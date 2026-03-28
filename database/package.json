@@ -1,0 +1,19 @@
+{
+  "name": "@sanipatitas/database",
+  "type": "module",
+  "private": true,
+  "scripts": {
+    "db:generate": "tsc && bunx --bun drizzle-kit generate",
+    "db:seed": "bun run ./src/seeds/index.ts"
+  },
+  "dependencies": {
+    "drizzle-kit": "0.31.10",
+    "drizzle-orm": "0.45.2"
+  },
+  "devDependencies": {
+    "@types/bun": "latest"
+  },
+  "peerDependencies": {
+    "typescript": "^5"
+  }
+}

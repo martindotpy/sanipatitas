@@ -1,0 +1,25 @@
+# Build
+dist/
+out/
+target/
+
+# Tanstack
+.tanstack/
+
+# Astro
+.astro/
+
+# Cache / lockfiles
+bun.lock
+node_modules/
+
+# Generated
+**/__generated__/
+**/*.gen.ts
+
+# Coverage
+coverage/
+
+# Java
+*.class
+*.jar

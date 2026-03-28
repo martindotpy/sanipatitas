@@ -1,0 +1,40 @@
+---
+import Layout from "@sanipatitas/desktop/core/components/layouts/Layout.astro"
+import { ScalarComponent } from "@scalar/astro"
+
+// Context
+export const prerender = true
+---
+
+<Layout
+  title="OpenAPI Documentation"
+  description="Explore the OpenAPI documentation for all services."
+>
+  <ScalarComponent
+    configuration={{
+      theme: "deepSpace",
+      sources: [
+        {
+          title: "Core",
+          url: "/api/core/openapi.json",
+        },
+        {
+          title: "Auth",
+          url: "/api/auth/openapi.json",
+        },
+      ],
+    }}
+  />
+</Layout>
+
+<style>
+  @reference "@sanipatitas/desktop/styles";
+
+  :root {
+    --scalar-font: var(--default-font-family);
+  }
+
+  html {
+    @apply no-scrollbar;
+  }
+</style>

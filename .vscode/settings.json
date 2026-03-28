@@ -1,0 +1,43 @@
+{
+  // Spell checker
+  "cSpell.words": [
+    "Cayetano",
+    "coolify",
+    "elysia",
+    "elysiajs",
+    "Heredia",
+    "nanostores",
+    "sanipatitas",
+    "sonner",
+    "tauri",
+    "Umami"
+  ],
+
+  // Javascript
+  "js/ts.preferences.importModuleSpecifier": "non-relative",
+
+  // Tailwindcss
+  "files.associations": {
+    "*.css": "tailwindcss"
+  },
+  "tailwindCSS.classFunctions": [
+    "tw",
+    "twi",
+    "twj",
+    "tv",
+    "cn",
+    "clsx",
+    "twMerge",
+    "cva"
+  ],
+  "tailwindCSS.experimental.classRegex": [
+    // Includ spread operator for twj
+    "\\.\\.\\.\\s*twj`([\\s\\S]*?)`"
+  ],
+  "tailwindCSS.classAttributes": [
+    "class=*",
+    "class:list=*",
+    ".*Classname(s?)*",
+    ".*Classname(s?): .*"
+  ]
+}

@@ -1,0 +1,106 @@
+services:
+  # Dev services (test)
+  test-database-sql:
+    image: postgres:17-alpine
+    environment:
+      TZ: America/Lima
+      POSTGRES_USER: sanipatitas-user
+      POSTGRES_PASSWORD: sanipatitas-password
+      POSTGRES_DB: sanipatitas-db
+    profiles:
+      - test
+    ports:
+      - "5432"
+    healthcheck:
+      test:
+        - CMD-SHELL
+        - "pg_isready -U $${POSTGRES_USER} -d $${POSTGRES_DB}"
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+  test-database-redis:
+    image: redis:7-alpine
+    environment:
+      TZ: America/Lima
+    profiles:
+      - test
+    ports:
+      - "6379"
+    healthcheck:
+      test:
+        - CMD-SHELL
+        - "redis-cli ping"
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+  # Databases
+  # - SQL
+  database-sql:
+    image: postgres:17-alpine
+    container_name: sanipatitas-db
+    profiles:
+      - dev
+    environment:
+      TZ: America/Lima
+      POSTGRES_USER: sanipatitas-user
+      POSTGRES_PASSWORD: sanipatitas-password
+      POSTGRES_DB: sanipatitas-db
+    ports:
+      - "5432:5432"
+    healthcheck:
+      test:
+        - CMD-SHELL
+        - "pg_isready -U $${POSTGRES_USER} -d $${POSTGRES_DB}"
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+  # - SQL Studio
+  database-sql-studio:
+    image: ghcr.io/drizzle-team/gateway:latest
+    container_name: sanipatitas-db-studio
+    profiles:
+      - dev
+    environment:
+      TZ: America/Lima
+      DATABASE_URL_APP: postgres://sanipatitas-user:sanipatitas-password@database-sql:5432/sanipatitas-db
+      STORE_PATH: /data
+    volumes:
+      - healthcheck-sql-studio-data:/data
+    ports:
+      - "4983:4983"
+
+  # - Redis
+  database-redis:
+    image: redis:7-alpine
+    container_name: sanipatitas-redis
+    profiles:
+      - dev
+    environment:
+      TZ: America/Lima
+    ports:
+      - "6379:6379"
+    healthcheck:
+      test:
+        - CMD-SHELL
+        - "redis-cli ping"
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+  # - Redis Studio
+  database-redis-studio:
+    image: redis/redisinsight:latest
+    container_name: sanipatitas-redis-studio
+    profiles:
+      - dev
+    environment:
+      TZ: America/Lima
+      RI_REDIS_HOST_APP: database-redis
+    ports:
+      - "5540:5540"
+
+volumes:
+  healthcheck-sql-studio-data:

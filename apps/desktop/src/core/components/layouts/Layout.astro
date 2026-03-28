@@ -1,0 +1,126 @@
+---
+import Styles from "@sanipatitas/desktop/core/components/atoms/Styles.astro"
+import Sonner from "@sanipatitas/desktop/core/components/molecules/Sonner.astro"
+import {
+  site,
+  siteUrl,
+} from "@sanipatitas/desktop/core/configuration/app-configuration"
+import {
+  author,
+  defaultDescription,
+} from "@sanipatitas/desktop/core/constant/seo-constant"
+import { getTitle } from "@sanipatitas/desktop/core/kit/title-kit"
+import { pwaAssetsHead } from "virtual:pwa-assets/head"
+
+// Context
+interface Props {
+  title?: string
+  description?: string
+  keywords?: string
+}
+
+const { title, description = defaultDescription, keywords } = Astro.props
+
+// Title
+const fullTitle = getTitle(title)
+
+// Site
+const { url } = Astro
+
+// Url
+const { hostname } = Astro.url
+const isProdHostname = hostname === siteUrl.hostname
+---
+
+<!doctype html>
+<html lang="es" class="dark" style="color-scheme: dark;">
+  <head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <title>{fullTitle}</title>
+
+    <link
+      rel="sitemap"
+      type="application/xml"
+      title="Sitemap"
+      href="/sitemap-index.xml"
+    />
+    <link rel="shortcut icon" type="image/svg+xml" href="/favicon.svg" />
+    <meta name="robots" content="index, follow" />
+
+    <meta name="author" content={author} />
+    {keywords && <meta name="keywords" content={keywords} />}
+    <meta name="description" content={description} />
+
+    <link rel="canonical" href={url} />
+
+    <meta property="og:site_name" content="Sanipatitas Platform" />
+    <meta property="og:url" content={site} />
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content={fullTitle} />
+    <meta property="og:locale" content="es" />
+    <meta property="og:description" content={description} />
+
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:domain" content={site.replace("https://", "")} />
+    <meta name="twitter:url" content={site} />
+    <meta name="twitter:title" content={fullTitle} />
+    <meta name="twitter:description" content={description} />
+
+    {
+      pwaAssetsHead.themeColor && (
+        <>
+          <meta name="theme-color" content={pwaAssetsHead.themeColor.content} />
+          <meta
+            name="msapplication-TileColor"
+            content={pwaAssetsHead.themeColor.content}
+          />
+        </>
+      )
+    }
+
+    <meta name="msapplication-TileImage" content="/pwa-150x150.png" />
+    {
+      pwaAssetsHead.links.map((link) => (
+        <link
+          id={link.id}
+          rel={link.rel}
+          href={link.href}
+          sizes={link.sizes}
+          media={link.media}
+          type={link.type}
+        />
+      ))
+    }
+
+    <slot name="head" />
+
+    {/* Styles */}
+    <Styles />
+
+    {/* Scripts */}
+    <Sonner />
+    {
+      isProdHostname && (
+        <script
+          is:inline
+          defer
+          id="umami-script"
+          src="https://analytics.martindotpy.dev/script.js"
+          data-website-id=""
+        />
+      )
+    }
+    <script src="@sanipatitas/desktop/core/scripts/umami-identify.ts"></script>
+    <script src="@sanipatitas/desktop/core/scripts/configure-client.ts"
+    ></script>
+  </head>
+
+  <body class="bg-background text-foreground flex min-h-dvh flex-col">
+    <slot />
+
+    <script src="@sanipatitas/desktop/core/scripts/show-window.ts"></script>
+  </body>
+</html>

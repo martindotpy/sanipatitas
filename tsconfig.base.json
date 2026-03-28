@@ -1,0 +1,55 @@
+{
+  "compilerOptions": {
+    // Environment setup & latest features
+    "module": "Preserve",
+    "moduleDetection": "force",
+    "resolveJsonModule": true,
+
+    // Bundler mode
+    "noEmit": true,
+    "esModuleInterop": true,
+    "moduleResolution": "bundler",
+    "verbatimModuleSyntax": true,
+    "allowImportingTsExtensions": true,
+
+    // Best practices
+    "strict": true,
+    "skipLibCheck": true,
+    "noFallthroughCasesInSwitch": true,
+    "noUncheckedIndexedAccess": true,
+    "noImplicitOverride": true,
+    "allowJs": true,
+
+    // Some stricter flags (disabled by default)
+    "noUnusedLocals": false,
+    "noUnusedParameters": false,
+    "noPropertyAccessFromIndexSignature": false,
+
+    // Alias
+    "baseUrl": ".",
+    "paths": {
+      // Assets
+      "@sanipatitas/assets/*": ["./assets/*"],
+
+      // Shared
+      "@sanipatitas/shared/*": ["./shared/typescript/src/*"],
+
+      // Ui
+      "@sanipatitas/ui/*": ["./shared/ui/src/*"],
+      "@sanipatitas/ui/styles": ["./shared/ui/src/styles.css"],
+      "@sanipatitas/ui/tailwind-config": ["./shared/ui/tailwind.config.js"],
+
+      // Database
+      "@sanipatitas/database": ["./database/src"],
+      "@sanipatitas/database/*": ["./database/src/*"],
+
+      // Auth
+      "@sanipatitas/auth": ["./services/auth/src"],
+      "@sanipatitas/auth/*": ["./services/auth/src/*"],
+
+      // Desktop
+      "@sanipatitas/desktop/*": ["./apps/desktop/src/*"],
+      "@sanipatitas/desktop/styles": ["./apps/desktop/src/styles.css"]
+    }
+  }
+}
