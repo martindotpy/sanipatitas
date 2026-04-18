@@ -25,7 +25,7 @@
     "noUnusedParameters": false,
     "noPropertyAccessFromIndexSignature": false,
 
-    // Alias
+    // Alias 
     "baseUrl": ".",
     "paths": {
       // Assets
