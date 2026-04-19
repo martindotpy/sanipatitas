@@ -3,12 +3,11 @@ import { $jwt } from "@sanipatitas/desktop/auth/store/jwt-store"
 import { $auth } from "@sanipatitas/desktop/auth/store/user-store"
 import { isSsr } from "@sanipatitas/desktop/core/configuration/app-configuration"
 import { Devtools } from "@sanipatitas/desktop/core/devtools/devtools"
+import { useInit } from "@sanipatitas/desktop/core/hook/use-init"
 import { getTitle } from "@sanipatitas/desktop/core/kit/title-kit"
 import type { QueryClient } from "@tanstack/react-query"
 import { createRootRouteWithContext, Outlet } from "@tanstack/react-router"
-import { getCurrentWindow } from "@tauri-apps/api/window"
 import type { AstroGlobal } from "astro"
-import { useEffect } from "react"
 
 // Route
 interface RootRouteContext {
@@ -39,11 +38,8 @@ export const Route = createRootRouteWithContext<RootRouteContext>()({
 })
 
 function RootComponent() {
-  useEffect(() => {
-    ;(async () => {
-      await getCurrentWindow().show()
-    })()
-  }, [])
+  // Make initialization operations
+  useInit()
 
   return (
     <>

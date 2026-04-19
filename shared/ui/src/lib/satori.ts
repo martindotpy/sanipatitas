@@ -1,6 +1,6 @@
 import { Resvg } from "@resvg/resvg-js"
 import type { PartialIntegrationOptions } from "astro-opengraph-images"
-import fs from "fs/promises"
+import fs from "node:fs/promises"
 import satori, { type SatoriOptions } from "satori"
 
 // Constants

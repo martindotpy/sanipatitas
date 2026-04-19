@@ -6,6 +6,7 @@ import {
 import {
   InputGroup,
   InputGroupAddon,
+  InputGroupTextarea,
 } from "@sanipatitas/ui/components/ui/input-group"
 import { Textarea } from "@sanipatitas/ui/components/ui/textarea"
 import type { ClassNameProp } from "@sanipatitas/ui/kit/component-kit"
@@ -57,7 +58,7 @@ export function ControlledTextarea<
           </FieldLabel>
 
           <InputGroup>
-            <Textarea
+            <InputGroupTextarea
               id={name}
               className={textareaClassName}
               aria-invalid={fieldState.invalid}

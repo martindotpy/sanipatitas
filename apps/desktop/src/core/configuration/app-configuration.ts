@@ -1,3 +1,4 @@
+import { type } from "@tauri-apps/plugin-os"
 import z from "zod"
 
 // Environment
@@ -21,3 +22,6 @@ export const {
 
 // Url
 export const siteUrl = new URL(site)
+
+// Os
+export const os = isSsr ? null : type()

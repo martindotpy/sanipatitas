@@ -15,7 +15,7 @@ COPY --chmod=0755 mvnw ./
 
 COPY pom.xml ./
 COPY shared/java/pom.xml ./shared/java/pom.xml
-COPY services/appointment/pom.xml ./services/appointment/pom.xml
+COPY services/core/pom.xml ./services/core/pom.xml
 COPY services/ehr/pom.xml ./services/ehr/pom.xml
 COPY services/insurance/pom.xml ./services/insurance/pom.xml
 
@@ -23,9 +23,9 @@ RUN ./mvnw -B dependency:go-offline
 
 # Build
 COPY shared/java/src shared/java/src
-COPY services/appointment/src services/appointment/src
+COPY services/core/src services/core/src
 
-RUN ./mvnw -pl services/appointment -am package -DskipTests -B
+RUN ./mvnw -pl services/core -am package -DskipTests -B
 
 
 FROM gcr.io/distroless/java25 AS runtime
@@ -41,10 +41,10 @@ ARG TZ
 
 ENV TZ=${TZ}
 
-COPY --chown=185 --from=build /app/services/appointment/target/quarkus-app/lib/ lib/
-COPY --chown=185 --from=build /app/services/appointment/target/quarkus-app/*.jar .
-COPY --chown=185 --from=build /app/services/appointment/target/quarkus-app/app/ app/
-COPY --chown=185 --from=build /app/services/appointment/target/quarkus-app/quarkus/ quarkus/
+COPY --chown=185 --from=build /app/services/core/target/quarkus-app/lib/ lib/
+COPY --chown=185 --from=build /app/services/core/target/quarkus-app/*.jar .
+COPY --chown=185 --from=build /app/services/core/target/quarkus-app/app/ app/
+COPY --chown=185 --from=build /app/services/core/target/quarkus-app/quarkus/ quarkus/
 
 EXPOSE 8080
 USER 185

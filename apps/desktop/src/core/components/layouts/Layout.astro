@@ -47,7 +47,6 @@ const isProdHostname = hostname === siteUrl.hostname
       title="Sitemap"
       href="/sitemap-index.xml"
     />
-    <link rel="shortcut icon" type="image/svg+xml" href="/favicon.svg" />
     <meta name="robots" content="index, follow" />
 
     <meta name="author" content={author} />
@@ -102,6 +101,7 @@ const isProdHostname = hostname === siteUrl.hostname
 
     {/* Scripts */}
     <Sonner />
+    {/* TODO: Add website id to umami */}
     {
       isProdHostname && (
         <script
@@ -116,11 +116,10 @@ const isProdHostname = hostname === siteUrl.hostname
     <script src="@sanipatitas/desktop/core/scripts/umami-identify.ts"></script>
     <script src="@sanipatitas/desktop/core/scripts/configure-client.ts"
     ></script>
+    <script src="@sanipatitas/desktop/core/scripts/update-favicon.ts"></script>
   </head>
 
-  <body class="bg-background text-foreground flex min-h-dvh flex-col">
+  <body class="flex min-h-dvh flex-col">
     <slot />
-
-    <script src="@sanipatitas/desktop/core/scripts/show-window.ts"></script>
   </body>
 </html>

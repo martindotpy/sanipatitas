@@ -3,7 +3,6 @@
 export type { Options } from "./sdk.gen"
 export type {
   ClientOptions,
-  HelloWorld,
   HttpProblem,
   HttpValidationProblem,
   Violation,

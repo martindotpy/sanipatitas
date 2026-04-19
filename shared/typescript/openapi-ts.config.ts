@@ -1,16 +1,15 @@
 import { defineConfig } from "@hey-api/openapi-ts"
 
 export default defineConfig({
-  input: "http://localhost:8080/api/core/openapi.json",
+  input: [{ path: "http://localhost:8080/api/core/openapi.json", watch: true }],
   output: {
     path: "src/api/client",
     postProcess: ["prettier"],
   },
-  watch: true,
 
   plugins: [
     {
-      name: "@hey-api/client-axios",
+      name: "@hey-api/client-fetch",
       baseUrl: false,
     },
     "@tanstack/react-query",

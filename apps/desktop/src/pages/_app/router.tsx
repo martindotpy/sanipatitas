@@ -9,11 +9,7 @@ import { NotFoundMainSection } from "@sanipatitas/ui/components/organisms/not-fo
 import { DefaultPendingPage } from "@sanipatitas/ui/components/template/default-pending-page"
 import { TooltipProvider } from "@sanipatitas/ui/components/ui/tooltip"
 import { dehydrate, hydrate } from "@tanstack/react-query"
-import {
-  ClientOnly,
-  createRouter,
-  ErrorComponent,
-} from "@tanstack/react-router"
+import { createRouter, ErrorComponent } from "@tanstack/react-router"
 import type { AstroGlobal } from "astro"
 import { ThemeProvider } from "next-themes"
 import * as React from "react"
@@ -39,9 +35,7 @@ export function createAppRouter(astro?: AstroGlobal) {
         <React.StrictMode>
           <TanstackQueryProvider {...tanstackQueryContext}>
             <TooltipProvider>
-              <ClientOnly>
-                <ThemeProvider attribute="class">{children}</ThemeProvider>
-              </ClientOnly>
+              <ThemeProvider attribute="class">{children}</ThemeProvider>
             </TooltipProvider>
           </TanstackQueryProvider>
         </React.StrictMode>

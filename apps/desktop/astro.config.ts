@@ -75,6 +75,9 @@ export default defineConfig({
         "/api/core": "http://localhost:8080",
       },
     },
+    ssr: {
+      noExternal: ["react-use"],
+    },
   },
 
   experimental: {

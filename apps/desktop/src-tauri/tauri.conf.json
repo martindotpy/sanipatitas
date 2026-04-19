@@ -1,7 +1,6 @@
 {
   "$schema": "https://schema.tauri.app/config/2",
   "productName": "Sanipatitas",
-  "version": "0.0.0",
   "identifier": "dev.martindotpy.sanipatitas",
   "build": {
     "beforeDevCommand": "bun run dev",
@@ -16,7 +15,9 @@
         "width": 800,
         "height": 600,
         "visible": false,
-        "decorations": false
+        "hiddenTitle": true,
+        "titleBarStyle": "Overlay",
+        "center": true
       }
     ],
     "security": {
