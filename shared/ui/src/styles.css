@@ -143,6 +143,10 @@
     scrollbar-color: var(--muted) transparent;
   }
 
+  *[data-tauri-drag-region] {
+    app-region: drag;
+  }
+
   body {
     @apply bg-background text-foreground antialiased!;
     text-rendering: optimizelegibility !important;

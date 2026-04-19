@@ -9,9 +9,15 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from "./routes/__root"
+import { Route as PublicRouteRouteImport } from "./routes/_public/route"
 import { Route as PrivateRouteRouteImport } from "./routes/_private/route"
 import { Route as PrivateIndexRouteImport } from "./routes/_private/index"
+import { Route as PublicLoginRouteImport } from "./routes/_public/login"
 
+const PublicRouteRoute = PublicRouteRouteImport.update({
+  id: "/_public",
+  getParentRoute: () => rootRouteImport,
+} as any)
 const PrivateRouteRoute = PrivateRouteRouteImport.update({
   id: "/_private",
   getParentRoute: () => rootRouteImport,
@@ -21,32 +27,49 @@ const PrivateIndexRoute = PrivateIndexRouteImport.update({
   path: "/",
   getParentRoute: () => PrivateRouteRoute,
 } as any)
+const PublicLoginRoute = PublicLoginRouteImport.update({
+  id: "/login",
+  path: "/login",
+  getParentRoute: () => PublicRouteRoute,
+} as any)
 
 export interface FileRoutesByFullPath {
   "/": typeof PrivateIndexRoute
+  "/login": typeof PublicLoginRoute
 }
 export interface FileRoutesByTo {
   "/": typeof PrivateIndexRoute
+  "/login": typeof PublicLoginRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   "/_private": typeof PrivateRouteRouteWithChildren
+  "/_public": typeof PublicRouteRouteWithChildren
+  "/_public/login": typeof PublicLoginRoute
   "/_private/": typeof PrivateIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: "/"
+  fullPaths: "/" | "/login"
   fileRoutesByTo: FileRoutesByTo
-  to: "/"
-  id: "__root__" | "/_private" | "/_private/"
+  to: "/" | "/login"
+  id: "__root__" | "/_private" | "/_public" | "/_public/login" | "/_private/"
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   PrivateRouteRoute: typeof PrivateRouteRouteWithChildren
+  PublicRouteRoute: typeof PublicRouteRouteWithChildren
 }
 
 declare module "@tanstack/react-router" {
   interface FileRoutesByPath {
+    "/_public": {
+      id: "/_public"
+      path: ""
+      fullPath: "/"
+      preLoaderRoute: typeof PublicRouteRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     "/_private": {
       id: "/_private"
       path: ""
@@ -60,6 +83,13 @@ declare module "@tanstack/react-router" {
       fullPath: "/"
       preLoaderRoute: typeof PrivateIndexRouteImport
       parentRoute: typeof PrivateRouteRoute
+    }
+    "/_public/login": {
+      id: "/_public/login"
+      path: "/login"
+      fullPath: "/login"
+      preLoaderRoute: typeof PublicLoginRouteImport
+      parentRoute: typeof PublicRouteRoute
     }
   }
 }
@@ -76,8 +106,21 @@ const PrivateRouteRouteWithChildren = PrivateRouteRoute._addFileChildren(
   PrivateRouteRouteChildren,
 )
 
+interface PublicRouteRouteChildren {
+  PublicLoginRoute: typeof PublicLoginRoute
+}
+
+const PublicRouteRouteChildren: PublicRouteRouteChildren = {
+  PublicLoginRoute: PublicLoginRoute,
+}
+
+const PublicRouteRouteWithChildren = PublicRouteRoute._addFileChildren(
+  PublicRouteRouteChildren,
+)
+
 const rootRouteChildren: RootRouteChildren = {
   PrivateRouteRoute: PrivateRouteRouteWithChildren,
+  PublicRouteRoute: PublicRouteRouteWithChildren,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

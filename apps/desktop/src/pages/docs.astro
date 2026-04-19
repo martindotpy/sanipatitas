@@ -1,6 +1,7 @@
 ---
 import Layout from "@sanipatitas/desktop/core/components/layouts/Layout.astro"
 import { isProd } from "@sanipatitas/shared/app-context"
+import { DraggableHeader } from "@sanipatitas/ui/components/molecules/draggable-header"
 import { ScalarComponent } from "@scalar/astro"
 
 // Context
@@ -12,10 +13,24 @@ if (isProd) {
 }
 ---
 
+<script>
+  import { os } from "@sanipatitas/desktop/core/configuration/app-configuration"
+
+  // Change styles based on the operating system
+  if (os === "macos") {
+    document.documentElement.style.setProperty(
+      "--scalar-document-selector-padding-top",
+      "2.25rem"
+    )
+  }
+</script>
+
 <Layout
   title="OpenAPI Documentation"
   description="Explore the OpenAPI documentation for all services."
 >
+  <DraggableHeader className="z-100" />
+
   <ScalarComponent
     configuration={{
       theme: "deepSpace",
@@ -29,6 +44,11 @@ if (isProd) {
           url: "/api/auth/openapi.json",
         },
       ],
+      customCss: `
+        .document-selector {
+          padding-top: var(--scalar-document-selector-padding-top) !important;
+        }
+      `,
     }}
   />
 </Layout>
@@ -38,6 +58,8 @@ if (isProd) {
 
   :root {
     --scalar-font: var(--default-font-family);
+    --scalar-background-1: var(--background-color);
+    --scalar-document-selector-padding-top: 0.75rem;
   }
 
   html {

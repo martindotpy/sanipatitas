@@ -8,7 +8,7 @@ import type { QueryClient } from "@tanstack/react-query"
 import { createRootRouteWithContext, Outlet } from "@tanstack/react-router"
 import type { AstroGlobal } from "astro"
 
-// Route
+// Root route
 interface RootRouteContext {
   astro: AstroGlobal | undefined
   queryClient: QueryClient
@@ -18,6 +18,7 @@ export const Route = createRootRouteWithContext<RootRouteContext>()({
   beforeLoad: async () => {
     if (isSsr) return { auth: null }
 
+    // Get the session
     const auth = await authClient.getSession({
       fetchOptions: {
         onSuccess: ({ response }) => {
