@@ -1,9 +1,15 @@
 ---
 import Layout from "@sanipatitas/desktop/core/components/layouts/Layout.astro"
+import { isProd } from "@sanipatitas/shared/app-context"
 import { ScalarComponent } from "@scalar/astro"
 
 // Context
 export const prerender = true
+
+// Redirect if the build is in production
+if (isProd) {
+  return Astro.redirect("/404", 302)
+}
 ---
 
 <Layout

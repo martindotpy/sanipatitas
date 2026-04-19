@@ -8,7 +8,7 @@ import type { ComponentProps } from "astro/types"
 type Props = ComponentProps<typeof Layout>
 
 export const getStaticPaths = (() => {
-  return [{ params: { csr: "_shell" } }]
+  return [{ params: { csr: "/" } }]
 }) satisfies GetStaticPaths
 
 const { props } = Astro

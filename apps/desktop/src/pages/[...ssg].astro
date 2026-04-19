@@ -12,7 +12,7 @@ type Props = ComponentProps<typeof Layout>
 export const prerender = !isDev // Live render in dev
 
 export const getStaticPaths = (() => {
-  const routes = ["login", "register"]
+  const routes: string[] = []
 
   return routes.map((ssg) => ({
     params: { ssg },

@@ -1,5 +1,6 @@
 import { createFileRoute, Outlet } from "@tanstack/react-router"
 
+// Route layout
 export const Route = createFileRoute("/_private")({
   component: RouteComponent,
 })

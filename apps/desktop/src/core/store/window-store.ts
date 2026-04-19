@@ -1,6 +1,6 @@
 import { useStore } from "@nanostores/react"
 import { isSsr } from "@sanipatitas/desktop/core/configuration/app-configuration"
-import { getCurrentWindow, Window } from "@tauri-apps/api/window"
+import { getCurrentWindow, type Window } from "@tauri-apps/api/window"
 import { atom } from "nanostores"
 
 // Store

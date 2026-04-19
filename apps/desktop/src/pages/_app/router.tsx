@@ -14,6 +14,7 @@ import type { AstroGlobal } from "astro"
 import { ThemeProvider } from "next-themes"
 import * as React from "react"
 
+// Router
 export function createAppRouter(astro?: AstroGlobal) {
   const tanstackQueryContext = getTanstackQueryContext()
 

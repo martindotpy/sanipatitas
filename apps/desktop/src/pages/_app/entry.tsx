@@ -6,19 +6,20 @@ import {
 import { RouterProvider } from "@tanstack/react-router"
 import { RouterClient } from "@tanstack/react-router/ssr/client"
 
+// Router
 let clientRouter: AppRouter | undefined
 
 if (!isSsr) {
   clientRouter = createAppRouter()
 }
 
-export function AppEntry({
-  getServerRouter,
-  clientOnly,
-}: {
+// Entry
+interface AppEntryProps {
   getServerRouter?: () => AppRouter
   clientOnly?: boolean
-}) {
+}
+
+export function AppEntry({ getServerRouter, clientOnly }: AppEntryProps) {
   return clientOnly ? (
     <RouterProvider router={clientRouter!} />
   ) : isSsr ? (
