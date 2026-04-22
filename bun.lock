@@ -63,6 +63,7 @@
         "@tauri-apps/api": "2.10.1",
         "@tauri-apps/plugin-opener": "2.5.3",
         "@tauri-apps/plugin-os": "2.3.2",
+        "@tauri-controls-v2/react": "0.4.4",
         "@types/react": "19.2.14",
         "@types/react-dom": "19.2.3",
         "@types/umami-browser": "2.18.1",
@@ -1010,6 +1011,8 @@
     "@tauri-apps/plugin-opener": ["@tauri-apps/plugin-opener@2.5.3", "", { "dependencies": { "@tauri-apps/api": "^2.8.0" } }, "sha512-CCcUltXMOfUEArbf3db3kCE7Ggy1ExBEBl51Ko2ODJ6GDYHRp1nSNlQm5uNCFY5k7/ufaK5Ib3Du/Zir19IYQQ=="],
 
     "@tauri-apps/plugin-os": ["@tauri-apps/plugin-os@2.3.2", "", { "dependencies": { "@tauri-apps/api": "^2.8.0" } }, "sha512-n+nXWeuSeF9wcEsSPmRnBEGrRgOy6jjkSU+UVCOV8YUGKb2erhDOxis7IqRXiRVHhY8XMKks00BJ0OAdkpf6+A=="],
+
+    "@tauri-controls-v2/react": ["@tauri-controls-v2/react@0.4.4", "", { "peerDependencies": { "clsx": "^2.1.1", "react": "^18.2.0 || ^19.0.0", "react-dom": "^18.2.0 || ^19.0.0", "tailwind-merge": "^3.0.1" } }, "sha512-/yGbWbKGFD/lZUlXcutbnKNgcuH2bScATg4S0ZVmqxxuLWJk31sA4C822GLt88r1L4Rtau8RPFRz8hxnwq2xig=="],
 
     "@tokenizer/inflate": ["@tokenizer/inflate@0.4.1", "", { "dependencies": { "debug": "^4.4.3", "token-types": "^6.1.1" } }, "sha512-2mAv+8pkG6GIZiF1kNg1jAjh27IDxEPKwdGul3snfztFerfPGI1LjDezZp3i7BElXompqEtPmoPx6c2wgtWsOA=="],
 

@@ -12,7 +12,7 @@ import { Route as rootRouteImport } from "./routes/__root"
 import { Route as PublicRouteRouteImport } from "./routes/_public/route"
 import { Route as PrivateRouteRouteImport } from "./routes/_private/route"
 import { Route as PrivateIndexRouteImport } from "./routes/_private/index"
-import { Route as PublicLoginRouteImport } from "./routes/_public/login"
+import { Route as PublicSignInRouteImport } from "./routes/_public/sign-in"
 
 const PublicRouteRoute = PublicRouteRouteImport.update({
   id: "/_public",
@@ -27,33 +27,33 @@ const PrivateIndexRoute = PrivateIndexRouteImport.update({
   path: "/",
   getParentRoute: () => PrivateRouteRoute,
 } as any)
-const PublicLoginRoute = PublicLoginRouteImport.update({
-  id: "/login",
-  path: "/login",
+const PublicSignInRoute = PublicSignInRouteImport.update({
+  id: "/sign-in",
+  path: "/sign-in",
   getParentRoute: () => PublicRouteRoute,
 } as any)
 
 export interface FileRoutesByFullPath {
   "/": typeof PrivateIndexRoute
-  "/login": typeof PublicLoginRoute
+  "/sign-in": typeof PublicSignInRoute
 }
 export interface FileRoutesByTo {
   "/": typeof PrivateIndexRoute
-  "/login": typeof PublicLoginRoute
+  "/sign-in": typeof PublicSignInRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   "/_private": typeof PrivateRouteRouteWithChildren
   "/_public": typeof PublicRouteRouteWithChildren
-  "/_public/login": typeof PublicLoginRoute
+  "/_public/sign-in": typeof PublicSignInRoute
   "/_private/": typeof PrivateIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: "/" | "/login"
+  fullPaths: "/" | "/sign-in"
   fileRoutesByTo: FileRoutesByTo
-  to: "/" | "/login"
-  id: "__root__" | "/_private" | "/_public" | "/_public/login" | "/_private/"
+  to: "/" | "/sign-in"
+  id: "__root__" | "/_private" | "/_public" | "/_public/sign-in" | "/_private/"
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -84,11 +84,11 @@ declare module "@tanstack/react-router" {
       preLoaderRoute: typeof PrivateIndexRouteImport
       parentRoute: typeof PrivateRouteRoute
     }
-    "/_public/login": {
-      id: "/_public/login"
-      path: "/login"
-      fullPath: "/login"
-      preLoaderRoute: typeof PublicLoginRouteImport
+    "/_public/sign-in": {
+      id: "/_public/sign-in"
+      path: "/sign-in"
+      fullPath: "/sign-in"
+      preLoaderRoute: typeof PublicSignInRouteImport
       parentRoute: typeof PublicRouteRoute
     }
   }
@@ -107,11 +107,11 @@ const PrivateRouteRouteWithChildren = PrivateRouteRoute._addFileChildren(
 )
 
 interface PublicRouteRouteChildren {
-  PublicLoginRoute: typeof PublicLoginRoute
+  PublicSignInRoute: typeof PublicSignInRoute
 }
 
 const PublicRouteRouteChildren: PublicRouteRouteChildren = {
-  PublicLoginRoute: PublicLoginRoute,
+  PublicSignInRoute: PublicSignInRoute,
 }
 
 const PublicRouteRouteWithChildren = PublicRouteRoute._addFileChildren(

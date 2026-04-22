@@ -91,7 +91,7 @@ export function ControlledPasswordInput<
               id={name}
               type={showPassword ? "text" : "password"}
               className={cn(
-                "[[type=password]]:tracking-widest",
+                { "[[type=password]]:tracking-widest": field.value },
                 inputClassName
               )}
               aria-invalid={fieldState.invalid}

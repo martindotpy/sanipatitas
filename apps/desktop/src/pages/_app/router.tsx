@@ -6,8 +6,8 @@ import {
 import { routeTree } from "@sanipatitas/desktop/pages/_app/routeTree.gen"
 import { ErrorMainSection } from "@sanipatitas/ui/components/organisms/error-main-section"
 import { NotFoundMainSection } from "@sanipatitas/ui/components/organisms/not-found-main-section"
-import { DefaultPendingPage } from "@sanipatitas/ui/components/template/default-pending-page"
 import { TooltipProvider } from "@sanipatitas/ui/components/ui/tooltip"
+import { DefaultLoadingPage } from "@sanipatitas/ui/src/components/template/default-loading-page"
 import { dehydrate, hydrate } from "@tanstack/react-query"
 import { createRouter, ErrorComponent } from "@tanstack/react-router"
 import type { AstroGlobal } from "astro"
@@ -42,7 +42,7 @@ export function createAppRouter(astro?: AstroGlobal) {
         </React.StrictMode>
       )
     },
-    defaultPendingComponent: DefaultPendingPage,
+    defaultPendingComponent: DefaultLoadingPage,
     defaultNotFoundComponent: () => (
       <div className="flex flex-1 flex-col">
         <NotFoundMainSection />

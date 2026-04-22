@@ -8,7 +8,7 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@sanipatitas/ui/components/ui/dialog"
-import { TbLoader } from "react-icons/tb"
+import { TbLoader2 } from "react-icons/tb"
 
 // Component
 interface ConfirmDialogProps {
@@ -59,7 +59,7 @@ export function ConfirmDialog({
           >
             {isLoading ? (
               <>
-                <TbLoader className="size-4 animate-spin" />
+                <TbLoader2 className="size-4 animate-spin" />
                 Cargando...
               </>
             ) : (

@@ -4,7 +4,7 @@ import {
   TbAlertTriangle,
   TbCircleCheck,
   TbInfoCircle,
-  TbLoader,
+  TbLoader2,
 } from "react-icons/tb"
 import { Toaster as Sonner, type ToasterProps } from "sonner"
 
@@ -20,7 +20,7 @@ const Toaster = ({ ...props }: ToasterProps) => {
         info: <TbInfoCircle className="size-4" />,
         warning: <TbAlertTriangle className="size-4" />,
         error: <TbAlertOctagon className="size-4" />,
-        loading: <TbLoader className="size-4 animate-spin" />,
+        loading: <TbLoader2 className="size-4 animate-spin" />,
       }}
       style={
         {

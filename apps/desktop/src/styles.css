@@ -1,3 +1,4 @@
 @import "../../../shared/ui/src/styles.css";
 
 @source "../../../shared/ui/src";
+@import "../node_modules/@tauri-controls-v2/react/dist/tauri-controls.css";

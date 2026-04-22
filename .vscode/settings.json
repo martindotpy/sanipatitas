@@ -15,6 +15,7 @@
 
   // Javascript
   "js/ts.preferences.importModuleSpecifier": "non-relative",
+  "js/ts.experimental.useTsgo": true,
 
   // Tailwindcss
   "files.associations": {

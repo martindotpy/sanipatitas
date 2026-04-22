@@ -76,7 +76,7 @@ export default defineConfig({
       },
     },
     ssr: {
-      noExternal: ["react-use"],
+      noExternal: ["react-use", "@tauri-controls-v2/react"],
     },
   },
 

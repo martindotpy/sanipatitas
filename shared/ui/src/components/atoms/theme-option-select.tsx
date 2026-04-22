@@ -48,7 +48,7 @@ export function ThemeOptionSelect() {
           </Button>
         }
       />
-      <DropdownMenuContent>
+      <DropdownMenuContent align="center">
         {themes.map((themeOption) => (
           <DropdownMenuItem
             key={themeOption}

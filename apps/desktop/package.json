@@ -37,6 +37,7 @@
     "@tauri-apps/api": "2.10.1",
     "@tauri-apps/plugin-opener": "2.5.3",
     "@tauri-apps/plugin-os": "2.3.2",
+    "@tauri-controls-v2/react": "0.4.4",
     "@types/react": "19.2.14",
     "@types/react-dom": "19.2.3",
     "@types/umami-browser": "2.18.1",
