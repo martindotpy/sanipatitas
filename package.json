@@ -14,13 +14,13 @@
     "lint": "eslint . --ext js,ts,jsx,tsx,cjs,mjs --fix"
   },
   "dependencies": {
-    "zod": "4.3.6"
+    "zod": "4.4.3"
   },
   "devDependencies": {
     "@eslint/js": "9.39.4",
-    "@tanstack/eslint-plugin-query": "5.99.1",
+    "@tanstack/eslint-plugin-query": "5.100.9",
     "@tanstack/eslint-plugin-router": "1.161.6",
-    "@typescript-eslint/parser": "8.58.2",
+    "@typescript-eslint/parser": "8.59.2",
     "eslint": "9.39.4",
     "eslint-config-prettier": "10.1.8",
     "eslint-plugin-astro": "1.7.0",
@@ -30,14 +30,14 @@
     "eslint-plugin-react-hooks": "7.0.0",
     "eslint-plugin-react-refresh": "0.5.2",
     "husky": "9.1.7",
-    "lint-staged": "16.4.0",
+    "lint-staged": "17.0.4",
     "prettier": "3.8.3",
     "prettier-plugin-astro": "0.14.1",
     "prettier-plugin-astro-organize-imports": "0.4.12",
     "prettier-plugin-organize-imports": "4.3.0",
-    "prettier-plugin-tailwindcss": "0.7.2",
-    "shadcn": "4.3.0",
-    "typescript-eslint": "8.58.2"
+    "prettier-plugin-tailwindcss": "0.8.0",
+    "shadcn": "4.7.0",
+    "typescript-eslint": "8.59.2"
   },
   "peerDependencies": {
     "typescript": "^5"

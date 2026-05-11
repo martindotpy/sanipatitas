@@ -40,5 +40,26 @@
     "class:list=*",
     ".*Classname(s?)*",
     ".*Classname(s?): .*"
-  ]
+  ],
+
+  // Java
+  "[java]": {
+    "editor.defaultFormatter": "redhat.java",
+    "editor.rulers": [100]
+  },
+  "java.format.settings.url": "${workspaceFolder}/eclipse-format.xml",
+  "java.completion.importOrder": [
+    "#",
+    "java",
+    "javax",
+    "jakarta",
+    "org",
+    "com",
+    ""
+  ],
+
+  // All
+  "files.trimTrailingWhitespace": true,
+  "files.insertFinalNewline": true,
+  "java.configuration.updateBuildConfiguration": "interactive"
 }

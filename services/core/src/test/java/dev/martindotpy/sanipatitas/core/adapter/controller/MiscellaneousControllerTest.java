@@ -12,7 +12,8 @@ class MiscellaneousControllerTest {
     @Test
     void testHelloEndpoint() {
         given()
-                .when().get("/_health")
+                .when()
+                .get("/_health")
                 .then()
                 .statusCode(200)
                 .body(is("Ok"));

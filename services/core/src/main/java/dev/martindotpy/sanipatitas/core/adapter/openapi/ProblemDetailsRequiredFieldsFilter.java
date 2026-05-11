@@ -13,32 +13,37 @@ import org.eclipse.microprofile.openapi.models.responses.APIResponses;
 
 public class ProblemDetailsRequiredFieldsFilter implements OASFilter {
     @Override
-    public void filterOpenAPI(OpenAPI openAPI) {
-        openAPI.getComponents().getSchemas().forEach((name, schema) -> {
+    public void filterOpenAPI(OpenAPI openApi) {
+        openApi.getComponents().getSchemas().forEach((name, schema) -> {
             switch (name) {
                 case "HttpProblem", "HttpValidationProblem" ->
                     schema.setRequired(List.of("status", "instance"));
                 case "Violation" ->
                     schema.setRequired(List.of("field", "in", "message"));
+                default -> {
+                    break;
+                }
             }
         });
 
         // Add 422 response to operations with input if not already defined
         APIResponse validationResponse = createValidationResponse();
 
-        openAPI.getPaths().getPathItems().forEach((path, pathItem) -> {
+        openApi.getPaths().getPathItems().forEach((path, pathItem) -> {
             pathItem.getOperations().forEach((_, operation) -> {
                 boolean hasInput = (operation.getParameters() != null
                         && !operation.getParameters().isEmpty())
                         || operation.getRequestBody() != null;
 
-                if (!hasInput)
+                if (!hasInput) {
                     return;
+                }
 
                 APIResponses responses = operation.getResponses();
 
-                if (responses == null)
+                if (responses == null) {
                     return;
+                }
 
                 responses.removeAPIResponse("400");
 

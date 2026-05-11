@@ -1,9 +1,9 @@
 package dev.martindotpy.sanipatitas.core.adapter.controller;
 
-import org.eclipse.microprofile.openapi.annotations.Operation;
-
 import jakarta.ws.rs.GET;
 import jakarta.ws.rs.Path;
+
+import org.eclipse.microprofile.openapi.annotations.Operation;
 
 @Path("/")
 public class MiscellaneousController {

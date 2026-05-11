@@ -1,0 +1,11 @@
+<?xml version="1.0"?>
+<!DOCTYPE suppressions PUBLIC "-//Checkstyle//DTD SuppressionFilter Configuration 1.2//EN" "https://checkstyle.org/dtds/suppressions_1_2.dtd">
+<suppressions>
+    <suppress checks="HideUtilityClassConstructor" files=".*\.java" />
+    <suppress checks="MissingJavadocType" files=".*\.java" />
+    <suppress checks="LambdaParameterName" files=".*\.java" />
+    <suppress checks="CustomImportOrder" files=".*\.java" />
+    <suppress checks="Indentation" files=".*\.java" />
+    <suppress checks="MissingSwitchDefault" files=".*\.java" />
+    <suppress checks="SummaryJavadoc" files=".*\.java" />
+</suppressions>
