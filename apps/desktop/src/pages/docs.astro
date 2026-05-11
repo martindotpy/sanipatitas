@@ -48,13 +48,17 @@ if (isProd) {
         .document-selector {
           padding-top: var(--scalar-document-selector-padding-top) !important;
         }
+
+        .scalar-app * {
+          --refs-content-max-width: 1350px;
+        }
       `,
     }}
   />
 </Layout>
 
 <style>
-  @reference "@sanipatitas/desktop/styles";
+  @reference "@sanipatitas/desktop/styles.css";
 
   :root {
     --scalar-font: var(--default-font-family);
