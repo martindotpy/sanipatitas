@@ -79,18 +79,18 @@ export default defineConfig({
       noExternal: ["react-use", "@tauri-controls-v2/react"],
     },
   },
+  fonts: [
+    {
+      provider: fontProviders.google(),
+      name: "Geist",
+      cssVariable: "--font-geist",
+      subsets: ["latin"],
+      weights: ["100 900"],
+      styles: ["normal"],
+    },
+  ],
 
   experimental: {
-    fonts: [
-      {
-        provider: fontProviders.google(),
-        name: "Geist",
-        cssVariable: "--font-geist",
-        subsets: ["latin"],
-        weights: ["100 900"],
-        styles: ["normal"],
-      },
-    ],
     contentIntellisense: true,
   },
 

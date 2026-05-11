@@ -26,6 +26,7 @@
     "noPropertyAccessFromIndexSignature": false,
 
     // Alias
+    "ignoreDeprecations": "6.0",
     "baseUrl": ".",
     "paths": {
       // Assets
@@ -37,7 +38,6 @@
       // Ui
       "@sanipatitas/ui/*": ["./shared/ui/src/*"],
       "@sanipatitas/ui/styles": ["./shared/ui/src/styles.css"],
-      "@sanipatitas/ui/tailwind-config": ["./shared/ui/tailwind.config.js"],
 
       // Database
       "@sanipatitas/database": ["./database/src"],
