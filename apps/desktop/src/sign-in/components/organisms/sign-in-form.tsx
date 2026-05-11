@@ -9,6 +9,7 @@ import {
   FieldDescription,
   FieldGroup,
 } from "@sanipatitas/ui/components/ui/field"
+import { useNavigate } from "@tanstack/react-router"
 import { useForm } from "react-hook-form"
 import { toast } from "sonner"
 import { z } from "zod"
@@ -21,6 +22,9 @@ const SignInEmailBody = zOpenapiSignInEmailBody.safeExtend({
 
 // Component
 export function SignInForm() {
+  // Navigate
+  const navigate = useNavigate()
+
   // Form
   const {
     control,
@@ -37,10 +41,17 @@ export function SignInForm() {
   const onSubmit = handleSubmit(async (data) => {
     await toast
       .promise(
-        authClient.signIn.email({ email: data.email, password: data.password }),
+        authClient.signIn.email(
+          { email: data.email, password: data.password },
+          { throw: true }
+        ),
         {
           loading: "Ingresando...",
-          success: "¡Bienvenido de nuevo!",
+          success: () => {
+            navigate({ to: "/home" })
+
+            return "¡Bienvenido de nuevo!"
+          },
           error:
             "Error al ingresar, verifica tus credenciales e intenta nuevamente.",
         }

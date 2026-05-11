@@ -11,7 +11,7 @@ export const Route = createFileRoute("/_public")({
     if (isSsr) return null
 
     // Redirect to private routes if is authenticated
-    if (context.auth) throw redirect({ to: "/" })
+    if (context.auth) throw redirect({ to: "/home" })
   },
   component: RouteComponent,
 })

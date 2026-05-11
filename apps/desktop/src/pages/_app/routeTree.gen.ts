@@ -13,6 +13,7 @@ import { Route as PublicRouteRouteImport } from "./routes/_public/route"
 import { Route as PrivateRouteRouteImport } from "./routes/_private/route"
 import { Route as PrivateIndexRouteImport } from "./routes/_private/index"
 import { Route as PublicSignInRouteImport } from "./routes/_public/sign-in"
+import { Route as PrivateHomeRouteImport } from "./routes/_private/home"
 
 const PublicRouteRoute = PublicRouteRouteImport.update({
   id: "/_public",
@@ -32,28 +33,42 @@ const PublicSignInRoute = PublicSignInRouteImport.update({
   path: "/sign-in",
   getParentRoute: () => PublicRouteRoute,
 } as any)
+const PrivateHomeRoute = PrivateHomeRouteImport.update({
+  id: "/home",
+  path: "/home",
+  getParentRoute: () => PrivateRouteRoute,
+} as any)
 
 export interface FileRoutesByFullPath {
   "/": typeof PrivateIndexRoute
+  "/home": typeof PrivateHomeRoute
   "/sign-in": typeof PublicSignInRoute
 }
 export interface FileRoutesByTo {
   "/": typeof PrivateIndexRoute
+  "/home": typeof PrivateHomeRoute
   "/sign-in": typeof PublicSignInRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   "/_private": typeof PrivateRouteRouteWithChildren
   "/_public": typeof PublicRouteRouteWithChildren
+  "/_private/home": typeof PrivateHomeRoute
   "/_public/sign-in": typeof PublicSignInRoute
   "/_private/": typeof PrivateIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: "/" | "/sign-in"
+  fullPaths: "/" | "/home" | "/sign-in"
   fileRoutesByTo: FileRoutesByTo
-  to: "/" | "/sign-in"
-  id: "__root__" | "/_private" | "/_public" | "/_public/sign-in" | "/_private/"
+  to: "/" | "/home" | "/sign-in"
+  id:
+    | "__root__"
+    | "/_private"
+    | "/_public"
+    | "/_private/home"
+    | "/_public/sign-in"
+    | "/_private/"
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -91,14 +106,23 @@ declare module "@tanstack/react-router" {
       preLoaderRoute: typeof PublicSignInRouteImport
       parentRoute: typeof PublicRouteRoute
     }
+    "/_private/home": {
+      id: "/_private/home"
+      path: "/home"
+      fullPath: "/home"
+      preLoaderRoute: typeof PrivateHomeRouteImport
+      parentRoute: typeof PrivateRouteRoute
+    }
   }
 }
 
 interface PrivateRouteRouteChildren {
+  PrivateHomeRoute: typeof PrivateHomeRoute
   PrivateIndexRoute: typeof PrivateIndexRoute
 }
 
 const PrivateRouteRouteChildren: PrivateRouteRouteChildren = {
+  PrivateHomeRoute: PrivateHomeRoute,
   PrivateIndexRoute: PrivateIndexRoute,
 }
 

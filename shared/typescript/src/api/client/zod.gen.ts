@@ -142,13 +142,13 @@ export const zOpenapiSocialSignInBody = z.object({
 })
 
 /**
- * Session response when idToken is provided
+ * Returns session details when idToken is provided, or an authorize URL otherwise
  */
 export const zOpenapiSocialSignInResponse = z.object({
-  token: z.string(),
-  user: zOpenapiUser,
+  token: z.string().optional(),
+  user: zOpenapiUser.optional(),
   url: z.string().optional(),
-  redirect: z.literal(false),
+  redirect: z.boolean(),
 })
 
 export const zPostApiAuthCallbackByIdBody = z.record(z.string(), z.unknown())

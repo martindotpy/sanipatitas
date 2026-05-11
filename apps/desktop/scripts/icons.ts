@@ -33,5 +33,6 @@ await Promise.all(
 const input = await readFile(path.join(cwd, "src-tauri", "icons", "icon.png"))
 const icns = png2icons.createICNS(input, png2icons.BICUBIC, 0)
 
-if (icns)
+if (icns) {
   await writeFile(path.join(cwd, "src-tauri", "icons", "icon.icns"), icns)
+}

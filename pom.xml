@@ -14,6 +14,8 @@
     </modules>
 
     <properties>
+        <java.version>25</java.version>
+
         <maven.compiler.source>${java.version}</maven.compiler.source>
         <maven.compiler.release>${java.version}</maven.compiler.release>
 
