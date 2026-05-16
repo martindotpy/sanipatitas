@@ -13,6 +13,7 @@ import { Route as PublicRouteRouteImport } from "./routes/_public/route"
 import { Route as PrivateRouteRouteImport } from "./routes/_private/route"
 import { Route as PrivateIndexRouteImport } from "./routes/_private/index"
 import { Route as PublicSignInRouteImport } from "./routes/_public/sign-in"
+import { Route as PrivateProfileRouteImport } from "./routes/_private/profile"
 import { Route as PrivateHomeRouteImport } from "./routes/_private/home"
 
 const PublicRouteRoute = PublicRouteRouteImport.update({
@@ -33,6 +34,11 @@ const PublicSignInRoute = PublicSignInRouteImport.update({
   path: "/sign-in",
   getParentRoute: () => PublicRouteRoute,
 } as any)
+const PrivateProfileRoute = PrivateProfileRouteImport.update({
+  id: "/profile",
+  path: "/profile",
+  getParentRoute: () => PrivateRouteRoute,
+} as any)
 const PrivateHomeRoute = PrivateHomeRouteImport.update({
   id: "/home",
   path: "/home",
@@ -42,11 +48,13 @@ const PrivateHomeRoute = PrivateHomeRouteImport.update({
 export interface FileRoutesByFullPath {
   "/": typeof PrivateIndexRoute
   "/home": typeof PrivateHomeRoute
+  "/profile": typeof PrivateProfileRoute
   "/sign-in": typeof PublicSignInRoute
 }
 export interface FileRoutesByTo {
   "/": typeof PrivateIndexRoute
   "/home": typeof PrivateHomeRoute
+  "/profile": typeof PrivateProfileRoute
   "/sign-in": typeof PublicSignInRoute
 }
 export interface FileRoutesById {
@@ -54,19 +62,21 @@ export interface FileRoutesById {
   "/_private": typeof PrivateRouteRouteWithChildren
   "/_public": typeof PublicRouteRouteWithChildren
   "/_private/home": typeof PrivateHomeRoute
+  "/_private/profile": typeof PrivateProfileRoute
   "/_public/sign-in": typeof PublicSignInRoute
   "/_private/": typeof PrivateIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: "/" | "/home" | "/sign-in"
+  fullPaths: "/" | "/home" | "/profile" | "/sign-in"
   fileRoutesByTo: FileRoutesByTo
-  to: "/" | "/home" | "/sign-in"
+  to: "/" | "/home" | "/profile" | "/sign-in"
   id:
     | "__root__"
     | "/_private"
     | "/_public"
     | "/_private/home"
+    | "/_private/profile"
     | "/_public/sign-in"
     | "/_private/"
   fileRoutesById: FileRoutesById
@@ -106,6 +116,13 @@ declare module "@tanstack/react-router" {
       preLoaderRoute: typeof PublicSignInRouteImport
       parentRoute: typeof PublicRouteRoute
     }
+    "/_private/profile": {
+      id: "/_private/profile"
+      path: "/profile"
+      fullPath: "/profile"
+      preLoaderRoute: typeof PrivateProfileRouteImport
+      parentRoute: typeof PrivateRouteRoute
+    }
     "/_private/home": {
       id: "/_private/home"
       path: "/home"
@@ -118,11 +135,13 @@ declare module "@tanstack/react-router" {
 
 interface PrivateRouteRouteChildren {
   PrivateHomeRoute: typeof PrivateHomeRoute
+  PrivateProfileRoute: typeof PrivateProfileRoute
   PrivateIndexRoute: typeof PrivateIndexRoute
 }
 
 const PrivateRouteRouteChildren: PrivateRouteRouteChildren = {
   PrivateHomeRoute: PrivateHomeRoute,
+  PrivateProfileRoute: PrivateProfileRoute,
   PrivateIndexRoute: PrivateIndexRoute,
 }
 

@@ -60,7 +60,7 @@ export function ConfirmDialog({
             {isLoading ? (
               <>
                 <TbLoader2 className="size-4 animate-spin" />
-                Cargando...
+                Cargando&hellip;
               </>
             ) : (
               confirmLabel

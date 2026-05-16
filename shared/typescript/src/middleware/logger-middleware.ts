@@ -25,7 +25,7 @@ export const loggerMiddleware = elysiaLogger({
   autoLogging: {
     ignore: isDev
       ? (ctx) =>
-          ctx.request.url === "http://localhost:3000/api/auth/openapi.json"
-      : (ctx) => ctx.request.url === "http://localhost:3000/_health",
+          new URL(ctx.request.url).pathname.endsWith("/api/auth/openapi.json")
+      : (ctx) => new URL(ctx.request.url).pathname.endsWith("/_health"),
   },
 })

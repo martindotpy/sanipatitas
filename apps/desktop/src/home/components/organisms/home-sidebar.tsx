@@ -1,8 +1,10 @@
-// import { Banner } from "@sanipatitas/desktop/core/components/atoms/banner"
-// import { Brandmark } from "@sanipatitas/desktop/core/components/atoms/branmark"
+import { Favicon } from "@sanipatitas/desktop/core/components/atoms/favicon"
+import { NavUser } from "@sanipatitas/desktop/home/components/molecules/nav-user"
+import { useSidebarItems } from "@sanipatitas/desktop/home/hook/use-sidebar-items"
 import {
   Sidebar,
   SidebarContent,
+  SidebarFooter,
   SidebarGroup,
   SidebarGroupContent,
   SidebarHeader,
@@ -10,12 +12,7 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
 } from "@sanipatitas/ui/components/ui/sidebar"
-// import { cn } from "@sanipatitas/desktop/core/lib/tailwind"
-import { useSidebarItems } from "@sanipatitas/desktop/home/hook/use-sidebar-items"
-import {
-  // Link,
-  useLocation,
-} from "@tanstack/react-router"
+import { Link, useLocation } from "@tanstack/react-router"
 
 // Component
 export function HomeSidebar({
@@ -24,27 +21,26 @@ export function HomeSidebar({
   // Pathname
   const { pathname } = useLocation()
 
+  // Items
   const sidebarItems = useSidebarItems()
 
   return (
-    <Sidebar collapsible="icon" {...props}>
-      <SidebarHeader className="p-0">
-        {/* <Link
+    <Sidebar
+      collapsible="icon"
+      className="top-header-h h-[calc(100vh-var(--header-height))]"
+      {...props}
+    >
+      <SidebarHeader className="gap-0 p-0">
+        <Link
           to="/"
-          className={cn(
-            "py-8 transition-[padding]",
-            "group-data-[collapsible=icon]:px-3 group-data-[collapsible=icon]:py-4!"
-          )}
+          className="macos:mt-6 flex items-center gap-3 p-3 md:-mt-2!"
         >
-          <Banner
-            className={cn(
-              "text-primary-500 mx-auto mt-4 h-8 min-h-8 w-fit min-w-35",
-              "md:mt-0",
-              "group-data-[collapsible=icon]:hidden"
-            )}
-          />
-          <Brandmark className="hidden aspect-video w-6 group-data-[collapsible=icon]:block" />
-        </Link> */}
+          <Favicon className="size-6 min-h-6 min-w-6" />
+
+          <span className="truncate text-sm group-data-[collapsible=icon]:sr-only">
+            Veterinaria HC
+          </span>
+        </Link>
       </SidebarHeader>
       <SidebarContent>
         <SidebarGroup>
@@ -64,13 +60,13 @@ export function HomeSidebar({
                       tooltip={item.label}
                       className="flex items-center gap-2 transition-colors group-data-[collapsible=icon]:px-1.5!"
                       isActive={Boolean(isActive)}
-                      // render={
-                      //   <Link to={item.to} preload={false}>
-                      //     <item.icon className="size-5!" />
+                      render={
+                        <Link to={item.to} preload={false}>
+                          <item.icon className="size-5!" />
 
-                      //     <span>{item.label}</span>
-                      //   </Link>
-                      // }
+                          <span>{item.label}</span>
+                        </Link>
+                      }
                     />
                   </SidebarMenuItem>
                 )
@@ -79,6 +75,9 @@ export function HomeSidebar({
           </SidebarGroupContent>
         </SidebarGroup>
       </SidebarContent>
+      <SidebarFooter>
+        <NavUser />
+      </SidebarFooter>
     </Sidebar>
   )
 }

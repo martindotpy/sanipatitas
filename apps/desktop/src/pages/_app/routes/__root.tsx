@@ -1,6 +1,4 @@
-import { authClient } from "@sanipatitas/desktop/auth/client/auth-client"
-import { $jwt } from "@sanipatitas/desktop/auth/store/jwt-store"
-import { $auth } from "@sanipatitas/desktop/auth/store/user-store"
+import { getSession } from "@sanipatitas/desktop/auth/query/session-query"
 import { isSsr } from "@sanipatitas/desktop/core/configuration/app-configuration"
 import { Devtools } from "@sanipatitas/desktop/core/devtools/devtools"
 import { getTitle } from "@sanipatitas/desktop/core/kit/title-kit"
@@ -18,20 +16,9 @@ export const Route = createRootRouteWithContext<RootRouteContext>()({
   beforeLoad: async () => {
     if (isSsr) return { auth: null }
 
-    // Get the session
-    const auth = await authClient.getSession({
-      fetchOptions: {
-        onSuccess: ({ response }) => {
-          const authJwt = response.headers.get("set-auth-jwt")
+    const auth = await getSession()
 
-          $jwt.set(authJwt)
-        },
-      },
-    })
-
-    $auth.set(auth.data)
-
-    return { auth: auth.data }
+    return { auth }
   },
   head: () => ({ meta: [{ title: getTitle() }] }),
   component: RootComponent,

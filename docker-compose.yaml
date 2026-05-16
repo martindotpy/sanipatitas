@@ -1,16 +1,4 @@
 services:
-  # Apps
-  # - Web
-  app-web:
-    build:
-      context: .
-      dockerfile: apps/web/Dockerfile
-    container_name: sanipatitas-web
-    ports:
-      - "4321:80"
-    depends_on:
-      - service-auth
-
   # Services
   # - Auth
   service-auth:

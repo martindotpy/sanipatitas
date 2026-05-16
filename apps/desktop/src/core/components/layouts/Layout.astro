@@ -113,15 +113,17 @@ const isProdHostname = hostname === siteUrl.hostname
         />
       )
     }
-    <script src="@sanipatitas/desktop/core/scripts/umami-identify.ts"></script>
-    <script src="@sanipatitas/desktop/core/scripts/configure-client.ts"
-    ></script>
+
     <script src="@sanipatitas/desktop/core/scripts/update-favicon.ts"></script>
+    <script src="@sanipatitas/desktop/core/scripts/setup-umami.ts"></script>
+    <script src="@sanipatitas/desktop/core/scripts/setup-os.ts"></script>
+    <script src="@sanipatitas/desktop/core/scripts/setup-client.ts"></script>
+    <script src="@sanipatitas/desktop/core/scripts/setup-zod.ts"></script>
   </head>
 
   <body class="flex min-h-dvh flex-col">
     <slot />
 
-    <script src="@sanipatitas/desktop/core/scripts/show-window.ts"></script>
+    <script src="@sanipatitas/desktop/core/scripts/setup-window.ts"></script>
   </body>
 </html>

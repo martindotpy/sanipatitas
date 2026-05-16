@@ -16,8 +16,6 @@ COPY --chmod=0755 mvnw ./
 COPY pom.xml ./
 COPY shared/java/pom.xml ./shared/java/pom.xml
 COPY services/core/pom.xml ./services/core/pom.xml
-COPY services/ehr/pom.xml ./services/ehr/pom.xml
-COPY services/insurance/pom.xml ./services/insurance/pom.xml
 
 RUN ./mvnw -B dependency:go-offline
 

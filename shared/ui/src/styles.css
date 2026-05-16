@@ -8,7 +8,7 @@
 
 @theme inline {
   /* Spacing */
-  --spacing-header-h: calc(var(--spacing) * 12);
+  --spacing-header-h: calc(var(--spacing) * 8);
   --spacing-main-h: calc(100svh - var(--spacing-header-h));
 
   /* Breakpoints */
@@ -147,6 +147,10 @@
     app-region: drag;
   }
 
+  html {
+    overscroll-behavior: none;
+  }
+
   body {
     @apply bg-background text-foreground antialiased!;
     text-rendering: optimizelegibility !important;
@@ -157,8 +161,16 @@
   }
 }
 
+/* Height breakpoints */
 @custom-variant h-sm (@media (height >= 40rem));
 @custom-variant h-md (@media (height >= 48rem));
 @custom-variant h-lg (@media (height >= 64rem));
 @custom-variant h-xl (@media (height >= 80rem));
 @custom-variant h-2xl (@media (height >= 96rem));
+
+/* Os */
+@custom-variant linux (&:is([data-os="linux"] *));
+@custom-variant windows (&:is([data-os="windows"] *));
+@custom-variant macos (&:is([data-os="macos"] *));
+@custom-variant ios (&:is([data-os="ios"] *));
+@custom-variant android (&:is([data-os="android"] *));

@@ -12,6 +12,7 @@ import {
 import { useNavigate } from "@tanstack/react-router"
 import { useForm } from "react-hook-form"
 import { toast } from "sonner"
+import { TbLoader2 } from "react-icons/tb"
 import { z } from "zod"
 
 // Schema
@@ -47,10 +48,10 @@ export function SignInForm() {
         ),
         {
           loading: "Ingresando...",
-          success: () => {
+          success: ({ user }) => {
             navigate({ to: "/home" })
 
-            return "¡Bienvenido de nuevo!"
+            return `¡Bienvenido de nuevo, ${user.name}!`
           },
           error:
             "Error al ingresar, verifica tus credenciales e intenta nuevamente.",
@@ -98,7 +99,14 @@ export function SignInForm() {
           </div>
 
           <Button type="submit" disabled={isSubmitting}>
-            {isSubmitting ? "Ingresando..." : "Ingresar"}
+            {isSubmitting ? (
+              <>
+                <TbLoader2 className="size-4 animate-spin" />
+                Ingresando...
+              </>
+            ) : (
+              "Ingresar"
+            )}
           </Button>
         </FieldGroup>
       </form>

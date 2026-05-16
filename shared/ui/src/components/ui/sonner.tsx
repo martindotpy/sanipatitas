@@ -31,9 +31,6 @@ const Toaster = ({ ...props }: ToasterProps) => {
         } as React.CSSProperties
       }
       toastOptions={{
-        classNames: {
-          toast: "cn-toast",
-        },
         style: {
           fontFamily: "var(--default-font-family)",
         },

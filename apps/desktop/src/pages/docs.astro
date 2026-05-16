@@ -29,7 +29,7 @@ if (isProd) {
   title="OpenAPI Documentation"
   description="Explore the OpenAPI documentation for all services."
 >
-  <DraggableHeader className="z-100" />
+  <DraggableHeader client:only="react" className="z-100" />
 
   <ScalarComponent
     configuration={{
