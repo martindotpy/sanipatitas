@@ -14,8 +14,8 @@ pub fn run() {
 
             Ok(())
         })
-        .plugin(tauri_plugin_opener::init())
         .plugin(tauri_plugin_os::init())
+        .plugin(tauri_plugin_opener::init())
         .plugin(FramePluginBuilder::new().auto_titlebar(true).build())
         .run(tauri::generate_context!())
         .expect("error while running tauri application");
