@@ -9,12 +9,13 @@
     "frontendDist": "../dist/client"
   },
   "app": {
+    "withGlobalTauri": true,
     "windows": [
       {
         "title": "Sanipatitas",
         "width": 800,
         "height": 600,
-        "visible": false,
+        "visible": true,
         "hiddenTitle": true,
         "titleBarStyle": "Overlay",
         "center": true
