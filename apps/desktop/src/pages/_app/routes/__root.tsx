@@ -1,7 +1,9 @@
 import { getSession } from "@sanipatitas/desktop/auth/query/session-query"
+import { DraggableHeader } from "@sanipatitas/desktop/core/components/molecules/draggable-header"
 import { isSsr } from "@sanipatitas/desktop/core/configuration/app-configuration"
 import { Devtools } from "@sanipatitas/desktop/core/devtools/devtools"
 import { getTitle } from "@sanipatitas/desktop/core/kit/title-kit"
+import { SidebarProvider } from "@sanipatitas/ui/components/ui/sidebar"
 import type { QueryClient } from "@tanstack/react-query"
 import { createRootRouteWithContext, Outlet } from "@tanstack/react-router"
 import type { AstroGlobal } from "astro"
@@ -14,7 +16,9 @@ interface RootRouteContext {
 
 export const Route = createRootRouteWithContext<RootRouteContext>()({
   beforeLoad: async () => {
-    if (isSsr) return { auth: null }
+    if (isSsr) {
+      return { auth: null }
+    }
 
     const auth = await getSession()
 
@@ -27,7 +31,11 @@ export const Route = createRootRouteWithContext<RootRouteContext>()({
 function RootComponent() {
   return (
     <>
-      <Outlet />
+      <SidebarProvider className="flex flex-col">
+        <DraggableHeader />
+
+        <Outlet />
+      </SidebarProvider>
 
       <Devtools />
     </>

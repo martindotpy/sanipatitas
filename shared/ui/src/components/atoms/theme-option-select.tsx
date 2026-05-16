@@ -5,6 +5,7 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@sanipatitas/ui/components/ui/dropdown-menu"
+import { ClientOnly } from "@tanstack/react-router"
 import { useTheme } from "next-themes"
 import { useEffect, useRef } from "react"
 import { TbMoon, TbSun, TbSunMoon } from "react-icons/tb"
@@ -44,7 +45,9 @@ export function ThemeOptionSelect() {
       <DropdownMenuTrigger
         render={
           <Button variant="ghost" size="icon-lg">
-            <Icon className="size-5" />
+            <ClientOnly fallback={<TbSunMoon className="size-5" />}>
+              <Icon className="size-5" />
+            </ClientOnly>
           </Button>
         }
       />

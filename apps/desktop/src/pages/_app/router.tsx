@@ -7,7 +7,7 @@ import { routeTree } from "@sanipatitas/desktop/pages/_app/routeTree.gen"
 import { ErrorMainSection } from "@sanipatitas/ui/components/organisms/error-main-section"
 import { NotFoundMainSection } from "@sanipatitas/ui/components/organisms/not-found-main-section"
 import { TooltipProvider } from "@sanipatitas/ui/components/ui/tooltip"
-import { DefaultLoadingPage } from "@sanipatitas/ui/src/components/template/default-loading-page"
+import { DefaultLoadingPage } from "@sanipatitas/ui/components/template/default-loading-page"
 import { dehydrate, hydrate } from "@tanstack/react-query"
 import { createRouter, ErrorComponent } from "@tanstack/react-router"
 import type { AstroGlobal } from "astro"
@@ -56,7 +56,10 @@ export function createAppRouter(astro?: AstroGlobal) {
       )
     },
     defaultViewTransition: true,
-    scrollRestoration: true,
+    scrollRestoration: ({ location }) => {
+      return location.pathname !== "/docs"
+    },
+    scrollRestorationBehavior: "instant",
     defaultPreload: "intent",
   })
 
@@ -71,9 +74,6 @@ declare module "@tanstack/react-router" {
   }
 
   interface StaticDataRouteOption {
-    creationMode?: boolean
-    editMode?: boolean
-    manualMode?: boolean
-    aiMode?: boolean
+    sidebar?: boolean
   }
 }

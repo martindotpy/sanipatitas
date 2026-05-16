@@ -9,13 +9,18 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from "./routes/__root"
+import { Route as DocsRouteImport } from "./routes/docs"
 import { Route as PublicRouteRouteImport } from "./routes/_public/route"
 import { Route as PrivateRouteRouteImport } from "./routes/_private/route"
 import { Route as PrivateIndexRouteImport } from "./routes/_private/index"
 import { Route as PublicSignInRouteImport } from "./routes/_public/sign-in"
 import { Route as PrivateProfileRouteImport } from "./routes/_private/profile"
-import { Route as PrivateHomeRouteImport } from "./routes/_private/home"
 
+const DocsRoute = DocsRouteImport.update({
+  id: "/docs",
+  path: "/docs",
+  getParentRoute: () => rootRouteImport,
+} as any)
 const PublicRouteRoute = PublicRouteRouteImport.update({
   id: "/_public",
   getParentRoute: () => rootRouteImport,
@@ -39,21 +44,16 @@ const PrivateProfileRoute = PrivateProfileRouteImport.update({
   path: "/profile",
   getParentRoute: () => PrivateRouteRoute,
 } as any)
-const PrivateHomeRoute = PrivateHomeRouteImport.update({
-  id: "/home",
-  path: "/home",
-  getParentRoute: () => PrivateRouteRoute,
-} as any)
 
 export interface FileRoutesByFullPath {
   "/": typeof PrivateIndexRoute
-  "/home": typeof PrivateHomeRoute
+  "/docs": typeof DocsRoute
   "/profile": typeof PrivateProfileRoute
   "/sign-in": typeof PublicSignInRoute
 }
 export interface FileRoutesByTo {
   "/": typeof PrivateIndexRoute
-  "/home": typeof PrivateHomeRoute
+  "/docs": typeof DocsRoute
   "/profile": typeof PrivateProfileRoute
   "/sign-in": typeof PublicSignInRoute
 }
@@ -61,21 +61,21 @@ export interface FileRoutesById {
   __root__: typeof rootRouteImport
   "/_private": typeof PrivateRouteRouteWithChildren
   "/_public": typeof PublicRouteRouteWithChildren
-  "/_private/home": typeof PrivateHomeRoute
+  "/docs": typeof DocsRoute
   "/_private/profile": typeof PrivateProfileRoute
   "/_public/sign-in": typeof PublicSignInRoute
   "/_private/": typeof PrivateIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: "/" | "/home" | "/profile" | "/sign-in"
+  fullPaths: "/" | "/docs" | "/profile" | "/sign-in"
   fileRoutesByTo: FileRoutesByTo
-  to: "/" | "/home" | "/profile" | "/sign-in"
+  to: "/" | "/docs" | "/profile" | "/sign-in"
   id:
     | "__root__"
     | "/_private"
     | "/_public"
-    | "/_private/home"
+    | "/docs"
     | "/_private/profile"
     | "/_public/sign-in"
     | "/_private/"
@@ -84,10 +84,18 @@ export interface FileRouteTypes {
 export interface RootRouteChildren {
   PrivateRouteRoute: typeof PrivateRouteRouteWithChildren
   PublicRouteRoute: typeof PublicRouteRouteWithChildren
+  DocsRoute: typeof DocsRoute
 }
 
 declare module "@tanstack/react-router" {
   interface FileRoutesByPath {
+    "/docs": {
+      id: "/docs"
+      path: "/docs"
+      fullPath: "/docs"
+      preLoaderRoute: typeof DocsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     "/_public": {
       id: "/_public"
       path: ""
@@ -123,24 +131,15 @@ declare module "@tanstack/react-router" {
       preLoaderRoute: typeof PrivateProfileRouteImport
       parentRoute: typeof PrivateRouteRoute
     }
-    "/_private/home": {
-      id: "/_private/home"
-      path: "/home"
-      fullPath: "/home"
-      preLoaderRoute: typeof PrivateHomeRouteImport
-      parentRoute: typeof PrivateRouteRoute
-    }
   }
 }
 
 interface PrivateRouteRouteChildren {
-  PrivateHomeRoute: typeof PrivateHomeRoute
   PrivateProfileRoute: typeof PrivateProfileRoute
   PrivateIndexRoute: typeof PrivateIndexRoute
 }
 
 const PrivateRouteRouteChildren: PrivateRouteRouteChildren = {
-  PrivateHomeRoute: PrivateHomeRoute,
   PrivateProfileRoute: PrivateProfileRoute,
   PrivateIndexRoute: PrivateIndexRoute,
 }
@@ -164,6 +163,7 @@ const PublicRouteRouteWithChildren = PublicRouteRoute._addFileChildren(
 const rootRouteChildren: RootRouteChildren = {
   PrivateRouteRoute: PrivateRouteRouteWithChildren,
   PublicRouteRoute: PublicRouteRouteWithChildren,
+  DocsRoute: DocsRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

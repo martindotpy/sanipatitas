@@ -143,12 +143,16 @@
     scrollbar-color: var(--muted) transparent;
   }
 
-  *[data-tauri-drag-region] {
-    app-region: drag;
+  [data-tauri-frame-tb] {
+    @apply right-0! left-auto! w-fit!;
+
+    & > [data-tauri-drag-region] {
+      @apply hidden!;
+    }
   }
 
   html {
-    overscroll-behavior: none;
+    @apply no-scrollbar overscroll-none;
   }
 
   body {
@@ -159,6 +163,32 @@
   body * {
     @apply scroll-smooth;
   }
+}
+
+/* Scalar */
+:root {
+  --scalar-font: var(--default-font-family);
+}
+
+.document-selector {
+  @apply windows:mt-header-h;
+}
+
+.scalar-app {
+  --scalar-background-1: var(--background);
+
+  & * {
+    --scalar-background-1: var(--background);
+    --scalar-header-height: var(--spacing-header-h);
+  }
+
+  & .t-doc__header {
+    @apply h-header-h;
+  }
+}
+
+.darklight-reference {
+  @apply **:hidden!;
 }
 
 /* Height breakpoints */

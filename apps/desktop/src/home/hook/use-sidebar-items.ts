@@ -11,7 +11,7 @@ interface SidebarItem {
 export function useSidebarItems(): SidebarItem[] {
   return [
     {
-      to: "/home",
+      to: "/",
       label: "Inicio",
       icon: TbHome,
     },

@@ -1,6 +1,8 @@
 import { zodResolver } from "@hookform/resolvers/zod"
 import { authClient } from "@sanipatitas/desktop/auth/client/auth-client"
+import { invalidateSessionQuery } from "@sanipatitas/desktop/auth/query/session-query"
 import { Favicon } from "@sanipatitas/desktop/core/components/atoms/favicon"
+import { useClearHistory } from "@sanipatitas/desktop/core/hook/use-clear-history"
 import { zOpenapiSignInEmailBody } from "@sanipatitas/shared/api/client/zod.gen"
 import { ControlledInput } from "@sanipatitas/ui/components/form/controlled/controlled-input"
 import { ControlledPasswordInput } from "@sanipatitas/ui/components/form/controlled/controlled-password-input"
@@ -11,8 +13,8 @@ import {
 } from "@sanipatitas/ui/components/ui/field"
 import { useNavigate } from "@tanstack/react-router"
 import { useForm } from "react-hook-form"
-import { toast } from "sonner"
 import { TbLoader2 } from "react-icons/tb"
+import { toast } from "sonner"
 import { z } from "zod"
 
 // Schema
@@ -25,6 +27,9 @@ const SignInEmailBody = zOpenapiSignInEmailBody.safeExtend({
 export function SignInForm() {
   // Navigate
   const navigate = useNavigate()
+
+  // Clear history
+  const clearHistory = useClearHistory()
 
   // Form
   const {
@@ -42,14 +47,17 @@ export function SignInForm() {
   const onSubmit = handleSubmit(async (data) => {
     await toast
       .promise(
-        authClient.signIn.email(
-          { email: data.email, password: data.password },
-          { throw: true }
+        invalidateSessionQuery().then(() =>
+          authClient.signIn.email(
+            { email: data.email, password: data.password },
+            { throw: true }
+          )
         ),
         {
           loading: "Ingresando...",
-          success: ({ user }) => {
-            navigate({ to: "/home" })
+          success: async ({ user }) => {
+            await navigate({ to: "/", replace: true })
+            clearHistory()
 
             return `¡Bienvenido de nuevo, ${user.name}!`
           },

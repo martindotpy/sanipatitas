@@ -26,3 +26,8 @@ export async function getSession() {
     staleTime: SESSION_STALE_TIME,
   })
 }
+
+
+export async function invalidateSessionQuery() {
+  await queryClient.invalidateQueries({ queryKey: sessionQueryKey })
+}

@@ -1,6 +1,8 @@
 import { authClient } from "@sanipatitas/desktop/auth/client/auth-client"
 import { displayRole } from "@sanipatitas/desktop/auth/display/display-role"
 import { useUser } from "@sanipatitas/desktop/auth/hook/use-user"
+import { invalidateSessionQuery } from "@sanipatitas/desktop/auth/query/session-query"
+import { useClearHistory } from "@sanipatitas/desktop/core/hook/use-clear-history"
 import {
   Avatar,
   AvatarFallback,
@@ -28,6 +30,9 @@ import { toast } from "sonner"
 export function NavUser() {
   // Navigate
   const navigate = useNavigate()
+
+  // Clear history
+  const clearHistory = useClearHistory()
 
   // User
   const user = useUser()
@@ -77,19 +82,23 @@ export function NavUser() {
             <DropdownMenuSeparator />
             <DropdownMenuGroup>
               <DropdownMenuItem
-                onClick={() => {
+                onClick={async () => {
                   setIsSigningOut(true)
 
-                  toast
-                    .promise(authClient.signOut(), {
-                      loading: "Cerrando sesión...",
-                      success: () => {
-                        navigate({ to: "/sign-in" })
+                  await toast
+                    .promise(
+                      invalidateSessionQuery().then(() => authClient.signOut()),
+                      {
+                        loading: "Cerrando sesión...",
+                        success: async () => {
+                          await navigate({ to: "/sign-in", replace: true })
+                          clearHistory()
 
-                        return "¡Hasta luego!"
-                      },
-                      error: "Error al cerrar sesión, intenta nuevamente.",
-                    })
+                          return `¡Hasta luego, ${user.name}!`
+                        },
+                        error: "Error al cerrar sesión, intenta nuevamente.",
+                      }
+                    )
                     .unwrap()
                     .finally(() => setIsSigningOut(false))
                 }}

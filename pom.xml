@@ -190,6 +190,7 @@
     </build>
 
     <profiles>
+        <!-- Native profile -->
         <profile>
             <id>native</id>
             <activation>

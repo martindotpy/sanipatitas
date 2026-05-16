@@ -4,6 +4,7 @@
   "private": true,
   "dependencies": {
     "@base-ui/react": "1.4.1",
+    "@lottiefiles/react-lottie-player": "3.6.0",
     "@resvg/resvg-js": "2.6.2",
     "@tanstack/react-router": "1.169.2",
     "@types/react": "19.2.14",

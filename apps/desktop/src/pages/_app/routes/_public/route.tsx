@@ -11,11 +11,13 @@ export const Route = createFileRoute("/_public")({
     if (isSsr) return null
 
     // Redirect to private routes if is authenticated
-    if (context.auth) throw redirect({ to: "/home" })
+    if (context.auth) {
+      throw redirect({ to: "/", replace: true })
+    }
   },
-  component: RouteComponent,
+  component: PublicLayout,
 })
 
-function RouteComponent() {
+function PublicLayout() {
   return <Outlet />
 }

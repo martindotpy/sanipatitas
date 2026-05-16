@@ -23,7 +23,7 @@
     "@resvg/resvg-js": "2.6.2",
     "@sanipatitas/shared": "workspace:*",
     "@sanipatitas/ui": "workspace:*",
-    "@scalar/astro": "0.2.14",
+    "@scalar/api-reference-react": "0.9.34",
     "@tailwindcss/vite": "4.3.0",
     "@tanstack/devtools-vite": "0.6.0",
     "@tanstack/react-db": "0.1.83",

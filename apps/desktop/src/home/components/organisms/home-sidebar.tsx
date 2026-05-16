@@ -30,7 +30,7 @@ export function HomeSidebar({
       className="top-header-h h-[calc(100vh-var(--header-height))]"
       {...props}
     >
-      <SidebarHeader className="gap-0 p-0">
+      <SidebarHeader className="mt-2 gap-0 p-0">
         <Link
           to="/"
           className="macos:mt-6 flex items-center gap-3 p-3 md:-mt-2!"

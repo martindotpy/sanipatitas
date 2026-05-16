@@ -1,5 +1,6 @@
 import LightFavicon from "@sanipatitas/ui/assets/svg/favicon-light.svg?react"
 import DarkFavicon from "@sanipatitas/ui/assets/svg/favicon.svg?react"
+import { ClientOnly } from "@tanstack/react-router"
 import { useTheme } from "next-themes"
 
 // Component
@@ -9,9 +10,13 @@ export function Favicon(props: FaviconProps) {
   // Theme
   const { resolvedTheme } = useTheme()
 
-  return resolvedTheme === "dark" ? (
-    <LightFavicon {...props} />
-  ) : (
-    <DarkFavicon {...props} />
+  return (
+    <ClientOnly fallback={<DarkFavicon {...props} />}>
+      {resolvedTheme === "dark" ? (
+        <LightFavicon {...props} />
+      ) : (
+        <DarkFavicon {...props} />
+      )}
+    </ClientOnly>
   )
 }

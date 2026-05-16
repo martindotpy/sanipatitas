@@ -9,7 +9,8 @@ import sharp from "sharp"
 png2icons.setLogger(consola.log)
 
 // Context
-const cwd = process.cwd()
+const { dirname } = import.meta
+const desktopDirname = path.join(dirname, "..")
 
 // Convert to RGB to RGBA all images (.png/.ico)
 const imagesGlob = new Glob("src-tauri/icons/**/*.{png}")
@@ -30,9 +31,14 @@ await Promise.all(
 )
 
 // Generate .icns file from .png
-const input = await readFile(path.join(cwd, "src-tauri", "icons", "icon.png"))
+const input = await readFile(
+  path.join(desktopDirname, "src-tauri", "icons", "icon.png")
+)
 const icns = png2icons.createICNS(input, png2icons.BICUBIC, 0)
 
 if (icns) {
-  await writeFile(path.join(cwd, "src-tauri", "icons", "icon.icns"), icns)
+  await writeFile(
+    path.join(desktopDirname, "src-tauri", "icons", "icon.icns"),
+    icns
+  )
 }
