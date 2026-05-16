@@ -9,6 +9,9 @@ import { redis } from "bun"
 // Logger
 const authLogger = serverLog.child({ module: "auth" })
 
+// Redis
+const namespace = "sanipatitas:auth"
+
 // Auth configuration
 export const auth = betterAuth({
   database: drizzleAdapter(db, { provider: "pg", schema, debugLogs: true }),
@@ -46,14 +49,14 @@ export const auth = betterAuth({
   },
   secondaryStorage: {
     get: async (key) => {
-      return await redis.get(key)
+      return await redis.get(`${namespace}:${key}`)
     },
     set: async (key, value, ttl) => {
-      if (ttl) await redis.set(key, value, "EX", ttl)
-      else await redis.set(key, value)
+      if (ttl) await redis.set(`${namespace}:${key}`, value, "EX", ttl)
+      else await redis.set(`${namespace}:${key}`, value)
     },
     delete: async (key) => {
-      await redis.del(key)
+      await redis.del(`${namespace}:${key}`)
     },
   },
   advanced: {
