@@ -90,9 +90,12 @@ export function NavUser() {
                       invalidateSessionQuery().then(() => authClient.signOut()),
                       {
                         loading: "Cerrando sesión...",
-                        success: async () => {
-                          await navigate({ to: "/sign-in", replace: true })
-                          clearHistory()
+                        success: () => {
+                          navigate({ to: "/sign-in", replace: true }).then(
+                            () => {
+                              clearHistory()
+                            }
+                          )
 
                           return `¡Hasta luego, ${user.name}!`
                         },

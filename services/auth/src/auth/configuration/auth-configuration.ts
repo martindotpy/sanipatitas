@@ -52,8 +52,11 @@ export const auth = betterAuth({
       return await redis.get(`${namespace}:${key}`)
     },
     set: async (key, value, ttl) => {
-      if (ttl) await redis.set(`${namespace}:${key}`, value, "EX", ttl)
-      else await redis.set(`${namespace}:${key}`, value)
+      if (ttl) {
+        await redis.set(`${namespace}:${key}`, value, "EX", ttl)
+      } else {
+        await redis.set(`${namespace}:${key}`, value)
+      }
     },
     delete: async (key) => {
       await redis.del(`${namespace}:${key}`)
@@ -65,6 +68,7 @@ export const auth = betterAuth({
       generateId: () => Bun.randomUUIDv7(),
     },
   },
+  trustedOrigins: isDev ? ["http://localhost:1420"] : [],
   experimental: { joins: true },
 })
 

@@ -152,7 +152,7 @@
   }
 
   html {
-    @apply no-scrollbar overscroll-none;
+    @apply no-scrollbar overscroll-none bg-background;
   }
 
   body {

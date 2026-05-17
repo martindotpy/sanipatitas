@@ -2,12 +2,12 @@
 import Styles from "@sanipatitas/desktop/core/components/atoms/Styles.astro"
 import Sonner from "@sanipatitas/desktop/core/components/molecules/Sonner.astro"
 import {
-site,
-siteUrl,
+  site,
+  siteUrl,
 } from "@sanipatitas/desktop/core/configuration/app-configuration"
 import {
-author,
-defaultDescription,
+  author,
+  defaultDescription,
 } from "@sanipatitas/desktop/core/constant/seo-constant"
 import { getTitle } from "@sanipatitas/desktop/core/kit/title-kit"
 import { pwaAssetsHead } from "virtual:pwa-assets/head"
@@ -114,11 +114,11 @@ const isProdHostname = hostname === siteUrl.hostname
       )
     }
 
-    <script src="@sanipatitas/desktop/core/scripts/update-favicon.ts"></script>
-    <script src="@sanipatitas/desktop/core/scripts/setup-umami.ts"></script>
-    <script src="@sanipatitas/desktop/core/scripts/setup-os.ts"></script>
     <script src="@sanipatitas/desktop/core/scripts/setup-client.ts"></script>
+    <script src="@sanipatitas/desktop/core/scripts/setup-os.ts"></script>
+    <script src="@sanipatitas/desktop/core/scripts/setup-umami.ts"></script>
     <script src="@sanipatitas/desktop/core/scripts/setup-zod.ts"></script>
+    <script src="@sanipatitas/desktop/core/scripts/update-favicon.ts"></script>
   </head>
 
   <body class="flex min-h-dvh flex-col">

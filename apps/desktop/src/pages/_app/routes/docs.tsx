@@ -2,6 +2,7 @@ import { isProd } from "@sanipatitas/shared/app-context"
 import { ApiReferenceReact } from "@scalar/api-reference-react"
 import "@scalar/api-reference-react/style.css"
 import { createFileRoute, notFound } from "@tanstack/react-router"
+import { fetch as tauriFetch } from "@tauri-apps/plugin-http"
 import { useTheme } from "next-themes"
 
 // Route
@@ -38,6 +39,18 @@ function DocsComponent() {
         telemetry: false,
         hideDarkModeToggle: true,
         showDeveloperTools: "never",
+        fetch: tauriFetch,
+        operationsSorter: (a, b) => {
+          const methodOrder = ["get", "post", "patch", "put", "delete"]
+          const methodComparison =
+            methodOrder.indexOf(a.method) - methodOrder.indexOf(b.method)
+
+          if (methodComparison !== 0) {
+            return methodComparison
+          }
+
+          return a.path.localeCompare(b.path)
+        },
       }}
     />
   )

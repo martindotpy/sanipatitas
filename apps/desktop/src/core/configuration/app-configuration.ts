@@ -1,3 +1,4 @@
+import { isTauri as checkIsTauri } from "@tauri-apps/api/core"
 import { type } from "@tauri-apps/plugin-os"
 import z from "zod"
 
@@ -9,6 +10,7 @@ export const {
   PROD: isProd,
   SITE: site,
   SSR: isSsr,
+  PUBLIC_BASE_URL: publicBaseUrl,
 } = (
   z.object({
     BASE_URL: z.string(),
@@ -17,6 +19,7 @@ export const {
     SITE: z.string(),
     SSR: z.coerce.boolean(),
     MODE: z.enum(["development", "production", "test"]).default("development"),
+    PUBLIC_BASE_URL: z.string().optional(),
   }) satisfies z.ZodType<KeyEnv>
 ).parse(import.meta.env)
 
@@ -25,3 +28,6 @@ export const siteUrl = new URL(site)
 
 // Os
 export const os = isSsr ? null : type()
+
+// Tauri
+export const isTauri = checkIsTauri()

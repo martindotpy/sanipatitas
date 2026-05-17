@@ -1,21 +1,36 @@
-#[cfg(windows)]
+use std::time::Duration;
 use tauri::Manager;
 use tauri_plugin_frame::FramePluginBuilder;
 
 #[cfg_attr(mobile, tauri::mobile_entry_point)]
 pub fn run() {
     tauri::Builder::default()
-        .setup(|_app| {
+        .setup(|app| {
+            let window = app.get_webview_window("main").unwrap();
+
             #[cfg(windows)]
             {
-                let window = _app.get_webview_window("main").unwrap();
                 setup_windows(&window);
             }
+
+            #[cfg(desktop)]
+            {
+                use tauri_plugin_deep_link::DeepLinkExt;
+
+                app.deep_link().register("sanipatitas")?;
+            }
+
+            tauri::async_runtime::spawn(async move {
+                tokio::time::sleep(Duration::from_millis(5000)).await;
+                window.show().unwrap();
+            });
 
             Ok(())
         })
         .plugin(tauri_plugin_os::init())
+        .plugin(tauri_plugin_http::init())
         .plugin(tauri_plugin_opener::init())
+        .plugin(tauri_plugin_deep_link::init())
         .plugin(FramePluginBuilder::new().auto_titlebar(true).build())
         .run(tauri::generate_context!())
         .expect("error while running tauri application");

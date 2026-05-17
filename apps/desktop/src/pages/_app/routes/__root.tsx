@@ -1,4 +1,5 @@
 import { getSession } from "@sanipatitas/desktop/auth/query/session-query"
+import { DeepLinkHandler } from "@sanipatitas/desktop/core/components/atoms/deep-link-handler"
 import { DraggableHeader } from "@sanipatitas/desktop/core/components/molecules/draggable-header"
 import { isSsr } from "@sanipatitas/desktop/core/configuration/app-configuration"
 import { Devtools } from "@sanipatitas/desktop/core/devtools/devtools"
@@ -31,6 +32,8 @@ export const Route = createRootRouteWithContext<RootRouteContext>()({
 function RootComponent() {
   return (
     <>
+      <DeepLinkHandler />
+
       <SidebarProvider className="flex flex-col">
         <DraggableHeader />
 

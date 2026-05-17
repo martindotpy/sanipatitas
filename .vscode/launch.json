@@ -16,7 +16,7 @@
       "type": "bun",
       "name": "Sanipatitas (auth) 🐞",
       "request": "launch",
-      "program": "dev",
+      "program": "src/index.ts",
       "cwd": "${workspaceFolder}/services/auth",
       "internalConsoleOptions": "neverOpen",
       "preLaunchTask": "core:dev",

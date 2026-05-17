@@ -7,10 +7,7 @@ export function useClearHistory() {
   const clearHistory = () => {
     router.update({
       ...router.options,
-      history: createMemoryHistory({
-        initialEntries: [router.state.location.pathname],
-        initialIndex: 0,
-      }),
+      history: createMemoryHistory(),
     })
   }
 

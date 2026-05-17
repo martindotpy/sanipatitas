@@ -1,7 +1,5 @@
 import { Section } from "@sanipatitas/ui/components/organisms/section"
-import { buttonVariants } from "@sanipatitas/ui/components/ui/button"
 import { Link } from "@sanipatitas/ui/components/ui/link"
-import { cn } from "@sanipatitas/ui/lib/tailwind"
 
 // Component
 export function NotFoundMainSection() {
@@ -15,15 +13,12 @@ export function NotFoundMainSection() {
       </p>
 
       <div className="flex w-full flex-col gap-2">
-        <Link variant="default" className="w-full">
+        <Link to="/" variant="default" className="w-full">
           Volver al inicio
         </Link>
-        <a
-          href="/docs"
-          className={cn(buttonVariants({ variant: "secondary" }), "w-full")}
-        >
+        <Link to="/docs" variant="secondary" className="w-full">
           Documentación
-        </a>
+        </Link>
       </div>
     </Section>
   )

@@ -1,11 +1,6 @@
 {
   // Spell checker
-  "cSpell.words": [
-    "sanipatitas",
-    "sonner",
-    "tauri",
-    "Umami"
-  ],
+  "cSpell.words": ["sanipatitas", "sonner", "tauri", "Umami"],
 
   // Javascript
   "js/ts.preferences.importModuleSpecifier": "non-relative",
@@ -53,6 +48,5 @@
 
   // All
   "files.trimTrailingWhitespace": true,
-  "files.insertFinalNewline": true,
-  "java.configuration.updateBuildConfiguration": "interactive"
+  "files.insertFinalNewline": true
 }

@@ -55,9 +55,10 @@ export function SignInForm() {
         ),
         {
           loading: "Ingresando...",
-          success: async ({ user }) => {
-            await navigate({ to: "/", replace: true })
-            clearHistory()
+          success: ({ user }) => {
+            navigate({ to: "/", replace: true }).then(() => {
+              clearHistory()
+            })
 
             return `¡Bienvenido de nuevo, ${user.name}!`
           },
