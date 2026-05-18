@@ -11,6 +11,7 @@ import {
 } from "@sanipatitas/desktop/core/constant/seo-constant"
 import { getTitle } from "@sanipatitas/desktop/core/kit/title-kit"
 import { pwaAssetsHead } from "virtual:pwa-assets/head"
+import { FallbackDraggableHeader } from "@sanipatitas/desktop/core/components/molecules/fallback-draggable-header"
 
 // Context
 interface Props {
@@ -122,6 +123,8 @@ const isProdHostname = hostname === siteUrl.hostname
   </head>
 
   <body class="flex min-h-dvh flex-col">
+    <FallbackDraggableHeader />
+
     <slot />
 
     <script src="@sanipatitas/desktop/core/scripts/setup-window.ts"></script>

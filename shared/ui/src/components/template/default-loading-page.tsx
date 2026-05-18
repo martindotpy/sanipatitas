@@ -1,12 +1,12 @@
 import { ClientOnly } from "@tanstack/react-router"
-import { lazy, useId } from "react"
+import { lazy, Suspense } from "react"
 
 // Animations
 const ANIMATIONS = [
   lazy(() =>
-    import("@sanipatitas/ui/components/atoms/ambulance-animated").then(
-      (m) => ({ default: m.AmbulanceAnimated })
-    )
+    import("@sanipatitas/ui/components/atoms/ambulance-animated").then((m) => ({
+      default: m.AmbulanceAnimated,
+    }))
   ),
   lazy(() =>
     import("@sanipatitas/ui/components/atoms/cat-animated").then((m) => ({
@@ -24,9 +24,9 @@ const ANIMATIONS = [
     )
   ),
   lazy(() =>
-    import("@sanipatitas/ui/components/atoms/injection-animated").then(
-      (m) => ({ default: m.InjectionAnimated })
-    )
+    import("@sanipatitas/ui/components/atoms/injection-animated").then((m) => ({
+      default: m.InjectionAnimated,
+    }))
   ),
   lazy(() =>
     import("@sanipatitas/ui/components/atoms/maneki-cat-animated").then(
@@ -45,25 +45,27 @@ const ANIMATIONS = [
   ),
 ] as const
 
-const hashCode = (str: string): number => {
-  let hash = 0
-  for (let i = 0; i < str.length; i++) {
-    hash = (hash << 5) - hash + str.charCodeAt(i)
-    hash |= 0
-  }
-  return Math.abs(hash)
-}
-
 // Component
 export function DefaultLoadingPage() {
-  const RandomAnimation = ANIMATIONS[hashCode(useId()) % ANIMATIONS.length]!
+  const RandomAnimation = ANIMATIONS[randomAnimation()]!
 
   return (
     <div className="flex flex-1 flex-col items-center justify-center gap-1 p-2">
-      <ClientOnly fallback={<div className="min-h-32 min-w-32 size-32" />}>
-        <RandomAnimation className="min-h-32 min-w-32 size-32" />
+      <ClientOnly fallback={<Fallback />}>
+        <Suspense fallback={<Fallback />}>
+          <RandomAnimation className="size-32 min-h-32 min-w-32" />
+        </Suspense>
       </ClientOnly>
       Cargando...
     </div>
   )
+}
+
+// Helper
+function randomAnimation() {
+  return Math.floor(Math.random() * ANIMATIONS.length)
+}
+
+function Fallback() {
+  return <div className="size-32 min-h-32 min-w-32" />
 }

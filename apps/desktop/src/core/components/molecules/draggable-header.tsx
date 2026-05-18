@@ -22,25 +22,31 @@ export function DraggableHeader({ className, ...props }: DraggableHeaderProps) {
   const isSidebarActive = useIsSidebarActive()
 
   return (
-    <div className={cn("fixed z-99 flex h-8 w-dvw", className)} {...props}>
-      <Button
-        size="icon-sm"
-        variant="ghost"
-        disabled={!canGoBack}
-        onClick={() => router.history.back()}
+    <div className={cn("fixed z-99 flex h-header-h w-dvw", className)} {...props}>
+      <div
+        id="draggable-header"
+        className="macos:pl-18 flex h-full items-center"
       >
-        <TbChevronLeft className="size-4" />
-      </Button>
-      <Button
-        size="icon-sm"
-        variant="ghost"
-        disabled={!canGoForward}
-        onClick={() => router.history.forward()}
-      >
-        <TbChevronRight className="size-4" />
-      </Button>
+        <Button
+          size="icon-sm"
+          variant="ghost"
+          disabled={!canGoBack}
+          onClick={() => router.history.back()}
+        >
+          <TbChevronLeft className="size-4" />
+        </Button>
+        <Button
+          size="icon-sm"
+          variant="ghost"
+          disabled={!canGoForward}
+          onClick={() => router.history.forward()}
+        >
+          <TbChevronRight className="size-4" />
+        </Button>
+      </div>
+
       {isSidebarActive && <SidebarTrigger />}
-      <div className="windows:[app-region:drag] macos:[app-region:drag] h-full flex-1" />
+      <div data-tauri-drag-region className="h-full flex-1" />
     </div>
   )
 }

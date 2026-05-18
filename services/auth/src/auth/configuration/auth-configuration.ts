@@ -68,7 +68,10 @@ export const auth = betterAuth({
       generateId: () => Bun.randomUUIDv7(),
     },
   },
-  trustedOrigins: isDev ? ["http://localhost:1420"] : [],
+  trustedOrigins: [
+    "tauri://localhost",
+    ...(isDev ? ["http://localhost:1420"] : []),
+  ],
   experimental: { joins: true },
 })
 
