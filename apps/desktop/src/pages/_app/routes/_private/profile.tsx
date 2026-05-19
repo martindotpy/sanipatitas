@@ -6,5 +6,5 @@ export const Route = createFileRoute("/_private/profile")({
 })
 
 function ProfileComponent() {
-  return <>Profile</>
+  return <></>
 }

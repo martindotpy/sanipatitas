@@ -55,7 +55,7 @@ export const openapiMiddleware = openapi({
       {
         url:
           authOpenAPISchema.servers?.[0]?.url?.replace("/api/auth", "") ??
-          "http://localhost:4321",
+          "http://localhost",
       },
     ],
   },

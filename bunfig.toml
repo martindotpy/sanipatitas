@@ -1,4 +1,4 @@
 [install]
 ignoreScripts = false
-minimumReleaseAge = 604800 # 7 days in seconds
+minimumReleaseAge = 259200 # 3 days in seconds
 optional = true

@@ -2,6 +2,7 @@ import { authController } from "@sanipatitas/auth/auth/controller/auth-controlle
 import { port } from "@sanipatitas/auth/core/configuration/app-configuration"
 import { miscellaneousController } from "@sanipatitas/auth/core/controller/miscellaneous-controller"
 import { initializeApp } from "@sanipatitas/auth/core/initializer"
+import { corsMiddleware } from "@sanipatitas/auth/core/middleware/cors-middleware"
 import { openapiMiddleware } from "@sanipatitas/auth/core/middleware/openapi-middleware"
 import { loggerMiddleware } from "@sanipatitas/shared/middleware/logger-middleware"
 import Elysia from "elysia"
@@ -10,6 +11,7 @@ import Elysia from "elysia"
 export const api = new Elysia({ aot: true, precompile: true })
   .use(loggerMiddleware)
   .use(openapiMiddleware)
+  .use(corsMiddleware)
   .use(miscellaneousController)
   .use(authController)
 

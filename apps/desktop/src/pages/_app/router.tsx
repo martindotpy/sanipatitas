@@ -7,9 +7,14 @@ import { routeTree } from "@sanipatitas/desktop/pages/_app/routeTree.gen"
 import { ErrorMainSection } from "@sanipatitas/ui/components/organisms/error-main-section"
 import { NotFoundMainSection } from "@sanipatitas/ui/components/organisms/not-found-main-section"
 import { DefaultLoadingPage } from "@sanipatitas/ui/components/template/default-loading-page"
+import { Toaster } from "@sanipatitas/ui/components/ui/sonner"
 import { TooltipProvider } from "@sanipatitas/ui/components/ui/tooltip"
 import { dehydrate, hydrate } from "@tanstack/react-query"
-import { createRouter, ErrorComponent } from "@tanstack/react-router"
+import {
+  createMemoryHistory,
+  createRouter,
+  ErrorComponent,
+} from "@tanstack/react-router"
 import type { AstroGlobal } from "astro"
 import { ThemeProvider } from "next-themes"
 import * as React from "react"
@@ -36,7 +41,10 @@ export function createAppRouter(astro?: AstroGlobal) {
         <React.StrictMode>
           <TanstackQueryProvider {...tanstackQueryContext}>
             <TooltipProvider>
-              <ThemeProvider attribute="class">{children}</ThemeProvider>
+              <ThemeProvider attribute="class">
+                {children}
+                <Toaster />
+              </ThemeProvider>
             </TooltipProvider>
           </TanstackQueryProvider>
         </React.StrictMode>
@@ -59,8 +67,7 @@ export function createAppRouter(astro?: AstroGlobal) {
     scrollRestoration: ({ location }) => {
       return location.pathname !== "/docs"
     },
-    scrollRestorationBehavior: "instant",
-    defaultPreload: "intent",
+    history: createMemoryHistory(),
   })
 
   return router

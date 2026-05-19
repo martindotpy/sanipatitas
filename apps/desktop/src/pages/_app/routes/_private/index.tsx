@@ -6,5 +6,5 @@ export const Route = createFileRoute("/_private/")({
 })
 
 function IndexComponent() {
-  return <>¡Hola!</>
+  return <></>
 }

@@ -48,7 +48,7 @@ export function NavUser() {
             render={
               <SidebarMenuButton
                 size="lg"
-                className="data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground"
+                className="data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground min-h-12 group-data-[collapsible=icon]:bg-transparent! hover:cursor-pointer"
               >
                 <Avatar>
                   <AvatarImage src={user.image ?? undefined} alt={user.name} />

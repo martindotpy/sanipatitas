@@ -17,6 +17,7 @@
       "name": "Sanipatitas (auth) 🐞",
       "request": "launch",
       "program": "src/index.ts",
+      "watchMode": true,
       "cwd": "${workspaceFolder}/services/auth",
       "internalConsoleOptions": "neverOpen",
       "preLaunchTask": "core:dev",

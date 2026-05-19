@@ -1,6 +1,5 @@
 ---
 import Styles from "@sanipatitas/desktop/core/components/atoms/Styles.astro"
-import Sonner from "@sanipatitas/desktop/core/components/molecules/Sonner.astro"
 import {
   site,
   siteUrl,
@@ -100,8 +99,6 @@ const isProdHostname = hostname === siteUrl.hostname
     {/* Styles */}
     <Styles />
 
-    {/* Scripts */}
-    <Sonner />
     {/* TODO: Add website id to umami */}
     {
       isProdHostname && (

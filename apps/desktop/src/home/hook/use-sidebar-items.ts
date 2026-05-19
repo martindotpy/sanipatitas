@@ -1,5 +1,5 @@
 import type { IconType } from "react-icons/lib"
-import { TbHome } from "react-icons/tb"
+import { TbLayout } from "react-icons/tb"
 
 // Hook
 interface SidebarItem {
@@ -13,7 +13,7 @@ export function useSidebarItems(): SidebarItem[] {
     {
       to: "/",
       label: "Inicio",
-      icon: TbHome,
+      icon: TbLayout,
     },
   ]
 }
