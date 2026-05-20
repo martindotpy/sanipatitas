@@ -1,14 +1,13 @@
 import { useIsSidebarActive } from "@sanipatitas/desktop/home/hook/use-is-sidebar-active"
 import { Button } from "@sanipatitas/ui/components/ui/button"
 import { SidebarTrigger } from "@sanipatitas/ui/components/ui/sidebar"
-import { cn } from "@sanipatitas/ui/lib/tailwind"
+import { $ } from "@sanipatitas/ui/lib/dom-selector"
 import { useCanGoBack, useRouter, useRouterState } from "@tanstack/react-router"
+import { useEffect } from "react"
 import { TbChevronLeft, TbChevronRight } from "react-icons/tb"
 
 // Component
-type DraggableHeaderProps = React.HTMLAttributes<HTMLDivElement>
-
-export function DraggableHeader({ className, ...props }: DraggableHeaderProps) {
+export function DraggableHeader() {
   // Router
   const router = useRouter()
 
@@ -21,12 +20,24 @@ export function DraggableHeader({ className, ...props }: DraggableHeaderProps) {
   // Sidebar
   const isSidebarActive = useIsSidebarActive()
 
+  // Remove fallback
+  useEffect(() => {
+    const $fallback = $<HTMLDivElement>("[data-draggable-fallback]")
+
+    if ($fallback) {
+      $fallback.dataset.draggableFallback = "false"
+    }
+
+    return () => {
+      if ($fallback) {
+        $fallback.dataset.draggableFallback = "true"
+      }
+    }
+  }, [])
+
   return (
-    <div className={cn("fixed z-99 flex h-header-h w-dvw", className)} {...props}>
-      <div
-        id="draggable-header"
-        className="macos:pl-18 flex h-full items-center"
-      >
+    <>
+      <div className="macos:pl-18 fixed top-0 left-0 z-99 flex w-fit">
         <Button
           size="icon-sm"
           variant="ghost"
@@ -43,10 +54,15 @@ export function DraggableHeader({ className, ...props }: DraggableHeaderProps) {
         >
           <TbChevronRight className="size-4" />
         </Button>
+
+        {isSidebarActive && <SidebarTrigger />}
       </div>
 
-      {isSidebarActive && <SidebarTrigger />}
-      <div data-tauri-drag-region className="h-full flex-1" />
-    </div>
+      <div
+        id="draggable-header"
+        data-tauri-drag-region
+        className="h-header-h fixed z-98 w-full"
+      />
+    </>
   )
 }

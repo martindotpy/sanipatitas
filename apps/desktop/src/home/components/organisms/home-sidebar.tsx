@@ -1,12 +1,14 @@
 import { Favicon } from "@sanipatitas/desktop/core/components/atoms/favicon"
 import { NavUser } from "@sanipatitas/desktop/home/components/molecules/nav-user"
 import { useSidebarItems } from "@sanipatitas/desktop/home/hook/use-sidebar-items"
+import { Separator } from "@sanipatitas/ui/components/ui/separator"
 import {
   Sidebar,
   SidebarContent,
   SidebarFooter,
   SidebarGroup,
   SidebarGroupContent,
+  SidebarGroupLabel,
   SidebarHeader,
   SidebarMenu,
   SidebarMenuButton,
@@ -43,37 +45,44 @@ export function HomeSidebar({
         </Link>
       </SidebarHeader>
       <SidebarContent>
-        <SidebarGroup>
-          <SidebarGroupContent>
-            <SidebarMenu>
-              {sidebarItems.map((item) => {
-                const isActive =
-                  item.to === "/"
-                    ? // Check if the item is the home route
-                      item.to === pathname
-                    : // Otherwise, check if the pathname starts with the item's route
-                      item.to && pathname.startsWith(item.to)
+        {Object.entries(sidebarItems).map(([group, items]) => (
+          <SidebarGroup key={group ?? "index"}>
+            {group && (
+              <SidebarGroupLabel className="">
+                {group} <Separator className="ml-2" />
+              </SidebarGroupLabel>
+            )}
+            <SidebarGroupContent>
+              <SidebarMenu>
+                {items.map((item) => {
+                  const isActive =
+                    item.to === "/"
+                      ? // Check if the item is the home route
+                        item.to === pathname
+                      : // Otherwise, check if the pathname starts with the item's route
+                        item.to && pathname.startsWith(item.to)
 
-                return (
-                  <SidebarMenuItem key={item.to}>
-                    <SidebarMenuButton
-                      tooltip={item.label}
-                      className="flex items-center gap-2 px-1.5 transition-colors group-data-[collapsible=icon]:px-1.5!"
-                      isActive={Boolean(isActive)}
-                      render={
-                        <Link to={item.to} preload={false}>
-                          <item.icon className="size-5!" />
+                  return (
+                    <SidebarMenuItem key={item.to}>
+                      <SidebarMenuButton
+                        tooltip={item.label}
+                        className="flex items-center gap-2 px-1.5 transition-colors group-data-[collapsible=icon]:px-1.5!"
+                        isActive={Boolean(isActive)}
+                        render={
+                          <Link to={item.to} preload={false}>
+                            <item.icon className="size-5!" />
 
-                          <span>{item.label}</span>
-                        </Link>
-                      }
-                    />
-                  </SidebarMenuItem>
-                )
-              })}
-            </SidebarMenu>
-          </SidebarGroupContent>
-        </SidebarGroup>
+                            <span>{item.label}</span>
+                          </Link>
+                        }
+                      />
+                    </SidebarMenuItem>
+                  )
+                })}
+              </SidebarMenu>
+            </SidebarGroupContent>
+          </SidebarGroup>
+        ))}
       </SidebarContent>
       <SidebarFooter>
         <NavUser />

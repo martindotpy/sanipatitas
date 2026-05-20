@@ -26,8 +26,8 @@ export const {
 // Url
 export const siteUrl = new URL(site)
 
-// Os
-export const os = isSsr ? null : type()
-
 // Tauri
 export const isTauri = checkIsTauri()
+
+// Os
+export const os = isSsr ? null : isTauri ? type() : null

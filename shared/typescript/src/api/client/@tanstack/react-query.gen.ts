@@ -15,6 +15,7 @@ import {
   getApiAuthError,
   getApiAuthOk,
   getApiAuthVerifyEmail,
+  getApiSpeciesById,
   openapiAdminListUserSessions,
   openapiAdminUpdateUser,
   openapiBanUser,
@@ -78,6 +79,9 @@ import type {
   GetApiAuthVerifyEmailData,
   GetApiAuthVerifyEmailError,
   GetApiAuthVerifyEmailResponse,
+  GetApiSpeciesByIdData,
+  GetApiSpeciesByIdError,
+  GetApiSpeciesByIdResponse,
   OpenapiAdminListUserSessionsData,
   OpenapiAdminListUserSessionsError,
   OpenapiAdminListUserSessionsResponse,
@@ -1649,4 +1653,32 @@ export const openapiGetJsonWebTokenOptions = (
       return data
     },
     queryKey: openapiGetJsonWebTokenQueryKey(options),
+  })
+
+export const getApiSpeciesByIdQueryKey = (
+  options: Options<GetApiSpeciesByIdData>
+) => createQueryKey("getApiSpeciesById", options)
+
+/**
+ * Get Species
+ */
+export const getApiSpeciesByIdOptions = (
+  options: Options<GetApiSpeciesByIdData>
+) =>
+  queryOptions<
+    GetApiSpeciesByIdResponse,
+    GetApiSpeciesByIdError,
+    GetApiSpeciesByIdResponse,
+    ReturnType<typeof getApiSpeciesByIdQueryKey>
+  >({
+    queryFn: async ({ queryKey, signal }) => {
+      const { data } = await getApiSpeciesById({
+        ...options,
+        ...queryKey[0],
+        signal,
+        throwOnError: true,
+      })
+      return data
+    },
+    queryKey: getApiSpeciesByIdQueryKey(options),
   })

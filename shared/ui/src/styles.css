@@ -152,7 +152,7 @@
   }
 
   html {
-    @apply no-scrollbar overscroll-none bg-background;
+    @apply no-scrollbar bg-background overscroll-none;
   }
 
   body {
@@ -184,6 +184,10 @@
 
   & .t-doc__header {
     @apply h-header-h;
+
+    & > header {
+      @apply macos:pl-26 pl-16;
+    }
   }
 }
 

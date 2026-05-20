@@ -6,7 +6,7 @@
     {
       "type": "shell",
       "group": "build",
-      "label": "core:dev",
+      "label": "patient:dev",
       "isBackground": true,
       "problemMatcher": [
         {
@@ -26,9 +26,9 @@
           }
         }
       ],
-      "command": "./mvnw -f services/core/pom.xml quarkus:dev",
+      "command": "./mvnw -f services/patient/pom.xml quarkus:dev",
       "windows": {
-        "command": ".\\mvnw.cmd -f services/core/pom.xml quarkus:dev"
+        "command": ".\\mvnw.cmd -f services/patient/pom.xml quarkus:dev"
       }
     },
     {

@@ -20,6 +20,9 @@ import type {
   GetApiAuthVerifyEmailData,
   GetApiAuthVerifyEmailErrors,
   GetApiAuthVerifyEmailResponses,
+  GetApiSpeciesByIdData,
+  GetApiSpeciesByIdErrors,
+  GetApiSpeciesByIdResponses,
   OpenapiAdminListUserSessionsData,
   OpenapiAdminListUserSessionsErrors,
   OpenapiAdminListUserSessionsResponses,
@@ -998,3 +1001,15 @@ export const openapiGetJsonWebToken = <ThrowOnError extends boolean = false>(
     OpenapiGetJsonWebTokenErrors,
     ThrowOnError
   >({ url: "/api/auth/token", ...options })
+
+/**
+ * Get Species
+ */
+export const getApiSpeciesById = <ThrowOnError extends boolean = false>(
+  options: Options<GetApiSpeciesByIdData, ThrowOnError>
+) =>
+  (options.client ?? client).get<
+    GetApiSpeciesByIdResponses,
+    GetApiSpeciesByIdErrors,
+    ThrowOnError
+  >({ url: "/api/species/{id}", ...options })

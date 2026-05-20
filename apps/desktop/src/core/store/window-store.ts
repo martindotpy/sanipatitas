@@ -1,5 +1,8 @@
 import { useStore } from "@nanostores/react"
-import { isSsr } from "@sanipatitas/desktop/core/configuration/app-configuration"
+import {
+  isSsr,
+  isTauri,
+} from "@sanipatitas/desktop/core/configuration/app-configuration"
 import { getCurrentWindow, type Window } from "@tauri-apps/api/window"
 import { atom } from "nanostores"
 
@@ -8,7 +11,9 @@ export const $window = atom<Window | null>(null)
 
 // Initialization
 if (!isSsr) {
-  $window.set(getCurrentWindow())
+  if (isTauri) {
+    $window.set(getCurrentWindow())
+  }
 }
 
 // Hook

@@ -1,4 +1,8 @@
 import * as authSchema from "@sanipatitas/database/auth/schema/auth-schema"
+import * as breedSchema from "@sanipatitas/database/patient/schema/breed-schema"
+import * as clientSchema from "@sanipatitas/database/patient/schema/client-schema"
+import * as patientSchema from "@sanipatitas/database/patient/schema/patient-schema"
+import * as speciesSchema from "@sanipatitas/database/patient/schema/species-schema"
 import { serverLog } from "@sanipatitas/shared/log/server-logger"
 import { SQL } from "bun"
 import { drizzle } from "drizzle-orm/bun-sql"
@@ -9,6 +13,10 @@ const client = new SQL()
 // All schemas
 const allSchemas = {
   ...authSchema,
+  ...speciesSchema,
+  ...breedSchema,
+  ...clientSchema,
+  ...patientSchema,
 }
 
 // Schema

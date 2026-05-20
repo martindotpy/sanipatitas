@@ -1,8 +1,11 @@
+import { publicBaseUrl } from "@sanipatitas/desktop/core/configuration/app-configuration"
 import { isProd } from "@sanipatitas/shared/app-context"
+import { $ } from "@sanipatitas/ui/lib/dom-selector"
 import { ApiReferenceReact } from "@scalar/api-reference-react"
 import "@scalar/api-reference-react/style.css"
 import { createFileRoute, notFound } from "@tanstack/react-router"
 import { useTheme } from "next-themes"
+import { useEffect } from "react"
 
 // Route
 export const Route = createFileRoute("/docs")({
@@ -15,6 +18,23 @@ export const Route = createFileRoute("/docs")({
 })
 
 function DocsComponent() {
+  // Add space for button
+  useEffect(() => {
+    const $draggableDiv = $<HTMLElement>("#draggable-header")
+
+    if (!$draggableDiv) {
+      return
+    }
+
+    $draggableDiv.classList.add("ml-26")
+    $draggableDiv.classList.add("macos:ml-46")
+
+    return () => {
+      $draggableDiv.classList.remove("ml-26")
+      $draggableDiv.classList.remove("macos:ml-46")
+    }
+  }, [])
+
   // Theme
   const { resolvedTheme } = useTheme()
 
@@ -26,12 +46,12 @@ function DocsComponent() {
         theme: "deepSpace",
         sources: [
           {
-            title: "Core",
-            url: "/api/core/openapi.json",
+            title: "Auth",
+            url: `${publicBaseUrl ?? ""}/api/auth/openapi.json`,
           },
           {
-            title: "Auth",
-            url: "/api/auth/openapi.json",
+            title: "Patient",
+            url: `${publicBaseUrl ?? ""}/api/patient/openapi.json`,
           },
         ],
         darkMode: isDark,

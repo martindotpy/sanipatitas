@@ -1,13 +1,13 @@
 import { isDev } from "@sanipatitas/shared/app-context"
-import path from "path"
 import pino, { type Logger } from "pino"
 
-// Types
-export type Log = Logger // Alias
+// Type
+export type Log = Logger
 
-// Transport
-const { dirname } = import.meta
-const targetPath = path.join(dirname, "transport", "consola-transport.js")
+// Stream
+const devStream = isDev
+  ? await import("./transport/consola-transport.js").then((m) => m.default())
+  : undefined
 
 // Logger
 export const serverLoggerOptions: pino.LoggerOptions = {
@@ -15,14 +15,10 @@ export const serverLoggerOptions: pino.LoggerOptions = {
   serializers: {
     err: pino.stdSerializers.err,
   },
-
-  // Development configuration
-  ...(isDev
-    ? {
-        base: undefined,
-        transport: { target: targetPath },
-      }
-    : {}),
+  ...(isDev ? { base: undefined } : {}),
 }
 
-export const serverLog = pino(serverLoggerOptions)
+export const serverLog =
+  isDev && devStream
+    ? pino(serverLoggerOptions, devStream) // Stream directo, sin worker
+    : pino(serverLoggerOptions)

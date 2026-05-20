@@ -72,7 +72,7 @@ export default defineConfig({
     server: {
       proxy: {
         "/api/auth": "http://localhost:3000",
-        "/api/core": "http://localhost:8080",
+        "/api/patient": "http://localhost:8080",
       },
     },
     ssr: {

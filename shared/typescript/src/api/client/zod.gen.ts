@@ -71,6 +71,23 @@ export const zOpenapiHttpProblem = z.object({
   instance: z.url(),
 })
 
+export const zOpenapiUuid = z
+  .uuid()
+  .regex(
+    /[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}/
+  )
+
+export const zOpenapiSpeciesDto = z.object({
+  id: zOpenapiUuid,
+  name: z.string().max(255).regex(/\S/),
+  description: z.string().max(2000).optional(),
+})
+
+export const zOpenapiDataResponseSpeciesDto = z.object({
+  data: zOpenapiSpeciesDto,
+  message: z.string().regex(/\S/),
+})
+
 /**
  * Validation constraint violation details
  */
@@ -740,3 +757,12 @@ export const zOpenapiGetJsonWebKeySetResponse = z.object({
 export const zOpenapiGetJsonWebTokenResponse = z.object({
   token: z.string().optional(),
 })
+
+export const zGetApiSpeciesByIdPath = z.object({
+  id: z.string(),
+})
+
+/**
+ * OK
+ */
+export const zGetApiSpeciesByIdResponse = zOpenapiDataResponseSpeciesDto

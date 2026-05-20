@@ -7,10 +7,7 @@
       "request": "launch",
       "command": "bun run tauri dev",
       "cwd": "${workspaceFolder}/apps/desktop",
-      "internalConsoleOptions": "neverOpen",
-      "presentation": {
-        "hidden": true
-      }
+      "internalConsoleOptions": "neverOpen"
     },
     {
       "type": "bun",
@@ -20,21 +17,15 @@
       "watchMode": true,
       "cwd": "${workspaceFolder}/services/auth",
       "internalConsoleOptions": "neverOpen",
-      "preLaunchTask": "core:dev",
-      "presentation": {
-        "hidden": true
-      }
+      "preLaunchTask": "patient:dev"
     },
     {
       "type": "java",
-      "name": "Sanipatitas (core) 🐞",
+      "name": "Sanipatitas (patient) 🐞",
       "request": "attach",
-      "preLaunchTask": "core:dev",
+      "preLaunchTask": "patient:dev",
       "hostName": "localhost",
-      "port": 5005,
-      "presentation": {
-        "hidden": true
-      }
+      "port": 5005
     },
     {
       "type": "node-terminal",
@@ -43,10 +34,7 @@
       "preLaunchTask": "wait",
       "command": "bun run api:generate",
       "cwd": "${workspaceFolder}/shared/typescript",
-      "internalConsoleOptions": "neverOpen",
-      "presentation": {
-        "hidden": true
-      }
+      "internalConsoleOptions": "neverOpen"
     }
   ],
   "compounds": [
@@ -54,12 +42,12 @@
       "name": "Sanipatitas 🐞",
       "configurations": [
         "Sanipatitas (auth) 🐞",
-        "Sanipatitas (core) 🐞",
+        "Sanipatitas (patient) 🐞",
         "Sanipatitas (desktop-ui) 🐞",
         "Sanipatitas (openapi) 🐞"
       ],
       "stopAll": true,
-      "preLaunchTask": "core:dev"
+      "preLaunchTask": "patient:dev"
     }
   ]
 }

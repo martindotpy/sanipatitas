@@ -9,11 +9,11 @@ services:
       - ./docker/haproxy/haproxy.cfg:/usr/local/etc/haproxy/haproxy.cfg:ro
     depends_on:
       - service-auth
-      - service-core
+      - service-patient
     healthcheck:
       test:
         - CMD-SHELL
-        - "wget --spider --timeout=5 http://localhost:80/api/auth/ok || wget --spider --timeout=5 http://localhost:80/api/core/_health"
+        - "wget --spider --timeout=5 http://localhost:80/api/auth/ok || wget --spider --timeout=5 http://localhost:80/api/patient/_health"
       interval: 15s
       timeout: 5s
       retries: 5
@@ -26,20 +26,19 @@ services:
       context: .
       dockerfile: services/auth/Dockerfile
     container_name: sanipatitas-auth
-    env_file: services/auth/.env
     expose:
       - "3000"
     depends_on:
       - database-sql
       - database-redis
 
-  # - Core
-  service-core:
+  # - Patient
+  service-patient:
     build:
       context: .
-      dockerfile: services/core/Dockerfile
-    container_name: sanipatitas-core
-    env_file: services/core/.env
+      dockerfile: services/patient/Dockerfile
+    container_name: sanipatitas-patient
+    env_file: services/patient/.env
     expose:
       - "8080"
     depends_on:

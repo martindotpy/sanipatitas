@@ -55,6 +55,11 @@ export type OpenapiJwks = {
   expiresAt?: string
 }
 
+export type OpenapiDataResponseSpeciesDto = {
+  data: OpenapiSpeciesDto
+  message: string
+}
+
 /**
  * HTTP Problem Response according to RFC9457 and RFC7807
  */
@@ -112,6 +117,14 @@ export type OpenapiHttpValidationProblem = {
   violations?: Array<OpenapiViolation>
   [key: string]: unknown
 }
+
+export type OpenapiSpeciesDto = {
+  id: OpenapiUuid
+  name: string
+  description?: string
+}
+
+export type OpenapiUuid = string
 
 /**
  * Validation constraint violation details
@@ -3690,3 +3703,36 @@ export type OpenapiGetJsonWebTokenResponses = {
 
 export type OpenapiGetJsonWebTokenResponse =
   OpenapiGetJsonWebTokenResponses[keyof OpenapiGetJsonWebTokenResponses]
+
+export type GetApiSpeciesByIdData = {
+  body?: never
+  path: {
+    id: string
+  }
+  query?: never
+  url: "/api/species/{id}"
+}
+
+export type GetApiSpeciesByIdErrors = {
+  /**
+   * Not Found: server cannot find the requested resource
+   */
+  404: OpenapiHttpProblem
+  /**
+   * Constraint Violation
+   */
+  422: OpenapiHttpValidationProblem
+}
+
+export type GetApiSpeciesByIdError =
+  GetApiSpeciesByIdErrors[keyof GetApiSpeciesByIdErrors]
+
+export type GetApiSpeciesByIdResponses = {
+  /**
+   * OK
+   */
+  200: OpenapiDataResponseSpeciesDto
+}
+
+export type GetApiSpeciesByIdResponse =
+  GetApiSpeciesByIdResponses[keyof GetApiSpeciesByIdResponses]
