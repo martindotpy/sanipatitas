@@ -29,8 +29,8 @@ RUN bun install --ci
 COPY shared/typescript/tsconfig.json ./shared/typescript/tsconfig.json
 COPY shared/typescript/src/ shared/typescript/src/
 
-COPY shared/ui/tsconfig.json ./shared/ui/tsconfig.json
 COPY shared/ui/tailwind.config.js ./shared/ui/tailwind.config.js
+COPY shared/ui/tsconfig.json ./shared/ui/tsconfig.json
 COPY shared/ui/components.json ./shared/ui/components.json
 COPY shared/ui/src/ shared/ui/src/
 
@@ -54,9 +54,10 @@ RUN bun astro telemetry disable
 
 # Build
 COPY apps/desktop/pwa-assets.config.ts ./
-COPY apps/desktop/tailwind.config.js ./
 COPY apps/desktop/astro.config.ts ./
 COPY apps/desktop/public/ public/
+COPY apps/desktop/scripts/ scripts/
+COPY apps/desktop/src-tauri/icons/ src-tauri/icons/
 COPY apps/desktop/src/ src/
 
 RUN bun run build
@@ -82,6 +83,8 @@ RUN apk add --no-cache \
 
 COPY apps/desktop/nginx.conf /etc/nginx/nginx.conf
 COPY --from=builder /app/apps/desktop/dist/client/ /usr/share/nginx/html/
+
+EXPOSE 80
 
 HEALTHCHECK --interval=120s --timeout=5s --start-period=5s \
   CMD ["/bin/wget", "--spider", "--timeout=5", "http://localhost:80/_health"]
