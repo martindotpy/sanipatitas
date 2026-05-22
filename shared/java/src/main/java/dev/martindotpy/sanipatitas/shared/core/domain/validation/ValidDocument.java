@@ -10,6 +10,8 @@ import java.lang.annotation.Target;
 import jakarta.validation.Constraint;
 import jakarta.validation.Payload;
 
+import dev.martindotpy.sanipatitas.shared.core.adapter.validation.DocumentValidator;
+
 @Target({ TYPE })
 @Retention(RUNTIME)
 @Constraint(validatedBy = DocumentValidator.class)

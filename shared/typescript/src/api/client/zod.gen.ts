@@ -77,6 +77,12 @@ export const zOpenapiUuid = z
     /[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}/
   )
 
+export const zOpenapiCreateSpeciesRequest = z.object({
+  id: zOpenapiUuid.optional(),
+  name: z.string().max(255).regex(/\S/),
+  description: z.string().max(2000).optional(),
+})
+
 export const zOpenapiSpeciesDto = z.object({
   id: zOpenapiUuid,
   name: z.string().max(255).regex(/\S/),
@@ -758,8 +764,15 @@ export const zOpenapiGetJsonWebTokenResponse = z.object({
   token: z.string().optional(),
 })
 
+export const zPostApiSpeciesBody = zOpenapiCreateSpeciesRequest
+
+/**
+ * OK
+ */
+export const zPostApiSpeciesResponse = zOpenapiDataResponseSpeciesDto
+
 export const zGetApiSpeciesByIdPath = z.object({
-  id: z.string(),
+  id: zOpenapiUuid,
 })
 
 /**

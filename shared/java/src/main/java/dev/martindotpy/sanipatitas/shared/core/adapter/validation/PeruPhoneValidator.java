@@ -1,4 +1,4 @@
-package dev.martindotpy.sanipatitas.shared.core.domain.validation;
+package dev.martindotpy.sanipatitas.shared.core.adapter.validation;
 
 import java.util.regex.Pattern;
 

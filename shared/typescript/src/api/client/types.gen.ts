@@ -55,6 +55,12 @@ export type OpenapiJwks = {
   expiresAt?: string
 }
 
+export type OpenapiCreateSpeciesRequest = {
+  id?: OpenapiUuid
+  name: string
+  description?: string
+}
+
 export type OpenapiDataResponseSpeciesDto = {
   data: OpenapiSpeciesDto
   message: string
@@ -3704,10 +3710,37 @@ export type OpenapiGetJsonWebTokenResponses = {
 export type OpenapiGetJsonWebTokenResponse =
   OpenapiGetJsonWebTokenResponses[keyof OpenapiGetJsonWebTokenResponses]
 
+export type PostApiSpeciesData = {
+  body: OpenapiCreateSpeciesRequest
+  path?: never
+  query?: never
+  url: "/api/species"
+}
+
+export type PostApiSpeciesErrors = {
+  /**
+   * Constraint Violation
+   */
+  422: OpenapiHttpValidationProblem
+}
+
+export type PostApiSpeciesError =
+  PostApiSpeciesErrors[keyof PostApiSpeciesErrors]
+
+export type PostApiSpeciesResponses = {
+  /**
+   * OK
+   */
+  200: OpenapiDataResponseSpeciesDto
+}
+
+export type PostApiSpeciesResponse =
+  PostApiSpeciesResponses[keyof PostApiSpeciesResponses]
+
 export type GetApiSpeciesByIdData = {
   body?: never
   path: {
-    id: string
+    id: OpenapiUuid
   }
   query?: never
   url: "/api/species/{id}"

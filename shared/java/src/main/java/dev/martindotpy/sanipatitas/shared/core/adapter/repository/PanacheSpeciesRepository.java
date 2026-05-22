@@ -1,4 +1,4 @@
-package dev.martindotpy.sanipatitas.patient.adapter.repository;
+package dev.martindotpy.sanipatitas.shared.core.adapter.repository;
 
 import jakarta.enterprise.context.ApplicationScoped;
 

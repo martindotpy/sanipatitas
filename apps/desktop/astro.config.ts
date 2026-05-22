@@ -72,7 +72,10 @@ export default defineConfig({
     server: {
       proxy: {
         "/api/auth": "http://localhost:3000",
+        "/api/breed": "http://localhost:8080",
+        "/api/species": "http://localhost:8080",
         "/api/patient": "http://localhost:8080",
+        "/api/client": "http://localhost:8080",
       },
     },
     ssr: {

@@ -10,9 +10,13 @@ import jakarta.persistence.PrePersist;
 import com.github.f4b6a3.uuid.UuidCreator;
 
 import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.experimental.SuperBuilder;
 
 @Getter
+@SuperBuilder
 @MappedSuperclass
+@NoArgsConstructor
 public class EntityWithUuidV7 {
     @Id
     @Column(columnDefinition = "uuid", updatable = false, nullable = false)

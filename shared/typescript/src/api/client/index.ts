@@ -51,6 +51,7 @@ export {
   postApiAuthRevokeSession,
   postApiAuthRevokeSessions,
   postApiAuthUnlinkAccount,
+  postApiSpecies,
   type Options,
 } from "./sdk.gen"
 export type {
@@ -114,6 +115,7 @@ export type {
   OpenapiChangePasswordErrors,
   OpenapiChangePasswordResponse,
   OpenapiChangePasswordResponses,
+  OpenapiCreateSpeciesRequest,
   OpenapiCreateUserData,
   OpenapiCreateUserError,
   OpenapiCreateUserErrors,
@@ -310,4 +312,9 @@ export type {
   PostApiAuthUnlinkAccountErrors,
   PostApiAuthUnlinkAccountResponse,
   PostApiAuthUnlinkAccountResponses,
+  PostApiSpeciesData,
+  PostApiSpeciesError,
+  PostApiSpeciesErrors,
+  PostApiSpeciesResponse,
+  PostApiSpeciesResponses,
 } from "./types.gen"

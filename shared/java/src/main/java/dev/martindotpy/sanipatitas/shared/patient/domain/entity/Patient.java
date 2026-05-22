@@ -22,15 +22,15 @@ import org.hibernate.annotations.UpdateTimestamp;
 import dev.martindotpy.sanipatitas.shared.core.domain.enums.Gender;
 import dev.martindotpy.sanipatitas.shared.core.domain.model.EntityWithUuidV7;
 import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.experimental.SuperBuilder;
 
 @Getter
 @Setter
-@Builder
 @Entity
+@SuperBuilder
 @NoArgsConstructor
 @AllArgsConstructor
 public class Patient extends EntityWithUuidV7 {

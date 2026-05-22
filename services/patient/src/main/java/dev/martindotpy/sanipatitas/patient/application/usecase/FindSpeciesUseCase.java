@@ -11,9 +11,11 @@ import dev.martindotpy.sanipatitas.shared.patient.application.adapter.FindSpecie
 import dev.martindotpy.sanipatitas.shared.patient.application.dto.SpeciesDto;
 import dev.martindotpy.sanipatitas.shared.patient.domain.error.SpeciesNotFoundException;
 import dev.martindotpy.sanipatitas.shared.patient.domain.repository.SpeciesRepository;
+import io.quarkus.hibernate.reactive.panache.common.WithSession;
 import io.smallrye.mutiny.Uni;
 import lombok.RequiredArgsConstructor;
 
+@WithSession
 @ApplicationScoped
 @RequiredArgsConstructor
 public final class FindSpeciesUseCase implements FindSpeciesPort {

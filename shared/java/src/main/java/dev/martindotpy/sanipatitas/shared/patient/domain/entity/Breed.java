@@ -11,15 +11,15 @@ import jakarta.validation.constraints.Size;
 
 import dev.martindotpy.sanipatitas.shared.core.domain.model.EntityWithUuidV7;
 import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.experimental.SuperBuilder;
 
 @Getter
 @Setter
-@Builder
 @Entity
+@SuperBuilder
 @NoArgsConstructor
 @AllArgsConstructor
 public class Breed extends EntityWithUuidV7 {

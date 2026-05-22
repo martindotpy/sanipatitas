@@ -15,20 +15,21 @@ import jakarta.validation.constraints.Size;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
+import dev.martindotpy.sanipatitas.shared.core.adapter.validation.PeruPhone;
 import dev.martindotpy.sanipatitas.shared.core.domain.enums.IdType;
 import dev.martindotpy.sanipatitas.shared.core.domain.model.EntityWithUuidV7;
-import dev.martindotpy.sanipatitas.shared.core.domain.validation.PeruPhone;
 import dev.martindotpy.sanipatitas.shared.core.domain.validation.ValidDocument;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.experimental.SuperBuilder;
 
 @Getter
 @Setter
-@Builder
 @Entity
+@SuperBuilder
 @NoArgsConstructor
 @AllArgsConstructor
 @ValidDocument

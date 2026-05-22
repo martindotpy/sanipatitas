@@ -60,6 +60,7 @@ import {
   postApiAuthRevokeSession,
   postApiAuthRevokeSessions,
   postApiAuthUnlinkAccount,
+  postApiSpecies,
 } from "../sdk.gen"
 import type {
   GetApiAuthAccountInfoData,
@@ -209,6 +210,9 @@ import type {
   PostApiAuthUnlinkAccountData,
   PostApiAuthUnlinkAccountError,
   PostApiAuthUnlinkAccountResponse,
+  PostApiSpeciesData,
+  PostApiSpeciesError,
+  PostApiSpeciesResponse,
 } from "../types.gen"
 
 /**
@@ -1654,6 +1658,33 @@ export const openapiGetJsonWebTokenOptions = (
     },
     queryKey: openapiGetJsonWebTokenQueryKey(options),
   })
+
+/**
+ * Create Species
+ */
+export const postApiSpeciesMutation = (
+  options?: Partial<Options<PostApiSpeciesData>>
+): UseMutationOptions<
+  PostApiSpeciesResponse,
+  PostApiSpeciesError,
+  Options<PostApiSpeciesData>
+> => {
+  const mutationOptions: UseMutationOptions<
+    PostApiSpeciesResponse,
+    PostApiSpeciesError,
+    Options<PostApiSpeciesData>
+  > = {
+    mutationFn: async (fnOptions) => {
+      const { data } = await postApiSpecies({
+        ...options,
+        ...fnOptions,
+        throwOnError: true,
+      })
+      return data
+    },
+  }
+  return mutationOptions
+}
 
 export const getApiSpeciesByIdQueryKey = (
   options: Options<GetApiSpeciesByIdData>

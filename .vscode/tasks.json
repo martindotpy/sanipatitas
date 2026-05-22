@@ -26,10 +26,11 @@
           }
         }
       ],
-      "command": "./mvnw -f services/patient/pom.xml quarkus:dev",
+      "command": "./mvnw",
       "windows": {
-        "command": ".\\mvnw.cmd -f services/patient/pom.xml quarkus:dev"
-      }
+        "command": ".\\mvnw.cmd"
+      },
+      "args": ["-f", "services/patient/pom.xml", "quarkus:dev"]
     },
     {
       "type": "shell",

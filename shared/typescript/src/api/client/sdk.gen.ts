@@ -150,6 +150,9 @@ import type {
   PostApiAuthUnlinkAccountData,
   PostApiAuthUnlinkAccountErrors,
   PostApiAuthUnlinkAccountResponses,
+  PostApiSpeciesData,
+  PostApiSpeciesErrors,
+  PostApiSpeciesResponses,
 } from "./types.gen"
 
 export type Options<
@@ -1001,6 +1004,25 @@ export const openapiGetJsonWebToken = <ThrowOnError extends boolean = false>(
     OpenapiGetJsonWebTokenErrors,
     ThrowOnError
   >({ url: "/api/auth/token", ...options })
+
+/**
+ * Create Species
+ */
+export const postApiSpecies = <ThrowOnError extends boolean = false>(
+  options: Options<PostApiSpeciesData, ThrowOnError>
+) =>
+  (options.client ?? client).post<
+    PostApiSpeciesResponses,
+    PostApiSpeciesErrors,
+    ThrowOnError
+  >({
+    url: "/api/species",
+    ...options,
+    headers: {
+      "Content-Type": "application/json",
+      ...options.headers,
+    },
+  })
 
 /**
  * Get Species

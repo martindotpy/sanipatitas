@@ -1,4 +1,4 @@
-package dev.martindotpy.sanipatitas.shared.core.domain.validation;
+package dev.martindotpy.sanipatitas.shared.core.adapter.validation;
 
 import java.util.regex.Pattern;
 
@@ -6,6 +6,7 @@ import jakarta.validation.ConstraintValidator;
 import jakarta.validation.ConstraintValidatorContext;
 
 import dev.martindotpy.sanipatitas.shared.core.domain.enums.IdType;
+import dev.martindotpy.sanipatitas.shared.core.domain.validation.ValidDocument;
 
 public class DocumentValidator implements ConstraintValidator<ValidDocument, Object> {
     private static final Pattern DNI_PATTERN = Pattern.compile("^\\d{8}$");

@@ -11,12 +11,15 @@ import java.lang.annotation.Target;
 import jakarta.validation.Constraint;
 import jakarta.validation.Payload;
 
+import dev.martindotpy.sanipatitas.shared.core.adapter.validation.UuidStringValidator;
+import dev.martindotpy.sanipatitas.shared.core.adapter.validation.UuidValidator;
+
 @Target({ FIELD, PARAMETER })
 @Retention(RUNTIME)
-@Constraint(validatedBy = PeruPhoneValidator.class)
 @Documented
-public @interface PeruPhone {
-    String message() default "Debe ser un número de teléfono móvil peruano válido (9XXXXXXXX)";
+@Constraint(validatedBy = { UuidStringValidator.class, UuidValidator.class })
+public @interface Uuid {
+    String message() default "debe ser un UUID válido";
 
     Class<?>[] groups() default {};
 

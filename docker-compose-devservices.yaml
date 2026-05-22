@@ -1,13 +1,4 @@
 services:
-  # Reverse proxy
-  reverse-proxy:
-    image: haproxy:3.1-alpine
-    container_name: sanipatitas-proxy
-    ports:
-      - "80:80"
-    volumes:
-      - ./docker/haproxy/haproxy.cfg:/usr/local/etc/haproxy/haproxy.cfg:ro
-
   # Dev services (test)
   test-database-sql:
     image: postgres:17-alpine
@@ -16,6 +7,8 @@ services:
       POSTGRES_USER: sanipatitas-user
       POSTGRES_PASSWORD: sanipatitas-password
       POSTGRES_DB: sanipatitas-db
+    volumes:
+      - ./database/migration:/docker-entrypoint-initdb.d:ro
     profiles:
       - test
     ports:
@@ -110,6 +103,17 @@ services:
       RI_REDIS_HOST_APP: database-redis
     ports:
       - "5540:5540"
+
+  # Reverse proxy
+  reverse-proxy:
+    image: haproxy:3.1-alpine
+    container_name: sanipatitas-proxy
+    profiles:
+      - dev
+    ports:
+      - "80:80"
+    volumes:
+      - ./docker/haproxy/haproxy.cfg:/usr/local/etc/haproxy/haproxy.cfg:ro
 
 volumes:
   healthcheck-sql-studio-data:

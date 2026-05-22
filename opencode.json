@@ -3,8 +3,11 @@
   "mcp": {
     "shadcn": {
       "type": "local",
-      "command": ["bunx", "shadcn@latest", "mcp"],
-      "enabled": true
+      "command": ["bun", "run", "shadcn", "mcp"]
+    },
+    "quarkus-agent": {
+      "type": "local",
+      "command": ["jbang", "quarkus-agent-mcp@quarkusio"]
     }
   }
 }
