@@ -4,12 +4,10 @@ import java.util.UUID;
 
 import jakarta.ws.rs.ext.ParamConverter;
 
-import dev.martindotpy.sanipatitas.shared.core.application.utils.Patterns;
-
 public class UuidParamConverter implements ParamConverter<UUID> {
     @Override
     public UUID fromString(String value) {
-        if (value == null || !Patterns.UUID_PATTERN.matcher(value).matches()) {
+        if (value == null) {
             return null;
         }
 
