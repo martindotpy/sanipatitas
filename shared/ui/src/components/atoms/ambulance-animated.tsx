@@ -6,5 +6,5 @@ import {
 
 // Component
 export function AmbulanceAnimated(props: LottieAnimatedProps) {
-  return <LottieAnimatedBase {...props} src={lottieAmbulance} />
+  return <LottieAnimatedBase {...props} data={lottieAmbulance} />
 }

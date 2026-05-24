@@ -6,5 +6,5 @@ import {
 
 // Component
 export function ManekiCatAnimated(props: LottieAnimatedProps) {
-  return <LottieAnimatedBase {...props} src={lottieManekiCat} />
+  return <LottieAnimatedBase {...props} data={lottieManekiCat} />
 }

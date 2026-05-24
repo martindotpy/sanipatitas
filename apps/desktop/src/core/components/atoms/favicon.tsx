@@ -11,7 +11,7 @@ export function Favicon(props: FaviconProps) {
   const { resolvedTheme } = useTheme()
 
   return (
-    <ClientOnly fallback={<DarkFavicon {...props} />}>
+    <ClientOnly fallback={<LightFavicon {...props} />}>
       {resolvedTheme === "dark" ? (
         <LightFavicon {...props} />
       ) : (

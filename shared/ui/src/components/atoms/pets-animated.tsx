@@ -6,5 +6,5 @@ import {
 
 // Component
 export function PetsAnimated(props: LottieAnimatedProps) {
-  return <LottieAnimatedBase {...props} speed={0.75} src={lottiePets} />
+  return <LottieAnimatedBase {...props} speed={0.75} data={lottiePets} />
 }

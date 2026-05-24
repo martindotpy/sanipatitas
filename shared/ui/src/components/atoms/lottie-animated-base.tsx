@@ -1,21 +1,21 @@
-import { Player } from "@lottiefiles/react-lottie-player"
+import { DotLottieReact } from "@lottiefiles/dotlottie-react"
 import { cn } from "@sanipatitas/ui/lib/tailwind"
 
 // Type
-export type LottieAnimatedProps = Omit<LottieAnimatedBaseProps, "src">
+export type LottieAnimatedProps = Omit<LottieAnimatedBaseProps, "data">
 
 // Component
-type LottieAnimatedBaseProps = React.ComponentProps<typeof Player>
+type LottieAnimatedBaseProps = React.ComponentProps<typeof DotLottieReact>
 
 export function LottieAnimatedBase({
   className,
   ...props
 }: LottieAnimatedBaseProps) {
   return (
-    <Player
+    <DotLottieReact
       autoplay
       loop
-      className={cn("**:stroke-primary", className)}
+      className={cn("dark:invert", className)}
       {...props}
     />
   )

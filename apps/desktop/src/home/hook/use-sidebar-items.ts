@@ -1,4 +1,4 @@
-import { isDev } from "@sanipatitas/desktop/core/configuration/app-configuration"
+import { useIsAdmin } from "@sanipatitas/desktop/auth/hook/use-role"
 import type { LinkRoute } from "@sanipatitas/desktop/pages/_app/routes/-routes-types"
 import type { IconType } from "react-icons/lib"
 import {
@@ -20,6 +20,8 @@ interface SidebarItem {
 type SidebarGroups = Record<string, SidebarItem[]>
 
 export function useSidebarItems(): SidebarGroups {
+  const isAdmin = useIsAdmin()
+
   return {
     "": [
       {
@@ -46,17 +48,15 @@ export function useSidebarItems(): SidebarGroups {
       },
     ],
 
-    ...(isDev
-      ? {
-          Desarrollo: [
-            {
-              to: "/docs",
-              label: "Documentación OpenAPI",
-              icon: TbApi,
-              external: true,
-            },
-          ],
-        }
-      : {}),
+    ...(isAdmin && {
+      Desarrollo: [
+        {
+          to: "/docs",
+          label: "Documentación OpenAPI",
+          icon: TbApi,
+          external: true,
+        },
+      ],
+    }),
   }
 }

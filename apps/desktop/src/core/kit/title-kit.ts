@@ -1,5 +1,6 @@
 import { appShortName, defaultTitle } from "../constant/seo-constant"
 
+// Kit
 export function getTitle(title?: string) {
   return title ? `${title} | ${appShortName}` : defaultTitle
 }

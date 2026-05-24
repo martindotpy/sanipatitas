@@ -6,5 +6,5 @@ import {
 
 // Component
 export function InjectionAnimated(props: LottieAnimatedProps) {
-  return <LottieAnimatedBase {...props} src={lottieInjection} />
+  return <LottieAnimatedBase {...props} data={lottieInjection} />
 }
