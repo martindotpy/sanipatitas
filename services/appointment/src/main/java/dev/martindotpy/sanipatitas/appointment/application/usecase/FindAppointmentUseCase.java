@@ -26,8 +26,8 @@ public final class FindAppointmentUseCase implements FindAppointmentPort {
     private final AppointmentMapper appointmentMapper;
 
     @Override
-    public Uni<PageResult<AppointmentDto>> findByDateRange(@Nullable LocalDate from, @Nullable LocalDate to, int page,
-            int size) {
+    public Uni<PageResult<AppointmentDto>> findByDateRange(
+            @Nullable LocalDate from, @Nullable LocalDate to, int page, int size) {
         var pagination = Page.of(page, size);
         var hasRange = from != null && to != null;
 

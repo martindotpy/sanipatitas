@@ -12,7 +12,7 @@ const authLogger = serverLog.child({ module: "auth" })
 // Redis
 const namespace = "sanipatitas:auth"
 
-// Auth configuration
+// Configuration
 export const auth = betterAuth({
   database: drizzleAdapter(db, { provider: "pg", schema, debugLogs: true }),
   logger: {
@@ -75,7 +75,7 @@ export const auth = betterAuth({
   experimental: { joins: true },
 })
 
-// Types
+// Type
 export type Auth = typeof auth.$Infer.Session
 export type AuthUser = typeof auth.$Infer.Session.user
 export type AuthSession = typeof auth.$Infer.Session.session

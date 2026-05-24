@@ -29,27 +29,29 @@ import lombok.experimental.SuperBuilder;
 @Table(name = "\"user\"")
 public class User extends EntityWithUuidV7 {
     @NotBlank
-    @Column(nullable = false)
+    @Column(columnDefinition = "text")
     private String name;
     @NotBlank
     @Email
-    @Column(nullable = false, unique = true)
+    @Column(columnDefinition = "text", unique = true)
     private String email;
     @NotNull
-    @Column(nullable = false)
     private Boolean emailVerified;
     @Nullable
+    @Column(columnDefinition = "text")
     private String image;
     @Nullable
+    @Column(columnDefinition = "text")
     private String role;
     @Nullable
     private Boolean banned;
     @Nullable
+    @Column(columnDefinition = "text")
     private String banReason;
     @Nullable
     private OffsetDateTime banExpires;
     @NotBlank
-    @Column(nullable = false)
+    @Column(columnDefinition = "text")
     private String lastName;
 
     @CreationTimestamp

@@ -37,21 +37,19 @@ import lombok.experimental.SuperBuilder;
 @AllArgsConstructor
 public class Appointment extends EntityWithUuidV7 {
     @NotNull
-    @Column(nullable = false)
     private LocalDate date;
     @NotNull
-    @Column(nullable = false)
     private LocalTime startTime;
     @Nullable
     private LocalTime endTime;
     @NotNull
     @Enumerated(EnumType.STRING)
-    @Column(nullable = false, length = 20)
+    @Column(length = 20)
     private AppointmentStatus status;
     @Builder.Default
     @NotNull
     @Enumerated(EnumType.STRING)
-    @Column(name = "class", nullable = false, length = 20)
+    @Column(name = "class", length = 20)
     private AppointmentClass appointmentClass = AppointmentClass.AMBULATORY;
     @Nullable
     @Size(max = 2000)

@@ -23,7 +23,7 @@ import lombok.experimental.SuperBuilder;
 public class Species extends EntityWithUuidV7 {
     @NotBlank
     @Size(max = 255)
-    @Column(unique = true, nullable = false)
+    @Column(unique = true)
     private String name;
     @Nullable
     @Size(max = 2000)

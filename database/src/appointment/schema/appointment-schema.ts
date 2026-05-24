@@ -13,7 +13,7 @@ import {
 } from "drizzle-orm/pg-core"
 
 // Enum
-const appointmentStatuses = [
+export const appointmentStatuses = [
   "SCHEDULED",
   "IN_PROGRESS",
   "COMPLETED",
@@ -22,7 +22,11 @@ const appointmentStatuses = [
 ] as const
 export type AppointmentStatus = (typeof appointmentStatuses)[number]
 
-const appointmentClasses = ["AMBULATORY", "EMERGENCY", "HOME_VISIT"] as const
+export const appointmentClasses = [
+  "AMBULATORY",
+  "EMERGENCY",
+  "HOME_VISIT",
+] as const
 export type AppointmentClass = (typeof appointmentClasses)[number]
 
 // Table
@@ -59,11 +63,11 @@ export const appointmentTable = pgTable(
   (table) => [
     check(
       "appointment_status_check",
-      sql`${table.status} IN ('SCHEDULED', 'IN_PROGRESS', 'COMPLETED', 'CANCELLED', 'NO_SHOW')`
+      sql`${table.status} IN (${appointmentStatuses.map((status) => `'${status}'`).join(", ")})`
     ),
     check(
       "appointment_class_check",
-      sql`${table.appointmentClass} IN ('AMBULATORY', 'EMERGENCY', 'HOME_VISIT')`
+      sql`${table.appointmentClass} IN (${appointmentClasses.map((cls) => `'${cls}'`).join(", ")})`
     ),
   ]
 )

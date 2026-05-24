@@ -15,7 +15,7 @@ import {
 } from "drizzle-orm/pg-core"
 
 // Enum
-const genders = ["MALE", "FEMALE", "UNKNOWN"] as const
+export const genders = ["MALE", "FEMALE", "UNKNOWN"] as const
 export type Gender = (typeof genders)[number]
 
 // Table
@@ -50,7 +50,7 @@ export const patientTable = pgTable(
   (table) => [
     check(
       "gender_check",
-      sql`${table.gender} IN ('MALE', 'FEMALE', 'UNKNOWN')`
+      sql`${table.gender} IN (${genders.map((gender) => `'${gender}'`).join(", ")})`
     ),
     index("patient_search_idx").using("gin", table.searchVector),
   ]

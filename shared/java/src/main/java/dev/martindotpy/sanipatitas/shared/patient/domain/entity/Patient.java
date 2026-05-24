@@ -37,7 +37,6 @@ import lombok.experimental.SuperBuilder;
 public class Patient extends EntityWithUuidV7 {
     @NotBlank
     @Size(max = 500)
-    @Column(nullable = false)
     private String name;
     @Nullable
     @Enumerated(EnumType.STRING)

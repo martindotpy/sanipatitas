@@ -36,23 +36,21 @@ import lombok.experimental.SuperBuilder;
 public class Client extends EntityWithUuidV7 {
     @NotBlank
     @Size(max = 100)
-    @Column(nullable = false)
     private String firstName;
     @NotBlank
     @Size(max = 100)
-    @Column(nullable = false)
     private String lastName;
     @NotNull
     @Enumerated(EnumType.STRING)
-    @Column(nullable = false, length = 20)
+    @Column(length = 20)
     private IdType idType;
     @NotBlank
     @Size(min = 6, max = 20)
-    @Column(nullable = false, unique = true)
+    @Column(unique = true)
     private String idNumber;
     @NotBlank
     @PeruPhone
-    @Column(nullable = false, length = 15)
+    @Column(length = 15)
     private String phone;
     @Nullable
     @PeruPhone
@@ -68,9 +66,8 @@ public class Client extends EntityWithUuidV7 {
     @Nullable
     @Size(max = 2000)
     private String notes;
-    @Builder.Default
     @NotNull
-    @Column(nullable = false)
+    @Builder.Default
     private Boolean isActive = true;
 
     @CreationTimestamp

@@ -18,7 +18,7 @@ import dev.martindotpy.sanipatitas.shared.core.adapter.validation.PeruPhoneValid
 @Constraint(validatedBy = PeruPhoneValidator.class)
 @Documented
 public @interface PeruPhone {
-    String message() default "Debe ser un número de teléfono móvil peruano válido (9XXXXXXXX)";
+    String message() default "debe ser un número de teléfono móvil peruano válido (9XXXXXXXX)";
 
     Class<?>[] groups() default {};
 

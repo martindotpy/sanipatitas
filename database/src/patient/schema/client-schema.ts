@@ -12,7 +12,7 @@ import {
 } from "drizzle-orm/pg-core"
 
 // Enum
-const idTypes = ["DNI", "CE", "PASSPORT"] as const
+export const idTypes = ["DNI", "CE", "PASSPORT"] as const
 export type IdType = (typeof idTypes)[number]
 
 // Table
@@ -44,7 +44,10 @@ export const clientTable = pgTable(
     ),
   },
   (table) => [
-    check("id_type_check", sql`${table.idType} IN ('DNI', 'CE', 'PASSPORT')`),
+    check(
+      "id_type_check",
+      sql`${table.idType} IN (${idTypes.map((type) => `'${type}'`).join(", ")})`
+    ),
     index("client_search_idx").using("gin", table.searchVector),
   ]
 )

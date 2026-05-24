@@ -17,7 +17,7 @@ import dev.martindotpy.sanipatitas.shared.core.adapter.validation.DocumentValida
 @Constraint(validatedBy = DocumentValidator.class)
 @Documented
 public @interface ValidDocument {
-    String message() default "El número de documento no es válido para el tipo seleccionado";
+    String message() default "el número de documento no es válido para el tipo seleccionado";
 
     Class<?>[] groups() default {};
 
