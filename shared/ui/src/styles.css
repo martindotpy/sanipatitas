@@ -186,7 +186,7 @@
     @apply h-header-h;
 
     & > header {
-      @apply macos:pl-26 pl-16;
+      @apply macos:pl-18 pl-8;
     }
   }
 }

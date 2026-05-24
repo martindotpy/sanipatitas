@@ -8,7 +8,7 @@ import { useTheme } from "next-themes"
 import { useEffect } from "react"
 
 // Route
-export const Route = createFileRoute("/docs")({
+export const Route = createFileRoute("/docs-pre")({
   beforeLoad: async () => {
     if (isProd) {
       throw notFound()

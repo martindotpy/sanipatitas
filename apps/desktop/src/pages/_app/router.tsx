@@ -64,9 +64,7 @@ export function createAppRouter(astro?: AstroGlobal) {
       )
     },
     defaultViewTransition: true,
-    scrollRestoration: ({ location }) => {
-      return location.pathname !== "/docs"
-    },
+    scrollRestoration: true,
     history: createMemoryHistory(),
   })
 

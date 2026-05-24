@@ -9,7 +9,7 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from "./routes/__root"
-import { Route as DocsRouteImport } from "./routes/docs"
+import { Route as DocsPreRouteImport } from "./routes/docs-pre"
 import { Route as PublicRouteRouteImport } from "./routes/_public/route"
 import { Route as PrivateRouteRouteImport } from "./routes/_private/route"
 import { Route as PrivateIndexRouteImport } from "./routes/_private/index"
@@ -20,9 +20,9 @@ import { Route as PrivatePatientsRouteImport } from "./routes/_private/patients"
 import { Route as PrivateClientsRouteImport } from "./routes/_private/clients"
 import { Route as PrivateBreedsRouteImport } from "./routes/_private/breeds"
 
-const DocsRoute = DocsRouteImport.update({
-  id: "/docs",
-  path: "/docs",
+const DocsPreRoute = DocsPreRouteImport.update({
+  id: "/docs-pre",
+  path: "/docs-pre",
   getParentRoute: () => rootRouteImport,
 } as any)
 const PublicRouteRoute = PublicRouteRouteImport.update({
@@ -71,7 +71,7 @@ const PrivateBreedsRoute = PrivateBreedsRouteImport.update({
 
 export interface FileRoutesByFullPath {
   "/": typeof PrivateIndexRoute
-  "/docs": typeof DocsRoute
+  "/docs-pre": typeof DocsPreRoute
   "/breeds": typeof PrivateBreedsRoute
   "/clients": typeof PrivateClientsRoute
   "/patients": typeof PrivatePatientsRoute
@@ -81,7 +81,7 @@ export interface FileRoutesByFullPath {
 }
 export interface FileRoutesByTo {
   "/": typeof PrivateIndexRoute
-  "/docs": typeof DocsRoute
+  "/docs-pre": typeof DocsPreRoute
   "/breeds": typeof PrivateBreedsRoute
   "/clients": typeof PrivateClientsRoute
   "/patients": typeof PrivatePatientsRoute
@@ -93,7 +93,7 @@ export interface FileRoutesById {
   __root__: typeof rootRouteImport
   "/_private": typeof PrivateRouteRouteWithChildren
   "/_public": typeof PublicRouteRouteWithChildren
-  "/docs": typeof DocsRoute
+  "/docs-pre": typeof DocsPreRoute
   "/_private/breeds": typeof PrivateBreedsRoute
   "/_private/clients": typeof PrivateClientsRoute
   "/_private/patients": typeof PrivatePatientsRoute
@@ -106,7 +106,7 @@ export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | "/"
-    | "/docs"
+    | "/docs-pre"
     | "/breeds"
     | "/clients"
     | "/patients"
@@ -116,7 +116,7 @@ export interface FileRouteTypes {
   fileRoutesByTo: FileRoutesByTo
   to:
     | "/"
-    | "/docs"
+    | "/docs-pre"
     | "/breeds"
     | "/clients"
     | "/patients"
@@ -127,7 +127,7 @@ export interface FileRouteTypes {
     | "__root__"
     | "/_private"
     | "/_public"
-    | "/docs"
+    | "/docs-pre"
     | "/_private/breeds"
     | "/_private/clients"
     | "/_private/patients"
@@ -140,16 +140,16 @@ export interface FileRouteTypes {
 export interface RootRouteChildren {
   PrivateRouteRoute: typeof PrivateRouteRouteWithChildren
   PublicRouteRoute: typeof PublicRouteRouteWithChildren
-  DocsRoute: typeof DocsRoute
+  DocsPreRoute: typeof DocsPreRoute
 }
 
 declare module "@tanstack/react-router" {
   interface FileRoutesByPath {
-    "/docs": {
-      id: "/docs"
-      path: "/docs"
-      fullPath: "/docs"
-      preLoaderRoute: typeof DocsRouteImport
+    "/docs-pre": {
+      id: "/docs-pre"
+      path: "/docs-pre"
+      fullPath: "/docs-pre"
+      preLoaderRoute: typeof DocsPreRouteImport
       parentRoute: typeof rootRouteImport
     }
     "/_public": {
@@ -255,7 +255,7 @@ const PublicRouteRouteWithChildren = PublicRouteRoute._addFileChildren(
 const rootRouteChildren: RootRouteChildren = {
   PrivateRouteRoute: PrivateRouteRouteWithChildren,
   PublicRouteRoute: PublicRouteRouteWithChildren,
-  DocsRoute: DocsRoute,
+  DocsPreRoute: DocsPreRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

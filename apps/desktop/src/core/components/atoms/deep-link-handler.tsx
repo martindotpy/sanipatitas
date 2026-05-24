@@ -1,6 +1,7 @@
 import { isTauri } from "@sanipatitas/desktop/core/configuration/app-configuration"
 import { log } from "@sanipatitas/shared/log/client-logger"
 import { useRouter } from "@tanstack/react-router"
+import { onOpenUrl } from "@tauri-apps/plugin-deep-link"
 import { useEffect } from "react"
 
 // Component
@@ -15,8 +16,6 @@ export function DeepLinkHandler() {
 
     let unlisten: (() => void) | undefined
     ;(async () => {
-      const { onOpenUrl } = await import("@tauri-apps/plugin-deep-link")
-
       unlisten = await onOpenUrl((urls) => {
         urls.forEach((url) => {
           try {

@@ -93,10 +93,6 @@ export default defineConfig({
     },
   ],
 
-  experimental: {
-    contentIntellisense: true,
-  },
-
   image: { layout: "constrained" },
 
   // Not necessary because pre-caching of the workbox was configured
