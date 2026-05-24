@@ -1,12 +1,20 @@
+import { isDev } from "@sanipatitas/desktop/core/configuration/app-configuration"
 import type { LinkRoute } from "@sanipatitas/desktop/pages/_app/routes/-routes-types"
 import type { IconType } from "react-icons/lib"
-import { TbCategory2, TbLayoutDashboard, TbPaw, TbUsers } from "react-icons/tb"
+import {
+  TbApi,
+  TbCategory2,
+  TbLayoutDashboard,
+  TbPaw,
+  TbUsers,
+} from "react-icons/tb"
 
 // Hook
 interface SidebarItem {
-  to: LinkRoute
+  to: LinkRoute | (string & {})
   label: string
   icon: IconType
+  external?: boolean
 }
 
 type SidebarGroups = Record<string, SidebarItem[]>
@@ -37,5 +45,18 @@ export function useSidebarItems(): SidebarGroups {
         icon: TbCategory2,
       },
     ],
+
+    ...(isDev
+      ? {
+          Desarrollo: [
+            {
+              to: "/docs",
+              label: "Documentación OpenAPI",
+              icon: TbApi,
+              external: true,
+            },
+          ],
+        }
+      : {}),
   }
 }

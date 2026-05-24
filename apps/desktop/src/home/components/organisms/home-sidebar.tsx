@@ -69,11 +69,19 @@ export function HomeSidebar({
                         className="flex items-center gap-2 px-1.5 transition-colors group-data-[collapsible=icon]:px-1.5!"
                         isActive={Boolean(isActive)}
                         render={
-                          <Link to={item.to} preload={false}>
-                            <item.icon className="size-5!" />
+                          !item.external ? (
+                            <Link to={item.to} preload={false}>
+                              <item.icon className="size-5!" />
 
-                            <span>{item.label}</span>
-                          </Link>
+                              <span>{item.label}</span>
+                            </Link>
+                          ) : (
+                            <a href={item.to}>
+                              <item.icon className="size-5!" />
+
+                              <span>{item.label}</span>
+                            </a>
+                          )
                         }
                       />
                     </SidebarMenuItem>

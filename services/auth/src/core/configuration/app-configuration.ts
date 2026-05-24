@@ -12,6 +12,7 @@ export const {
   NODE_ENV: nodeEnv,
   DATABASE_URL: databaseUrl,
   BETTER_AUTH_SECRET: betterAuthSecret,
+  BETTER_AUTH_URL: betterAuthUrl,
   ADMIN_EMAIL: adminEmail,
   ADMIN_PASSWORD: adminPassword,
 } = (
@@ -29,6 +30,7 @@ export const {
 
     // Better auth
     BETTER_AUTH_SECRET: z.string().min(1),
+    BETTER_AUTH_URL: z.url(),
 
     // Admin user
     ADMIN_EMAIL: z.email(),

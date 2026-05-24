@@ -41,8 +41,6 @@ export const openapiMiddleware = openapi({
     tags: ["Internal"],
   },
   specPath: "/api/auth/openapi.json",
-  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-  // @ts-expect-error
   documentation: {
     ...authOpenAPISchema,
     info: {
@@ -51,12 +49,18 @@ export const openapiMiddleware = openapi({
       description:
         "API documentation for the Auth Service of the Sanipatitas Platform. This service handles user authentication and authorization.",
     },
-    servers: [
-      {
-        url:
-          authOpenAPISchema.servers?.[0]?.url?.replace("/api/auth", "") ??
-          "http://localhost",
+    components: {
+      ...authOpenAPISchema.components,
+      securitySchemes: {
+        ...authOpenAPISchema.components.securitySchemes,
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+        // @ts-expect-error
+        apiKeyCookie: {
+          ...authOpenAPISchema.components.securitySchemes.apiKeyCookie,
+          name: "sanipatitas.session_token",
+        },
       },
-    ],
+    },
+    servers: [],
   },
 })

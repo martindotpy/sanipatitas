@@ -42,7 +42,7 @@ export const auth = betterAuth({
         },
       },
     }),
-    openAPI(),
+    openAPI({ disableDefaultReference: true }),
   ],
   telemetry: {
     enabled: false,
