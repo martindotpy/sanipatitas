@@ -15,4 +15,8 @@ public class DataResponse<T> {
     private T data;
     @NotBlank
     private String message;
+
+    public static <T> DataResponseBuilder<T> from(T data) {
+        return DataResponse.<T>builder().data(data);
+    }
 }

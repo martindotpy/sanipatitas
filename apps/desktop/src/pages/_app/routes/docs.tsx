@@ -53,6 +53,10 @@ function DocsComponent() {
             title: "Patient",
             url: `${publicBaseUrl ?? ""}/api/patient/openapi.json`,
           },
+          {
+            title: "Appointment",
+            url: `${publicBaseUrl ?? ""}/api/appointment/openapi.json`,
+          },
         ],
         darkMode: isDark,
         mcp: {

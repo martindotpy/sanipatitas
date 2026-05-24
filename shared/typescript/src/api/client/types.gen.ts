@@ -55,16 +55,87 @@ export type OpenapiJwks = {
   expiresAt?: string
 }
 
+export type OpenapiBreedDto = {
+  id: OpenapiUuid
+  name: string
+  description?: string
+  species: OpenapiSpeciesDto
+}
+
+export type OpenapiClientDto = {
+  id: OpenapiUuid
+  firstName: string
+  lastName: string
+  idType: OpenapiIdType
+  idNumber: string
+  phone: string
+  phoneAlt?: string
+  email?: string
+  address?: string
+  notes?: string
+}
+
+export type OpenapiCreateBreedRequest = {
+  id?: OpenapiUuid
+  name: string
+  description?: string
+  speciesId: OpenapiUuid
+}
+
+export type OpenapiCreateClientRequest = {
+  id?: OpenapiUuid
+  firstName: string
+  lastName: string
+  idType: OpenapiIdType
+  idNumber: string
+  phone: string
+  phoneAlt?: string
+  email?: string
+  address?: string
+  notes?: string
+}
+
+export type OpenapiCreatePatientRequest = {
+  id?: OpenapiUuid
+  name: string
+  gender?: OpenapiGender
+  birthDate?: OpenapiLocalDate
+  approximateAge?: string
+  weightKg?: number
+  description?: string
+  isSterilized?: boolean
+  isDeceased?: boolean
+  breedId?: OpenapiUuid
+  clientId: OpenapiUuid
+}
+
 export type OpenapiCreateSpeciesRequest = {
   id?: OpenapiUuid
   name: string
   description?: string
 }
 
+export type OpenapiDataResponseBreedDto = {
+  data: OpenapiBreedDto
+  message: string
+}
+
+export type OpenapiDataResponseClientDto = {
+  data: OpenapiClientDto
+  message: string
+}
+
+export type OpenapiDataResponsePatientDto = {
+  data: OpenapiPatientDto
+  message: string
+}
+
 export type OpenapiDataResponseSpeciesDto = {
   data: OpenapiSpeciesDto
   message: string
 }
+
+export type OpenapiGender = "MALE" | "FEMALE" | "UNKNOWN"
 
 /**
  * HTTP Problem Response according to RFC9457 and RFC7807
@@ -124,6 +195,64 @@ export type OpenapiHttpValidationProblem = {
   [key: string]: unknown
 }
 
+export type OpenapiIdType = "DNI" | "CE" | "PASSPORT"
+
+export type OpenapiLocalDate = string
+
+export type OpenapiOffsetDateTime = string
+
+export type OpenapiPageResponseBreedDto = {
+  data: Array<OpenapiBreedDto>
+  page?: number
+  size?: number
+  totalElements?: number
+  totalPages?: number
+  message: string
+}
+
+export type OpenapiPageResponseClientDto = {
+  data: Array<OpenapiClientDto>
+  page?: number
+  size?: number
+  totalElements?: number
+  totalPages?: number
+  message: string
+}
+
+export type OpenapiPageResponsePatientDto = {
+  data: Array<OpenapiPatientDto>
+  page?: number
+  size?: number
+  totalElements?: number
+  totalPages?: number
+  message: string
+}
+
+export type OpenapiPageResponseSpeciesDto = {
+  data: Array<OpenapiSpeciesDto>
+  page?: number
+  size?: number
+  totalElements?: number
+  totalPages?: number
+  message: string
+}
+
+export type OpenapiPatientDto = {
+  id: OpenapiUuid
+  name: string
+  gender?: OpenapiGender
+  birthDate?: OpenapiLocalDate
+  approximateAge?: string
+  weightKg?: number
+  description?: string
+  isSterilized?: boolean
+  isDeceased?: boolean
+  createdAt: OpenapiOffsetDateTime
+  updatedAt: OpenapiOffsetDateTime
+  breed?: OpenapiBreedDto
+  client: OpenapiClientDto
+}
+
 export type OpenapiSpeciesDto = {
   id: OpenapiUuid
   name: string
@@ -131,6 +260,42 @@ export type OpenapiSpeciesDto = {
 }
 
 export type OpenapiUuid = string
+
+export type OpenapiUpdateBreedRequest = {
+  name: string
+  description?: string
+  speciesId: OpenapiUuid
+}
+
+export type OpenapiUpdateClientRequest = {
+  firstName: string
+  lastName: string
+  idType: OpenapiIdType
+  idNumber: string
+  phone: string
+  phoneAlt?: string
+  email?: string
+  address?: string
+  notes?: string
+}
+
+export type OpenapiUpdatePatientRequest = {
+  name: string
+  gender?: OpenapiGender
+  birthDate?: OpenapiLocalDate
+  approximateAge?: string
+  weightKg?: number
+  description?: string
+  isSterilized?: boolean
+  isDeceased?: boolean
+  breedId?: OpenapiUuid
+  clientId: OpenapiUuid
+}
+
+export type OpenapiUpdateSpeciesRequest = {
+  name: string
+  description?: string
+}
 
 /**
  * Validation constraint violation details
@@ -148,6 +313,89 @@ export type OpenapiViolation = {
    * Description of the validation error
    */
   message: string
+}
+
+export type OpenapiAppointmentClass = "AMBULATORY" | "EMERGENCY" | "HOME_VISIT"
+
+export type OpenapiAppointmentDto = {
+  id: OpenapiUuid
+  date: OpenapiLocalDate
+  startTime: OpenapiLocalTime
+  endTime?: OpenapiLocalTime
+  status: OpenapiAppointmentStatus
+  appointmentClass: OpenapiAppointmentClass
+  reason?: string
+  notes?: string
+  createdAt: OpenapiOffsetDateTime
+  updatedAt: OpenapiOffsetDateTime
+  patient: OpenapiPatientDto
+  client: OpenapiClientDto
+  veterinarian: OpenapiUserDto
+}
+
+export type OpenapiAppointmentStatus =
+  | "SCHEDULED"
+  | "IN_PROGRESS"
+  | "COMPLETED"
+  | "CANCELLED"
+  | "NO_SHOW"
+
+export type OpenapiCreateAppointmentRequest = {
+  id?: OpenapiUuid
+  date: OpenapiLocalDate
+  startTime: OpenapiLocalTime
+  endTime?: OpenapiLocalTime
+  status: OpenapiAppointmentStatus
+  appointmentClass?: OpenapiAppointmentClass
+  reason?: string
+  notes?: string
+  patientId: OpenapiUuid
+  clientId: OpenapiUuid
+  veterinarianId: OpenapiUuid
+}
+
+export type OpenapiDataResponseAppointmentDto = {
+  data: OpenapiAppointmentDto
+  message: string
+}
+
+export type OpenapiLocalTime = string
+
+export type OpenapiPageResponseAppointmentDto = {
+  data: Array<OpenapiAppointmentDto>
+  page?: number
+  size?: number
+  totalElements?: number
+  totalPages?: number
+  message: string
+}
+
+export type OpenapiUpdateAppointmentRequest = {
+  date: OpenapiLocalDate
+  startTime: OpenapiLocalTime
+  endTime?: OpenapiLocalTime
+  status: OpenapiAppointmentStatus
+  appointmentClass?: OpenapiAppointmentClass
+  reason?: string
+  notes?: string
+  patientId: OpenapiUuid
+  clientId: OpenapiUuid
+  veterinarianId: OpenapiUuid
+}
+
+export type OpenapiUserDto = {
+  id: OpenapiUuid
+  name: string
+  email: string
+  emailVerified: boolean
+  image?: string
+  role?: string
+  banned?: boolean
+  banReason?: string
+  banExpires?: OpenapiOffsetDateTime
+  lastName: string
+  createdAt: OpenapiOffsetDateTime
+  updatedAt: OpenapiOffsetDateTime
 }
 
 export type OpenapiUserWritable = {
@@ -3710,6 +3958,478 @@ export type OpenapiGetJsonWebTokenResponses = {
 export type OpenapiGetJsonWebTokenResponse =
   OpenapiGetJsonWebTokenResponses[keyof OpenapiGetJsonWebTokenResponses]
 
+export type GetApiBreedData = {
+  body?: never
+  path?: never
+  query?: {
+    page?: number
+    search?: string
+    size?: number
+  }
+  url: "/api/breed"
+}
+
+export type GetApiBreedErrors = {
+  /**
+   * Constraint Violation
+   */
+  422: OpenapiHttpValidationProblem
+}
+
+export type GetApiBreedError = GetApiBreedErrors[keyof GetApiBreedErrors]
+
+export type GetApiBreedResponses = {
+  /**
+   * OK
+   */
+  200: OpenapiPageResponseBreedDto
+}
+
+export type GetApiBreedResponse =
+  GetApiBreedResponses[keyof GetApiBreedResponses]
+
+export type PostApiBreedData = {
+  body: OpenapiCreateBreedRequest
+  path?: never
+  query?: never
+  url: "/api/breed"
+}
+
+export type PostApiBreedErrors = {
+  /**
+   * Constraint Violation
+   */
+  422: OpenapiHttpValidationProblem
+}
+
+export type PostApiBreedError = PostApiBreedErrors[keyof PostApiBreedErrors]
+
+export type PostApiBreedResponses = {
+  /**
+   * OK
+   */
+  200: OpenapiDataResponseBreedDto
+}
+
+export type PostApiBreedResponse =
+  PostApiBreedResponses[keyof PostApiBreedResponses]
+
+export type DeleteApiBreedByIdData = {
+  body?: never
+  path: {
+    id: OpenapiUuid
+  }
+  query?: never
+  url: "/api/breed/{id}"
+}
+
+export type DeleteApiBreedByIdErrors = {
+  /**
+   * Constraint Violation
+   */
+  422: OpenapiHttpValidationProblem
+}
+
+export type DeleteApiBreedByIdError =
+  DeleteApiBreedByIdErrors[keyof DeleteApiBreedByIdErrors]
+
+export type DeleteApiBreedByIdResponses = {
+  /**
+   * No Content
+   */
+  204: void
+}
+
+export type DeleteApiBreedByIdResponse =
+  DeleteApiBreedByIdResponses[keyof DeleteApiBreedByIdResponses]
+
+export type GetApiBreedByIdData = {
+  body?: never
+  path: {
+    id: OpenapiUuid
+  }
+  query?: never
+  url: "/api/breed/{id}"
+}
+
+export type GetApiBreedByIdErrors = {
+  /**
+   * Not Found: server cannot find the requested resource
+   */
+  404: OpenapiHttpProblem
+  /**
+   * Constraint Violation
+   */
+  422: OpenapiHttpValidationProblem
+}
+
+export type GetApiBreedByIdError =
+  GetApiBreedByIdErrors[keyof GetApiBreedByIdErrors]
+
+export type GetApiBreedByIdResponses = {
+  /**
+   * OK
+   */
+  200: OpenapiDataResponseBreedDto
+}
+
+export type GetApiBreedByIdResponse =
+  GetApiBreedByIdResponses[keyof GetApiBreedByIdResponses]
+
+export type PutApiBreedByIdData = {
+  body: OpenapiUpdateBreedRequest
+  path: {
+    id: OpenapiUuid
+  }
+  query?: never
+  url: "/api/breed/{id}"
+}
+
+export type PutApiBreedByIdErrors = {
+  /**
+   * Constraint Violation
+   */
+  422: OpenapiHttpValidationProblem
+}
+
+export type PutApiBreedByIdError =
+  PutApiBreedByIdErrors[keyof PutApiBreedByIdErrors]
+
+export type PutApiBreedByIdResponses = {
+  /**
+   * OK
+   */
+  200: OpenapiDataResponseBreedDto
+}
+
+export type PutApiBreedByIdResponse =
+  PutApiBreedByIdResponses[keyof PutApiBreedByIdResponses]
+
+export type GetApiClientData = {
+  body?: never
+  path?: never
+  query?: {
+    page?: number
+    search?: string
+    size?: number
+  }
+  url: "/api/client"
+}
+
+export type GetApiClientErrors = {
+  /**
+   * Constraint Violation
+   */
+  422: OpenapiHttpValidationProblem
+}
+
+export type GetApiClientError = GetApiClientErrors[keyof GetApiClientErrors]
+
+export type GetApiClientResponses = {
+  /**
+   * OK
+   */
+  200: OpenapiPageResponseClientDto
+}
+
+export type GetApiClientResponse =
+  GetApiClientResponses[keyof GetApiClientResponses]
+
+export type PostApiClientData = {
+  body: OpenapiCreateClientRequest
+  path?: never
+  query?: never
+  url: "/api/client"
+}
+
+export type PostApiClientErrors = {
+  /**
+   * Constraint Violation
+   */
+  422: OpenapiHttpValidationProblem
+}
+
+export type PostApiClientError = PostApiClientErrors[keyof PostApiClientErrors]
+
+export type PostApiClientResponses = {
+  /**
+   * OK
+   */
+  200: OpenapiDataResponseClientDto
+}
+
+export type PostApiClientResponse =
+  PostApiClientResponses[keyof PostApiClientResponses]
+
+export type DeleteApiClientByIdData = {
+  body?: never
+  path: {
+    id: OpenapiUuid
+  }
+  query?: never
+  url: "/api/client/{id}"
+}
+
+export type DeleteApiClientByIdErrors = {
+  /**
+   * Constraint Violation
+   */
+  422: OpenapiHttpValidationProblem
+}
+
+export type DeleteApiClientByIdError =
+  DeleteApiClientByIdErrors[keyof DeleteApiClientByIdErrors]
+
+export type DeleteApiClientByIdResponses = {
+  /**
+   * No Content
+   */
+  204: void
+}
+
+export type DeleteApiClientByIdResponse =
+  DeleteApiClientByIdResponses[keyof DeleteApiClientByIdResponses]
+
+export type GetApiClientByIdData = {
+  body?: never
+  path: {
+    id: OpenapiUuid
+  }
+  query?: never
+  url: "/api/client/{id}"
+}
+
+export type GetApiClientByIdErrors = {
+  /**
+   * Not Found: server cannot find the requested resource
+   */
+  404: OpenapiHttpProblem
+  /**
+   * Constraint Violation
+   */
+  422: OpenapiHttpValidationProblem
+}
+
+export type GetApiClientByIdError =
+  GetApiClientByIdErrors[keyof GetApiClientByIdErrors]
+
+export type GetApiClientByIdResponses = {
+  /**
+   * OK
+   */
+  200: OpenapiDataResponseClientDto
+}
+
+export type GetApiClientByIdResponse =
+  GetApiClientByIdResponses[keyof GetApiClientByIdResponses]
+
+export type PutApiClientByIdData = {
+  body: OpenapiUpdateClientRequest
+  path: {
+    id: OpenapiUuid
+  }
+  query?: never
+  url: "/api/client/{id}"
+}
+
+export type PutApiClientByIdErrors = {
+  /**
+   * Constraint Violation
+   */
+  422: OpenapiHttpValidationProblem
+}
+
+export type PutApiClientByIdError =
+  PutApiClientByIdErrors[keyof PutApiClientByIdErrors]
+
+export type PutApiClientByIdResponses = {
+  /**
+   * OK
+   */
+  200: OpenapiDataResponseClientDto
+}
+
+export type PutApiClientByIdResponse =
+  PutApiClientByIdResponses[keyof PutApiClientByIdResponses]
+
+export type GetApiPatientData = {
+  body?: never
+  path?: never
+  query?: {
+    page?: number
+    search?: string
+    size?: number
+  }
+  url: "/api/patient"
+}
+
+export type GetApiPatientErrors = {
+  /**
+   * Constraint Violation
+   */
+  422: OpenapiHttpValidationProblem
+}
+
+export type GetApiPatientError = GetApiPatientErrors[keyof GetApiPatientErrors]
+
+export type GetApiPatientResponses = {
+  /**
+   * OK
+   */
+  200: OpenapiPageResponsePatientDto
+}
+
+export type GetApiPatientResponse =
+  GetApiPatientResponses[keyof GetApiPatientResponses]
+
+export type PostApiPatientData = {
+  body: OpenapiCreatePatientRequest
+  path?: never
+  query?: never
+  url: "/api/patient"
+}
+
+export type PostApiPatientErrors = {
+  /**
+   * Constraint Violation
+   */
+  422: OpenapiHttpValidationProblem
+}
+
+export type PostApiPatientError =
+  PostApiPatientErrors[keyof PostApiPatientErrors]
+
+export type PostApiPatientResponses = {
+  /**
+   * OK
+   */
+  200: OpenapiDataResponsePatientDto
+}
+
+export type PostApiPatientResponse =
+  PostApiPatientResponses[keyof PostApiPatientResponses]
+
+export type DeleteApiPatientByIdData = {
+  body?: never
+  path: {
+    id: OpenapiUuid
+  }
+  query?: never
+  url: "/api/patient/{id}"
+}
+
+export type DeleteApiPatientByIdErrors = {
+  /**
+   * Constraint Violation
+   */
+  422: OpenapiHttpValidationProblem
+}
+
+export type DeleteApiPatientByIdError =
+  DeleteApiPatientByIdErrors[keyof DeleteApiPatientByIdErrors]
+
+export type DeleteApiPatientByIdResponses = {
+  /**
+   * No Content
+   */
+  204: void
+}
+
+export type DeleteApiPatientByIdResponse =
+  DeleteApiPatientByIdResponses[keyof DeleteApiPatientByIdResponses]
+
+export type GetApiPatientByIdData = {
+  body?: never
+  path: {
+    id: OpenapiUuid
+  }
+  query?: never
+  url: "/api/patient/{id}"
+}
+
+export type GetApiPatientByIdErrors = {
+  /**
+   * Not Found: server cannot find the requested resource
+   */
+  404: OpenapiHttpProblem
+  /**
+   * Constraint Violation
+   */
+  422: OpenapiHttpValidationProblem
+}
+
+export type GetApiPatientByIdError =
+  GetApiPatientByIdErrors[keyof GetApiPatientByIdErrors]
+
+export type GetApiPatientByIdResponses = {
+  /**
+   * OK
+   */
+  200: OpenapiDataResponsePatientDto
+}
+
+export type GetApiPatientByIdResponse =
+  GetApiPatientByIdResponses[keyof GetApiPatientByIdResponses]
+
+export type PutApiPatientByIdData = {
+  body: OpenapiUpdatePatientRequest
+  path: {
+    id: OpenapiUuid
+  }
+  query?: never
+  url: "/api/patient/{id}"
+}
+
+export type PutApiPatientByIdErrors = {
+  /**
+   * Constraint Violation
+   */
+  422: OpenapiHttpValidationProblem
+}
+
+export type PutApiPatientByIdError =
+  PutApiPatientByIdErrors[keyof PutApiPatientByIdErrors]
+
+export type PutApiPatientByIdResponses = {
+  /**
+   * OK
+   */
+  200: OpenapiDataResponsePatientDto
+}
+
+export type PutApiPatientByIdResponse =
+  PutApiPatientByIdResponses[keyof PutApiPatientByIdResponses]
+
+export type GetApiSpeciesData = {
+  body?: never
+  path?: never
+  query?: {
+    page?: number
+    search?: string
+    size?: number
+  }
+  url: "/api/species"
+}
+
+export type GetApiSpeciesErrors = {
+  /**
+   * Constraint Violation
+   */
+  422: OpenapiHttpValidationProblem
+}
+
+export type GetApiSpeciesError = GetApiSpeciesErrors[keyof GetApiSpeciesErrors]
+
+export type GetApiSpeciesResponses = {
+  /**
+   * OK
+   */
+  200: OpenapiPageResponseSpeciesDto
+}
+
+export type GetApiSpeciesResponse =
+  GetApiSpeciesResponses[keyof GetApiSpeciesResponses]
+
 export type PostApiSpeciesData = {
   body: OpenapiCreateSpeciesRequest
   path?: never
@@ -3737,6 +4457,35 @@ export type PostApiSpeciesResponses = {
 export type PostApiSpeciesResponse =
   PostApiSpeciesResponses[keyof PostApiSpeciesResponses]
 
+export type DeleteApiSpeciesByIdData = {
+  body?: never
+  path: {
+    id: OpenapiUuid
+  }
+  query?: never
+  url: "/api/species/{id}"
+}
+
+export type DeleteApiSpeciesByIdErrors = {
+  /**
+   * Constraint Violation
+   */
+  422: OpenapiHttpValidationProblem
+}
+
+export type DeleteApiSpeciesByIdError =
+  DeleteApiSpeciesByIdErrors[keyof DeleteApiSpeciesByIdErrors]
+
+export type DeleteApiSpeciesByIdResponses = {
+  /**
+   * No Content
+   */
+  204: void
+}
+
+export type DeleteApiSpeciesByIdResponse =
+  DeleteApiSpeciesByIdResponses[keyof DeleteApiSpeciesByIdResponses]
+
 export type GetApiSpeciesByIdData = {
   body?: never
   path: {
@@ -3747,10 +4496,6 @@ export type GetApiSpeciesByIdData = {
 }
 
 export type GetApiSpeciesByIdErrors = {
-  /**
-   * Not Found: server cannot find the requested resource
-   */
-  404: OpenapiHttpProblem
   /**
    * Constraint Violation
    */
@@ -3769,3 +4514,182 @@ export type GetApiSpeciesByIdResponses = {
 
 export type GetApiSpeciesByIdResponse =
   GetApiSpeciesByIdResponses[keyof GetApiSpeciesByIdResponses]
+
+export type PutApiSpeciesByIdData = {
+  body: OpenapiUpdateSpeciesRequest
+  path: {
+    id: OpenapiUuid
+  }
+  query?: never
+  url: "/api/species/{id}"
+}
+
+export type PutApiSpeciesByIdErrors = {
+  /**
+   * Constraint Violation
+   */
+  422: OpenapiHttpValidationProblem
+}
+
+export type PutApiSpeciesByIdError =
+  PutApiSpeciesByIdErrors[keyof PutApiSpeciesByIdErrors]
+
+export type PutApiSpeciesByIdResponses = {
+  /**
+   * OK
+   */
+  200: OpenapiDataResponseSpeciesDto
+}
+
+export type PutApiSpeciesByIdResponse =
+  PutApiSpeciesByIdResponses[keyof PutApiSpeciesByIdResponses]
+
+export type GetApiAppointmentData = {
+  body?: never
+  path?: never
+  query?: {
+    from?: OpenapiLocalDate
+    page?: number
+    size?: number
+    to?: OpenapiLocalDate
+  }
+  url: "/api/appointment"
+}
+
+export type GetApiAppointmentErrors = {
+  /**
+   * Constraint Violation
+   */
+  422: OpenapiHttpValidationProblem
+}
+
+export type GetApiAppointmentError =
+  GetApiAppointmentErrors[keyof GetApiAppointmentErrors]
+
+export type GetApiAppointmentResponses = {
+  /**
+   * OK
+   */
+  200: OpenapiPageResponseAppointmentDto
+}
+
+export type GetApiAppointmentResponse =
+  GetApiAppointmentResponses[keyof GetApiAppointmentResponses]
+
+export type PostApiAppointmentData = {
+  body: OpenapiCreateAppointmentRequest
+  path?: never
+  query?: never
+  url: "/api/appointment"
+}
+
+export type PostApiAppointmentErrors = {
+  /**
+   * Constraint Violation
+   */
+  422: OpenapiHttpValidationProblem
+}
+
+export type PostApiAppointmentError =
+  PostApiAppointmentErrors[keyof PostApiAppointmentErrors]
+
+export type PostApiAppointmentResponses = {
+  /**
+   * OK
+   */
+  200: OpenapiDataResponseAppointmentDto
+}
+
+export type PostApiAppointmentResponse =
+  PostApiAppointmentResponses[keyof PostApiAppointmentResponses]
+
+export type DeleteApiAppointmentByIdData = {
+  body?: never
+  path: {
+    id: OpenapiUuid
+  }
+  query?: never
+  url: "/api/appointment/{id}"
+}
+
+export type DeleteApiAppointmentByIdErrors = {
+  /**
+   * Constraint Violation
+   */
+  422: OpenapiHttpValidationProblem
+}
+
+export type DeleteApiAppointmentByIdError =
+  DeleteApiAppointmentByIdErrors[keyof DeleteApiAppointmentByIdErrors]
+
+export type DeleteApiAppointmentByIdResponses = {
+  /**
+   * No Content
+   */
+  204: void
+}
+
+export type DeleteApiAppointmentByIdResponse =
+  DeleteApiAppointmentByIdResponses[keyof DeleteApiAppointmentByIdResponses]
+
+export type GetApiAppointmentByIdData = {
+  body?: never
+  path: {
+    id: OpenapiUuid
+  }
+  query?: never
+  url: "/api/appointment/{id}"
+}
+
+export type GetApiAppointmentByIdErrors = {
+  /**
+   * Not Found: server cannot find the requested resource
+   */
+  404: OpenapiHttpProblem
+  /**
+   * Constraint Violation
+   */
+  422: OpenapiHttpValidationProblem
+}
+
+export type GetApiAppointmentByIdError =
+  GetApiAppointmentByIdErrors[keyof GetApiAppointmentByIdErrors]
+
+export type GetApiAppointmentByIdResponses = {
+  /**
+   * OK
+   */
+  200: OpenapiDataResponseAppointmentDto
+}
+
+export type GetApiAppointmentByIdResponse =
+  GetApiAppointmentByIdResponses[keyof GetApiAppointmentByIdResponses]
+
+export type PutApiAppointmentByIdData = {
+  body: OpenapiUpdateAppointmentRequest
+  path: {
+    id: OpenapiUuid
+  }
+  query?: never
+  url: "/api/appointment/{id}"
+}
+
+export type PutApiAppointmentByIdErrors = {
+  /**
+   * Constraint Violation
+   */
+  422: OpenapiHttpValidationProblem
+}
+
+export type PutApiAppointmentByIdError =
+  PutApiAppointmentByIdErrors[keyof PutApiAppointmentByIdErrors]
+
+export type PutApiAppointmentByIdResponses = {
+  /**
+   * OK
+   */
+  200: OpenapiDataResponseAppointmentDto
+}
+
+export type PutApiAppointmentByIdResponse =
+  PutApiAppointmentByIdResponses[keyof PutApiAppointmentByIdResponses]

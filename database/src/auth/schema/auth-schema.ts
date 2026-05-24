@@ -73,6 +73,7 @@ export const jwksTable = pgTable("jwks", {
   expiresAt: timestamp(),
 })
 
+// Relation
 export const userRelations = relations(userTable, ({ many }) => ({
   accounts: many(accountTable),
 }))

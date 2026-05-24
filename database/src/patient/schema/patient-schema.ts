@@ -1,3 +1,6 @@
+import { tsvector } from "@sanipatitas/database/core/custom-types"
+import { breedTable } from "@sanipatitas/database/patient/schema/breed-schema"
+import { clientTable } from "@sanipatitas/database/patient/schema/client-schema"
 import { sql, type SQL } from "drizzle-orm"
 import {
   boolean,
@@ -10,10 +13,6 @@ import {
   uuid,
   varchar,
 } from "drizzle-orm/pg-core"
-
-import { breedTable } from "@sanipatitas/database/patient/schema/breed-schema"
-import { clientTable } from "@sanipatitas/database/patient/schema/client-schema"
-import { tsvector } from "@sanipatitas/database/core/custom-types"
 
 // Enum
 const genders = ["MALE", "FEMALE", "UNKNOWN"] as const
@@ -44,11 +43,15 @@ export const patientTable = pgTable(
       .$onUpdate(() => new Date())
       .notNull(),
     searchVector: tsvector("search_vector").generatedAlwaysAs(
-      (): SQL => sql`to_tsvector('spanish', coalesce(${patientTable.name}, '') || ' ' || coalesce(${patientTable.description}, ''))`
+      (): SQL =>
+        sql`to_tsvector('spanish', coalesce(${patientTable.name}, '') || ' ' || coalesce(${patientTable.description}, ''))`
     ),
   },
   (table) => [
-    check("gender_check", sql`${table.gender} IN ('MALE', 'FEMALE', 'UNKNOWN')`),
+    check(
+      "gender_check",
+      sql`${table.gender} IN ('MALE', 'FEMALE', 'UNKNOWN')`
+    ),
     index("patient_search_idx").using("gin", table.searchVector),
-  ],
+  ]
 )

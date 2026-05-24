@@ -1,3 +1,5 @@
+import { userTable } from "@sanipatitas/database/auth/schema/auth-schema"
+import { tsvector } from "@sanipatitas/database/core/custom-types"
 import { sql, type SQL } from "drizzle-orm"
 import {
   boolean,
@@ -8,9 +10,6 @@ import {
   uuid,
   varchar,
 } from "drizzle-orm/pg-core"
-
-import { userTable } from "@sanipatitas/database/auth/schema/auth-schema"
-import { tsvector } from "@sanipatitas/database/core/custom-types"
 
 // Enum
 const idTypes = ["DNI", "CE", "PASSPORT"] as const
@@ -40,7 +39,8 @@ export const clientTable = pgTable(
       .$onUpdate(() => new Date())
       .notNull(),
     searchVector: tsvector("search_vector").generatedAlwaysAs(
-      (): SQL => sql`to_tsvector('spanish', coalesce(${clientTable.firstName}, '') || ' ' || coalesce(${clientTable.lastName}, '') || ' ' || coalesce(${clientTable.idNumber}, ''))`
+      (): SQL =>
+        sql`to_tsvector('spanish', coalesce(${clientTable.firstName}, '') || ' ' || coalesce(${clientTable.lastName}, '') || ' ' || coalesce(${clientTable.idNumber}, ''))`
     ),
   },
   (table) => [

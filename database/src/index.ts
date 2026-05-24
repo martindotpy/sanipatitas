@@ -1,3 +1,4 @@
+import * as appointmentSchema from "@sanipatitas/database/appointment/schema/appointment-schema"
 import * as authSchema from "@sanipatitas/database/auth/schema/auth-schema"
 import * as breedSchema from "@sanipatitas/database/patient/schema/breed-schema"
 import * as clientSchema from "@sanipatitas/database/patient/schema/client-schema"
@@ -12,6 +13,7 @@ const client = new SQL()
 
 // All schemas
 const allSchemas = {
+  ...appointmentSchema,
   ...authSchema,
   ...speciesSchema,
   ...breedSchema,

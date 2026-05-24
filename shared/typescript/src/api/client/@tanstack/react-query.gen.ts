@@ -9,12 +9,26 @@ import {
 
 import { client } from "../client.gen"
 import {
+  deleteApiAppointmentById,
+  deleteApiBreedById,
+  deleteApiClientById,
+  deleteApiPatientById,
+  deleteApiSpeciesById,
+  getApiAppointment,
+  getApiAppointmentById,
   getApiAuthAccountInfo,
   getApiAuthCallbackById,
   getApiAuthDeleteUserCallback,
   getApiAuthError,
   getApiAuthOk,
   getApiAuthVerifyEmail,
+  getApiBreed,
+  getApiBreedById,
+  getApiClient,
+  getApiClientById,
+  getApiPatient,
+  getApiPatientById,
+  getApiSpecies,
   getApiSpeciesById,
   openapiAdminListUserSessions,
   openapiAdminUpdateUser,
@@ -51,6 +65,7 @@ import {
   openapiUpdateUser,
   openapiVerifyPassword,
   type Options,
+  postApiAppointment,
   postApiAuthAdminHasPermission,
   postApiAuthAdminStopImpersonating,
   postApiAuthCallbackById,
@@ -60,9 +75,38 @@ import {
   postApiAuthRevokeSession,
   postApiAuthRevokeSessions,
   postApiAuthUnlinkAccount,
+  postApiBreed,
+  postApiClient,
+  postApiPatient,
   postApiSpecies,
+  putApiAppointmentById,
+  putApiBreedById,
+  putApiClientById,
+  putApiPatientById,
+  putApiSpeciesById,
 } from "../sdk.gen"
 import type {
+  DeleteApiAppointmentByIdData,
+  DeleteApiAppointmentByIdError,
+  DeleteApiAppointmentByIdResponse,
+  DeleteApiBreedByIdData,
+  DeleteApiBreedByIdError,
+  DeleteApiBreedByIdResponse,
+  DeleteApiClientByIdData,
+  DeleteApiClientByIdError,
+  DeleteApiClientByIdResponse,
+  DeleteApiPatientByIdData,
+  DeleteApiPatientByIdError,
+  DeleteApiPatientByIdResponse,
+  DeleteApiSpeciesByIdData,
+  DeleteApiSpeciesByIdError,
+  DeleteApiSpeciesByIdResponse,
+  GetApiAppointmentByIdData,
+  GetApiAppointmentByIdError,
+  GetApiAppointmentByIdResponse,
+  GetApiAppointmentData,
+  GetApiAppointmentError,
+  GetApiAppointmentResponse,
   GetApiAuthAccountInfoData,
   GetApiAuthAccountInfoError,
   GetApiAuthAccountInfoResponse,
@@ -80,9 +124,30 @@ import type {
   GetApiAuthVerifyEmailData,
   GetApiAuthVerifyEmailError,
   GetApiAuthVerifyEmailResponse,
+  GetApiBreedByIdData,
+  GetApiBreedByIdError,
+  GetApiBreedByIdResponse,
+  GetApiBreedData,
+  GetApiBreedError,
+  GetApiBreedResponse,
+  GetApiClientByIdData,
+  GetApiClientByIdError,
+  GetApiClientByIdResponse,
+  GetApiClientData,
+  GetApiClientError,
+  GetApiClientResponse,
+  GetApiPatientByIdData,
+  GetApiPatientByIdError,
+  GetApiPatientByIdResponse,
+  GetApiPatientData,
+  GetApiPatientError,
+  GetApiPatientResponse,
   GetApiSpeciesByIdData,
   GetApiSpeciesByIdError,
   GetApiSpeciesByIdResponse,
+  GetApiSpeciesData,
+  GetApiSpeciesError,
+  GetApiSpeciesResponse,
   OpenapiAdminListUserSessionsData,
   OpenapiAdminListUserSessionsError,
   OpenapiAdminListUserSessionsResponse,
@@ -185,6 +250,9 @@ import type {
   OpenapiVerifyPasswordData,
   OpenapiVerifyPasswordError,
   OpenapiVerifyPasswordResponse,
+  PostApiAppointmentData,
+  PostApiAppointmentError,
+  PostApiAppointmentResponse,
   PostApiAuthAdminHasPermissionData,
   PostApiAuthAdminHasPermissionError,
   PostApiAuthAdminHasPermissionResponse,
@@ -210,9 +278,33 @@ import type {
   PostApiAuthUnlinkAccountData,
   PostApiAuthUnlinkAccountError,
   PostApiAuthUnlinkAccountResponse,
+  PostApiBreedData,
+  PostApiBreedError,
+  PostApiBreedResponse,
+  PostApiClientData,
+  PostApiClientError,
+  PostApiClientResponse,
+  PostApiPatientData,
+  PostApiPatientError,
+  PostApiPatientResponse,
   PostApiSpeciesData,
   PostApiSpeciesError,
   PostApiSpeciesResponse,
+  PutApiAppointmentByIdData,
+  PutApiAppointmentByIdError,
+  PutApiAppointmentByIdResponse,
+  PutApiBreedByIdData,
+  PutApiBreedByIdError,
+  PutApiBreedByIdResponse,
+  PutApiClientByIdData,
+  PutApiClientByIdError,
+  PutApiClientByIdResponse,
+  PutApiPatientByIdData,
+  PutApiPatientByIdError,
+  PutApiPatientByIdResponse,
+  PutApiSpeciesByIdData,
+  PutApiSpeciesByIdError,
+  PutApiSpeciesByIdResponse,
 } from "../types.gen"
 
 /**
@@ -1659,8 +1751,633 @@ export const openapiGetJsonWebTokenOptions = (
     queryKey: openapiGetJsonWebTokenQueryKey(options),
   })
 
+export const getApiBreedQueryKey = (options?: Options<GetApiBreedData>) =>
+  createQueryKey("getApiBreed", options)
+
 /**
- * Create Species
+ * Search
+ */
+export const getApiBreedOptions = (options?: Options<GetApiBreedData>) =>
+  queryOptions<
+    GetApiBreedResponse,
+    GetApiBreedError,
+    GetApiBreedResponse,
+    ReturnType<typeof getApiBreedQueryKey>
+  >({
+    queryFn: async ({ queryKey, signal }) => {
+      const { data } = await getApiBreed({
+        ...options,
+        ...queryKey[0],
+        signal,
+        throwOnError: true,
+      })
+      return data
+    },
+    queryKey: getApiBreedQueryKey(options),
+  })
+
+export const getApiBreedInfiniteQueryKey = (
+  options?: Options<GetApiBreedData>
+): QueryKey<Options<GetApiBreedData>> =>
+  createQueryKey("getApiBreed", options, true)
+
+/**
+ * Search
+ */
+export const getApiBreedInfiniteOptions = (
+  options?: Options<GetApiBreedData>
+) =>
+  infiniteQueryOptions<
+    GetApiBreedResponse,
+    GetApiBreedError,
+    InfiniteData<GetApiBreedResponse>,
+    QueryKey<Options<GetApiBreedData>>,
+    | number
+    | Pick<
+        QueryKey<Options<GetApiBreedData>>[0],
+        "body" | "headers" | "path" | "query"
+      >
+  >(
+    // @ts-ignore
+    {
+      queryFn: async ({ pageParam, queryKey, signal }) => {
+        // @ts-ignore
+        const page: Pick<
+          QueryKey<Options<GetApiBreedData>>[0],
+          "body" | "headers" | "path" | "query"
+        > =
+          typeof pageParam === "object"
+            ? pageParam
+            : {
+                query: {
+                  page: pageParam,
+                },
+              }
+        const params = createInfiniteParams(queryKey, page)
+        const { data } = await getApiBreed({
+          ...options,
+          ...params,
+          signal,
+          throwOnError: true,
+        })
+        return data
+      },
+      queryKey: getApiBreedInfiniteQueryKey(options),
+    }
+  )
+
+/**
+ * Create
+ */
+export const postApiBreedMutation = (
+  options?: Partial<Options<PostApiBreedData>>
+): UseMutationOptions<
+  PostApiBreedResponse,
+  PostApiBreedError,
+  Options<PostApiBreedData>
+> => {
+  const mutationOptions: UseMutationOptions<
+    PostApiBreedResponse,
+    PostApiBreedError,
+    Options<PostApiBreedData>
+  > = {
+    mutationFn: async (fnOptions) => {
+      const { data } = await postApiBreed({
+        ...options,
+        ...fnOptions,
+        throwOnError: true,
+      })
+      return data
+    },
+  }
+  return mutationOptions
+}
+
+/**
+ * Delete
+ */
+export const deleteApiBreedByIdMutation = (
+  options?: Partial<Options<DeleteApiBreedByIdData>>
+): UseMutationOptions<
+  DeleteApiBreedByIdResponse,
+  DeleteApiBreedByIdError,
+  Options<DeleteApiBreedByIdData>
+> => {
+  const mutationOptions: UseMutationOptions<
+    DeleteApiBreedByIdResponse,
+    DeleteApiBreedByIdError,
+    Options<DeleteApiBreedByIdData>
+  > = {
+    mutationFn: async (fnOptions) => {
+      const { data } = await deleteApiBreedById({
+        ...options,
+        ...fnOptions,
+        throwOnError: true,
+      })
+      return data
+    },
+  }
+  return mutationOptions
+}
+
+export const getApiBreedByIdQueryKey = (
+  options: Options<GetApiBreedByIdData>
+) => createQueryKey("getApiBreedById", options)
+
+/**
+ * Get By Id
+ */
+export const getApiBreedByIdOptions = (options: Options<GetApiBreedByIdData>) =>
+  queryOptions<
+    GetApiBreedByIdResponse,
+    GetApiBreedByIdError,
+    GetApiBreedByIdResponse,
+    ReturnType<typeof getApiBreedByIdQueryKey>
+  >({
+    queryFn: async ({ queryKey, signal }) => {
+      const { data } = await getApiBreedById({
+        ...options,
+        ...queryKey[0],
+        signal,
+        throwOnError: true,
+      })
+      return data
+    },
+    queryKey: getApiBreedByIdQueryKey(options),
+  })
+
+/**
+ * Update
+ */
+export const putApiBreedByIdMutation = (
+  options?: Partial<Options<PutApiBreedByIdData>>
+): UseMutationOptions<
+  PutApiBreedByIdResponse,
+  PutApiBreedByIdError,
+  Options<PutApiBreedByIdData>
+> => {
+  const mutationOptions: UseMutationOptions<
+    PutApiBreedByIdResponse,
+    PutApiBreedByIdError,
+    Options<PutApiBreedByIdData>
+  > = {
+    mutationFn: async (fnOptions) => {
+      const { data } = await putApiBreedById({
+        ...options,
+        ...fnOptions,
+        throwOnError: true,
+      })
+      return data
+    },
+  }
+  return mutationOptions
+}
+
+export const getApiClientQueryKey = (options?: Options<GetApiClientData>) =>
+  createQueryKey("getApiClient", options)
+
+/**
+ * Search
+ */
+export const getApiClientOptions = (options?: Options<GetApiClientData>) =>
+  queryOptions<
+    GetApiClientResponse,
+    GetApiClientError,
+    GetApiClientResponse,
+    ReturnType<typeof getApiClientQueryKey>
+  >({
+    queryFn: async ({ queryKey, signal }) => {
+      const { data } = await getApiClient({
+        ...options,
+        ...queryKey[0],
+        signal,
+        throwOnError: true,
+      })
+      return data
+    },
+    queryKey: getApiClientQueryKey(options),
+  })
+
+export const getApiClientInfiniteQueryKey = (
+  options?: Options<GetApiClientData>
+): QueryKey<Options<GetApiClientData>> =>
+  createQueryKey("getApiClient", options, true)
+
+/**
+ * Search
+ */
+export const getApiClientInfiniteOptions = (
+  options?: Options<GetApiClientData>
+) =>
+  infiniteQueryOptions<
+    GetApiClientResponse,
+    GetApiClientError,
+    InfiniteData<GetApiClientResponse>,
+    QueryKey<Options<GetApiClientData>>,
+    | number
+    | Pick<
+        QueryKey<Options<GetApiClientData>>[0],
+        "body" | "headers" | "path" | "query"
+      >
+  >(
+    // @ts-ignore
+    {
+      queryFn: async ({ pageParam, queryKey, signal }) => {
+        // @ts-ignore
+        const page: Pick<
+          QueryKey<Options<GetApiClientData>>[0],
+          "body" | "headers" | "path" | "query"
+        > =
+          typeof pageParam === "object"
+            ? pageParam
+            : {
+                query: {
+                  page: pageParam,
+                },
+              }
+        const params = createInfiniteParams(queryKey, page)
+        const { data } = await getApiClient({
+          ...options,
+          ...params,
+          signal,
+          throwOnError: true,
+        })
+        return data
+      },
+      queryKey: getApiClientInfiniteQueryKey(options),
+    }
+  )
+
+/**
+ * Create
+ */
+export const postApiClientMutation = (
+  options?: Partial<Options<PostApiClientData>>
+): UseMutationOptions<
+  PostApiClientResponse,
+  PostApiClientError,
+  Options<PostApiClientData>
+> => {
+  const mutationOptions: UseMutationOptions<
+    PostApiClientResponse,
+    PostApiClientError,
+    Options<PostApiClientData>
+  > = {
+    mutationFn: async (fnOptions) => {
+      const { data } = await postApiClient({
+        ...options,
+        ...fnOptions,
+        throwOnError: true,
+      })
+      return data
+    },
+  }
+  return mutationOptions
+}
+
+/**
+ * Delete
+ */
+export const deleteApiClientByIdMutation = (
+  options?: Partial<Options<DeleteApiClientByIdData>>
+): UseMutationOptions<
+  DeleteApiClientByIdResponse,
+  DeleteApiClientByIdError,
+  Options<DeleteApiClientByIdData>
+> => {
+  const mutationOptions: UseMutationOptions<
+    DeleteApiClientByIdResponse,
+    DeleteApiClientByIdError,
+    Options<DeleteApiClientByIdData>
+  > = {
+    mutationFn: async (fnOptions) => {
+      const { data } = await deleteApiClientById({
+        ...options,
+        ...fnOptions,
+        throwOnError: true,
+      })
+      return data
+    },
+  }
+  return mutationOptions
+}
+
+export const getApiClientByIdQueryKey = (
+  options: Options<GetApiClientByIdData>
+) => createQueryKey("getApiClientById", options)
+
+/**
+ * Get By Id
+ */
+export const getApiClientByIdOptions = (
+  options: Options<GetApiClientByIdData>
+) =>
+  queryOptions<
+    GetApiClientByIdResponse,
+    GetApiClientByIdError,
+    GetApiClientByIdResponse,
+    ReturnType<typeof getApiClientByIdQueryKey>
+  >({
+    queryFn: async ({ queryKey, signal }) => {
+      const { data } = await getApiClientById({
+        ...options,
+        ...queryKey[0],
+        signal,
+        throwOnError: true,
+      })
+      return data
+    },
+    queryKey: getApiClientByIdQueryKey(options),
+  })
+
+/**
+ * Update
+ */
+export const putApiClientByIdMutation = (
+  options?: Partial<Options<PutApiClientByIdData>>
+): UseMutationOptions<
+  PutApiClientByIdResponse,
+  PutApiClientByIdError,
+  Options<PutApiClientByIdData>
+> => {
+  const mutationOptions: UseMutationOptions<
+    PutApiClientByIdResponse,
+    PutApiClientByIdError,
+    Options<PutApiClientByIdData>
+  > = {
+    mutationFn: async (fnOptions) => {
+      const { data } = await putApiClientById({
+        ...options,
+        ...fnOptions,
+        throwOnError: true,
+      })
+      return data
+    },
+  }
+  return mutationOptions
+}
+
+export const getApiPatientQueryKey = (options?: Options<GetApiPatientData>) =>
+  createQueryKey("getApiPatient", options)
+
+/**
+ * Search
+ */
+export const getApiPatientOptions = (options?: Options<GetApiPatientData>) =>
+  queryOptions<
+    GetApiPatientResponse,
+    GetApiPatientError,
+    GetApiPatientResponse,
+    ReturnType<typeof getApiPatientQueryKey>
+  >({
+    queryFn: async ({ queryKey, signal }) => {
+      const { data } = await getApiPatient({
+        ...options,
+        ...queryKey[0],
+        signal,
+        throwOnError: true,
+      })
+      return data
+    },
+    queryKey: getApiPatientQueryKey(options),
+  })
+
+export const getApiPatientInfiniteQueryKey = (
+  options?: Options<GetApiPatientData>
+): QueryKey<Options<GetApiPatientData>> =>
+  createQueryKey("getApiPatient", options, true)
+
+/**
+ * Search
+ */
+export const getApiPatientInfiniteOptions = (
+  options?: Options<GetApiPatientData>
+) =>
+  infiniteQueryOptions<
+    GetApiPatientResponse,
+    GetApiPatientError,
+    InfiniteData<GetApiPatientResponse>,
+    QueryKey<Options<GetApiPatientData>>,
+    | number
+    | Pick<
+        QueryKey<Options<GetApiPatientData>>[0],
+        "body" | "headers" | "path" | "query"
+      >
+  >(
+    // @ts-ignore
+    {
+      queryFn: async ({ pageParam, queryKey, signal }) => {
+        // @ts-ignore
+        const page: Pick<
+          QueryKey<Options<GetApiPatientData>>[0],
+          "body" | "headers" | "path" | "query"
+        > =
+          typeof pageParam === "object"
+            ? pageParam
+            : {
+                query: {
+                  page: pageParam,
+                },
+              }
+        const params = createInfiniteParams(queryKey, page)
+        const { data } = await getApiPatient({
+          ...options,
+          ...params,
+          signal,
+          throwOnError: true,
+        })
+        return data
+      },
+      queryKey: getApiPatientInfiniteQueryKey(options),
+    }
+  )
+
+/**
+ * Create
+ */
+export const postApiPatientMutation = (
+  options?: Partial<Options<PostApiPatientData>>
+): UseMutationOptions<
+  PostApiPatientResponse,
+  PostApiPatientError,
+  Options<PostApiPatientData>
+> => {
+  const mutationOptions: UseMutationOptions<
+    PostApiPatientResponse,
+    PostApiPatientError,
+    Options<PostApiPatientData>
+  > = {
+    mutationFn: async (fnOptions) => {
+      const { data } = await postApiPatient({
+        ...options,
+        ...fnOptions,
+        throwOnError: true,
+      })
+      return data
+    },
+  }
+  return mutationOptions
+}
+
+/**
+ * Delete
+ */
+export const deleteApiPatientByIdMutation = (
+  options?: Partial<Options<DeleteApiPatientByIdData>>
+): UseMutationOptions<
+  DeleteApiPatientByIdResponse,
+  DeleteApiPatientByIdError,
+  Options<DeleteApiPatientByIdData>
+> => {
+  const mutationOptions: UseMutationOptions<
+    DeleteApiPatientByIdResponse,
+    DeleteApiPatientByIdError,
+    Options<DeleteApiPatientByIdData>
+  > = {
+    mutationFn: async (fnOptions) => {
+      const { data } = await deleteApiPatientById({
+        ...options,
+        ...fnOptions,
+        throwOnError: true,
+      })
+      return data
+    },
+  }
+  return mutationOptions
+}
+
+export const getApiPatientByIdQueryKey = (
+  options: Options<GetApiPatientByIdData>
+) => createQueryKey("getApiPatientById", options)
+
+/**
+ * Get By Id
+ */
+export const getApiPatientByIdOptions = (
+  options: Options<GetApiPatientByIdData>
+) =>
+  queryOptions<
+    GetApiPatientByIdResponse,
+    GetApiPatientByIdError,
+    GetApiPatientByIdResponse,
+    ReturnType<typeof getApiPatientByIdQueryKey>
+  >({
+    queryFn: async ({ queryKey, signal }) => {
+      const { data } = await getApiPatientById({
+        ...options,
+        ...queryKey[0],
+        signal,
+        throwOnError: true,
+      })
+      return data
+    },
+    queryKey: getApiPatientByIdQueryKey(options),
+  })
+
+/**
+ * Update
+ */
+export const putApiPatientByIdMutation = (
+  options?: Partial<Options<PutApiPatientByIdData>>
+): UseMutationOptions<
+  PutApiPatientByIdResponse,
+  PutApiPatientByIdError,
+  Options<PutApiPatientByIdData>
+> => {
+  const mutationOptions: UseMutationOptions<
+    PutApiPatientByIdResponse,
+    PutApiPatientByIdError,
+    Options<PutApiPatientByIdData>
+  > = {
+    mutationFn: async (fnOptions) => {
+      const { data } = await putApiPatientById({
+        ...options,
+        ...fnOptions,
+        throwOnError: true,
+      })
+      return data
+    },
+  }
+  return mutationOptions
+}
+
+export const getApiSpeciesQueryKey = (options?: Options<GetApiSpeciesData>) =>
+  createQueryKey("getApiSpecies", options)
+
+/**
+ * Search
+ */
+export const getApiSpeciesOptions = (options?: Options<GetApiSpeciesData>) =>
+  queryOptions<
+    GetApiSpeciesResponse,
+    GetApiSpeciesError,
+    GetApiSpeciesResponse,
+    ReturnType<typeof getApiSpeciesQueryKey>
+  >({
+    queryFn: async ({ queryKey, signal }) => {
+      const { data } = await getApiSpecies({
+        ...options,
+        ...queryKey[0],
+        signal,
+        throwOnError: true,
+      })
+      return data
+    },
+    queryKey: getApiSpeciesQueryKey(options),
+  })
+
+export const getApiSpeciesInfiniteQueryKey = (
+  options?: Options<GetApiSpeciesData>
+): QueryKey<Options<GetApiSpeciesData>> =>
+  createQueryKey("getApiSpecies", options, true)
+
+/**
+ * Search
+ */
+export const getApiSpeciesInfiniteOptions = (
+  options?: Options<GetApiSpeciesData>
+) =>
+  infiniteQueryOptions<
+    GetApiSpeciesResponse,
+    GetApiSpeciesError,
+    InfiniteData<GetApiSpeciesResponse>,
+    QueryKey<Options<GetApiSpeciesData>>,
+    | number
+    | Pick<
+        QueryKey<Options<GetApiSpeciesData>>[0],
+        "body" | "headers" | "path" | "query"
+      >
+  >(
+    // @ts-ignore
+    {
+      queryFn: async ({ pageParam, queryKey, signal }) => {
+        // @ts-ignore
+        const page: Pick<
+          QueryKey<Options<GetApiSpeciesData>>[0],
+          "body" | "headers" | "path" | "query"
+        > =
+          typeof pageParam === "object"
+            ? pageParam
+            : {
+                query: {
+                  page: pageParam,
+                },
+              }
+        const params = createInfiniteParams(queryKey, page)
+        const { data } = await getApiSpecies({
+          ...options,
+          ...params,
+          signal,
+          throwOnError: true,
+        })
+        return data
+      },
+      queryKey: getApiSpeciesInfiniteQueryKey(options),
+    }
+  )
+
+/**
+ * Create
  */
 export const postApiSpeciesMutation = (
   options?: Partial<Options<PostApiSpeciesData>>
@@ -1686,12 +2403,39 @@ export const postApiSpeciesMutation = (
   return mutationOptions
 }
 
+/**
+ * Delete
+ */
+export const deleteApiSpeciesByIdMutation = (
+  options?: Partial<Options<DeleteApiSpeciesByIdData>>
+): UseMutationOptions<
+  DeleteApiSpeciesByIdResponse,
+  DeleteApiSpeciesByIdError,
+  Options<DeleteApiSpeciesByIdData>
+> => {
+  const mutationOptions: UseMutationOptions<
+    DeleteApiSpeciesByIdResponse,
+    DeleteApiSpeciesByIdError,
+    Options<DeleteApiSpeciesByIdData>
+  > = {
+    mutationFn: async (fnOptions) => {
+      const { data } = await deleteApiSpeciesById({
+        ...options,
+        ...fnOptions,
+        throwOnError: true,
+      })
+      return data
+    },
+  }
+  return mutationOptions
+}
+
 export const getApiSpeciesByIdQueryKey = (
   options: Options<GetApiSpeciesByIdData>
 ) => createQueryKey("getApiSpeciesById", options)
 
 /**
- * Get Species
+ * Get By Id
  */
 export const getApiSpeciesByIdOptions = (
   options: Options<GetApiSpeciesByIdData>
@@ -1713,3 +2457,217 @@ export const getApiSpeciesByIdOptions = (
     },
     queryKey: getApiSpeciesByIdQueryKey(options),
   })
+
+/**
+ * Update
+ */
+export const putApiSpeciesByIdMutation = (
+  options?: Partial<Options<PutApiSpeciesByIdData>>
+): UseMutationOptions<
+  PutApiSpeciesByIdResponse,
+  PutApiSpeciesByIdError,
+  Options<PutApiSpeciesByIdData>
+> => {
+  const mutationOptions: UseMutationOptions<
+    PutApiSpeciesByIdResponse,
+    PutApiSpeciesByIdError,
+    Options<PutApiSpeciesByIdData>
+  > = {
+    mutationFn: async (fnOptions) => {
+      const { data } = await putApiSpeciesById({
+        ...options,
+        ...fnOptions,
+        throwOnError: true,
+      })
+      return data
+    },
+  }
+  return mutationOptions
+}
+
+export const getApiAppointmentQueryKey = (
+  options?: Options<GetApiAppointmentData>
+) => createQueryKey("getApiAppointment", options)
+
+/**
+ * Find By Date Range
+ */
+export const getApiAppointmentOptions = (
+  options?: Options<GetApiAppointmentData>
+) =>
+  queryOptions<
+    GetApiAppointmentResponse,
+    GetApiAppointmentError,
+    GetApiAppointmentResponse,
+    ReturnType<typeof getApiAppointmentQueryKey>
+  >({
+    queryFn: async ({ queryKey, signal }) => {
+      const { data } = await getApiAppointment({
+        ...options,
+        ...queryKey[0],
+        signal,
+        throwOnError: true,
+      })
+      return data
+    },
+    queryKey: getApiAppointmentQueryKey(options),
+  })
+
+export const getApiAppointmentInfiniteQueryKey = (
+  options?: Options<GetApiAppointmentData>
+): QueryKey<Options<GetApiAppointmentData>> =>
+  createQueryKey("getApiAppointment", options, true)
+
+/**
+ * Find By Date Range
+ */
+export const getApiAppointmentInfiniteOptions = (
+  options?: Options<GetApiAppointmentData>
+) =>
+  infiniteQueryOptions<
+    GetApiAppointmentResponse,
+    GetApiAppointmentError,
+    InfiniteData<GetApiAppointmentResponse>,
+    QueryKey<Options<GetApiAppointmentData>>,
+    | number
+    | Pick<
+        QueryKey<Options<GetApiAppointmentData>>[0],
+        "body" | "headers" | "path" | "query"
+      >
+  >(
+    // @ts-ignore
+    {
+      queryFn: async ({ pageParam, queryKey, signal }) => {
+        // @ts-ignore
+        const page: Pick<
+          QueryKey<Options<GetApiAppointmentData>>[0],
+          "body" | "headers" | "path" | "query"
+        > =
+          typeof pageParam === "object"
+            ? pageParam
+            : {
+                query: {
+                  page: pageParam,
+                },
+              }
+        const params = createInfiniteParams(queryKey, page)
+        const { data } = await getApiAppointment({
+          ...options,
+          ...params,
+          signal,
+          throwOnError: true,
+        })
+        return data
+      },
+      queryKey: getApiAppointmentInfiniteQueryKey(options),
+    }
+  )
+
+/**
+ * Create
+ */
+export const postApiAppointmentMutation = (
+  options?: Partial<Options<PostApiAppointmentData>>
+): UseMutationOptions<
+  PostApiAppointmentResponse,
+  PostApiAppointmentError,
+  Options<PostApiAppointmentData>
+> => {
+  const mutationOptions: UseMutationOptions<
+    PostApiAppointmentResponse,
+    PostApiAppointmentError,
+    Options<PostApiAppointmentData>
+  > = {
+    mutationFn: async (fnOptions) => {
+      const { data } = await postApiAppointment({
+        ...options,
+        ...fnOptions,
+        throwOnError: true,
+      })
+      return data
+    },
+  }
+  return mutationOptions
+}
+
+/**
+ * Delete
+ */
+export const deleteApiAppointmentByIdMutation = (
+  options?: Partial<Options<DeleteApiAppointmentByIdData>>
+): UseMutationOptions<
+  DeleteApiAppointmentByIdResponse,
+  DeleteApiAppointmentByIdError,
+  Options<DeleteApiAppointmentByIdData>
+> => {
+  const mutationOptions: UseMutationOptions<
+    DeleteApiAppointmentByIdResponse,
+    DeleteApiAppointmentByIdError,
+    Options<DeleteApiAppointmentByIdData>
+  > = {
+    mutationFn: async (fnOptions) => {
+      const { data } = await deleteApiAppointmentById({
+        ...options,
+        ...fnOptions,
+        throwOnError: true,
+      })
+      return data
+    },
+  }
+  return mutationOptions
+}
+
+export const getApiAppointmentByIdQueryKey = (
+  options: Options<GetApiAppointmentByIdData>
+) => createQueryKey("getApiAppointmentById", options)
+
+/**
+ * Get By Id
+ */
+export const getApiAppointmentByIdOptions = (
+  options: Options<GetApiAppointmentByIdData>
+) =>
+  queryOptions<
+    GetApiAppointmentByIdResponse,
+    GetApiAppointmentByIdError,
+    GetApiAppointmentByIdResponse,
+    ReturnType<typeof getApiAppointmentByIdQueryKey>
+  >({
+    queryFn: async ({ queryKey, signal }) => {
+      const { data } = await getApiAppointmentById({
+        ...options,
+        ...queryKey[0],
+        signal,
+        throwOnError: true,
+      })
+      return data
+    },
+    queryKey: getApiAppointmentByIdQueryKey(options),
+  })
+
+/**
+ * Update
+ */
+export const putApiAppointmentByIdMutation = (
+  options?: Partial<Options<PutApiAppointmentByIdData>>
+): UseMutationOptions<
+  PutApiAppointmentByIdResponse,
+  PutApiAppointmentByIdError,
+  Options<PutApiAppointmentByIdData>
+> => {
+  const mutationOptions: UseMutationOptions<
+    PutApiAppointmentByIdResponse,
+    PutApiAppointmentByIdError,
+    Options<PutApiAppointmentByIdData>
+  > = {
+    mutationFn: async (fnOptions) => {
+      const { data } = await putApiAppointmentById({
+        ...options,
+        ...fnOptions,
+        throwOnError: true,
+      })
+      return data
+    },
+  }
+  return mutationOptions
+}

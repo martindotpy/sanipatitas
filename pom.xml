@@ -11,6 +11,7 @@
     <modules>
         <module>shared/java</module>
         <module>services/patient</module>
+        <module>services/appointment</module>
     </modules>
 
     <properties>

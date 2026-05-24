@@ -32,6 +32,22 @@ services:
       - database-sql
       - database-redis
 
+  # - Appointment
+  service-appointment:
+    build:
+      context: .
+      dockerfile: services/appointment/Dockerfile
+    environment:
+      - QUARKUS_DATASOURCE_REACTIVE_URL=vertx-reactive:postgresql://sanipatitas-user:sanipatitas-password@database-sql:5432/sanipatitas-db
+      - QUARKUS_REDIS_HOSTS=redis://database-redis:6379
+    container_name: sanipatitas-appointment
+    env_file: services/appointment/.env
+    expose:
+      - "8081"
+    depends_on:
+      - database-sql
+      - database-redis
+
   # - Patient
   service-patient:
     build:

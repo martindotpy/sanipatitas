@@ -4,6 +4,13 @@ import { migrate } from "drizzle-orm/bun-sql/migrator"
 
 // Initializer
 export async function initializeDatabase(migrationsFolder: string) {
+  if (process.env.MIGRATE === "false") {
+    serverLog.info("Skipping database migrations")
+
+    return
+  }
+
+  // Run migration
   serverLog.info("Running database migrations...")
 
   await migrate(db, { migrationsFolder }).catch((error) => {

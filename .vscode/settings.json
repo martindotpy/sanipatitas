@@ -45,6 +45,7 @@
     "com",
     ""
   ],
+  "java.configuration.updateBuildConfiguration": "interactive",
 
   // All
   "files.trimTrailingWhitespace": true,

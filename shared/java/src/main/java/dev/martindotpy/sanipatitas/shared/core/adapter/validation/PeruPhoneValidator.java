@@ -5,6 +5,8 @@ import java.util.regex.Pattern;
 import jakarta.validation.ConstraintValidator;
 import jakarta.validation.ConstraintValidatorContext;
 
+import dev.martindotpy.sanipatitas.shared.core.domain.validation.PeruPhone;
+
 public class PeruPhoneValidator implements ConstraintValidator<PeruPhone, String> {
     private static final Pattern PHONE_PATTERN = Pattern.compile("^9\\d{8}$");
 
@@ -13,6 +15,7 @@ public class PeruPhoneValidator implements ConstraintValidator<PeruPhone, String
         if (value == null || value.isBlank()) {
             return true;
         }
+
         return PHONE_PATTERN.matcher(value.strip()).matches();
     }
 }

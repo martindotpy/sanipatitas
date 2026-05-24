@@ -1,6 +1,6 @@
 import type { LinkRoute } from "@sanipatitas/desktop/pages/_app/routes/-routes-types"
 import type { IconType } from "react-icons/lib"
-import { TbAbc, TbLayout, TbPaw, TbUsers } from "react-icons/tb"
+import { TbCategory2, TbLayoutDashboard, TbPaw, TbUsers } from "react-icons/tb"
 
 // Hook
 interface SidebarItem {
@@ -17,7 +17,7 @@ export function useSidebarItems(): SidebarGroups {
       {
         to: "/",
         label: "Dashboard",
-        icon: TbLayout,
+        icon: TbLayoutDashboard,
       },
     ],
     Pacientes: [
@@ -34,7 +34,7 @@ export function useSidebarItems(): SidebarGroups {
       {
         to: "/breeds",
         label: "Razas",
-        icon: TbAbc,
+        icon: TbCategory2,
       },
     ],
   }

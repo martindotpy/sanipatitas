@@ -2,10 +2,11 @@
   "servers": {
     "shadcn": {
       "command": "bunx",
-      "args": [
-        "shadcn@latest",
-        "mcp"
-      ]
+      "args": ["shadcn@latest", "mcp"]
+    },
+    "quarkus-agent": {
+      "command": "jbang",
+      "args": ["quarkus-agent-mcp@quarkusio"]
     }
   }
 }

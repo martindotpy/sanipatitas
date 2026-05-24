@@ -3,6 +3,27 @@
 import type { Client, Options as Options2, TDataShape } from "./client"
 import { client } from "./client.gen"
 import type {
+  DeleteApiAppointmentByIdData,
+  DeleteApiAppointmentByIdErrors,
+  DeleteApiAppointmentByIdResponses,
+  DeleteApiBreedByIdData,
+  DeleteApiBreedByIdErrors,
+  DeleteApiBreedByIdResponses,
+  DeleteApiClientByIdData,
+  DeleteApiClientByIdErrors,
+  DeleteApiClientByIdResponses,
+  DeleteApiPatientByIdData,
+  DeleteApiPatientByIdErrors,
+  DeleteApiPatientByIdResponses,
+  DeleteApiSpeciesByIdData,
+  DeleteApiSpeciesByIdErrors,
+  DeleteApiSpeciesByIdResponses,
+  GetApiAppointmentByIdData,
+  GetApiAppointmentByIdErrors,
+  GetApiAppointmentByIdResponses,
+  GetApiAppointmentData,
+  GetApiAppointmentErrors,
+  GetApiAppointmentResponses,
   GetApiAuthAccountInfoData,
   GetApiAuthAccountInfoErrors,
   GetApiAuthAccountInfoResponses,
@@ -20,9 +41,30 @@ import type {
   GetApiAuthVerifyEmailData,
   GetApiAuthVerifyEmailErrors,
   GetApiAuthVerifyEmailResponses,
+  GetApiBreedByIdData,
+  GetApiBreedByIdErrors,
+  GetApiBreedByIdResponses,
+  GetApiBreedData,
+  GetApiBreedErrors,
+  GetApiBreedResponses,
+  GetApiClientByIdData,
+  GetApiClientByIdErrors,
+  GetApiClientByIdResponses,
+  GetApiClientData,
+  GetApiClientErrors,
+  GetApiClientResponses,
+  GetApiPatientByIdData,
+  GetApiPatientByIdErrors,
+  GetApiPatientByIdResponses,
+  GetApiPatientData,
+  GetApiPatientErrors,
+  GetApiPatientResponses,
   GetApiSpeciesByIdData,
   GetApiSpeciesByIdErrors,
   GetApiSpeciesByIdResponses,
+  GetApiSpeciesData,
+  GetApiSpeciesErrors,
+  GetApiSpeciesResponses,
   OpenapiAdminListUserSessionsData,
   OpenapiAdminListUserSessionsErrors,
   OpenapiAdminListUserSessionsResponses,
@@ -125,6 +167,9 @@ import type {
   OpenapiVerifyPasswordData,
   OpenapiVerifyPasswordErrors,
   OpenapiVerifyPasswordResponses,
+  PostApiAppointmentData,
+  PostApiAppointmentErrors,
+  PostApiAppointmentResponses,
   PostApiAuthAdminHasPermissionData,
   PostApiAuthAdminHasPermissionErrors,
   PostApiAuthAdminHasPermissionResponses,
@@ -150,9 +195,33 @@ import type {
   PostApiAuthUnlinkAccountData,
   PostApiAuthUnlinkAccountErrors,
   PostApiAuthUnlinkAccountResponses,
+  PostApiBreedData,
+  PostApiBreedErrors,
+  PostApiBreedResponses,
+  PostApiClientData,
+  PostApiClientErrors,
+  PostApiClientResponses,
+  PostApiPatientData,
+  PostApiPatientErrors,
+  PostApiPatientResponses,
   PostApiSpeciesData,
   PostApiSpeciesErrors,
   PostApiSpeciesResponses,
+  PutApiAppointmentByIdData,
+  PutApiAppointmentByIdErrors,
+  PutApiAppointmentByIdResponses,
+  PutApiBreedByIdData,
+  PutApiBreedByIdErrors,
+  PutApiBreedByIdResponses,
+  PutApiClientByIdData,
+  PutApiClientByIdErrors,
+  PutApiClientByIdResponses,
+  PutApiPatientByIdData,
+  PutApiPatientByIdErrors,
+  PutApiPatientByIdResponses,
+  PutApiSpeciesByIdData,
+  PutApiSpeciesByIdErrors,
+  PutApiSpeciesByIdResponses,
 } from "./types.gen"
 
 export type Options<
@@ -1006,7 +1075,241 @@ export const openapiGetJsonWebToken = <ThrowOnError extends boolean = false>(
   >({ url: "/api/auth/token", ...options })
 
 /**
- * Create Species
+ * Search
+ */
+export const getApiBreed = <ThrowOnError extends boolean = false>(
+  options?: Options<GetApiBreedData, ThrowOnError>
+) =>
+  (options?.client ?? client).get<
+    GetApiBreedResponses,
+    GetApiBreedErrors,
+    ThrowOnError
+  >({ url: "/api/breed", ...options })
+
+/**
+ * Create
+ */
+export const postApiBreed = <ThrowOnError extends boolean = false>(
+  options: Options<PostApiBreedData, ThrowOnError>
+) =>
+  (options.client ?? client).post<
+    PostApiBreedResponses,
+    PostApiBreedErrors,
+    ThrowOnError
+  >({
+    url: "/api/breed",
+    ...options,
+    headers: {
+      "Content-Type": "application/json",
+      ...options.headers,
+    },
+  })
+
+/**
+ * Delete
+ */
+export const deleteApiBreedById = <ThrowOnError extends boolean = false>(
+  options: Options<DeleteApiBreedByIdData, ThrowOnError>
+) =>
+  (options.client ?? client).delete<
+    DeleteApiBreedByIdResponses,
+    DeleteApiBreedByIdErrors,
+    ThrowOnError
+  >({ url: "/api/breed/{id}", ...options })
+
+/**
+ * Get By Id
+ */
+export const getApiBreedById = <ThrowOnError extends boolean = false>(
+  options: Options<GetApiBreedByIdData, ThrowOnError>
+) =>
+  (options.client ?? client).get<
+    GetApiBreedByIdResponses,
+    GetApiBreedByIdErrors,
+    ThrowOnError
+  >({ url: "/api/breed/{id}", ...options })
+
+/**
+ * Update
+ */
+export const putApiBreedById = <ThrowOnError extends boolean = false>(
+  options: Options<PutApiBreedByIdData, ThrowOnError>
+) =>
+  (options.client ?? client).put<
+    PutApiBreedByIdResponses,
+    PutApiBreedByIdErrors,
+    ThrowOnError
+  >({
+    url: "/api/breed/{id}",
+    ...options,
+    headers: {
+      "Content-Type": "application/json",
+      ...options.headers,
+    },
+  })
+
+/**
+ * Search
+ */
+export const getApiClient = <ThrowOnError extends boolean = false>(
+  options?: Options<GetApiClientData, ThrowOnError>
+) =>
+  (options?.client ?? client).get<
+    GetApiClientResponses,
+    GetApiClientErrors,
+    ThrowOnError
+  >({ url: "/api/client", ...options })
+
+/**
+ * Create
+ */
+export const postApiClient = <ThrowOnError extends boolean = false>(
+  options: Options<PostApiClientData, ThrowOnError>
+) =>
+  (options.client ?? client).post<
+    PostApiClientResponses,
+    PostApiClientErrors,
+    ThrowOnError
+  >({
+    url: "/api/client",
+    ...options,
+    headers: {
+      "Content-Type": "application/json",
+      ...options.headers,
+    },
+  })
+
+/**
+ * Delete
+ */
+export const deleteApiClientById = <ThrowOnError extends boolean = false>(
+  options: Options<DeleteApiClientByIdData, ThrowOnError>
+) =>
+  (options.client ?? client).delete<
+    DeleteApiClientByIdResponses,
+    DeleteApiClientByIdErrors,
+    ThrowOnError
+  >({ url: "/api/client/{id}", ...options })
+
+/**
+ * Get By Id
+ */
+export const getApiClientById = <ThrowOnError extends boolean = false>(
+  options: Options<GetApiClientByIdData, ThrowOnError>
+) =>
+  (options.client ?? client).get<
+    GetApiClientByIdResponses,
+    GetApiClientByIdErrors,
+    ThrowOnError
+  >({ url: "/api/client/{id}", ...options })
+
+/**
+ * Update
+ */
+export const putApiClientById = <ThrowOnError extends boolean = false>(
+  options: Options<PutApiClientByIdData, ThrowOnError>
+) =>
+  (options.client ?? client).put<
+    PutApiClientByIdResponses,
+    PutApiClientByIdErrors,
+    ThrowOnError
+  >({
+    url: "/api/client/{id}",
+    ...options,
+    headers: {
+      "Content-Type": "application/json",
+      ...options.headers,
+    },
+  })
+
+/**
+ * Search
+ */
+export const getApiPatient = <ThrowOnError extends boolean = false>(
+  options?: Options<GetApiPatientData, ThrowOnError>
+) =>
+  (options?.client ?? client).get<
+    GetApiPatientResponses,
+    GetApiPatientErrors,
+    ThrowOnError
+  >({ url: "/api/patient", ...options })
+
+/**
+ * Create
+ */
+export const postApiPatient = <ThrowOnError extends boolean = false>(
+  options: Options<PostApiPatientData, ThrowOnError>
+) =>
+  (options.client ?? client).post<
+    PostApiPatientResponses,
+    PostApiPatientErrors,
+    ThrowOnError
+  >({
+    url: "/api/patient",
+    ...options,
+    headers: {
+      "Content-Type": "application/json",
+      ...options.headers,
+    },
+  })
+
+/**
+ * Delete
+ */
+export const deleteApiPatientById = <ThrowOnError extends boolean = false>(
+  options: Options<DeleteApiPatientByIdData, ThrowOnError>
+) =>
+  (options.client ?? client).delete<
+    DeleteApiPatientByIdResponses,
+    DeleteApiPatientByIdErrors,
+    ThrowOnError
+  >({ url: "/api/patient/{id}", ...options })
+
+/**
+ * Get By Id
+ */
+export const getApiPatientById = <ThrowOnError extends boolean = false>(
+  options: Options<GetApiPatientByIdData, ThrowOnError>
+) =>
+  (options.client ?? client).get<
+    GetApiPatientByIdResponses,
+    GetApiPatientByIdErrors,
+    ThrowOnError
+  >({ url: "/api/patient/{id}", ...options })
+
+/**
+ * Update
+ */
+export const putApiPatientById = <ThrowOnError extends boolean = false>(
+  options: Options<PutApiPatientByIdData, ThrowOnError>
+) =>
+  (options.client ?? client).put<
+    PutApiPatientByIdResponses,
+    PutApiPatientByIdErrors,
+    ThrowOnError
+  >({
+    url: "/api/patient/{id}",
+    ...options,
+    headers: {
+      "Content-Type": "application/json",
+      ...options.headers,
+    },
+  })
+
+/**
+ * Search
+ */
+export const getApiSpecies = <ThrowOnError extends boolean = false>(
+  options?: Options<GetApiSpeciesData, ThrowOnError>
+) =>
+  (options?.client ?? client).get<
+    GetApiSpeciesResponses,
+    GetApiSpeciesErrors,
+    ThrowOnError
+  >({ url: "/api/species", ...options })
+
+/**
+ * Create
  */
 export const postApiSpecies = <ThrowOnError extends boolean = false>(
   options: Options<PostApiSpeciesData, ThrowOnError>
@@ -1025,7 +1328,19 @@ export const postApiSpecies = <ThrowOnError extends boolean = false>(
   })
 
 /**
- * Get Species
+ * Delete
+ */
+export const deleteApiSpeciesById = <ThrowOnError extends boolean = false>(
+  options: Options<DeleteApiSpeciesByIdData, ThrowOnError>
+) =>
+  (options.client ?? client).delete<
+    DeleteApiSpeciesByIdResponses,
+    DeleteApiSpeciesByIdErrors,
+    ThrowOnError
+  >({ url: "/api/species/{id}", ...options })
+
+/**
+ * Get By Id
  */
 export const getApiSpeciesById = <ThrowOnError extends boolean = false>(
   options: Options<GetApiSpeciesByIdData, ThrowOnError>
@@ -1035,3 +1350,96 @@ export const getApiSpeciesById = <ThrowOnError extends boolean = false>(
     GetApiSpeciesByIdErrors,
     ThrowOnError
   >({ url: "/api/species/{id}", ...options })
+
+/**
+ * Update
+ */
+export const putApiSpeciesById = <ThrowOnError extends boolean = false>(
+  options: Options<PutApiSpeciesByIdData, ThrowOnError>
+) =>
+  (options.client ?? client).put<
+    PutApiSpeciesByIdResponses,
+    PutApiSpeciesByIdErrors,
+    ThrowOnError
+  >({
+    url: "/api/species/{id}",
+    ...options,
+    headers: {
+      "Content-Type": "application/json",
+      ...options.headers,
+    },
+  })
+
+/**
+ * Find By Date Range
+ */
+export const getApiAppointment = <ThrowOnError extends boolean = false>(
+  options?: Options<GetApiAppointmentData, ThrowOnError>
+) =>
+  (options?.client ?? client).get<
+    GetApiAppointmentResponses,
+    GetApiAppointmentErrors,
+    ThrowOnError
+  >({ url: "/api/appointment", ...options })
+
+/**
+ * Create
+ */
+export const postApiAppointment = <ThrowOnError extends boolean = false>(
+  options: Options<PostApiAppointmentData, ThrowOnError>
+) =>
+  (options.client ?? client).post<
+    PostApiAppointmentResponses,
+    PostApiAppointmentErrors,
+    ThrowOnError
+  >({
+    url: "/api/appointment",
+    ...options,
+    headers: {
+      "Content-Type": "application/json",
+      ...options.headers,
+    },
+  })
+
+/**
+ * Delete
+ */
+export const deleteApiAppointmentById = <ThrowOnError extends boolean = false>(
+  options: Options<DeleteApiAppointmentByIdData, ThrowOnError>
+) =>
+  (options.client ?? client).delete<
+    DeleteApiAppointmentByIdResponses,
+    DeleteApiAppointmentByIdErrors,
+    ThrowOnError
+  >({ url: "/api/appointment/{id}", ...options })
+
+/**
+ * Get By Id
+ */
+export const getApiAppointmentById = <ThrowOnError extends boolean = false>(
+  options: Options<GetApiAppointmentByIdData, ThrowOnError>
+) =>
+  (options.client ?? client).get<
+    GetApiAppointmentByIdResponses,
+    GetApiAppointmentByIdErrors,
+    ThrowOnError
+  >({ url: "/api/appointment/{id}", ...options })
+
+/**
+ * Update
+ */
+export const putApiAppointmentById = <ThrowOnError extends boolean = false>(
+  options: Options<PutApiAppointmentByIdData, ThrowOnError>
+) =>
+  (options.client ?? client).put<
+    PutApiAppointmentByIdResponses,
+    PutApiAppointmentByIdErrors,
+    ThrowOnError
+  >({
+    url: "/api/appointment/{id}",
+    ...options,
+    headers: {
+      "Content-Type": "application/json",
+      ...options.headers,
+    },
+  })

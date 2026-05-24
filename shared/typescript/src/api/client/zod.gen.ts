@@ -53,6 +53,8 @@ export const zOpenapiJwks = z.object({
   expiresAt: z.iso.datetime().optional(),
 })
 
+export const zOpenapiGender = z.enum(["MALE", "FEMALE", "UNKNOWN"])
+
 /**
  * HTTP Problem Response according to RFC9457 and RFC7807
  */
@@ -71,16 +73,115 @@ export const zOpenapiHttpProblem = z.object({
   instance: z.url(),
 })
 
+export const zOpenapiIdType = z.enum(["DNI", "CE", "PASSPORT"])
+
+export const zOpenapiLocalDate = z.iso.date()
+
+export const zOpenapiOffsetDateTime = z.iso.datetime()
+
 export const zOpenapiUuid = z
   .uuid()
   .regex(
     /[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}/
   )
 
+export const zOpenapiClientDto = z.object({
+  id: zOpenapiUuid,
+  firstName: z.string().max(100).regex(/\S/),
+  lastName: z.string().max(100).regex(/\S/),
+  idType: zOpenapiIdType,
+  idNumber: z.string().min(6).max(20).regex(/\S/),
+  phone: z.string().regex(/\S/),
+  phoneAlt: z.string().max(15).optional(),
+  email: z.string().max(255).optional(),
+  address: z.string().max(500).optional(),
+  notes: z.string().max(2000).optional(),
+})
+
+export const zOpenapiCreateBreedRequest = z.object({
+  id: zOpenapiUuid.optional(),
+  name: z.string().max(255).regex(/\S/),
+  description: z.string().max(2000).optional(),
+  speciesId: zOpenapiUuid,
+})
+
+export const zOpenapiCreateClientRequest = z.object({
+  id: zOpenapiUuid.optional(),
+  firstName: z.string().max(100).regex(/\S/),
+  lastName: z.string().max(100).regex(/\S/),
+  idType: zOpenapiIdType,
+  idNumber: z.string().min(6).max(20).regex(/\S/),
+  phone: z.string().max(15).regex(/\S/),
+  phoneAlt: z.string().max(15).optional(),
+  email: z.string().max(255).optional(),
+  address: z.string().max(500).optional(),
+  notes: z.string().max(2000).optional(),
+})
+
+export const zOpenapiCreatePatientRequest = z.object({
+  id: zOpenapiUuid.optional(),
+  name: z.string().max(500).regex(/\S/),
+  gender: zOpenapiGender.optional(),
+  birthDate: zOpenapiLocalDate.optional(),
+  approximateAge: z.string().max(50).optional(),
+  weightKg: z.number().optional(),
+  description: z.string().max(2000).optional(),
+  isSterilized: z.boolean().optional(),
+  isDeceased: z.boolean().optional(),
+  breedId: zOpenapiUuid.optional(),
+  clientId: zOpenapiUuid,
+})
+
 export const zOpenapiCreateSpeciesRequest = z.object({
   id: zOpenapiUuid.optional(),
   name: z.string().max(255).regex(/\S/),
   description: z.string().max(2000).optional(),
+})
+
+export const zOpenapiDataResponseClientDto = z.object({
+  data: zOpenapiClientDto,
+  message: z.string().regex(/\S/),
+})
+
+export const zOpenapiPageResponseClientDto = z.object({
+  data: z.array(zOpenapiClientDto),
+  page: z
+    .int()
+    .min(-2147483648, {
+      error: "Invalid value: Expected int32 to be >= -2147483648",
+    })
+    .max(2147483647, {
+      error: "Invalid value: Expected int32 to be <= 2147483647",
+    })
+    .optional(),
+  size: z
+    .int()
+    .min(-2147483648, {
+      error: "Invalid value: Expected int32 to be >= -2147483648",
+    })
+    .max(2147483647, {
+      error: "Invalid value: Expected int32 to be <= 2147483647",
+    })
+    .optional(),
+  totalElements: z.coerce
+    .bigint()
+    .min(BigInt("-9223372036854775808"), {
+      error: "Invalid value: Expected int64 to be >= -9223372036854775808",
+    })
+    .max(BigInt("9223372036854775807"), {
+      error: "Invalid value: Expected int64 to be <= 9223372036854775807",
+    })
+    .optional(),
+  totalPages: z
+    .int()
+    .min(-2147483648, {
+      error: "Invalid value: Expected int32 to be >= -2147483648",
+    })
+    .max(2147483647, {
+      error: "Invalid value: Expected int32 to be <= 2147483647",
+    })
+    .optional(),
+  message: z.string().regex(/\S/),
 })
 
 export const zOpenapiSpeciesDto = z.object({
@@ -89,9 +190,201 @@ export const zOpenapiSpeciesDto = z.object({
   description: z.string().max(2000).optional(),
 })
 
+export const zOpenapiBreedDto = z.object({
+  id: zOpenapiUuid,
+  name: z.string().max(255).regex(/\S/),
+  description: z.string().max(2000).optional(),
+  species: zOpenapiSpeciesDto,
+})
+
+export const zOpenapiDataResponseBreedDto = z.object({
+  data: zOpenapiBreedDto,
+  message: z.string().regex(/\S/),
+})
+
 export const zOpenapiDataResponseSpeciesDto = z.object({
   data: zOpenapiSpeciesDto,
   message: z.string().regex(/\S/),
+})
+
+export const zOpenapiPageResponseBreedDto = z.object({
+  data: z.array(zOpenapiBreedDto),
+  page: z
+    .int()
+    .min(-2147483648, {
+      error: "Invalid value: Expected int32 to be >= -2147483648",
+    })
+    .max(2147483647, {
+      error: "Invalid value: Expected int32 to be <= 2147483647",
+    })
+    .optional(),
+  size: z
+    .int()
+    .min(-2147483648, {
+      error: "Invalid value: Expected int32 to be >= -2147483648",
+    })
+    .max(2147483647, {
+      error: "Invalid value: Expected int32 to be <= 2147483647",
+    })
+    .optional(),
+  totalElements: z.coerce
+    .bigint()
+    .min(BigInt("-9223372036854775808"), {
+      error: "Invalid value: Expected int64 to be >= -9223372036854775808",
+    })
+    .max(BigInt("9223372036854775807"), {
+      error: "Invalid value: Expected int64 to be <= 9223372036854775807",
+    })
+    .optional(),
+  totalPages: z
+    .int()
+    .min(-2147483648, {
+      error: "Invalid value: Expected int32 to be >= -2147483648",
+    })
+    .max(2147483647, {
+      error: "Invalid value: Expected int32 to be <= 2147483647",
+    })
+    .optional(),
+  message: z.string().regex(/\S/),
+})
+
+export const zOpenapiPageResponseSpeciesDto = z.object({
+  data: z.array(zOpenapiSpeciesDto),
+  page: z
+    .int()
+    .min(-2147483648, {
+      error: "Invalid value: Expected int32 to be >= -2147483648",
+    })
+    .max(2147483647, {
+      error: "Invalid value: Expected int32 to be <= 2147483647",
+    })
+    .optional(),
+  size: z
+    .int()
+    .min(-2147483648, {
+      error: "Invalid value: Expected int32 to be >= -2147483648",
+    })
+    .max(2147483647, {
+      error: "Invalid value: Expected int32 to be <= 2147483647",
+    })
+    .optional(),
+  totalElements: z.coerce
+    .bigint()
+    .min(BigInt("-9223372036854775808"), {
+      error: "Invalid value: Expected int64 to be >= -9223372036854775808",
+    })
+    .max(BigInt("9223372036854775807"), {
+      error: "Invalid value: Expected int64 to be <= 9223372036854775807",
+    })
+    .optional(),
+  totalPages: z
+    .int()
+    .min(-2147483648, {
+      error: "Invalid value: Expected int32 to be >= -2147483648",
+    })
+    .max(2147483647, {
+      error: "Invalid value: Expected int32 to be <= 2147483647",
+    })
+    .optional(),
+  message: z.string().regex(/\S/),
+})
+
+export const zOpenapiPatientDto = z.object({
+  id: zOpenapiUuid,
+  name: z.string().max(500).regex(/\S/),
+  gender: zOpenapiGender.optional(),
+  birthDate: zOpenapiLocalDate.optional(),
+  approximateAge: z.string().max(50).optional(),
+  weightKg: z.number().optional(),
+  description: z.string().max(2000).optional(),
+  isSterilized: z.boolean().optional(),
+  isDeceased: z.boolean().optional(),
+  createdAt: zOpenapiOffsetDateTime,
+  updatedAt: zOpenapiOffsetDateTime,
+  breed: zOpenapiBreedDto.optional(),
+  client: zOpenapiClientDto,
+})
+
+export const zOpenapiDataResponsePatientDto = z.object({
+  data: zOpenapiPatientDto,
+  message: z.string().regex(/\S/),
+})
+
+export const zOpenapiPageResponsePatientDto = z.object({
+  data: z.array(zOpenapiPatientDto),
+  page: z
+    .int()
+    .min(-2147483648, {
+      error: "Invalid value: Expected int32 to be >= -2147483648",
+    })
+    .max(2147483647, {
+      error: "Invalid value: Expected int32 to be <= 2147483647",
+    })
+    .optional(),
+  size: z
+    .int()
+    .min(-2147483648, {
+      error: "Invalid value: Expected int32 to be >= -2147483648",
+    })
+    .max(2147483647, {
+      error: "Invalid value: Expected int32 to be <= 2147483647",
+    })
+    .optional(),
+  totalElements: z.coerce
+    .bigint()
+    .min(BigInt("-9223372036854775808"), {
+      error: "Invalid value: Expected int64 to be >= -9223372036854775808",
+    })
+    .max(BigInt("9223372036854775807"), {
+      error: "Invalid value: Expected int64 to be <= 9223372036854775807",
+    })
+    .optional(),
+  totalPages: z
+    .int()
+    .min(-2147483648, {
+      error: "Invalid value: Expected int32 to be >= -2147483648",
+    })
+    .max(2147483647, {
+      error: "Invalid value: Expected int32 to be <= 2147483647",
+    })
+    .optional(),
+  message: z.string().regex(/\S/),
+})
+
+export const zOpenapiUpdateBreedRequest = z.object({
+  name: z.string().max(255).regex(/\S/),
+  description: z.string().max(2000).optional(),
+  speciesId: zOpenapiUuid,
+})
+
+export const zOpenapiUpdateClientRequest = z.object({
+  firstName: z.string().max(100).regex(/\S/),
+  lastName: z.string().max(100).regex(/\S/),
+  idType: zOpenapiIdType,
+  idNumber: z.string().min(6).max(20).regex(/\S/),
+  phone: z.string().max(15).regex(/\S/),
+  phoneAlt: z.string().max(15).optional(),
+  email: z.string().max(255).optional(),
+  address: z.string().max(500).optional(),
+  notes: z.string().max(2000).optional(),
+})
+
+export const zOpenapiUpdatePatientRequest = z.object({
+  name: z.string().max(500).regex(/\S/),
+  gender: zOpenapiGender.optional(),
+  birthDate: zOpenapiLocalDate.optional(),
+  approximateAge: z.string().max(50).optional(),
+  weightKg: z.number().optional(),
+  description: z.string().max(2000).optional(),
+  isSterilized: z.boolean().optional(),
+  isDeceased: z.boolean().optional(),
+  breedId: zOpenapiUuid.optional(),
+  clientId: zOpenapiUuid,
+})
+
+export const zOpenapiUpdateSpeciesRequest = z.object({
+  name: z.string().max(255).regex(/\S/),
+  description: z.string().max(2000).optional(),
 })
 
 /**
@@ -120,6 +413,126 @@ export const zOpenapiHttpValidationProblem = z.object({
   detail: z.string().optional(),
   instance: z.url(),
   violations: z.array(zOpenapiViolation).optional(),
+})
+
+export const zOpenapiAppointmentClass = z.enum([
+  "AMBULATORY",
+  "EMERGENCY",
+  "HOME_VISIT",
+])
+
+export const zOpenapiAppointmentStatus = z.enum([
+  "SCHEDULED",
+  "IN_PROGRESS",
+  "COMPLETED",
+  "CANCELLED",
+  "NO_SHOW",
+])
+
+export const zOpenapiLocalTime = z.string()
+
+export const zOpenapiCreateAppointmentRequest = z.object({
+  id: zOpenapiUuid.optional(),
+  date: zOpenapiLocalDate,
+  startTime: zOpenapiLocalTime,
+  endTime: zOpenapiLocalTime.optional(),
+  status: zOpenapiAppointmentStatus,
+  appointmentClass: zOpenapiAppointmentClass.optional(),
+  reason: z.string().max(2000).optional(),
+  notes: z.string().max(2000).optional(),
+  patientId: zOpenapiUuid,
+  clientId: zOpenapiUuid,
+  veterinarianId: zOpenapiUuid,
+})
+
+export const zOpenapiUpdateAppointmentRequest = z.object({
+  date: zOpenapiLocalDate,
+  startTime: zOpenapiLocalTime,
+  endTime: zOpenapiLocalTime.optional(),
+  status: zOpenapiAppointmentStatus,
+  appointmentClass: zOpenapiAppointmentClass.optional(),
+  reason: z.string().max(2000).optional(),
+  notes: z.string().max(2000).optional(),
+  patientId: zOpenapiUuid,
+  clientId: zOpenapiUuid,
+  veterinarianId: zOpenapiUuid,
+})
+
+export const zOpenapiUserDto = z.object({
+  id: zOpenapiUuid,
+  name: z.string().max(255).regex(/\S/),
+  email: z.string().max(255).regex(/\S/),
+  emailVerified: z.boolean(),
+  image: z.string().max(500).optional(),
+  role: z.string().max(50).optional(),
+  banned: z.boolean().optional(),
+  banReason: z.string().max(500).optional(),
+  banExpires: zOpenapiOffsetDateTime.optional(),
+  lastName: z.string().max(255).regex(/\S/),
+  createdAt: zOpenapiOffsetDateTime,
+  updatedAt: zOpenapiOffsetDateTime,
+})
+
+export const zOpenapiAppointmentDto = z.object({
+  id: zOpenapiUuid,
+  date: zOpenapiLocalDate,
+  startTime: zOpenapiLocalTime,
+  endTime: zOpenapiLocalTime.optional(),
+  status: zOpenapiAppointmentStatus,
+  appointmentClass: zOpenapiAppointmentClass,
+  reason: z.string().max(2000).optional(),
+  notes: z.string().max(2000).optional(),
+  createdAt: zOpenapiOffsetDateTime,
+  updatedAt: zOpenapiOffsetDateTime,
+  patient: zOpenapiPatientDto,
+  client: zOpenapiClientDto,
+  veterinarian: zOpenapiUserDto,
+})
+
+export const zOpenapiDataResponseAppointmentDto = z.object({
+  data: zOpenapiAppointmentDto,
+  message: z.string().regex(/\S/),
+})
+
+export const zOpenapiPageResponseAppointmentDto = z.object({
+  data: z.array(zOpenapiAppointmentDto),
+  page: z
+    .int()
+    .min(-2147483648, {
+      error: "Invalid value: Expected int32 to be >= -2147483648",
+    })
+    .max(2147483647, {
+      error: "Invalid value: Expected int32 to be <= 2147483647",
+    })
+    .optional(),
+  size: z
+    .int()
+    .min(-2147483648, {
+      error: "Invalid value: Expected int32 to be >= -2147483648",
+    })
+    .max(2147483647, {
+      error: "Invalid value: Expected int32 to be <= 2147483647",
+    })
+    .optional(),
+  totalElements: z.coerce
+    .bigint()
+    .min(BigInt("-9223372036854775808"), {
+      error: "Invalid value: Expected int64 to be >= -9223372036854775808",
+    })
+    .max(BigInt("9223372036854775807"), {
+      error: "Invalid value: Expected int64 to be <= 9223372036854775807",
+    })
+    .optional(),
+  totalPages: z
+    .int()
+    .min(-2147483648, {
+      error: "Invalid value: Expected int32 to be >= -2147483648",
+    })
+    .max(2147483647, {
+      error: "Invalid value: Expected int32 to be <= 2147483647",
+    })
+    .optional(),
+  message: z.string().regex(/\S/),
 })
 
 export const zOpenapiUserWritable = z.object({
@@ -764,12 +1177,229 @@ export const zOpenapiGetJsonWebTokenResponse = z.object({
   token: z.string().optional(),
 })
 
+export const zGetApiBreedQuery = z.object({
+  page: z
+    .int()
+    .gte(0)
+    .max(2147483647, {
+      error: "Invalid value: Expected int32 to be <= 2147483647",
+    })
+    .optional()
+    .default(0),
+  search: z.string().optional(),
+  size: z
+    .int()
+    .gte(1)
+    .max(2147483647, {
+      error: "Invalid value: Expected int32 to be <= 2147483647",
+    })
+    .optional()
+    .default(20),
+})
+
+/**
+ * OK
+ */
+export const zGetApiBreedResponse = zOpenapiPageResponseBreedDto
+
+export const zPostApiBreedBody = zOpenapiCreateBreedRequest
+
+/**
+ * OK
+ */
+export const zPostApiBreedResponse = zOpenapiDataResponseBreedDto
+
+export const zDeleteApiBreedByIdPath = z.object({
+  id: zOpenapiUuid,
+})
+
+/**
+ * No Content
+ */
+export const zDeleteApiBreedByIdResponse = z.void()
+
+export const zGetApiBreedByIdPath = z.object({
+  id: zOpenapiUuid,
+})
+
+/**
+ * OK
+ */
+export const zGetApiBreedByIdResponse = zOpenapiDataResponseBreedDto
+
+export const zPutApiBreedByIdBody = zOpenapiUpdateBreedRequest
+
+export const zPutApiBreedByIdPath = z.object({
+  id: zOpenapiUuid,
+})
+
+/**
+ * OK
+ */
+export const zPutApiBreedByIdResponse = zOpenapiDataResponseBreedDto
+
+export const zGetApiClientQuery = z.object({
+  page: z
+    .int()
+    .gte(0)
+    .max(2147483647, {
+      error: "Invalid value: Expected int32 to be <= 2147483647",
+    })
+    .optional()
+    .default(0),
+  search: z.string().optional(),
+  size: z
+    .int()
+    .gte(1)
+    .max(2147483647, {
+      error: "Invalid value: Expected int32 to be <= 2147483647",
+    })
+    .optional()
+    .default(20),
+})
+
+/**
+ * OK
+ */
+export const zGetApiClientResponse = zOpenapiPageResponseClientDto
+
+export const zPostApiClientBody = zOpenapiCreateClientRequest
+
+/**
+ * OK
+ */
+export const zPostApiClientResponse = zOpenapiDataResponseClientDto
+
+export const zDeleteApiClientByIdPath = z.object({
+  id: zOpenapiUuid,
+})
+
+/**
+ * No Content
+ */
+export const zDeleteApiClientByIdResponse = z.void()
+
+export const zGetApiClientByIdPath = z.object({
+  id: zOpenapiUuid,
+})
+
+/**
+ * OK
+ */
+export const zGetApiClientByIdResponse = zOpenapiDataResponseClientDto
+
+export const zPutApiClientByIdBody = zOpenapiUpdateClientRequest
+
+export const zPutApiClientByIdPath = z.object({
+  id: zOpenapiUuid,
+})
+
+/**
+ * OK
+ */
+export const zPutApiClientByIdResponse = zOpenapiDataResponseClientDto
+
+export const zGetApiPatientQuery = z.object({
+  page: z
+    .int()
+    .gte(0)
+    .max(2147483647, {
+      error: "Invalid value: Expected int32 to be <= 2147483647",
+    })
+    .optional()
+    .default(0),
+  search: z.string().optional(),
+  size: z
+    .int()
+    .gte(1)
+    .max(2147483647, {
+      error: "Invalid value: Expected int32 to be <= 2147483647",
+    })
+    .optional()
+    .default(20),
+})
+
+/**
+ * OK
+ */
+export const zGetApiPatientResponse = zOpenapiPageResponsePatientDto
+
+export const zPostApiPatientBody = zOpenapiCreatePatientRequest
+
+/**
+ * OK
+ */
+export const zPostApiPatientResponse = zOpenapiDataResponsePatientDto
+
+export const zDeleteApiPatientByIdPath = z.object({
+  id: zOpenapiUuid,
+})
+
+/**
+ * No Content
+ */
+export const zDeleteApiPatientByIdResponse = z.void()
+
+export const zGetApiPatientByIdPath = z.object({
+  id: zOpenapiUuid,
+})
+
+/**
+ * OK
+ */
+export const zGetApiPatientByIdResponse = zOpenapiDataResponsePatientDto
+
+export const zPutApiPatientByIdBody = zOpenapiUpdatePatientRequest
+
+export const zPutApiPatientByIdPath = z.object({
+  id: zOpenapiUuid,
+})
+
+/**
+ * OK
+ */
+export const zPutApiPatientByIdResponse = zOpenapiDataResponsePatientDto
+
+export const zGetApiSpeciesQuery = z.object({
+  page: z
+    .int()
+    .gte(0)
+    .max(2147483647, {
+      error: "Invalid value: Expected int32 to be <= 2147483647",
+    })
+    .optional()
+    .default(0),
+  search: z.string().optional(),
+  size: z
+    .int()
+    .gte(1)
+    .max(2147483647, {
+      error: "Invalid value: Expected int32 to be <= 2147483647",
+    })
+    .optional()
+    .default(20),
+})
+
+/**
+ * OK
+ */
+export const zGetApiSpeciesResponse = zOpenapiPageResponseSpeciesDto
+
 export const zPostApiSpeciesBody = zOpenapiCreateSpeciesRequest
 
 /**
  * OK
  */
 export const zPostApiSpeciesResponse = zOpenapiDataResponseSpeciesDto
+
+export const zDeleteApiSpeciesByIdPath = z.object({
+  id: zOpenapiUuid,
+})
+
+/**
+ * No Content
+ */
+export const zDeleteApiSpeciesByIdResponse = z.void()
 
 export const zGetApiSpeciesByIdPath = z.object({
   id: zOpenapiUuid,
@@ -779,3 +1409,76 @@ export const zGetApiSpeciesByIdPath = z.object({
  * OK
  */
 export const zGetApiSpeciesByIdResponse = zOpenapiDataResponseSpeciesDto
+
+export const zPutApiSpeciesByIdBody = zOpenapiUpdateSpeciesRequest
+
+export const zPutApiSpeciesByIdPath = z.object({
+  id: zOpenapiUuid,
+})
+
+/**
+ * OK
+ */
+export const zPutApiSpeciesByIdResponse = zOpenapiDataResponseSpeciesDto
+
+export const zGetApiAppointmentQuery = z.object({
+  from: zOpenapiLocalDate.optional(),
+  page: z
+    .int()
+    .gte(0)
+    .max(2147483647, {
+      error: "Invalid value: Expected int32 to be <= 2147483647",
+    })
+    .optional()
+    .default(0),
+  size: z
+    .int()
+    .gte(1)
+    .max(2147483647, {
+      error: "Invalid value: Expected int32 to be <= 2147483647",
+    })
+    .optional()
+    .default(20),
+  to: zOpenapiLocalDate.optional(),
+})
+
+/**
+ * OK
+ */
+export const zGetApiAppointmentResponse = zOpenapiPageResponseAppointmentDto
+
+export const zPostApiAppointmentBody = zOpenapiCreateAppointmentRequest
+
+/**
+ * OK
+ */
+export const zPostApiAppointmentResponse = zOpenapiDataResponseAppointmentDto
+
+export const zDeleteApiAppointmentByIdPath = z.object({
+  id: zOpenapiUuid,
+})
+
+/**
+ * No Content
+ */
+export const zDeleteApiAppointmentByIdResponse = z.void()
+
+export const zGetApiAppointmentByIdPath = z.object({
+  id: zOpenapiUuid,
+})
+
+/**
+ * OK
+ */
+export const zGetApiAppointmentByIdResponse = zOpenapiDataResponseAppointmentDto
+
+export const zPutApiAppointmentByIdBody = zOpenapiUpdateAppointmentRequest
+
+export const zPutApiAppointmentByIdPath = z.object({
+  id: zOpenapiUuid,
+})
+
+/**
+ * OK
+ */
+export const zPutApiAppointmentByIdResponse = zOpenapiDataResponseAppointmentDto

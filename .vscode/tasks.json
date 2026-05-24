@@ -34,6 +34,35 @@
     },
     {
       "type": "shell",
+      "group": "build",
+      "label": "appointment:dev",
+      "isBackground": true,
+      "problemMatcher": [
+        {
+          "pattern": [
+            {
+              "regexp": "\\[(\\d+)\\]\\s(.*):(\\d+):(\\d+)\\s\\-\\s{(.*)}:\\s(.*)$",
+              "file": 2,
+              "line": 3,
+              "column": 4,
+              "message": 6
+            }
+          ],
+          "background": {
+            "activeOnStart": true,
+            "beginsPattern": "^.*Scanning for projects...",
+            "endsPattern": "(^.*Quarkus .* started in .*\\.)|(^.* ERROR .* Failed to start)"
+          }
+        }
+      ],
+      "command": "./mvnw",
+      "windows": {
+        "command": ".\\mvnw.cmd"
+      },
+      "args": ["-f", "services/appointment/pom.xml", "quarkus:dev"]
+    },
+    {
+      "type": "shell",
       "label": "wait",
       "command": "sleep 90",
       "windows": {
