@@ -37,5 +37,9 @@ export const worker = ac.newRole({
 })
 
 export const roleNames = ["admin", "veterinarian", "worker"] as const
-
 export type Role = (typeof roleNames)[number]
+
+// Auxiliar
+export function isRole(value: string): value is Role {
+  return roleNames.includes(value as Role)
+}
