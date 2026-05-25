@@ -52,8 +52,7 @@
         "Sanipatitas (auth) 🐞",
         "Sanipatitas (patient) 🐞",
         "Sanipatitas (appointment) 🐞",
-        "Sanipatitas (desktop-ui) 🐞",
-        "Sanipatitas (openapi) 🐞"
+        "Sanipatitas (desktop-ui) 🐞"
       ],
       "stopAll": true,
       "preLaunchTask": "patient:dev"
