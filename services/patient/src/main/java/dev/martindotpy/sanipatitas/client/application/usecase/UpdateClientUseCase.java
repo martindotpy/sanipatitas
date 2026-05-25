@@ -29,7 +29,7 @@ public class UpdateClientUseCase implements UpdateClientPort {
 
         return clientRepository.findById(id)
                 .onItem().ifNull().failWith(() -> new ClientNotFoundException(id))
-                .replaceWith(clientRepository.persist(newClient))
+                .replaceWith(clientRepository.update(newClient))
                 .map(clientMapper::toDto);
     }
 }

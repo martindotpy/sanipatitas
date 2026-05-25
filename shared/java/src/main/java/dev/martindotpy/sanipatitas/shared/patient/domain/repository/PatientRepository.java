@@ -20,4 +20,8 @@ public interface PatientRepository extends PanacheRepositoryBase<Patient, UUID> 
     default Uni<Long> count(String search) {
         return count("name like ?1", "%%%s%%".formatted(search));
     }
+
+    default Uni<Patient> update(Patient patient) {
+        return getSession().chain(session -> session.merge(patient));
+    }
 }

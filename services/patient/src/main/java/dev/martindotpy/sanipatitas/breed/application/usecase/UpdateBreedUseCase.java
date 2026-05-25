@@ -47,7 +47,7 @@ public class UpdateBreedUseCase implements UpdateBreedPort {
 
                     return newBreed;
                 })
-                .flatMap(breedRepository::persist)
+                .flatMap(breedRepository::update)
                 .map(breedMapper::toDto);
     }
 }

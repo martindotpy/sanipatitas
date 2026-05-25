@@ -29,7 +29,7 @@ public class UpdateSpeciesUseCase implements UpdateSpeciesPort {
 
         return speciesRepository.findById(id)
                 .onItem().ifNull().failWith(() -> new SpeciesNotFoundException(id))
-                .replaceWith(speciesRepository.persist(newSpecies))
+                .replaceWith(speciesRepository.update(newSpecies))
                 .map(speciesMapper::toDto);
     }
 }

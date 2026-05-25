@@ -20,4 +20,8 @@ public interface ClientRepository extends PanacheRepositoryBase<Client, UUID> {
     default Uni<Long> countSearch(String search) {
         return count("firstName like ?1 or lastName like ?1", "%%%s%%".formatted(search));
     }
+
+    default Uni<Client> update(Client client) {
+        return getSession().chain(session -> session.merge(client));
+    }
 }

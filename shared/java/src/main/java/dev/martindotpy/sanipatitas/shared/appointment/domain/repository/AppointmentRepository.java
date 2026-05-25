@@ -21,4 +21,8 @@ public interface AppointmentRepository extends PanacheRepositoryBase<Appointment
     default Uni<Long> countByDateRange(LocalDate from, LocalDate to) {
         return count("date between ?1 and ?2", from, to);
     }
+
+    default Uni<Appointment> update(Appointment appointment) {
+        return getSession().chain(session -> session.merge(appointment));
+    }
 }

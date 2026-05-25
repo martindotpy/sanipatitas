@@ -58,7 +58,7 @@ public class UpdateAppointmentUseCase implements UpdateAppointmentPort {
 
                     return appointment;
                 })
-                .chain(appointmentRepository::persist)
+                .chain(appointmentRepository::update)
                 .map(appointmentMapper::toDto);
     }
 }

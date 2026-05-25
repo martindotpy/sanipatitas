@@ -20,4 +20,8 @@ public interface SpeciesRepository extends PanacheRepositoryBase<Species, UUID> 
     default Uni<Long> count(String search) {
         return count("name like ?1", "%%%s%%".formatted(search));
     }
+
+    default Uni<Species> update(Species species) {
+        return getSession().chain(session -> session.merge(species));
+    }
 }

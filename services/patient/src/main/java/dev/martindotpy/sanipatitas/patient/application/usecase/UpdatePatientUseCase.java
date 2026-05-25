@@ -60,7 +60,7 @@ public class UpdatePatientUseCase implements UpdatePatientPort {
 
                     return patient;
                 })
-                .chain(patientRepository::persist)
+                .chain(patientRepository::update)
                 .map(patientMapper::toDto);
     }
 }

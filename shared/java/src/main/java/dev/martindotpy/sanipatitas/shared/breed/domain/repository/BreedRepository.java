@@ -20,4 +20,8 @@ public interface BreedRepository extends PanacheRepositoryBase<Breed, UUID> {
     default Uni<Long> count(String search) {
         return count("name like ?1", "%%%s%%".formatted(search));
     }
+
+    default Uni<Breed> update(Breed breed) {
+        return getSession().chain(session -> session.merge(breed));
+    }
 }

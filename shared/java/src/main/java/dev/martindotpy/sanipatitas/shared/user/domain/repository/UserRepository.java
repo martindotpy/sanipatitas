@@ -20,4 +20,8 @@ public interface UserRepository extends PanacheRepositoryBase<User, UUID> {
     default Uni<Long> count(String search) {
         return count("name like ?1 or email like ?1 or lastName like ?1", "%%%s%%".formatted(search));
     }
+
+    default Uni<User> update(User user) {
+        return getSession().chain(session -> session.merge(user));
+    }
 }
