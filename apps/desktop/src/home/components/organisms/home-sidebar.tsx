@@ -47,10 +47,12 @@ export function HomeSidebar({
       <SidebarContent>
         {Object.entries(sidebarItems).map(([group, items]) => (
           <SidebarGroup key={group ?? "index"}>
-            {group && (
-              <SidebarGroupLabel className="">
-                {group} <Separator className="ml-2" />
+            {group ? (
+              <SidebarGroupLabel className="gap-2 px-0">
+                {group} <Separator className="w-fit flex-1" />
               </SidebarGroupLabel>
+            ) : (
+              <Separator className="w-fit flex-1" />
             )}
             <SidebarGroupContent>
               <SidebarMenu>
