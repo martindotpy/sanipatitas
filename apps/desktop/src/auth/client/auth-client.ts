@@ -2,6 +2,12 @@ import type {
   auth,
   AuthErrorCode,
 } from "@sanipatitas/auth/auth/configuration/auth-configuration"
+import {
+  ac,
+  admin,
+  veterinarian,
+  worker,
+} from "@sanipatitas/auth/auth/configuration/permissions"
 import { publicBaseUrl } from "@sanipatitas/desktop/core/configuration/app-configuration"
 import {
   adminClient,
@@ -12,12 +18,19 @@ import { createAuthClient } from "better-auth/react"
 
 // Client
 export const authClient = createAuthClient({
-  plugins: [inferAdditionalFields<typeof auth>(), adminClient(), jwtClient()],
+  plugins: [
+    inferAdditionalFields<typeof auth>(),
+    adminClient({
+      ac,
+      roles: { admin, veterinarian, worker },
+    }),
+    jwtClient(),
+  ],
   baseURL: publicBaseUrl,
 })
 
 // Error
-interface AuthError {
+export interface AuthError {
   readonly code: AuthErrorCode | (string & {})
   readonly message: string
 }

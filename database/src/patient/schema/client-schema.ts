@@ -44,10 +44,7 @@ export const clientTable = pgTable(
     ),
   },
   (table) => [
-    check(
-      "id_type_check",
-      sql`${table.idType} IN (${idTypes.map((type) => `'${type}'`).join(", ")})`
-    ),
+    check("id_type_check", sql`${table.idType} IN ('DNI', 'CE', 'PASSPORT')`),
     index("client_search_idx").using("gin", table.searchVector),
   ]
 )

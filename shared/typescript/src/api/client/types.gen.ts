@@ -3971,6 +3971,14 @@ export type GetApiBreedData = {
 
 export type GetApiBreedErrors = {
   /**
+   * Not Authorized
+   */
+  401: unknown
+  /**
+   * Not Allowed
+   */
+  403: unknown
+  /**
    * Constraint Violation
    */
   422: OpenapiHttpValidationProblem
@@ -3996,6 +4004,14 @@ export type PostApiBreedData = {
 }
 
 export type PostApiBreedErrors = {
+  /**
+   * Not Authorized
+   */
+  401: unknown
+  /**
+   * Not Allowed
+   */
+  403: unknown
   /**
    * Constraint Violation
    */
@@ -4025,6 +4041,14 @@ export type DeleteApiBreedByIdData = {
 
 export type DeleteApiBreedByIdErrors = {
   /**
+   * Not Authorized
+   */
+  401: unknown
+  /**
+   * Not Allowed
+   */
+  403: unknown
+  /**
    * Constraint Violation
    */
   422: OpenapiHttpValidationProblem
@@ -4053,6 +4077,14 @@ export type GetApiBreedByIdData = {
 }
 
 export type GetApiBreedByIdErrors = {
+  /**
+   * Not Authorized
+   */
+  401: unknown
+  /**
+   * Not Allowed
+   */
+  403: unknown
   /**
    * Not Found: server cannot find the requested resource
    */
@@ -4087,6 +4119,14 @@ export type PutApiBreedByIdData = {
 
 export type PutApiBreedByIdErrors = {
   /**
+   * Not Authorized
+   */
+  401: unknown
+  /**
+   * Not Allowed
+   */
+  403: unknown
+  /**
    * Constraint Violation
    */
   422: OpenapiHttpValidationProblem
@@ -4118,6 +4158,14 @@ export type GetApiClientData = {
 
 export type GetApiClientErrors = {
   /**
+   * Not Authorized
+   */
+  401: unknown
+  /**
+   * Not Allowed
+   */
+  403: unknown
+  /**
    * Constraint Violation
    */
   422: OpenapiHttpValidationProblem
@@ -4143,6 +4191,14 @@ export type PostApiClientData = {
 }
 
 export type PostApiClientErrors = {
+  /**
+   * Not Authorized
+   */
+  401: unknown
+  /**
+   * Not Allowed
+   */
+  403: unknown
   /**
    * Constraint Violation
    */
@@ -4172,6 +4228,14 @@ export type DeleteApiClientByIdData = {
 
 export type DeleteApiClientByIdErrors = {
   /**
+   * Not Authorized
+   */
+  401: unknown
+  /**
+   * Not Allowed
+   */
+  403: unknown
+  /**
    * Constraint Violation
    */
   422: OpenapiHttpValidationProblem
@@ -4200,6 +4264,14 @@ export type GetApiClientByIdData = {
 }
 
 export type GetApiClientByIdErrors = {
+  /**
+   * Not Authorized
+   */
+  401: unknown
+  /**
+   * Not Allowed
+   */
+  403: unknown
   /**
    * Not Found: server cannot find the requested resource
    */
@@ -4234,6 +4306,14 @@ export type PutApiClientByIdData = {
 
 export type PutApiClientByIdErrors = {
   /**
+   * Not Authorized
+   */
+  401: unknown
+  /**
+   * Not Allowed
+   */
+  403: unknown
+  /**
    * Constraint Violation
    */
   422: OpenapiHttpValidationProblem
@@ -4265,6 +4345,14 @@ export type GetApiPatientData = {
 
 export type GetApiPatientErrors = {
   /**
+   * Not Authorized
+   */
+  401: unknown
+  /**
+   * Not Allowed
+   */
+  403: unknown
+  /**
    * Constraint Violation
    */
   422: OpenapiHttpValidationProblem
@@ -4290,6 +4378,14 @@ export type PostApiPatientData = {
 }
 
 export type PostApiPatientErrors = {
+  /**
+   * Not Authorized
+   */
+  401: unknown
+  /**
+   * Not Allowed
+   */
+  403: unknown
   /**
    * Constraint Violation
    */
@@ -4320,6 +4416,14 @@ export type DeleteApiPatientByIdData = {
 
 export type DeleteApiPatientByIdErrors = {
   /**
+   * Not Authorized
+   */
+  401: unknown
+  /**
+   * Not Allowed
+   */
+  403: unknown
+  /**
    * Constraint Violation
    */
   422: OpenapiHttpValidationProblem
@@ -4348,6 +4452,14 @@ export type GetApiPatientByIdData = {
 }
 
 export type GetApiPatientByIdErrors = {
+  /**
+   * Not Authorized
+   */
+  401: unknown
+  /**
+   * Not Allowed
+   */
+  403: unknown
   /**
    * Not Found: server cannot find the requested resource
    */
@@ -4382,6 +4494,14 @@ export type PutApiPatientByIdData = {
 
 export type PutApiPatientByIdErrors = {
   /**
+   * Not Authorized
+   */
+  401: unknown
+  /**
+   * Not Allowed
+   */
+  403: unknown
+  /**
    * Constraint Violation
    */
   422: OpenapiHttpValidationProblem
@@ -4413,6 +4533,14 @@ export type GetApiSpeciesData = {
 
 export type GetApiSpeciesErrors = {
   /**
+   * Not Authorized
+   */
+  401: unknown
+  /**
+   * Not Allowed
+   */
+  403: unknown
+  /**
    * Constraint Violation
    */
   422: OpenapiHttpValidationProblem
@@ -4438,6 +4566,14 @@ export type PostApiSpeciesData = {
 }
 
 export type PostApiSpeciesErrors = {
+  /**
+   * Not Authorized
+   */
+  401: unknown
+  /**
+   * Not Allowed
+   */
+  403: unknown
   /**
    * Constraint Violation
    */
@@ -4468,6 +4604,14 @@ export type DeleteApiSpeciesByIdData = {
 
 export type DeleteApiSpeciesByIdErrors = {
   /**
+   * Not Authorized
+   */
+  401: unknown
+  /**
+   * Not Allowed
+   */
+  403: unknown
+  /**
    * Constraint Violation
    */
   422: OpenapiHttpValidationProblem
@@ -4497,6 +4641,14 @@ export type GetApiSpeciesByIdData = {
 
 export type GetApiSpeciesByIdErrors = {
   /**
+   * Not Authorized
+   */
+  401: unknown
+  /**
+   * Not Allowed
+   */
+  403: unknown
+  /**
    * Constraint Violation
    */
   422: OpenapiHttpValidationProblem
@@ -4525,6 +4677,14 @@ export type PutApiSpeciesByIdData = {
 }
 
 export type PutApiSpeciesByIdErrors = {
+  /**
+   * Not Authorized
+   */
+  401: unknown
+  /**
+   * Not Allowed
+   */
+  403: unknown
   /**
    * Constraint Violation
    */
@@ -4558,6 +4718,14 @@ export type GetApiAppointmentData = {
 
 export type GetApiAppointmentErrors = {
   /**
+   * Not Authorized
+   */
+  401: unknown
+  /**
+   * Not Allowed
+   */
+  403: unknown
+  /**
    * Constraint Violation
    */
   422: OpenapiHttpValidationProblem
@@ -4584,6 +4752,14 @@ export type PostApiAppointmentData = {
 }
 
 export type PostApiAppointmentErrors = {
+  /**
+   * Not Authorized
+   */
+  401: unknown
+  /**
+   * Not Allowed
+   */
+  403: unknown
   /**
    * Constraint Violation
    */
@@ -4614,6 +4790,14 @@ export type DeleteApiAppointmentByIdData = {
 
 export type DeleteApiAppointmentByIdErrors = {
   /**
+   * Not Authorized
+   */
+  401: unknown
+  /**
+   * Not Allowed
+   */
+  403: unknown
+  /**
    * Constraint Violation
    */
   422: OpenapiHttpValidationProblem
@@ -4642,6 +4826,14 @@ export type GetApiAppointmentByIdData = {
 }
 
 export type GetApiAppointmentByIdErrors = {
+  /**
+   * Not Authorized
+   */
+  401: unknown
+  /**
+   * Not Allowed
+   */
+  403: unknown
   /**
    * Not Found: server cannot find the requested resource
    */
@@ -4675,6 +4867,14 @@ export type PutApiAppointmentByIdData = {
 }
 
 export type PutApiAppointmentByIdErrors = {
+  /**
+   * Not Authorized
+   */
+  401: unknown
+  /**
+   * Not Allowed
+   */
+  403: unknown
   /**
    * Constraint Violation
    */

@@ -1,16 +1,16 @@
+import type { Role } from "@sanipatitas/auth/auth/configuration/permissions"
 import { useUser } from "@sanipatitas/desktop/auth/hook/use-user"
-import type { OpenapiUser } from "@sanipatitas/shared/api/client/types.gen"
 
 // Component
 interface RoleGuard {
-  role: OpenapiUser["role"]
+  role: Role
   children: React.ReactNode
 }
 
 export function RoleGuard({ role, children }: RoleGuard) {
   const user = useUser()
 
-  if (user.role === role) {
+  if (user.role !== role) {
     return null
   }
 
@@ -26,6 +26,10 @@ export function AdminGuard(props: Guard) {
   return <RoleGuard role="admin" {...props} />
 }
 
-export function UserGuard(props: Guard) {
-  return <RoleGuard role="user" {...props} />
+export function VeterinarianGuard(props: Guard) {
+  return <RoleGuard role="veterinarian" {...props} />
+}
+
+export function WorkerGuard(props: Guard) {
+  return <RoleGuard role="worker" {...props} />
 }

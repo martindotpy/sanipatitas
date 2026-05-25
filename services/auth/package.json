@@ -8,7 +8,7 @@
     "dev": "bun --bun --watch src/index.ts",
     "start": "bun --bun src/index.ts",
     "build": "tsc && bun run build:dts && bun build src/index.ts --production --sourcemap --format=esm --minify-whitespace --minify-syntax --no-compile-autoload-package-json --no-compile-autoload-tsconfig --bytecode --compile --target=bun --outfile index",
-    "auth:generate": "bunx --bun @better-auth/cli -y generate --config src/auth/configuration/auth-configuration.ts --output ../../database/src/auth/schema/auth-schema.ts && prettier --write ../../database/src/auth/schema/auth-schema.ts",
+    "auth:generate": "bunx --bun @better-auth/cli generate --config src/auth/configuration/auth-configuration.ts --output ../../database/src/auth/schema/auth-schema.ts && prettier --write ../../database/src/auth/schema/auth-schema.ts",
     "build:dts": "bun run scripts/generate-dts-bundle.ts"
   },
   "dependencies": {

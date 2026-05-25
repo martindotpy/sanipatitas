@@ -3,6 +3,7 @@ package dev.martindotpy.sanipatitas.client.adapter.controller;
 import java.util.UUID;
 
 import jakarta.validation.constraints.Min;
+import jakarta.annotation.security.RolesAllowed;
 import jakarta.ws.rs.DELETE;
 import jakarta.ws.rs.DefaultValue;
 import jakarta.ws.rs.GET;
@@ -38,6 +39,7 @@ public class ClientController {
     private final UpdateClientPort updateClientPort;
 
     @GET
+    @RolesAllowed({"admin", "worker"})
     public Uni<PageResponse<ClientDto>> search(
             @RestQuery @Nullable String search,
             @RestQuery @DefaultValue("0") @Min(0) int page,
@@ -51,6 +53,7 @@ public class ClientController {
 
     @GET
     @Path("/{id}")
+    @RolesAllowed({"admin", "worker"})
     public Uni<DataResponse<ClientDto>> getById(
             @Uuid @RestPath UUID id) throws NotFoundException {
         return findClientPort.findById(id)
@@ -61,6 +64,7 @@ public class ClientController {
     }
 
     @POST
+    @RolesAllowed({"admin", "worker"})
     public Uni<DataResponse<ClientDto>> create(CreateClientRequest request) {
         return createClientPort.create(request)
                 .map(DataResponse::from)
@@ -71,6 +75,7 @@ public class ClientController {
 
     @PUT
     @Path("/{id}")
+    @RolesAllowed({"admin", "worker"})
     public Uni<DataResponse<ClientDto>> update(
             @Uuid @RestPath UUID id, UpdateClientRequest request) {
         return updateClientPort.update(id, request)
@@ -83,6 +88,7 @@ public class ClientController {
     @DELETE
     @Path("/{id}")
     @ResponseStatus(204)
+    @RolesAllowed({"admin"})
     public Uni<Void> delete(@Uuid @RestPath UUID id) {
         return deleteClientPort.deleteById(id);
     }

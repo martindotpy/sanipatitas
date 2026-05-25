@@ -13,8 +13,14 @@ export function useIsAdmin() {
   return role === "admin"
 }
 
-export function useIsUser() {
+export function useIsVeterinarian() {
   const role = useRole()
 
-  return role === "user"
+  return role === "veterinarian"
+}
+
+export function useIsWorker() {
+  const role = useRole()
+
+  return role === "worker"
 }

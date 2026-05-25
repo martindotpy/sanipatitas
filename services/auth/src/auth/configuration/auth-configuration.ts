@@ -4,6 +4,12 @@ import { serverLog } from "@sanipatitas/shared/log/server-logger"
 import { betterAuth } from "better-auth"
 import { drizzleAdapter } from "better-auth/adapters/drizzle"
 import { admin, jwt, openAPI } from "better-auth/plugins"
+import {
+  ac,
+  admin as adminRole,
+  veterinarian,
+  worker,
+} from "@sanipatitas/auth/auth/configuration/permissions"
 import { redis } from "bun"
 
 // Logger
@@ -34,7 +40,15 @@ export const auth = betterAuth({
     },
   },
   plugins: [
-    admin(),
+    admin({
+      ac,
+      roles: {
+        admin: adminRole,
+        veterinarian,
+        worker,
+      },
+      adminRoles: ["admin"],
+    }),
     jwt({
       jwks: {
         keyPairConfig: {

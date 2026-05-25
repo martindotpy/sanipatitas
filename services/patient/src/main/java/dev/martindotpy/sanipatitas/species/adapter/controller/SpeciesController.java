@@ -3,6 +3,7 @@ package dev.martindotpy.sanipatitas.species.adapter.controller;
 import java.util.UUID;
 
 import jakarta.validation.constraints.Min;
+import jakarta.annotation.security.RolesAllowed;
 import jakarta.ws.rs.DELETE;
 import jakarta.ws.rs.DefaultValue;
 import jakarta.ws.rs.GET;
@@ -38,6 +39,7 @@ public class SpeciesController {
     private final UpdateSpeciesPort updateSpeciesPort;
 
     @GET
+    @RolesAllowed({"admin", "veterinarian", "worker"})
     public Uni<PageResponse<SpeciesDto>> search(
             @RestQuery @Nullable String search,
             @RestQuery @DefaultValue("0") @Min(0) int page,
@@ -51,6 +53,7 @@ public class SpeciesController {
 
     @GET
     @Path("/{id}")
+    @RolesAllowed({"admin", "veterinarian", "worker"})
     public Uni<DataResponse<SpeciesDto>> getById(
             @Uuid @RestPath UUID id) throws SpeciesNotFoundException {
         return findSpeciesPort.findById(id)
@@ -61,6 +64,7 @@ public class SpeciesController {
     }
 
     @POST
+    @RolesAllowed({"admin", "worker"})
     public Uni<DataResponse<SpeciesDto>> create(CreateSpeciesRequest request) {
         return createSpeciesPort.create(request)
                 .map(DataResponse::from)
@@ -71,6 +75,7 @@ public class SpeciesController {
 
     @PUT
     @Path("/{id}")
+    @RolesAllowed({"admin", "worker"})
     public Uni<DataResponse<SpeciesDto>> update(
             @Uuid @RestPath UUID id, UpdateSpeciesRequest request) throws SpeciesNotFoundException {
         return updateSpeciesPort.update(id, request)
@@ -83,6 +88,7 @@ public class SpeciesController {
     @DELETE
     @Path("/{id}")
     @ResponseStatus(204)
+    @RolesAllowed({"admin"})
     public Uni<Void> delete(@Uuid @RestPath UUID id) throws SpeciesNotFoundException {
         return deleteSpeciesPort.deleteById(id);
     }

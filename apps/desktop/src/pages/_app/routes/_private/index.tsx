@@ -1,4 +1,5 @@
-import { createFileRoute } from "@tanstack/react-router"
+import { createFileRoute, useRouter } from "@tanstack/react-router"
+import { useEffect } from "react"
 
 // Route
 export const Route = createFileRoute("/_private/")({
@@ -6,5 +7,11 @@ export const Route = createFileRoute("/_private/")({
 })
 
 function IndexComponent() {
+  const router = useRouter()
+
+  useEffect(() => {
+    router.navigate({ to: "/patients" })
+  }, [router])
+
   return <></>
 }

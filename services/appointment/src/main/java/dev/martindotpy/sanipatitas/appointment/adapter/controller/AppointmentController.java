@@ -4,6 +4,7 @@ import java.time.LocalDate;
 import java.util.UUID;
 
 import jakarta.validation.constraints.Min;
+import jakarta.annotation.security.RolesAllowed;
 import jakarta.ws.rs.DELETE;
 import jakarta.ws.rs.DefaultValue;
 import jakarta.ws.rs.GET;
@@ -39,6 +40,7 @@ public class AppointmentController {
     private final UpdateAppointmentPort updateAppointmentPort;
 
     @GET
+    @RolesAllowed({"admin", "veterinarian", "worker"})
     public Uni<PageResponse<AppointmentDto>> findByDateRange(
             @RestQuery @Nullable LocalDate from,
             @RestQuery @Nullable LocalDate to,
@@ -53,6 +55,7 @@ public class AppointmentController {
 
     @GET
     @Path("/{id}")
+    @RolesAllowed({"admin", "veterinarian", "worker"})
     public Uni<DataResponse<AppointmentDto>> getById(
             @Uuid @RestPath UUID id) throws NotFoundException {
         return findAppointmentPort.findById(id)
@@ -63,6 +66,7 @@ public class AppointmentController {
     }
 
     @POST
+    @RolesAllowed({"admin", "veterinarian", "worker"})
     public Uni<DataResponse<AppointmentDto>> create(CreateAppointmentRequest request) {
         return createAppointmentPort.create(request)
                 .map(DataResponse::from)
@@ -73,6 +77,7 @@ public class AppointmentController {
 
     @PUT
     @Path("/{id}")
+    @RolesAllowed({"admin", "veterinarian", "worker"})
     public Uni<DataResponse<AppointmentDto>> update(
             @Uuid @RestPath UUID id, UpdateAppointmentRequest request) {
         return updateAppointmentPort.update(id, request)
@@ -85,6 +90,7 @@ public class AppointmentController {
     @DELETE
     @Path("/{id}")
     @ResponseStatus(204)
+    @RolesAllowed({"admin"})
     public Uni<Void> delete(@Uuid @RestPath UUID id) {
         return deleteAppointmentPort.deleteById(id);
     }

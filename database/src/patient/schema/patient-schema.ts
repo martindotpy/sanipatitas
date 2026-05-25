@@ -50,7 +50,7 @@ export const patientTable = pgTable(
   (table) => [
     check(
       "gender_check",
-      sql`${table.gender} IN (${genders.map((gender) => `'${gender}'`).join(", ")})`
+      sql`${table.gender} IN ('MALE', 'FEMALE', 'UNKNOWN')`
     ),
     index("patient_search_idx").using("gin", table.searchVector),
   ]

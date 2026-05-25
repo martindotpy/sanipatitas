@@ -3,6 +3,7 @@ package dev.martindotpy.sanipatitas.patient.adapter.controller;
 import java.util.UUID;
 
 import jakarta.validation.constraints.Min;
+import jakarta.annotation.security.RolesAllowed;
 import jakarta.ws.rs.DELETE;
 import jakarta.ws.rs.DefaultValue;
 import jakarta.ws.rs.GET;
@@ -38,6 +39,7 @@ public class PatientController {
     private final UpdatePatientPort updatePatientPort;
 
     @GET
+    @RolesAllowed({"admin", "veterinarian", "worker"})
     public Uni<PageResponse<PatientDto>> search(
             @RestQuery @Nullable String search,
             @RestQuery @DefaultValue("0") @Min(0) int page,
@@ -51,6 +53,7 @@ public class PatientController {
 
     @GET
     @Path("/{id}")
+    @RolesAllowed({"admin", "veterinarian", "worker"})
     public Uni<DataResponse<PatientDto>> getById(
             @Uuid @RestPath UUID id) throws NotFoundException {
         return findPatientPort.findById(id)
@@ -61,6 +64,7 @@ public class PatientController {
     }
 
     @POST
+    @RolesAllowed({"admin", "worker"})
     public Uni<DataResponse<PatientDto>> create(CreatePatientRequest request) {
         return createPatientPort.create(request)
                 .map(DataResponse::from)
@@ -71,6 +75,7 @@ public class PatientController {
 
     @PUT
     @Path("/{id}")
+    @RolesAllowed({"admin", "worker"})
     public Uni<DataResponse<PatientDto>> update(
             @Uuid @RestPath UUID id, UpdatePatientRequest request) {
         return updatePatientPort.update(id, request)
@@ -83,6 +88,7 @@ public class PatientController {
     @DELETE
     @Path("/{id}")
     @ResponseStatus(204)
+    @RolesAllowed({"admin"})
     public Uni<Void> delete(@Uuid @RestPath UUID id) {
         return deletePatientPort.deleteById(id);
     }

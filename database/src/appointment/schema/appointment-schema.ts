@@ -22,11 +22,7 @@ export const appointmentStatuses = [
 ] as const
 export type AppointmentStatus = (typeof appointmentStatuses)[number]
 
-export const appointmentClasses = [
-  "AMBULATORY",
-  "EMERGENCY",
-  "HOME_VISIT",
-] as const
+export const appointmentClasses = ["AMBULATORY", "EMERGENCY", "HOME_VISIT"] as const
 export type AppointmentClass = (typeof appointmentClasses)[number]
 
 // Table
@@ -63,11 +59,11 @@ export const appointmentTable = pgTable(
   (table) => [
     check(
       "appointment_status_check",
-      sql`${table.status} IN (${appointmentStatuses.map((status) => `'${status}'`).join(", ")})`
+      sql`${table.status} IN ('SCHEDULED', 'IN_PROGRESS', 'COMPLETED', 'CANCELLED', 'NO_SHOW')`
     ),
     check(
       "appointment_class_check",
-      sql`${table.appointmentClass} IN (${appointmentClasses.map((cls) => `'${cls}'`).join(", ")})`
+      sql`${table.appointmentClass} IN ('AMBULATORY', 'EMERGENCY', 'HOME_VISIT')`
     ),
   ]
 )

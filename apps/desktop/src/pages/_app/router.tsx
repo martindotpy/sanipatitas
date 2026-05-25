@@ -58,7 +58,7 @@ export function createAppRouter(astro?: AstroGlobal) {
     ),
     defaultErrorComponent: ({ error }) => {
       return (
-        <div className="flex flex-1 flex-col">
+        <div className="pt-header-h flex flex-1 flex-col">
           {isDev ? <ErrorComponent error={error} /> : <ErrorMainSection />}
         </div>
       )
