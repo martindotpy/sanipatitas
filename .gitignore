@@ -51,3 +51,6 @@ services/**/index.js.map
 .DS_Store
 *.exe
 *.log
+
+# Opencode
+.opencode
