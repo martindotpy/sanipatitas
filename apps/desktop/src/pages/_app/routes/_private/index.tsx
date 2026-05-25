@@ -10,7 +10,7 @@ function IndexComponent() {
   const router = useRouter()
 
   useEffect(() => {
-    router.navigate({ to: "/patients" })
+    router.navigate({ to: "/patient" })
   }, [router])
 
   return <></>

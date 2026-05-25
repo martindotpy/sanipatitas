@@ -52,9 +52,15 @@ export function ControlledInput<
       name={name}
       render={({ field, fieldState }) => (
         <Field data-invalid={fieldState.invalid}>
-          <FieldLabel htmlFor={name} className={labelClassName} {...labelProps}>
-            {label}
-          </FieldLabel>
+          {label && (
+            <FieldLabel
+              htmlFor={name}
+              className={labelClassName}
+              {...labelProps}
+            >
+              {label}
+            </FieldLabel>
+          )}
 
           <InputGroup>
             <InputGroupInput

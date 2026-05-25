@@ -8,7 +8,7 @@
   "dependencies": {
     "@bogeychan/elysia-logger": "0.1.10",
     "@hey-api/openapi-ts": "0.97.1",
-    "@tanstack/react-query": "5.100.9",
+    "@tanstack/react-query": "5.100.10",
     "consola": "3.4.2",
     "pino": "10.3.1"
   },

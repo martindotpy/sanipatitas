@@ -1,4 +1,5 @@
 import { useIsSidebarActive } from "@sanipatitas/desktop/home/hook/use-is-sidebar-active"
+import { $title, useTitle } from "@sanipatitas/desktop/home/store/title-store"
 import { Button } from "@sanipatitas/ui/components/ui/button"
 import { SidebarTrigger } from "@sanipatitas/ui/components/ui/sidebar"
 import { $ } from "@sanipatitas/ui/lib/dom-selector"
@@ -20,6 +21,9 @@ export function DraggableHeader() {
   // Sidebar
   const isSidebarActive = useIsSidebarActive()
 
+  // Title
+  const title = useTitle()
+
   // Remove fallback
   useEffect(() => {
     const $fallback = $<HTMLDivElement>("[data-draggable-fallback]")
@@ -32,12 +36,14 @@ export function DraggableHeader() {
       if ($fallback) {
         $fallback.dataset.draggableFallback = "true"
       }
+
+      $title.set("")
     }
   }, [])
 
   return (
     <>
-      <div className="macos:pl-18 fixed top-0 left-0 z-99 flex w-fit">
+      <div className="macos:pl-18 fixed top-0 left-0 z-99 flex w-fit items-center">
         <Button
           size="icon-sm"
           variant="ghost"
@@ -56,6 +62,10 @@ export function DraggableHeader() {
         </Button>
 
         {isSidebarActive && <SidebarTrigger />}
+
+        <div className="ml-2">
+          {title && <h1 className="text-sm font-semibold">{title}</h1>}
+        </div>
       </div>
 
       <div

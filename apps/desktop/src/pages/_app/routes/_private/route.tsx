@@ -28,6 +28,7 @@ function PrivateLayout() {
 
       <div className="flex flex-1">
         <HomeSidebar />
+
         <SidebarInset className="border-t">
           <Outlet />
         </SidebarInset>

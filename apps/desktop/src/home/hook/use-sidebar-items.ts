@@ -32,17 +32,17 @@ export function useSidebarItems(): SidebarGroups {
     ],
     Pacientes: [
       {
-        to: "/patients",
+        to: "/patient",
         label: "Pacientes",
         icon: TbPaw,
       },
       {
-        to: "/clients",
+        to: "/client",
         label: "Clientes",
         icon: TbUsers,
       },
       {
-        to: "/breeds",
+        to: "/breed",
         label: "Razas",
         icon: TbCategory2,
       },

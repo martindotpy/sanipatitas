@@ -1,5 +1,7 @@
+import { SpeciesSection } from "@sanipatitas/desktop/species/components/sections/species-section"
+import { $title } from "@sanipatitas/desktop/home/store/title-store"
 import { createFileRoute } from "@tanstack/react-router"
-
+import { useEffect } from "react"
 
 // Route
 export const Route = createFileRoute("/_private/species")({
@@ -7,5 +9,14 @@ export const Route = createFileRoute("/_private/species")({
 })
 
 function SpeciesComponent() {
-  return <></>
+  // Update title
+  useEffect(() => {
+    $title.set("Especies")
+  }, [])
+
+  return (
+    <div className="flex flex-1 p-4">
+      <SpeciesSection />
+    </div>
+  )
 }
