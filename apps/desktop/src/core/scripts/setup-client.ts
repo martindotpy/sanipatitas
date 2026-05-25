@@ -3,14 +3,20 @@ import { $jwt } from "@sanipatitas/desktop/auth/store/jwt-store"
 import { publicBaseUrl } from "@sanipatitas/desktop/core/configuration/app-configuration"
 import { client } from "@sanipatitas/shared/api/client/client.gen"
 
-// Merge the default configuration with the auth configuration
+// Base URL
 client.setConfig({
-  auth: () => {
-    const jwt = $jwt.get()
-
-    return jwt ?? undefined
-  },
   baseUrl: publicBaseUrl,
+})
+
+// Attach JWT to every outgoing request
+client.interceptors.request.use((request) => {
+  const jwt = $jwt.get()
+
+  if (jwt) {
+    request.headers.set("Authorization", `Bearer ${jwt}`)
+  }
+
+  return request
 })
 
 // On 401 from Core API, invalidate session cache
@@ -18,7 +24,6 @@ client.setConfig({
 client.interceptors.response.use((response) => {
   if (response.status === 401) {
     invalidateSessionQuery()
-    $jwt.set(null)
   }
 
   return response
