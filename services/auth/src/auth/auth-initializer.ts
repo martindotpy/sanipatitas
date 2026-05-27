@@ -33,6 +33,7 @@ export async function initializeAuth() {
         role: "admin",
         data: {
           lastName: "Ramos",
+          emailVerified: true
         },
       },
     })

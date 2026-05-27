@@ -8,8 +8,14 @@ services:
     volumes:
       - ./docker/haproxy/haproxy.cfg:/usr/local/etc/haproxy/haproxy.cfg:ro
     depends_on:
-      - service-auth
-      - service-patient
+      service-auth:
+        condition: service_healthy
+      service-appointment:
+        condition: service_healthy
+      service-patient:
+        condition: service_healthy
+      frontend:
+        condition: service_healthy
     healthcheck:
       test:
         - CMD-SHELL
@@ -25,12 +31,38 @@ services:
     build:
       context: .
       dockerfile: services/auth/Dockerfile
+    env_file: services/auth/.env
     container_name: sanipatitas-auth
     expose:
       - "3000"
+    ports:
+      - "3000:3000"
     depends_on:
-      - database-sql
-      - database-redis
+      database-sql:
+        condition: service_healthy
+      database-redis:
+        condition: service_healthy
+
+  # - Patient
+  service-patient:
+    build:
+      context: .
+      dockerfile: services/patient/Dockerfile
+    container_name: sanipatitas-patient
+    env_file: services/patient/.env
+    environment:
+      - QUARKUS_DATASOURCE_REACTIVE_URL=vertx-reactive:postgresql://sanipatitas-user:sanipatitas-password@database-sql:5432/sanipatitas-db
+      - QUARKUS_REDIS_HOSTS=redis://database-redis:6379
+      - MP_JWT_VERIFY_PUBLICKEY_LOCATION=http://host.docker.internal/api/auth/jwks
+      - MP_JWT_VERIFY_ISSUER=http://localhost
+      - MP_JWT_VERIFY_AUDIENCES=http://localhost
+    expose:
+      - "8080"
+    ports:
+      - "8080:8080"
+    depends_on:
+      service-auth:
+        condition: service_healthy
 
   # - Appointment
   service-appointment:
@@ -40,26 +72,31 @@ services:
     environment:
       - QUARKUS_DATASOURCE_REACTIVE_URL=vertx-reactive:postgresql://sanipatitas-user:sanipatitas-password@database-sql:5432/sanipatitas-db
       - QUARKUS_REDIS_HOSTS=redis://database-redis:6379
+      - MP_JWT_VERIFY_PUBLICKEY_LOCATION=http://host.docker.internal/api/auth/jwks
+      - MP_JWT_VERIFY_ISSUER=http://localhost
+      - MP_JWT_VERIFY_AUDIENCES=http://localhost
     container_name: sanipatitas-appointment
     env_file: services/appointment/.env
     expose:
       - "8081"
+    ports:
+      - "8081:8081"
     depends_on:
-      - database-sql
-      - database-redis
+      service-auth:
+        condition: service_healthy
 
-  # - Patient
-  service-patient:
+  # Frontend
+  frontend:
     build:
       context: .
-      dockerfile: services/patient/Dockerfile
-    container_name: sanipatitas-patient
-    env_file: services/patient/.env
+      dockerfile: apps/desktop/Dockerfile
+    container_name: sanipatitas-frontend
+    environment:
+      - PUBLIC_BASE_URL=http://localhost
     expose:
-      - "8080"
-    depends_on:
-      - database-sql
-      - database-redis
+      - "80"
+    ports:
+      - "1420:80"
 
   # Databases
   # - SQL

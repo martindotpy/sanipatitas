@@ -20,7 +20,7 @@ export function SearchSpeciesForm() {
   })
 
   const onSubmit = handleSubmit((data) => {
-    $speciesQuery.set({ ...$speciesQuery.get(), search: data.search })
+    $speciesQuery.set({ ...$speciesQuery.get(), search: data.search, page: 0 })
   })
 
   return (

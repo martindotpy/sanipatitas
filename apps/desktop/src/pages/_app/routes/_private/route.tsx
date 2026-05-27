@@ -1,7 +1,9 @@
 import { HomeHeader } from "@sanipatitas/desktop/home/components/organisms/home-header"
 import { HomeSidebar } from "@sanipatitas/desktop/home/components/organisms/home-sidebar"
+import { $title } from "@sanipatitas/desktop/home/store/title-store"
 import { SidebarInset } from "@sanipatitas/ui/components/ui/sidebar"
 import { createFileRoute, Outlet, redirect } from "@tanstack/react-router"
+import { useEffect } from "react"
 
 // Private layout
 export const Route = createFileRoute("/_private")({
@@ -22,6 +24,12 @@ export const Route = createFileRoute("/_private")({
 })
 
 function PrivateLayout() {
+  useEffect(() => {
+    return () => {
+      $title.set(null)
+    }
+  }, [])
+
   return (
     <>
       <HomeHeader />

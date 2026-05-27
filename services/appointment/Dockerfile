@@ -6,24 +6,27 @@ ARG TZ
 
 ENV TZ=${TZ}
 
-# Workspace packages
 WORKDIR /app
 
-# Maven and dependencies
+# Maven wrapper
 COPY .mvn/ .mvn/
 COPY --chmod=0755 mvnw ./
 
-COPY pom.xml ./
+# Dependencies layer (cached unless POMs change)
+COPY pom.xml checkstyle-suppressions.xml spotbugs-exclude.xml ./
 COPY shared/java/pom.xml ./shared/java/pom.xml
+COPY services/patient/pom.xml ./services/patient/pom.xml
 COPY services/appointment/pom.xml ./services/appointment/pom.xml
 
-RUN ./mvnw -B dependency:go-offline
+RUN --mount=type=cache,target=/root/.m2/repository \
+    ./mvnw -B -pl services/appointment -am dependency:go-offline
 
-# Build
+# Build layer (cached unless sources change)
 COPY shared/java/src shared/java/src
 COPY services/appointment/src services/appointment/src
 
-RUN ./mvnw -pl services/appointment -am package -DskipTests -B
+RUN --mount=type=cache,target=/root/.m2/repository \
+    ./mvnw -B -pl services/appointment -am package -DskipTests
 
 
 FROM gcr.io/distroless/java25 AS runtime
@@ -47,7 +50,7 @@ COPY --chown=185 --from=build /app/services/appointment/target/quarkus-app/quark
 EXPOSE 8081
 USER 185
 
-ENTRYPOINT [ "java", "-XX:AOTCache=app.aot", "-jar", "quarkus-run.jar", "-Dquarkus.http.host=0.0.0.0", "-Dquarkus.http.port=8081", "-Djava.util.logging.manager=org.jboss.logmanager.LogManager", "-XX:+UnlockExperimentalVMOptions", "-XX:+EnableJVMCI"]
+ENTRYPOINT [ "java", "-jar", "quarkus-run.jar", "-Dquarkus.http.host=0.0.0.0", "-Dquarkus.http.port=8081", "-Djava.util.logging.manager=org.jboss.logmanager.LogManager", "-XX:+UnlockExperimentalVMOptions", "-XX:+EnableJVMCI"]
 
 HEALTHCHECK --interval=120s --timeout=5s --start-period=5s \
     CMD ["/bin/wget", "--spider", "--timeout=5", "http://localhost:8081/_health"]

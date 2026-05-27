@@ -1,15 +1,15 @@
-import { isDev } from "@sanipatitas/auth/core/configuration/app-configuration"
-import { db, schema } from "@sanipatitas/database"
-import { serverLog } from "@sanipatitas/shared/log/server-logger"
-import { betterAuth } from "better-auth"
-import { drizzleAdapter } from "better-auth/adapters/drizzle"
-import { admin, jwt, openAPI } from "better-auth/plugins"
 import {
   ac,
   admin as adminRole,
   veterinarian,
   worker,
 } from "@sanipatitas/auth/auth/configuration/permissions"
+import { isDev } from "@sanipatitas/auth/core/configuration/app-configuration"
+import { db, schema } from "@sanipatitas/database"
+import { serverLog } from "@sanipatitas/shared/log/server-logger"
+import { betterAuth } from "better-auth"
+import { drizzleAdapter } from "better-auth/adapters/drizzle"
+import { admin, jwt, openAPI } from "better-auth/plugins"
 import { redis } from "bun"
 
 // Logger
@@ -84,6 +84,7 @@ export const auth = betterAuth({
   },
   trustedOrigins: [
     "tauri://localhost",
+    "http://tauri.localhost",
     ...(isDev ? ["http://localhost:1420"] : []),
   ],
   experimental: { joins: true },
