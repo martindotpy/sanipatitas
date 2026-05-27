@@ -1,5 +1,6 @@
 package dev.martindotpy.sanipatitas.shared.core.adapter.openapi;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.eclipse.microprofile.openapi.OASFactory;
@@ -14,6 +15,30 @@ import org.eclipse.microprofile.openapi.models.responses.APIResponses;
 public class ProblemDetailsRequiredFieldsFilter implements OASFilter {
     @Override
     public void filterOpenAPI(OpenAPI openApi) {
+        // Update the refs in the paths to match the new schema names
+        openApi.getPaths().getPathItems().forEach((path, pathItem) -> {
+            if (pathItem.getOperations() != null) {
+                pathItem.getOperations().forEach((_, operation) -> {
+                    if (operation.getTags() == null) {
+                        return;
+                    }
+
+                    var tags = new ArrayList<String>();
+
+                    operation.getTags().forEach((tag) -> {
+                        if (tag.endsWith(" Controller")) {
+                            tags.add(tag.substring(0, tag.length() - 11));
+                        } else {
+                            tags.add(tag);
+                        }
+                    });
+
+                    operation.setTags(tags);
+                });
+            }
+        });
+
+        // Make the required fields in the problem details schemas actually required
         openApi.getComponents().getSchemas().forEach((name, schema) -> {
             switch (name) {
                 case "HttpProblem", "HttpValidationProblem" ->

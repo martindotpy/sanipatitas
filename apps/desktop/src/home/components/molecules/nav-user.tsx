@@ -87,7 +87,7 @@ export function NavUser() {
 
                   await toast
                     .promise(
-                      invalidateSessionQuery().then(() => authClient.signOut()),
+                      authClient.signOut().then(() => invalidateSessionQuery()),
                       {
                         loading: "Cerrando sesión...",
                         success: () => {

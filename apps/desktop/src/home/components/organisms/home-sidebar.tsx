@@ -72,7 +72,7 @@ export function HomeSidebar({
                         isActive={Boolean(isActive)}
                         render={
                           !item.external ? (
-                            <Link to={item.to} preload={false}>
+                            <Link to={item.to}>
                               <item.icon className="size-5!" />
 
                               <span>{item.label}</span>

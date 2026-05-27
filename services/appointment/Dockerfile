@@ -19,14 +19,14 @@ COPY services/patient/pom.xml ./services/patient/pom.xml
 COPY services/appointment/pom.xml ./services/appointment/pom.xml
 
 RUN --mount=type=cache,target=/root/.m2/repository \
-    ./mvnw -B -pl services/appointment -am dependency:go-offline
+  ./mvnw -B -pl services/appointment -am dependency:go-offline
 
 # Build layer (cached unless sources change)
 COPY shared/java/src shared/java/src
 COPY services/appointment/src services/appointment/src
 
 RUN --mount=type=cache,target=/root/.m2/repository \
-    ./mvnw -B -pl services/appointment -am package -DskipTests
+  ./mvnw -B -pl services/appointment -am package -DskipTests
 
 
 FROM gcr.io/distroless/java25 AS runtime
@@ -52,5 +52,5 @@ USER 185
 
 ENTRYPOINT [ "java", "-jar", "quarkus-run.jar", "-Dquarkus.http.host=0.0.0.0", "-Dquarkus.http.port=8081", "-Djava.util.logging.manager=org.jboss.logmanager.LogManager", "-XX:+UnlockExperimentalVMOptions", "-XX:+EnableJVMCI"]
 
-HEALTHCHECK --interval=120s --timeout=5s --start-period=5s \
-    CMD ["/bin/wget", "--spider", "--timeout=5", "http://localhost:8081/_health"]
+HEALTHCHECK --interval=120s --timeout=5s --start-period=10s \
+  CMD ["/bin/wget", "--spider", "--timeout=5", "http://localhost:8081/q/health/ready"] || exit 1

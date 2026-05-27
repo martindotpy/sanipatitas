@@ -1,3 +1,4 @@
+import { useAuthQuery } from "@sanipatitas/desktop/auth/hook/use-auth"
 import { HomeHeader } from "@sanipatitas/desktop/home/components/organisms/home-header"
 import { HomeSidebar } from "@sanipatitas/desktop/home/components/organisms/home-sidebar"
 import { $title } from "@sanipatitas/desktop/home/store/title-store"
@@ -24,6 +25,7 @@ export const Route = createFileRoute("/_private")({
 })
 
 function PrivateLayout() {
+  useAuthQuery()
   useEffect(() => {
     return () => {
       $title.set(null)

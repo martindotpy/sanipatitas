@@ -63,8 +63,8 @@ export function createAppRouter(astro?: AstroGlobal) {
         </div>
       )
     },
-    defaultViewTransition: true,
     scrollRestoration: true,
+    defaultViewTransition: true,
     history: createMemoryHistory(),
   })
 

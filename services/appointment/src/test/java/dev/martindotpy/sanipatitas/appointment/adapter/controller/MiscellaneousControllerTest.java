@@ -13,9 +13,9 @@ class MiscellaneousControllerTest {
     void testHelloEndpoint() {
         given()
                 .when()
-                .get("/_health")
+                .get("/q/health")
                 .then()
                 .statusCode(200)
-                .body(is("Ok"));
+                .body("status", is("UP"));
     }
 }
