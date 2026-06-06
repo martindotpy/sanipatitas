@@ -54,3 +54,6 @@ services/**/index.js.map
 
 # Opencode
 .opencode
+
+# Skills
+skill-lock.json
