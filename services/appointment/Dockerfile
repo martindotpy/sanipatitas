@@ -53,4 +53,4 @@ USER 185
 ENTRYPOINT [ "java", "-jar", "quarkus-run.jar", "-Dquarkus.http.host=0.0.0.0", "-Dquarkus.http.port=8081", "-Djava.util.logging.manager=org.jboss.logmanager.LogManager", "-XX:+UnlockExperimentalVMOptions", "-XX:+EnableJVMCI"]
 
 HEALTHCHECK --interval=120s --timeout=5s --start-period=10s \
-  CMD ["/bin/wget", "--spider", "--timeout=5", "http://localhost:8081/q/health/ready"] || exit 1
+  CMD ["/bin/wget", "--spider", "--timeout=5", "http://localhost:8081/q/health/ready"]
