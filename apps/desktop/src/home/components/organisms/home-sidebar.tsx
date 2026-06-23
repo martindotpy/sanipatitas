@@ -27,11 +27,7 @@ export function HomeSidebar({
   const sidebarItems = useSidebarItems()
 
   return (
-    <Sidebar
-      collapsible="icon"
-      className="top-header-h h-[calc(100vh-var(--header-height))]"
-      {...props}
-    >
+    <Sidebar collapsible="icon" className="top-header-h h-main-h!" {...props}>
       <SidebarHeader className="mt-2 gap-0 p-0">
         <Link
           to="/"
@@ -47,13 +43,15 @@ export function HomeSidebar({
       <SidebarContent>
         {Object.entries(sidebarItems).map(([group, items]) => (
           <SidebarGroup key={group ?? "index"}>
-            {group ? (
-              <SidebarGroupLabel className="gap-2 px-0">
-                {group} <Separator className="w-fit flex-1" />
+            {group && (
+              <SidebarGroupLabel className="gap-2 px-0 group-data-[collapsible=icon]:gap-0 group-data-[collapsible=icon]:opacity-100">
+                <span className="group-data-[collapsible=icon]:max-w-0 group-data-[collapsible=icon]:opacity-0">
+                  {group}{" "}
+                </span>
+                <Separator className="w-fit flex-1 group-data-[collapsible=icon]:mt-1.5" />
               </SidebarGroupLabel>
-            ) : (
-              <Separator className="w-fit flex-1" />
             )}
+
             <SidebarGroupContent>
               <SidebarMenu>
                 {items.map((item) => {

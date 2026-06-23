@@ -24,7 +24,7 @@ export function SearchSpeciesForm() {
   })
 
   return (
-    <form className="flex items-center gap-2" onSubmit={onSubmit}>
+    <form className="flex flex-1 items-center gap-2" onSubmit={onSubmit}>
       <ControlledInput
         control={control}
         name="search"
