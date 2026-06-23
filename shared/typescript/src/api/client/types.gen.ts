@@ -5,10 +5,10 @@ export type ClientOptions = {
 }
 
 export type OpenapiUser = {
-  id?: string
+  readonly id: string
   name: string
   email: string
-  readonly emailVerified?: boolean
+  readonly emailVerified: boolean
   image?: string
   createdAt: string
   updatedAt: string
@@ -20,7 +20,7 @@ export type OpenapiUser = {
 }
 
 export type OpenapiSession = {
-  id?: string
+  readonly id: string
   expiresAt: string
   token: string
   createdAt: string
@@ -28,11 +28,11 @@ export type OpenapiSession = {
   ipAddress?: string
   userAgent?: string
   userId: string
-  impersonatedBy?: string
+  readonly impersonatedBy?: string
 }
 
 export type OpenapiAccount = {
-  id?: string
+  readonly id: string
   accountId: string
   providerId: string
   userId: string
@@ -48,7 +48,7 @@ export type OpenapiAccount = {
 }
 
 export type OpenapiJwks = {
-  id?: string
+  readonly id: string
   publicKey: string
   privateKey: string
   createdAt: string
@@ -399,7 +399,6 @@ export type OpenapiUserDto = {
 }
 
 export type OpenapiUserWritable = {
-  id?: string
   name: string
   email: string
   image?: string
@@ -408,22 +407,90 @@ export type OpenapiUserWritable = {
   lastName: string
 }
 
+export type OpenapiSessionWritable = {
+  expiresAt: string
+  token: string
+  createdAt: string
+  updatedAt: string
+  ipAddress?: string
+  userAgent?: string
+  userId: string
+}
+
+export type OpenapiAccountWritable = {
+  accountId: string
+  providerId: string
+  userId: string
+  accessToken?: string
+  refreshToken?: string
+  idToken?: string
+  accessTokenExpiresAt?: string
+  refreshTokenExpiresAt?: string
+  scope?: string
+  password?: string
+  createdAt: string
+  updatedAt: string
+}
+
+export type OpenapiJwksWritable = {
+  publicKey: string
+  privateKey: string
+  createdAt: string
+  expiresAt?: string
+}
+
 export type OpenapiSocialSignInData = {
   body: {
     /**
      * Callback URL to redirect to after the user has signed in
      */
-    callbackURL?: string | null
-    newUserCallbackURL?: string | null
+    callbackURL?: string
+    newUserCallbackURL?: string
     /**
      * Callback URL to redirect to if an error happens
      */
-    errorCallbackURL?: string | null
-    provider: string
+    errorCallbackURL?: string
+    provider:
+      | "apple"
+      | "atlassian"
+      | "cognito"
+      | "discord"
+      | "facebook"
+      | "figma"
+      | "github"
+      | "microsoft"
+      | "google"
+      | "huggingface"
+      | "slack"
+      | "spotify"
+      | "twitch"
+      | "twitter"
+      | "dropbox"
+      | "kick"
+      | "linear"
+      | "linkedin"
+      | "gitlab"
+      | "tiktok"
+      | "reddit"
+      | "roblox"
+      | "salesforce"
+      | "vk"
+      | "zoom"
+      | "notion"
+      | "kakao"
+      | "naver"
+      | "line"
+      | "paybin"
+      | "paypal"
+      | "polar"
+      | "railway"
+      | "vercel"
+      | "wechat"
+      | string
     /**
      * Disable automatic redirection to the provider. Useful for handling the redirection yourself
      */
-    disableRedirect?: boolean | null
+    disableRedirect?: boolean
     idToken?: {
       /**
        * ID token from the provider
@@ -432,43 +499,45 @@ export type OpenapiSocialSignInData = {
       /**
        * Nonce used to generate the token
        */
-      nonce?: string | null
+      nonce?: string
       /**
        * Access token from the provider
        */
-      accessToken?: string | null
+      accessToken?: string
       /**
        * Refresh token from the provider
        */
-      refreshToken?: string | null
+      refreshToken?: string
       /**
        * Expiry date of the token
        */
-      expiresAt?: number | null
+      expiresAt?: number
       /**
        * The user object from the provider. Only available for some providers like Apple.
        */
       user?: {
         name?: {
-          firstName?: string | null
-          lastName?: string | null
-        } | null
-        email?: string | null
-      } | null
-    } | null
+          firstName?: string
+          lastName?: string
+        }
+        email?: string
+      }
+    }
     /**
      * Array of scopes to request from the provider. This will override the default scopes passed.
      */
-    scopes?: Array<unknown> | null
+    scopes?: Array<string>
     /**
      * Explicitly request sign-up. Useful when disableImplicitSignUp is true for this provider
      */
-    requestSignUp?: boolean | null
+    requestSignUp?: boolean
     /**
      * The login hint to use for the authorization code request
      */
-    loginHint?: string | null
-    additionalData?: string | null
+    loginHint?: string
+    additionalData?: {
+      [key: string]: unknown
+    }
   }
   path?: never
   query?: never
@@ -534,7 +603,9 @@ export type OpenapiSocialSignInResponse =
 
 export type GetApiAuthCallbackByIdData = {
   body?: never
-  path?: never
+  path: {
+    id: string
+  }
   query?: never
   url: "/api/auth/callback/{id}"
 }
@@ -583,9 +654,16 @@ export type GetApiAuthCallbackByIdError =
 
 export type PostApiAuthCallbackByIdData = {
   body?: {
-    [key: string]: unknown
+    code?: string
+    error?: string
+    device_id?: string
+    error_description?: string
+    state?: string
+    user?: string
   }
-  path?: never
+  path: {
+    id: string
+  }
   query?: never
   url: "/api/auth/callback/{id}"
 }
@@ -694,7 +772,7 @@ export type OpenapiGetSessionResponses = {
 export type OpenapiGetSessionResponse =
   OpenapiGetSessionResponses[keyof OpenapiGetSessionResponses]
 
-export type OpenapiGetSession2Data = {
+export type OpenapiGetSessionPostData = {
   body?: {
     [key: string]: unknown
   }
@@ -703,7 +781,7 @@ export type OpenapiGetSession2Data = {
   url: "/api/auth/get-session"
 }
 
-export type OpenapiGetSession2Errors = {
+export type OpenapiGetSessionPostErrors = {
   /**
    * Bad Request. Usually due to missing parameters, or invalid parameters.
    */
@@ -742,10 +820,10 @@ export type OpenapiGetSession2Errors = {
   }
 }
 
-export type OpenapiGetSession2Error =
-  OpenapiGetSession2Errors[keyof OpenapiGetSession2Errors]
+export type OpenapiGetSessionPostError =
+  OpenapiGetSessionPostErrors[keyof OpenapiGetSessionPostErrors]
 
-export type OpenapiGetSession2Responses = {
+export type OpenapiGetSessionPostResponses = {
   /**
    * Success
    */
@@ -755,8 +833,8 @@ export type OpenapiGetSession2Responses = {
   } | null
 }
 
-export type OpenapiGetSession2Response =
-  OpenapiGetSession2Responses[keyof OpenapiGetSession2Responses]
+export type OpenapiGetSessionPostResponse =
+  OpenapiGetSessionPostResponses[keyof OpenapiGetSessionPostResponses]
 
 export type OpenapiSignOutData = {
   body?: {
@@ -959,11 +1037,11 @@ export type OpenapiSignInEmailData = {
     /**
      * Callback URL to use as a redirect for email verification
      */
-    callbackURL?: string | null
+    callbackURL?: string
     /**
      * If this is false, the session will not be remembered. Default is `true`.
      */
-    rememberMe?: boolean | null
+    rememberMe?: boolean
   }
   path?: never
   query?: never
@@ -1039,7 +1117,7 @@ export type OpenapiResetPasswordData = {
     /**
      * The token to reset the password
      */
-    token?: string | null
+    token?: string
   }
   path?: never
   query?: never
@@ -1325,7 +1403,7 @@ export type OpenapiChangeEmailData = {
     /**
      * The URL to redirect to after email verification
      */
-    callbackURL?: string | null
+    callbackURL?: string
   }
   path?: never
   query?: never
@@ -1407,7 +1485,7 @@ export type OpenapiChangePasswordData = {
     /**
      * Must be a boolean value
      */
-    revokeOtherSessions?: boolean | null
+    revokeOtherSessions?: boolean
   }
   path?: never
   query?: never
@@ -1502,7 +1580,7 @@ export type OpenapiChangePasswordResponse =
   OpenapiChangePasswordResponses[keyof OpenapiChangePasswordResponses]
 
 export type OpenapiUpdateSessionData = {
-  body?: {
+  body: {
     [key: string]: unknown
   }
   path?: never
@@ -1724,7 +1802,7 @@ export type OpenapiRequestPasswordResetData = {
     /**
      * The URL to redirect the user to reset their password. If the token isn't valid or expired, it'll be redirected with a query parameter `?error=INVALID_TOKEN`. If the token is valid, it'll be redirected with a query parameter `?token=VALID_TOKEN
      */
-    redirectTo?: string | null
+    redirectTo?: string
   }
   path?: never
   query?: never
@@ -2122,29 +2200,67 @@ export type OpenapiLinkSocialAccountData = {
     /**
      * The URL to redirect to after the user has signed in
      */
-    callbackURL?: string | null
-    provider: string
+    callbackURL?: string
+    provider:
+      | "apple"
+      | "atlassian"
+      | "cognito"
+      | "discord"
+      | "facebook"
+      | "figma"
+      | "github"
+      | "microsoft"
+      | "google"
+      | "huggingface"
+      | "slack"
+      | "spotify"
+      | "twitch"
+      | "twitter"
+      | "dropbox"
+      | "kick"
+      | "linear"
+      | "linkedin"
+      | "gitlab"
+      | "tiktok"
+      | "reddit"
+      | "roblox"
+      | "salesforce"
+      | "vk"
+      | "zoom"
+      | "notion"
+      | "kakao"
+      | "naver"
+      | "line"
+      | "paybin"
+      | "paypal"
+      | "polar"
+      | "railway"
+      | "vercel"
+      | "wechat"
+      | string
     idToken?: {
       token: string
-      nonce?: string | null
-      accessToken?: string | null
-      refreshToken?: string | null
-      scopes?: Array<unknown> | null
-    } | null
-    requestSignUp?: boolean | null
+      nonce?: string
+      accessToken?: string
+      refreshToken?: string
+      scopes?: Array<string>
+    }
+    requestSignUp?: boolean
     /**
      * Additional scopes to request from the provider
      */
-    scopes?: Array<unknown> | null
+    scopes?: Array<string>
     /**
      * The URL to redirect to if there is an error during the link process
      */
-    errorCallbackURL?: string | null
+    errorCallbackURL?: string
     /**
      * Disable automatic redirection to the provider. Useful for handling the redirection yourself
      */
-    disableRedirect?: boolean | null
-    additionalData?: string | null
+    disableRedirect?: boolean
+    additionalData?: {
+      [key: string]: unknown
+    }
   }
   path?: never
   query?: never
@@ -2291,7 +2407,7 @@ export type GetApiAuthDeleteUserCallbackData = {
     /**
      * The URL to redirect to after deletion
      */
-    callbackURL?: string | null
+    callbackURL?: string
   }
   url: "/api/auth/delete-user/callback"
 }
@@ -2360,7 +2476,7 @@ export type GetApiAuthDeleteUserCallbackResponse =
 export type PostApiAuthUnlinkAccountData = {
   body: {
     providerId: string
-    accountId?: string | null
+    accountId?: string
   }
   path?: never
   query?: never
@@ -2430,11 +2546,11 @@ export type PostApiAuthRefreshTokenData = {
     /**
      * The account ID associated with the refresh token
      */
-    accountId?: string | null
+    accountId?: string
     /**
      * The user ID associated with the account
      */
-    userId?: string | null
+    userId?: string
   }
   path?: never
   query?: never
@@ -2507,11 +2623,11 @@ export type PostApiAuthGetAccessTokenData = {
     /**
      * The account ID associated with the refresh token
      */
-    accountId?: string | null
+    accountId?: string
     /**
      * The user ID associated with the account
      */
-    userId?: string | null
+    userId?: string
   }
   path?: never
   query?: never
@@ -2774,7 +2890,7 @@ export type OpenapiSetUserRoleData = {
     /**
      * The role to set, this can be a string or an array of strings. Eg: `admin` or `[admin, user]`
      */
-    role: string
+    role: string | Array<string>
   }
   path?: never
   query?: never
@@ -2907,13 +3023,15 @@ export type OpenapiCreateUserData = {
      * The email of the user
      */
     email: string
-    password?: string | null
+    password?: string
     /**
      * The name of the user
      */
     name: string
-    role?: string | null
-    data?: string | null
+    role?: string | Array<string>
+    data?: {
+      [key: string]: unknown
+    }
   }
   path?: never
   query?: never
@@ -2983,7 +3101,9 @@ export type OpenapiAdminUpdateUserData = {
     /**
      * The user data to update
      */
-    data: string
+    data: {
+      [key: string]: unknown
+    }
   }
   path?: never
   query?: never
@@ -3048,34 +3168,45 @@ export type OpenapiListUsersData = {
   body?: never
   path?: never
   query?: {
-    searchValue?: string | null
+    searchValue?: string
     /**
      * The field to search in, defaults to email. Can be `email` or `name`. Eg: "name"
      */
-    searchField?: string | null
+    searchField?: "email" | "name"
     /**
      * The operator to use for the search. Can be `contains`, `starts_with` or `ends_with`. Eg: "contains"
      */
-    searchOperator?: string | null
-    limit?: string | null
-    offset?: string | null
+    searchOperator?: "contains" | "starts_with" | "ends_with"
+    limit?: string | number
+    offset?: string | number
     /**
      * The field to sort by
      */
-    sortBy?: string | null
+    sortBy?: string
     /**
      * The direction to sort by
      */
-    sortDirection?: string | null
+    sortDirection?: "asc" | "desc"
     /**
      * The field to filter by
      */
-    filterField?: string | null
-    filterValue?: string | null
+    filterField?: string
+    filterValue?: string | number | boolean | Array<string> | Array<number>
     /**
      * The operator to use for the filter
      */
-    filterOperator?: string | null
+    filterOperator?:
+      | "eq"
+      | "ne"
+      | "lt"
+      | "lte"
+      | "gt"
+      | "gte"
+      | "in"
+      | "not_in"
+      | "contains"
+      | "starts_with"
+      | "ends_with"
   }
   url: "/api/auth/admin/list-users"
 }
@@ -3278,11 +3409,11 @@ export type OpenapiBanUserData = {
     /**
      * The reason for the ban
      */
-    banReason?: string | null
+    banReason?: string
     /**
      * The number of seconds until the ban expires
      */
-    banExpiresIn?: number | null
+    banExpiresIn?: number
   }
   path?: never
   query?: never

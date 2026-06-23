@@ -3,13 +3,13 @@
 import * as z from "zod"
 
 export const zOpenapiUser = z.object({
-  id: z.string().optional(),
+  id: z.string().readonly(),
   name: z.string(),
   email: z.string(),
-  emailVerified: z.boolean().readonly().optional().default(false),
+  emailVerified: z.boolean().readonly().default(false),
   image: z.string().optional(),
-  createdAt: z.iso.datetime().default("Generated at runtime"),
-  updatedAt: z.iso.datetime().default("Generated at runtime"),
+  createdAt: z.iso.datetime(),
+  updatedAt: z.iso.datetime(),
   role: z.string().readonly().optional(),
   banned: z.boolean().readonly().optional().default(false),
   banReason: z.string().readonly().optional(),
@@ -18,19 +18,19 @@ export const zOpenapiUser = z.object({
 })
 
 export const zOpenapiSession = z.object({
-  id: z.string().optional(),
+  id: z.string().readonly(),
   expiresAt: z.iso.datetime(),
   token: z.string(),
-  createdAt: z.iso.datetime().default("Generated at runtime"),
+  createdAt: z.iso.datetime(),
   updatedAt: z.iso.datetime(),
   ipAddress: z.string().optional(),
   userAgent: z.string().optional(),
   userId: z.string(),
-  impersonatedBy: z.string().optional(),
+  impersonatedBy: z.string().readonly().optional(),
 })
 
 export const zOpenapiAccount = z.object({
-  id: z.string().optional(),
+  id: z.string().readonly(),
   accountId: z.string(),
   providerId: z.string(),
   userId: z.string(),
@@ -41,12 +41,12 @@ export const zOpenapiAccount = z.object({
   refreshTokenExpiresAt: z.iso.datetime().optional(),
   scope: z.string().optional(),
   password: z.string().optional(),
-  createdAt: z.iso.datetime().default("Generated at runtime"),
+  createdAt: z.iso.datetime(),
   updatedAt: z.iso.datetime(),
 })
 
 export const zOpenapiJwks = z.object({
-  id: z.string().optional(),
+  id: z.string().readonly(),
   publicKey: z.string(),
   privateKey: z.string(),
   createdAt: z.iso.datetime(),
@@ -536,45 +536,115 @@ export const zOpenapiPageResponseAppointmentDto = z.object({
 })
 
 export const zOpenapiUserWritable = z.object({
-  id: z.string().optional(),
   name: z.string(),
   email: z.string(),
   image: z.string().optional(),
-  createdAt: z.iso.datetime().default("Generated at runtime"),
-  updatedAt: z.iso.datetime().default("Generated at runtime"),
+  createdAt: z.iso.datetime(),
+  updatedAt: z.iso.datetime(),
   lastName: z.string(),
 })
 
+export const zOpenapiSessionWritable = z.object({
+  expiresAt: z.iso.datetime(),
+  token: z.string(),
+  createdAt: z.iso.datetime(),
+  updatedAt: z.iso.datetime(),
+  ipAddress: z.string().optional(),
+  userAgent: z.string().optional(),
+  userId: z.string(),
+})
+
+export const zOpenapiAccountWritable = z.object({
+  accountId: z.string(),
+  providerId: z.string(),
+  userId: z.string(),
+  accessToken: z.string().optional(),
+  refreshToken: z.string().optional(),
+  idToken: z.string().optional(),
+  accessTokenExpiresAt: z.iso.datetime().optional(),
+  refreshTokenExpiresAt: z.iso.datetime().optional(),
+  scope: z.string().optional(),
+  password: z.string().optional(),
+  createdAt: z.iso.datetime(),
+  updatedAt: z.iso.datetime(),
+})
+
+export const zOpenapiJwksWritable = z.object({
+  publicKey: z.string(),
+  privateKey: z.string(),
+  createdAt: z.iso.datetime(),
+  expiresAt: z.iso.datetime().optional(),
+})
+
 export const zOpenapiSocialSignInBody = z.object({
-  callbackURL: z.string().nullish(),
-  newUserCallbackURL: z.string().nullish(),
-  errorCallbackURL: z.string().nullish(),
-  provider: z.string(),
-  disableRedirect: z.boolean().nullish(),
+  callbackURL: z.string().optional(),
+  newUserCallbackURL: z.string().optional(),
+  errorCallbackURL: z.string().optional(),
+  provider: z.union([
+    z.enum([
+      "apple",
+      "atlassian",
+      "cognito",
+      "discord",
+      "facebook",
+      "figma",
+      "github",
+      "microsoft",
+      "google",
+      "huggingface",
+      "slack",
+      "spotify",
+      "twitch",
+      "twitter",
+      "dropbox",
+      "kick",
+      "linear",
+      "linkedin",
+      "gitlab",
+      "tiktok",
+      "reddit",
+      "roblox",
+      "salesforce",
+      "vk",
+      "zoom",
+      "notion",
+      "kakao",
+      "naver",
+      "line",
+      "paybin",
+      "paypal",
+      "polar",
+      "railway",
+      "vercel",
+      "wechat",
+    ]),
+    z.string(),
+  ]),
+  disableRedirect: z.boolean().optional(),
   idToken: z
     .object({
       token: z.string(),
-      nonce: z.string().nullish(),
-      accessToken: z.string().nullish(),
-      refreshToken: z.string().nullish(),
-      expiresAt: z.number().nullish(),
+      nonce: z.string().optional(),
+      accessToken: z.string().optional(),
+      refreshToken: z.string().optional(),
+      expiresAt: z.number().optional(),
       user: z
         .object({
           name: z
             .object({
-              firstName: z.string().nullish(),
-              lastName: z.string().nullish(),
+              firstName: z.string().optional(),
+              lastName: z.string().optional(),
             })
-            .nullish(),
-          email: z.string().nullish(),
+            .optional(),
+          email: z.string().optional(),
         })
-        .nullish(),
+        .optional(),
     })
-    .nullish(),
-  scopes: z.array(z.unknown()).nullish(),
-  requestSignUp: z.boolean().nullish(),
-  loginHint: z.string().nullish(),
-  additionalData: z.string().nullish(),
+    .optional(),
+  scopes: z.array(z.string()).optional(),
+  requestSignUp: z.boolean().optional(),
+  loginHint: z.string().optional(),
+  additionalData: z.record(z.string(), z.unknown()).optional(),
 })
 
 /**
@@ -587,7 +657,22 @@ export const zOpenapiSocialSignInResponse = z.object({
   redirect: z.boolean(),
 })
 
-export const zPostApiAuthCallbackByIdBody = z.record(z.string(), z.unknown())
+export const zGetApiAuthCallbackByIdPath = z.object({
+  id: z.string(),
+})
+
+export const zPostApiAuthCallbackByIdBody = z.object({
+  code: z.string().optional(),
+  error: z.string().optional(),
+  device_id: z.string().optional(),
+  error_description: z.string().optional(),
+  state: z.string().optional(),
+  user: z.string().optional(),
+})
+
+export const zPostApiAuthCallbackByIdPath = z.object({
+  id: z.string(),
+})
 
 /**
  * Success
@@ -599,12 +684,12 @@ export const zOpenapiGetSessionResponse = z
   })
   .nullable()
 
-export const zOpenapiGetSession2Body = z.record(z.string(), z.unknown())
+export const zOpenapiGetSessionPostBody = z.record(z.string(), z.unknown())
 
 /**
  * Success
  */
-export const zOpenapiGetSession2Response = z
+export const zOpenapiGetSessionPostResponse = z
   .object({
     session: zOpenapiSession,
     user: zOpenapiUser,
@@ -648,8 +733,8 @@ export const zOpenapiSignUpWithEmailAndPasswordResponse = z.object({
 export const zOpenapiSignInEmailBody = z.object({
   email: z.string(),
   password: z.string(),
-  callbackURL: z.string().nullish(),
-  rememberMe: z.boolean().nullish().default(true),
+  callbackURL: z.string().optional(),
+  rememberMe: z.boolean().optional(),
 })
 
 /**
@@ -664,7 +749,7 @@ export const zOpenapiSignInEmailResponse = z.object({
 
 export const zOpenapiResetPasswordBody = z.object({
   newPassword: z.string(),
-  token: z.string().nullish(),
+  token: z.string().optional(),
 })
 
 /**
@@ -712,7 +797,7 @@ export const zOpenapiSendVerificationEmailResponse = z.object({
 
 export const zOpenapiChangeEmailBody = z.object({
   newEmail: z.string(),
-  callbackURL: z.string().nullish(),
+  callbackURL: z.string().optional(),
 })
 
 /**
@@ -727,7 +812,7 @@ export const zOpenapiChangeEmailResponse = z.object({
 export const zOpenapiChangePasswordBody = z.object({
   newPassword: z.string(),
   currentPassword: z.string(),
-  revokeOtherSessions: z.boolean().nullish(),
+  revokeOtherSessions: z.boolean().optional(),
 })
 
 /**
@@ -783,7 +868,7 @@ export const zOpenapiDeleteUserResponse = z.object({
 
 export const zOpenapiRequestPasswordResetBody = z.object({
   email: z.string(),
-  redirectTo: z.string().nullish(),
+  redirectTo: z.string().optional(),
 })
 
 /**
@@ -847,22 +932,61 @@ export const zPostApiAuthRevokeOtherSessionsResponse = z.object({
 })
 
 export const zOpenapiLinkSocialAccountBody = z.object({
-  callbackURL: z.string().nullish(),
-  provider: z.string(),
+  callbackURL: z.string().optional(),
+  provider: z.union([
+    z.enum([
+      "apple",
+      "atlassian",
+      "cognito",
+      "discord",
+      "facebook",
+      "figma",
+      "github",
+      "microsoft",
+      "google",
+      "huggingface",
+      "slack",
+      "spotify",
+      "twitch",
+      "twitter",
+      "dropbox",
+      "kick",
+      "linear",
+      "linkedin",
+      "gitlab",
+      "tiktok",
+      "reddit",
+      "roblox",
+      "salesforce",
+      "vk",
+      "zoom",
+      "notion",
+      "kakao",
+      "naver",
+      "line",
+      "paybin",
+      "paypal",
+      "polar",
+      "railway",
+      "vercel",
+      "wechat",
+    ]),
+    z.string(),
+  ]),
   idToken: z
     .object({
       token: z.string(),
-      nonce: z.string().nullish(),
-      accessToken: z.string().nullish(),
-      refreshToken: z.string().nullish(),
-      scopes: z.array(z.unknown()).nullish(),
+      nonce: z.string().optional(),
+      accessToken: z.string().optional(),
+      refreshToken: z.string().optional(),
+      scopes: z.array(z.string()).optional(),
     })
-    .nullish(),
-  requestSignUp: z.boolean().nullish(),
-  scopes: z.array(z.unknown()).nullish(),
-  errorCallbackURL: z.string().nullish(),
-  disableRedirect: z.boolean().nullish(),
-  additionalData: z.string().nullish(),
+    .optional(),
+  requestSignUp: z.boolean().optional(),
+  scopes: z.array(z.string()).optional(),
+  errorCallbackURL: z.string().optional(),
+  disableRedirect: z.boolean().optional(),
+  additionalData: z.record(z.string(), z.unknown()).optional(),
 })
 
 /**
@@ -891,7 +1015,7 @@ export const zOpenapiListUserAccountsResponse = z.array(
 
 export const zGetApiAuthDeleteUserCallbackQuery = z.object({
   token: z.string().optional(),
-  callbackURL: z.string().nullish(),
+  callbackURL: z.string().optional(),
 })
 
 /**
@@ -904,7 +1028,7 @@ export const zGetApiAuthDeleteUserCallbackResponse = z.object({
 
 export const zPostApiAuthUnlinkAccountBody = z.object({
   providerId: z.string(),
-  accountId: z.string().nullish(),
+  accountId: z.string().optional(),
 })
 
 /**
@@ -916,8 +1040,8 @@ export const zPostApiAuthUnlinkAccountResponse = z.object({
 
 export const zPostApiAuthRefreshTokenBody = z.object({
   providerId: z.string(),
-  accountId: z.string().nullish(),
-  userId: z.string().nullish(),
+  accountId: z.string().optional(),
+  userId: z.string().optional(),
 })
 
 /**
@@ -934,8 +1058,8 @@ export const zPostApiAuthRefreshTokenResponse = z.object({
 
 export const zPostApiAuthGetAccessTokenBody = z.object({
   providerId: z.string(),
-  accountId: z.string().nullish(),
-  userId: z.string().nullish(),
+  accountId: z.string().optional(),
+  userId: z.string().optional(),
 })
 
 /**
@@ -976,7 +1100,7 @@ export const zGetApiAuthErrorResponse = z.string()
 
 export const zOpenapiSetUserRoleBody = z.object({
   userId: z.string(),
-  role: z.string(),
+  role: z.union([z.string(), z.array(z.string())]),
 })
 
 /**
@@ -999,10 +1123,10 @@ export const zOpenapiGetUserResponse = z.object({
 
 export const zOpenapiCreateUserBody = z.object({
   email: z.string(),
-  password: z.string().nullish(),
+  password: z.string().optional(),
   name: z.string(),
-  role: z.string().nullish(),
-  data: z.string().nullish(),
+  role: z.union([z.string(), z.array(z.string())]).optional(),
+  data: z.record(z.string(), z.unknown()).optional(),
 })
 
 /**
@@ -1014,7 +1138,7 @@ export const zOpenapiCreateUserResponse = z.object({
 
 export const zOpenapiAdminUpdateUserBody = z.object({
   userId: z.string(),
-  data: z.string(),
+  data: z.record(z.string(), z.unknown()),
 })
 
 /**
@@ -1025,16 +1149,38 @@ export const zOpenapiAdminUpdateUserResponse = z.object({
 })
 
 export const zOpenapiListUsersQuery = z.object({
-  searchValue: z.string().nullish(),
-  searchField: z.string().nullish(),
-  searchOperator: z.string().nullish(),
-  limit: z.string().nullish(),
-  offset: z.string().nullish(),
-  sortBy: z.string().nullish(),
-  sortDirection: z.string().nullish(),
-  filterField: z.string().nullish(),
-  filterValue: z.string().nullish(),
-  filterOperator: z.string().nullish(),
+  searchValue: z.string().optional(),
+  searchField: z.enum(["email", "name"]).optional(),
+  searchOperator: z.enum(["contains", "starts_with", "ends_with"]).optional(),
+  limit: z.union([z.string(), z.number()]).optional(),
+  offset: z.union([z.string(), z.number()]).optional(),
+  sortBy: z.string().optional(),
+  sortDirection: z.enum(["asc", "desc"]).optional(),
+  filterField: z.string().optional(),
+  filterValue: z
+    .union([
+      z.union([
+        z.union([z.union([z.string(), z.number()]), z.boolean()]),
+        z.array(z.string()),
+      ]),
+      z.array(z.number()),
+    ])
+    .optional(),
+  filterOperator: z
+    .enum([
+      "eq",
+      "ne",
+      "lt",
+      "lte",
+      "gt",
+      "gte",
+      "in",
+      "not_in",
+      "contains",
+      "starts_with",
+      "ends_with",
+    ])
+    .optional(),
 })
 
 /**
@@ -1071,8 +1217,8 @@ export const zOpenapiUnbanUserResponse = z.object({
 
 export const zOpenapiBanUserBody = z.object({
   userId: z.string(),
-  banReason: z.string().nullish(),
-  banExpiresIn: z.number().nullish(),
+  banReason: z.string().optional(),
+  banExpiresIn: z.number().optional(),
 })
 
 /**
@@ -1128,8 +1274,8 @@ export const zOpenapiRemoveUserResponse = z.object({
 })
 
 export const zOpenapiSetUserPasswordBody = z.object({
-  newPassword: z.string(),
-  userId: z.string(),
+  newPassword: z.string().min(1),
+  userId: z.string().min(1),
 })
 
 /**

@@ -40,7 +40,7 @@ import {
   openapiGetJsonWebKeySet,
   openapiGetJsonWebToken,
   openapiGetSession,
-  openapiGetSession2,
+  openapiGetSessionPost,
   openapiGetUser,
   openapiImpersonateUser,
   openapiLinkSocialAccount,
@@ -175,11 +175,11 @@ import type {
   OpenapiGetJsonWebTokenData,
   OpenapiGetJsonWebTokenError,
   OpenapiGetJsonWebTokenResponse,
-  OpenapiGetSession2Data,
-  OpenapiGetSession2Error,
-  OpenapiGetSession2Response,
   OpenapiGetSessionData,
   OpenapiGetSessionError,
+  OpenapiGetSessionPostData,
+  OpenapiGetSessionPostError,
+  OpenapiGetSessionPostResponse,
   OpenapiGetSessionResponse,
   OpenapiGetUserData,
   OpenapiGetUserError,
@@ -375,11 +375,11 @@ const createQueryKey = <TOptions extends Options>(
 }
 
 export const getApiAuthCallbackByIdQueryKey = (
-  options?: Options<GetApiAuthCallbackByIdData>
+  options: Options<GetApiAuthCallbackByIdData>
 ) => createQueryKey("getApiAuthCallbackById", options)
 
 export const getApiAuthCallbackByIdOptions = (
-  options?: Options<GetApiAuthCallbackByIdData>
+  options: Options<GetApiAuthCallbackByIdData>
 ) =>
   queryOptions<
     unknown,
@@ -454,20 +454,20 @@ export const openapiGetSessionOptions = (
 /**
  * Get the current session
  */
-export const openapiGetSession2Mutation = (
-  options?: Partial<Options<OpenapiGetSession2Data>>
+export const openapiGetSessionPostMutation = (
+  options?: Partial<Options<OpenapiGetSessionPostData>>
 ): UseMutationOptions<
-  OpenapiGetSession2Response,
-  OpenapiGetSession2Error,
-  Options<OpenapiGetSession2Data>
+  OpenapiGetSessionPostResponse,
+  OpenapiGetSessionPostError,
+  Options<OpenapiGetSessionPostData>
 > => {
   const mutationOptions: UseMutationOptions<
-    OpenapiGetSession2Response,
-    OpenapiGetSession2Error,
-    Options<OpenapiGetSession2Data>
+    OpenapiGetSessionPostResponse,
+    OpenapiGetSessionPostError,
+    Options<OpenapiGetSessionPostData>
   > = {
     mutationFn: async (fnOptions) => {
-      const { data } = await openapiGetSession2({
+      const { data } = await openapiGetSessionPost({
         ...options,
         ...fnOptions,
         throwOnError: true,
@@ -1394,7 +1394,7 @@ export const openapiListUsersInfiniteOptions = (
     InfiniteData<OpenapiListUsersResponse>,
     QueryKey<Options<OpenapiListUsersData>>,
     | string
-    | null
+    | number
     | Pick<
         QueryKey<Options<OpenapiListUsersData>>[0],
         "body" | "headers" | "path" | "query"
