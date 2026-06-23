@@ -3,42 +3,45 @@ import { createRequestHandler } from "@tanstack/react-router/ssr/server"
 import type { AstroGlobal } from "astro"
 
 export async function handleSsrRequest(astro: AstroGlobal) {
+  // Server
   const router = createAppRouter(astro)
+  let scriptHtml = ""
 
   const getServerRouter = () => router
 
+  // Request
   const handler = createRequestHandler({
     request: new Request(astro.request.url.replace(".html", ""), astro.request),
     createRouter: getServerRouter,
   })
 
-  // request handler, which loads the router for SSR
-  // when TanStack Router's redirect is thrown, return redirect response
-  // ref: https://github.com/TanStack/router/blob/main/packages/react-router/src/ssr/defaultRenderHandler.tsx
-  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-  // @ts-ignore
-  const redirectResponse = await handler(({ router }) => {
-    return router.state.redirect
+  // Handle the request and extract the buffered scripts before cleanup runs
+  const response = await handler(({ router, responseHeaders }) => {
+    // Extract buffered scripts inside the callback before cleanup runs
+    const bufferedScripts = router.serverSsr?.takeBufferedScripts()
+
+    if (bufferedScripts?.tag === "script") {
+      const scriptAttr = bufferedScripts.attrs
+        ? " " +
+          Object.entries(bufferedScripts.attrs)
+            .map(([key, value]) => (value ? `${key}="${value}"` : key))
+            .join(" ")
+        : ""
+
+      scriptHtml = `<script${scriptAttr}>${bufferedScripts.children}</script>`
+    }
+
+    return new Response(null, {
+      status: router.stores.statusCode.get(),
+      headers: responseHeaders,
+    })
   })
 
-  if (redirectResponse)
-    return { redirectResponse, getServerRouter, scriptHtml: "" }
-
-  // Script
-  const bufferedScripts = router.serverSsr!.takeBufferedScripts()
-
-  let scriptHtml = ""
-
-  if (bufferedScripts?.tag === "script") {
-    const scriptAttr = bufferedScripts.attrs
-      ? " " +
-        Object.entries(bufferedScripts.attrs)
-          .map(([key, value]) => (value ? `${key}="${value}"` : key))
-          .join(" ")
-      : ""
-
-    scriptHtml = `<script${scriptAttr}>${bufferedScripts.children}</script>`
+  // Redirect
+  if (response.status >= 300 && response.status < 400) {
+    return { redirectResponse: response, getServerRouter, scriptHtml: "" }
   }
 
+  // Script
   return { redirectResponse: null, getServerRouter, scriptHtml }
 }

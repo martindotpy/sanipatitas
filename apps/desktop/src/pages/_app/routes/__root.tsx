@@ -1,4 +1,5 @@
 import { getSession } from "@sanipatitas/desktop/auth/query/session-query"
+import { DeepLink } from "@sanipatitas/desktop/core/components/atoms/deep-link"
 import { DraggableHeader } from "@sanipatitas/desktop/core/components/molecules/draggable-header"
 import { isSsr } from "@sanipatitas/desktop/core/configuration/app-configuration"
 import { Devtools } from "@sanipatitas/desktop/core/devtools/devtools"
@@ -17,12 +18,12 @@ interface RootRouteContext {
 export const Route = createRootRouteWithContext<RootRouteContext>()({
   beforeLoad: async () => {
     if (isSsr) {
-      return { auth: null }
+      return { auth: null, prerender: isSsr }
     }
 
     const auth = await getSession()
 
-    return { auth }
+    return { auth, prerender: isSsr }
   },
   head: () => ({ meta: [{ title: getTitle() }] }),
   component: RootComponent,
@@ -31,6 +32,8 @@ export const Route = createRootRouteWithContext<RootRouteContext>()({
 function RootComponent() {
   return (
     <>
+      <DeepLink />
+
       <SidebarProvider className="flex flex-col">
         <DraggableHeader />
 

@@ -5,6 +5,7 @@ import { devtools } from "@tanstack/devtools-vite"
 import { tanstackRouter } from "@tanstack/router-plugin/vite"
 import astroPwa from "@vite-pwa/astro"
 import compress from "astro-compress"
+import compressor from "astro-compressor"
 import { defineConfig, fontProviders } from "astro/config"
 import checker from "vite-plugin-checker"
 import svgr from "vite-plugin-svgr"
@@ -41,6 +42,7 @@ export default defineConfig({
       },
       Exclude: "favicon.svg",
     }),
+    compressor({ zstd: false }),
   ],
 
   server: {
