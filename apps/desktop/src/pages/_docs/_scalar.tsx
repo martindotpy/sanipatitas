@@ -102,6 +102,14 @@ function InnerScalar() {
           // @ts-expect-error
           fetch: (input, init) =>
             fetch(input, { ...init, credentials: "include" }),
+          ...(publicBaseUrl && {
+            servers: [
+              {
+                url: publicBaseUrl,
+                description: "Sanipatitas API",
+              },
+            ],
+          }),
         }}
       />
     </>
