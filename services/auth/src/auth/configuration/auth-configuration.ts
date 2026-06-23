@@ -7,8 +7,8 @@ import {
 import { isDev } from "@sanipatitas/auth/core/configuration/app-configuration"
 import { db, schema } from "@sanipatitas/database"
 import { serverLog } from "@sanipatitas/shared/log/server-logger"
-import { drizzleAdapter } from "better-auth/adapters/drizzle"
 import { betterAuth } from "better-auth"
+import { drizzleAdapter } from "better-auth/adapters/drizzle"
 import { admin, jwt, openAPI } from "better-auth/plugins"
 import { redis } from "bun"
 
@@ -80,6 +80,10 @@ export const auth = betterAuth({
     cookiePrefix: "sanipatitas",
     database: {
       generateId: () => Bun.randomUUIDv7(),
+    },
+    defaultCookieAttributes: {
+      sameSite: "none",
+      secure: true,
     },
   },
   trustedOrigins: [

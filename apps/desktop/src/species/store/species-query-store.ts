@@ -1,5 +1,5 @@
 import type { GetApiSpeciesData } from "@sanipatitas/shared/api/client/types.gen"
-import { useStore } from "better-auth/react"
+import { useStore } from "@nanostores/react"
 import { atom } from "nanostores"
 
 // Store

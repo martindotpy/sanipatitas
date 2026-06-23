@@ -1,6 +1,6 @@
 import { authClient } from "@sanipatitas/desktop/auth/client/auth-client"
 import { $jwt } from "@sanipatitas/desktop/auth/store/jwt-store"
-import { SESSION_STALE_TIME } from "@sanipatitas/desktop/core/constant/app-constant"
+import { SESSION_STALE_TIME_MS } from "@sanipatitas/desktop/core/constant/app-constant"
 import { queryClient } from "@sanipatitas/desktop/core/integrations/tanstack-query-integration"
 import type { FetchQueryOptions } from "@tanstack/react-query"
 
@@ -23,7 +23,7 @@ export const sessionQueryOptions = {
 
     return auth.data
   },
-  staleTime: SESSION_STALE_TIME,
+  staleTime: SESSION_STALE_TIME_MS,
 } satisfies FetchQueryOptions
 
 export async function getSession() {

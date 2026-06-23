@@ -64,6 +64,7 @@ export function createAppRouter(astro?: AstroGlobal) {
       )
     },
     scrollRestoration: true,
+    defaultPreload: "intent",
     defaultViewTransition: true,
     history: createMemoryHistory(),
   })

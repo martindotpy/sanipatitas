@@ -10,6 +10,7 @@ import "@scalar/api-reference-react/style.css"
 import { ThemeProvider, useTheme } from "next-themes"
 import { useEffect } from "react"
 
+// Component
 export function Scalar() {
   return (
     <ThemeProvider attribute="class">
@@ -18,6 +19,7 @@ export function Scalar() {
   )
 }
 
+// Inner component
 function InnerScalar() {
   // Add space for button
   useEffect(() => {

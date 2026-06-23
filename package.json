@@ -49,6 +49,9 @@
     "*.{js,ts,jsx,tsx,cjs,mjs}": [
       "eslint --fix",
       "prettier --write"
+    ],
+    "*.{java,kt}": [
+      "./mvnw verify formatter:format"
     ]
   },
   "patchedDependencies": {
