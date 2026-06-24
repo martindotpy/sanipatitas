@@ -101,7 +101,7 @@
   --sidebar-border: oklch(0.92 0.004 286.32);
   --sidebar-ring: oklch(0.705 0.015 286.067);
 
-  --header-height: cal
+  --header-height: cal;
 }
 
 .dark {
@@ -143,6 +143,10 @@
     @apply border-border outline-ring/50 selection:bg-accent/90 selection:text-accent-foreground;
     scrollbar-width: thin;
     scrollbar-color: var(--muted) transparent;
+  }
+
+  *:focus-visible {
+    @apply outline-ring outline-2 outline-offset-2;
   }
 
   [data-tauri-frame-tb] {
