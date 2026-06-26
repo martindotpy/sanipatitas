@@ -36,10 +36,10 @@ function PrivateLayout() {
     <>
       <HomeHeader />
 
-      <div className="flex flex-1">
+      <div className="bg-sidebar flex max-w-dvw min-w-0 flex-1">
         <HomeSidebar />
 
-        <SidebarInset className="border-t">
+        <SidebarInset className="min-w-0 rounded-tl-sm border-t border-l">
           <Outlet />
         </SidebarInset>
       </div>

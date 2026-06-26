@@ -10,6 +10,7 @@ import {
 } from "@sanipatitas/ui/components/ui/input-group"
 import { Textarea } from "@sanipatitas/ui/components/ui/textarea"
 import type { ClassNameProp } from "@sanipatitas/ui/kit/component-kit"
+import { cn } from "@sanipatitas/ui/lib/tailwind"
 import {
   Controller,
   type FieldPath,
@@ -60,7 +61,7 @@ export function ControlledTextarea<
           <InputGroup>
             <InputGroupTextarea
               id={name}
-              className={textareaClassName}
+              className={cn("max-h-32", textareaClassName)}
               aria-invalid={fieldState.invalid}
               {...field}
               {...textareaProps}

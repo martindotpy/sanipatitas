@@ -18,7 +18,7 @@ function BreedComponent() {
   }, [])
 
   return (
-    <div className={cn("flex flex-1 p-4", "gap-4 max-md:flex-col")}>
+    <div className={cn("flex min-w-0 flex-1 p-5", "gap-4 max-md:flex-col")}>
       <SpeciesSection />
 
       <Separator orientation="vertical" className="max-md:hidden" />
