@@ -17,7 +17,7 @@ COPY assets/ assets/
 
 # Typescript and dependencies
 COPY patches/ patches/
-COPY package.json bun.lock tsconfig.base.json ./
+COPY package.json bun.lock bunfig.toml tsconfig.base.json ./
 COPY database/package.json ./database/package.json
 COPY services/auth/package.json ./services/auth/package.json
 COPY shared/typescript/package.json ./shared/typescript/package.json

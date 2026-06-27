@@ -4,7 +4,7 @@
   "private": true,
   "dependencies": {
     "@base-ui/react": "1.6.0",
-    "@lottiefiles/dotlottie-react": "0.19.4",
+    "@lottiefiles/dotlottie-react": "0.19.5",
     "@resvg/resvg-js": "2.6.2",
     "@tanstack/react-router": "1.170.16",
     "@tanstack/react-table": "8.21.3",
