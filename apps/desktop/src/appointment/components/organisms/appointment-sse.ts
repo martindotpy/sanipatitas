@@ -1,30 +1,49 @@
+import { useJwt } from "@sanipatitas/desktop/auth/store/jwt-store"
 import { client } from "@sanipatitas/shared/api/client/client.gen"
 import { useQueryClient } from "@tanstack/react-query"
 import { useEffect, useRef } from "react"
 
-// Hook
 export function useAppointmentSSE() {
+  const token = useJwt()
   const queryClient = useQueryClient()
-  const esRef = useRef<EventSource | null>(null)
+  const abortRef = useRef<AbortController | null>(null)
 
   useEffect(() => {
-    const baseUrl = client.getConfig().baseUrl ?? ""
-    const url = `${baseUrl}/api/appointment/events`
-    const es = new EventSource(url)
+    if (!token) return
 
-    esRef.current = es
+    const controller = new AbortController()
+    abortRef.current = controller
 
-    es.addEventListener("message", () => {
-      queryClient.invalidateQueries({ queryKey: ["getApiAppointment"] })
-    })
+    let cancelled = false
 
-    es.addEventListener("error", () => {
-      // EventSource auto-reconnects
-    })
+    const start = async () => {
+      const { stream } = await client.sse.get({
+        url: "/api/appointment/events",
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+        signal: controller.signal,
+        onSseError: (error) => {
+          console.error("SSE error:", error)
+        },
+      })
+
+      try {
+        for await (const _event of stream) {
+          if (cancelled) break
+          queryClient.invalidateQueries({ queryKey: ["getApiAppointment"] })
+        }
+      } catch (error) {
+        if (!cancelled) console.error("SSE stream error:", error)
+      }
+    }
+
+    start()
 
     return () => {
-      es.close()
-      esRef.current = null
+      cancelled = true
+      controller.abort()
+      abortRef.current = null
     }
-  }, [queryClient])
+  }, [queryClient, token])
 }
