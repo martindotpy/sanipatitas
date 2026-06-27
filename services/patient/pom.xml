@@ -73,6 +73,12 @@
             <artifactId>quarkus-reactive-pg-client</artifactId>
         </dependency>
 
+        <!-- JDBC para Envers -->
+        <dependency>
+            <groupId>io.quarkus</groupId>
+            <artifactId>quarkus-jdbc-postgresql</artifactId>
+        </dependency>
+
         <!-- Redis -->
         <dependency>
             <groupId>io.quarkus</groupId>

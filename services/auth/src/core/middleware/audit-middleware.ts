@@ -4,18 +4,19 @@ import Elysia from "elysia"
 
 // Types
 type AuditLogEntry = {
-  audit_when: string
-  audit_service: string
-  audit_correlation_id: string
-  audit_who: string
-  audit_role: string
-  audit_action: string
-  audit_resource_type: string
-  audit_resource_id: string | null
-  audit_method: string
-  audit_path: string
-  audit_status: string
-  audit_duration_ms: string
+  type: string
+  when: string
+  service: string
+  correlationId: string
+  who: string
+  role: string
+  action: string
+  resourceType: string
+  resourceId: string | null
+  method: string
+  path: string
+  status: string
+  durationMs: string
 }
 
 type JwtPayload = {
@@ -45,18 +46,19 @@ export const auditMiddleware = new Elysia({ name: "audit-middleware" })
       const url = new URL(request.url)
       const payload = getJwtPayload(request)
       const entry: AuditLogEntry = {
-        audit_when: new Date().toISOString(),
-        audit_service: "auth",
-        audit_correlation_id: auditCorrelationId,
-        audit_who: payload.sub ?? "anonymous",
-        audit_role: payload.group ?? payload.role ?? "unknown",
-        audit_action: actionFromMethod(request.method),
-        audit_resource_type: resourceTypeFromPath(url.pathname),
-        audit_resource_id: resourceIdFromPath(url.pathname),
-        audit_method: request.method,
-        audit_path: url.pathname,
-        audit_status: String(set.status),
-        audit_duration_ms: String(Date.now() - auditStartedAt),
+        type: "audit",
+        when: new Date().toISOString(),
+        service: "auth",
+        correlationId: auditCorrelationId,
+        who: payload.sub ?? "anonymous",
+        role: payload.group ?? payload.role ?? "unknown",
+        action: actionFromMethod(request.method),
+        resourceType: resourceTypeFromPath(url.pathname),
+        resourceId: resourceIdFromPath(url.pathname),
+        method: request.method,
+        path: url.pathname,
+        status: String(set.status),
+        durationMs: String(Date.now() - auditStartedAt),
       }
 
       set.headers["X-Correlation-Id"] = auditCorrelationId

@@ -39,7 +39,7 @@ function createLokiTransport() {
         body: JSON.stringify({
           streams: [
             {
-              stream: { service: serviceName, environment: nodeEnv },
+              stream: { service: serviceName, level: "info", environment: nodeEnv },
               values,
             },
           ],

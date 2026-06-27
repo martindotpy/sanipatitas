@@ -56,6 +56,7 @@ public class AuditLogFilter implements ContainerRequestFilter, ContainerResponse
         responseContext.getHeaders().putSingle("X-Correlation-Id", correlationId);
 
         AuditLogEntry entry = new AuditLogEntry(
+                "audit",
                 Instant.now().toString(),
                 serviceName,
                 correlationId,
@@ -175,6 +176,7 @@ public class AuditLogFilter implements ContainerRequestFilter, ContainerResponse
     }
 
     private record AuditLogEntry(
+            String type,
             String when,
             String service,
             String correlationId,

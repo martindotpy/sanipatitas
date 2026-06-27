@@ -37,22 +37,24 @@ Levantados con `docker compose up`. Accesibles en:
 
 Los dashboards se importan automaticamente desde `docker/grafana/provisioning/dashboards/`. La provision se monta en `/var/lib/grafana/provisioning` (path writable) via `GF_PATHS_PROVISIONING`.
 
-**Quarkus**: `%prod.quarkus.log.console.json=true` produce JSON que Docker puede enviar a Loki via el driver `loki`.
-**Auth (Elysia/Bun)**: Pino emite JSON a stdout. Con `LOKI_ENABLED=true` y `LOKI_URL=http://loki:3100` se activa el transporte directo HTTP.
+**Todos los servicios envian logs directo a Loki via HTTP** (sin plugin de Docker ni sidecar):
 
-Para produccion, agregar a `docker-compose.yaml`:
+| Servicio | Mecanismo | Archivo |
+|---|---|---|
+| Auth (Elysia/Bun) | `loki-transport.ts` (Pino) | `shared/typescript/src/log/transport/loki-transport.ts` |
+| Patient (Quarkus) | `LokiLogHandler` (JUL) | `shared/java/.../audit/LokiLogHandler.java` |
+| Appointment (Quarkus) | `LokiLogHandler` (JUL) | `shared/java/.../audit/LokiLogHandler.java` |
+
+Variables de entorno requeridas por servicio:
 
 ```yaml
-logging:
-  driver: loki
-  options:
-    loki-url: "http://observability-loki:3100/loki/api/v1/push"
-    loki-external-labels: "service={{.Name}},environment=production"
+environment:
+  - LOKI_ENABLED=true
+  - LOKI_URL=http://observability-loki:3100
+  - SERVICE_NAME=patient   # o auth, appointment
 ```
 
-(Requiere el plugin Docker Loki: `docker plugin install grafana/loki-docker-driver:latest --alias loki --grant-all-permissions`)
-
-En desarrollo, Loki y Grafana se levantan con `docker compose up` y los logs son accesibles en `http://localhost:3001` (Grafana con Loki como datasource).
+`LokiLogHandler` se registra automaticamente via `LokiLogSetup` (`@Observes @Initialized(ApplicationScoped.class)`) en el root JUL logger. Bufferea logs en lotes de 100 y los envia async con `java.net.http.HttpClient`. Si `LOKI_ENABLED` no es `true`, no se activa (cero overhead).
 
 ## BPM
 

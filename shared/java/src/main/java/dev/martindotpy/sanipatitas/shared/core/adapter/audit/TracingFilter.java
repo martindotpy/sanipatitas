@@ -17,8 +17,6 @@ import org.slf4j.MDC;
 
 import com.github.f4b6a3.uuid.UuidCreator;
 
-// Setea correlation_id, who y role en MDC al inicio de cada request
-// Los limpia al final. Asi TODOS los logs del request tienen contexto.
 @Provider
 @ApplicationScoped
 @Priority(Priorities.AUTHENTICATION + 100)
@@ -35,25 +33,34 @@ public class TracingFilter implements ContainerRequestFilter, ContainerResponseF
             correlationId = UuidCreator.getTimeOrderedEpoch().toString();
         }
 
+        // Store property first (even if user/role resolution fails later)
         requestContext.setProperty("sanipatitas.correlation-id", correlationId);
-
         MDC.put("correlation_id", correlationId);
-        MDC.put("who", currentUser());
-        MDC.put("role", currentRole());
+
+        try {
+            MDC.put("who", resolveUser());
+            MDC.put("role", resolveRole());
+        } catch (Exception e) {
+            MDC.put("who", "anonymous");
+            MDC.put("role", "unknown");
+        }
     }
 
     @Override
     public void filter(ContainerRequestContext requestContext, ContainerResponseContext responseContext)
             throws IOException {
-        responseContext.getHeaders().putSingle("X-Correlation-Id",
-                requestContext.getProperty("sanipatitas.correlation-id").toString());
+        Object correlationId = requestContext.getProperty("sanipatitas.correlation-id");
+
+        if (correlationId != null) {
+            responseContext.getHeaders().putSingle("X-Correlation-Id", correlationId.toString());
+        }
 
         MDC.remove("correlation_id");
         MDC.remove("who");
         MDC.remove("role");
     }
 
-    private String currentUser() {
+    private String resolveUser() {
         try {
             String subject = token.getSubject();
 
@@ -62,12 +69,12 @@ public class TracingFilter implements ContainerRequestFilter, ContainerResponseF
             }
 
             return subject;
-        } catch (RuntimeException exception) {
+        } catch (Exception e) {
             return "anonymous";
         }
     }
 
-    private String currentRole() {
+    private String resolveRole() {
         try {
             Object role = token.getClaim("role");
 
@@ -76,7 +83,7 @@ public class TracingFilter implements ContainerRequestFilter, ContainerResponseF
             }
 
             return role.toString();
-        } catch (RuntimeException exception) {
+        } catch (Exception e) {
             return "unknown";
         }
     }

@@ -11,6 +11,7 @@ import jakarta.validation.constraints.NotNull;
 
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
+import org.hibernate.envers.Audited;
 import org.jspecify.annotations.Nullable;
 
 import dev.martindotpy.sanipatitas.shared.core.domain.model.EntityWithUuidV7;
@@ -23,6 +24,7 @@ import lombok.experimental.SuperBuilder;
 @Getter
 @Setter
 @Entity
+@Audited
 @SuperBuilder
 @NoArgsConstructor
 @AllArgsConstructor
