@@ -43,6 +43,13 @@
       "command": "bun run api:generate",
       "cwd": "${workspaceFolder}/shared/typescript",
       "internalConsoleOptions": "neverOpen"
+    },
+    {
+      "type": "chrome",
+      "name": "Sanipatitas (web) 🐞",
+      "request": "launch",
+      "url": "http://localhost:1420",
+      "webRoot": "${workspaceFolder}/apps/desktop"
     }
   ],
   "compounds": [

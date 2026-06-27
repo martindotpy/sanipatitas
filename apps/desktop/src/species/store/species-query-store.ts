@@ -1,12 +1,15 @@
-import type { GetApiSpeciesData } from "@sanipatitas/shared/api/client/types.gen"
 import { useStore } from "@nanostores/react"
+import type { GetApiSpeciesData } from "@sanipatitas/shared/api/client/types.gen"
 import { atom } from "nanostores"
 
 // Store
-export const $speciesQuery = atom<NonNullable<GetApiSpeciesData["query"]>>({
+export const $speciesQuery = atom<
+  Omit<Required<NonNullable<GetApiSpeciesData["query"]>>, "search"> & {
+    search?: string
+  }
+>({
   page: 0,
-  search: "",
-  size: 10,
+  size: 20,
 })
 
 // Hook

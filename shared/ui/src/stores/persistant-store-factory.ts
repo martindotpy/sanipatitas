@@ -1,7 +1,7 @@
 import { persistentJSON } from "@nanostores/persistent"
 import { useStore } from "@nanostores/react"
 import { type WritableAtom } from "nanostores"
-import { useCallback } from "react"
+import { useCallback, useMemo } from "react"
 
 // Cache
 const cache = new Map<string, WritableAtom<unknown>>()
@@ -24,17 +24,23 @@ export function usePersistentState<T>(
   key: string,
   initialValue: T | (() => T)
 ): [T, (next: T | ((prev: T) => T)) => void] {
-  // Init value
-  const resolvedInitialValue =
-    typeof initialValue === "function"
-      ? (initialValue as () => T)()
-      : initialValue
-
   // Store
-  const $store = getOrCreateStore(key, resolvedInitialValue)
+  const $store = useMemo(() => {
+    const resolvedInitialValue =
+      typeof initialValue === "function"
+        ? (initialValue as () => T)()
+        : initialValue
 
-  // State
+      console.log("Rerendering")
+
+    return getOrCreateStore(key, resolvedInitialValue)
+    // eslint-disable-next-line react-compiler/react-compiler
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [key])
+
+  // Value
   const value = useStore($store)
+
   const setValue = useCallback(
     (next: T | ((prev: T) => T)) => {
       const resolved =
