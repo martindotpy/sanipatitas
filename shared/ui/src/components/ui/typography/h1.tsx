@@ -1,14 +1,16 @@
-import type { ReactNode } from "react"
+import { cn } from "@sanipatitas/ui/lib/tailwind"
 
 // Component
-interface H1Props {
-  children: ReactNode
-}
+type H1Props = React.ComponentProps<"h1">
 
-export function H1({ children }: H1Props) {
+export function H1({ className, ...props }: H1Props) {
   return (
-    <h1 className="scroll-m-20 text-center text-4xl font-extrabold tracking-tight text-balance">
-      {children}
-    </h1>
+    <h1
+      className={cn(
+        "scroll-m-20 text-center text-4xl font-extrabold tracking-tight text-balance",
+        className
+      )}
+      {...props}
+    />
   )
 }
