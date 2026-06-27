@@ -19,6 +19,7 @@ import { Route as PrivatePatientRouteImport } from "./routes/_private/patient"
 import { Route as PrivateClientRouteImport } from "./routes/_private/client"
 import { Route as PrivateBreedRouteImport } from "./routes/_private/breed"
 import { Route as PrivateAppointmentRouteImport } from "./routes/_private/appointment"
+import { Route as PrivatePatientUuidRouteImport } from "./routes/_private/patient.$uuid"
 
 const PublicRouteRoute = PublicRouteRouteImport.update({
   id: "/_public",
@@ -68,26 +69,33 @@ const PrivateAppointmentRoute = PrivateAppointmentRouteImport.update({
   path: "/appointment",
   getParentRoute: () => PrivateRouteRoute,
 } as any)
+const PrivatePatientUuidRoute = PrivatePatientUuidRouteImport.update({
+  id: "/$uuid",
+  path: "/$uuid",
+  getParentRoute: () => PrivatePatientRoute,
+} as any)
 
 export interface FileRoutesByFullPath {
   "/": typeof PrivateIndexRoute
   "/appointment": typeof PrivateAppointmentRoute
   "/breed": typeof PrivateBreedRoute
   "/client": typeof PrivateClientRoute
-  "/patient": typeof PrivatePatientRoute
+  "/patient": typeof PrivatePatientRouteWithChildren
   "/profile": typeof PrivateProfileRoute
   "/species": typeof PrivateSpeciesRoute
   "/sign-in": typeof PublicSignInRoute
+  "/patient/$uuid": typeof PrivatePatientUuidRoute
 }
 export interface FileRoutesByTo {
   "/": typeof PrivateIndexRoute
   "/appointment": typeof PrivateAppointmentRoute
   "/breed": typeof PrivateBreedRoute
   "/client": typeof PrivateClientRoute
-  "/patient": typeof PrivatePatientRoute
+  "/patient": typeof PrivatePatientRouteWithChildren
   "/profile": typeof PrivateProfileRoute
   "/species": typeof PrivateSpeciesRoute
   "/sign-in": typeof PublicSignInRoute
+  "/patient/$uuid": typeof PrivatePatientUuidRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -96,11 +104,12 @@ export interface FileRoutesById {
   "/_private/appointment": typeof PrivateAppointmentRoute
   "/_private/breed": typeof PrivateBreedRoute
   "/_private/client": typeof PrivateClientRoute
-  "/_private/patient": typeof PrivatePatientRoute
+  "/_private/patient": typeof PrivatePatientRouteWithChildren
   "/_private/profile": typeof PrivateProfileRoute
   "/_private/species": typeof PrivateSpeciesRoute
   "/_public/sign-in": typeof PublicSignInRoute
   "/_private/": typeof PrivateIndexRoute
+  "/_private/patient/$uuid": typeof PrivatePatientUuidRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -113,6 +122,7 @@ export interface FileRouteTypes {
     | "/profile"
     | "/species"
     | "/sign-in"
+    | "/patient/$uuid"
   fileRoutesByTo: FileRoutesByTo
   to:
     | "/"
@@ -123,6 +133,7 @@ export interface FileRouteTypes {
     | "/profile"
     | "/species"
     | "/sign-in"
+    | "/patient/$uuid"
   id:
     | "__root__"
     | "/_private"
@@ -135,6 +146,7 @@ export interface FileRouteTypes {
     | "/_private/species"
     | "/_public/sign-in"
     | "/_private/"
+    | "/_private/patient/$uuid"
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -214,14 +226,33 @@ declare module "@tanstack/react-router" {
       preLoaderRoute: typeof PrivateAppointmentRouteImport
       parentRoute: typeof PrivateRouteRoute
     }
+    "/_private/patient/$uuid": {
+      id: "/_private/patient/$uuid"
+      path: "/$uuid"
+      fullPath: "/patient/$uuid"
+      preLoaderRoute: typeof PrivatePatientUuidRouteImport
+      parentRoute: typeof PrivatePatientRoute
+    }
   }
 }
+
+interface PrivatePatientRouteChildren {
+  PrivatePatientUuidRoute: typeof PrivatePatientUuidRoute
+}
+
+const PrivatePatientRouteChildren: PrivatePatientRouteChildren = {
+  PrivatePatientUuidRoute: PrivatePatientUuidRoute,
+}
+
+const PrivatePatientRouteWithChildren = PrivatePatientRoute._addFileChildren(
+  PrivatePatientRouteChildren,
+)
 
 interface PrivateRouteRouteChildren {
   PrivateAppointmentRoute: typeof PrivateAppointmentRoute
   PrivateBreedRoute: typeof PrivateBreedRoute
   PrivateClientRoute: typeof PrivateClientRoute
-  PrivatePatientRoute: typeof PrivatePatientRoute
+  PrivatePatientRoute: typeof PrivatePatientRouteWithChildren
   PrivateProfileRoute: typeof PrivateProfileRoute
   PrivateSpeciesRoute: typeof PrivateSpeciesRoute
   PrivateIndexRoute: typeof PrivateIndexRoute
@@ -231,7 +262,7 @@ const PrivateRouteRouteChildren: PrivateRouteRouteChildren = {
   PrivateAppointmentRoute: PrivateAppointmentRoute,
   PrivateBreedRoute: PrivateBreedRoute,
   PrivateClientRoute: PrivateClientRoute,
-  PrivatePatientRoute: PrivatePatientRoute,
+  PrivatePatientRoute: PrivatePatientRouteWithChildren,
   PrivateProfileRoute: PrivateProfileRoute,
   PrivateSpeciesRoute: PrivateSpeciesRoute,
   PrivateIndexRoute: PrivateIndexRoute,

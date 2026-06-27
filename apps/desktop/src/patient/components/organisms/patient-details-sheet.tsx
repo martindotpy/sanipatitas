@@ -1,4 +1,5 @@
 import type { OpenapiPatientDto } from "@sanipatitas/shared/api/client/types.gen"
+import { SanipatitasQR } from "@sanipatitas/desktop/core/components/atoms/sanipatitas-qr"
 import { Separator } from "@sanipatitas/ui/components/ui/separator"
 import {
   Sheet,
@@ -34,6 +35,8 @@ export function PatientDetailsSheet({
         <SheetHeader>
           <SheetTitle>{patient?.name ?? "Detalles"}</SheetTitle>
         </SheetHeader>
+
+        {patient && <SanipatitasQR uuid={patient.id} />}
 
         {patient && (
           <div className="flex flex-col gap-4 px-4">
