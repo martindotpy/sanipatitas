@@ -39,7 +39,7 @@ function PrivateLayout() {
       <div className="bg-sidebar flex max-w-dvw min-w-0 flex-1">
         <HomeSidebar />
 
-        <SidebarInset className="min-w-0 rounded-tl-sm border-t border-l">
+        <SidebarInset className="mt-header-h max-h-main-h max-w-full min-w-0 overflow-y-scroll rounded-tl-sm border-t border-l">
           <Outlet />
         </SidebarInset>
       </div>
