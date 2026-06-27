@@ -1,0 +1,77 @@
+import { useClient } from "@sanipatitas/desktop/client/hook/use-client"
+import { deleteApiClientById } from "@sanipatitas/shared/api/client/sdk.gen"
+import type { OpenapiClientDto } from "@sanipatitas/shared/api/client/types.gen"
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from "@sanipatitas/ui/components/ui/alert-dialog"
+import { useMutation } from "@tanstack/react-query"
+
+interface DeleteClientAlertProps {
+  clients: OpenapiClientDto[]
+  open: boolean
+  onOpenChange: (open: boolean) => void
+  onSuccess?: () => void
+}
+
+export function DeleteClientAlert({
+  clients,
+  open,
+  onOpenChange,
+  onSuccess,
+}: DeleteClientAlertProps) {
+  const clientQuery = useClient()
+
+  const deleteMutation = useMutation({
+    mutationFn: async (ids: string[]) => {
+      await Promise.all(
+        ids.map((id) => deleteApiClientById({ path: { id } }))
+      )
+    },
+    onSuccess: () => {
+      clientQuery.refetch()
+      onOpenChange(false)
+      onSuccess?.()
+    },
+  })
+
+  const isSingle = clients.length === 1
+  const clientName = isSingle
+    ? `${clients[0]?.firstName} ${clients[0]?.lastName}`
+    : ""
+
+  return (
+    <AlertDialog open={open} onOpenChange={onOpenChange}>
+      <AlertDialogContent size="sm">
+        <AlertDialogHeader>
+          <AlertDialogTitle>
+            Eliminar {isSingle ? "cliente" : "clientes"}
+          </AlertDialogTitle>
+          <AlertDialogDescription>
+            {isSingle
+              ? `¿Estás seguro de que deseas eliminar "${clientName}"? Esta acción no se puede deshacer.`
+              : `¿Estás seguro de que deseas eliminar ${clients.length} clientes? Esta acción no se puede deshacer.`}
+          </AlertDialogDescription>
+        </AlertDialogHeader>
+
+        <AlertDialogFooter>
+          <AlertDialogCancel>Cancelar</AlertDialogCancel>
+          <AlertDialogAction
+            variant="destructive"
+            onClick={() =>
+              deleteMutation.mutate(clients.map((c) => c.id))
+            }
+          >
+            {deleteMutation.isPending ? "Eliminando..." : "Eliminar"}
+          </AlertDialogAction>
+        </AlertDialogFooter>
+      </AlertDialogContent>
+    </AlertDialog>
+  )
+}

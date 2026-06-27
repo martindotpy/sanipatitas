@@ -1,3 +1,4 @@
+import { ClientSection } from "@sanipatitas/desktop/client/components/sections/client-section"
 import { $title } from "@sanipatitas/desktop/home/store/title-store"
 import { createFileRoute } from "@tanstack/react-router"
 import { useEffect } from "react"
@@ -13,5 +14,5 @@ function ClientComponent() {
     $title.set("Clientes")
   }, [])
 
-  return <></>
+  return <ClientSection />
 }
