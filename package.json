@@ -18,26 +18,26 @@
   },
   "devDependencies": {
     "@eslint/js": "9.39.4",
-    "@tanstack/eslint-plugin-query": "5.101.1",
+    "@tanstack/eslint-plugin-query": "5.101.0",
     "@tanstack/eslint-plugin-router": "1.162.0",
-    "@typescript-eslint/parser": "8.62.0",
+    "@typescript-eslint/parser": "8.61.1",
     "eslint": "9.39.4",
     "eslint-config-prettier": "10.1.8",
-    "eslint-plugin-astro": "2.1.1",
+    "eslint-plugin-astro": "1.7.0",
     "eslint-plugin-drizzle": "0.2.3",
     "eslint-plugin-react": "7.37.5",
     "eslint-plugin-react-compiler": "19.1.0-rc.2",
     "eslint-plugin-react-hooks": "7.0.0",
     "eslint-plugin-react-refresh": "0.5.3",
     "husky": "9.1.7",
-    "lint-staged": "17.0.8",
+    "lint-staged": "17.0.7",
     "prettier": "3.8.4",
     "prettier-plugin-astro": "0.14.1",
     "prettier-plugin-astro-organize-imports": "0.4.12",
     "prettier-plugin-organize-imports": "4.3.0",
     "prettier-plugin-tailwindcss": "0.8.0",
     "shadcn": "4.11.0",
-    "typescript-eslint": "8.62.0"
+    "typescript-eslint": "8.61.1"
   },
   "peerDependencies": {
     "typescript": "^6"
