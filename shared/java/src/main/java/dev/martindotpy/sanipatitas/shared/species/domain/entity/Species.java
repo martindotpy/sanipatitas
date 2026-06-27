@@ -5,6 +5,7 @@ import jakarta.persistence.Entity;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 
+import org.hibernate.envers.Audited;
 import org.jspecify.annotations.Nullable;
 
 import dev.martindotpy.sanipatitas.shared.core.domain.model.EntityWithUuidV7;
@@ -17,6 +18,7 @@ import lombok.experimental.SuperBuilder;
 @Getter
 @Setter
 @Entity
+@Audited
 @SuperBuilder
 @NoArgsConstructor
 @AllArgsConstructor

@@ -157,5 +157,35 @@ services:
     ports:
       - "5540:5540"
 
+  # Observability
+  # - Loki (log aggregation)
+  observability-loki:
+    image: grafana/loki:latest
+    container_name: sanipatitas-loki
+    volumes:
+      - ./docker/loki/loki-config.yaml:/etc/loki/local-config.yaml:ro
+      - sanipatitas-loki-data:/loki
+    ports:
+      - "3100:3100"
+    command: -config.file=/etc/loki/local-config.yaml
+
+  # - Grafana (log visualization)
+  observability-grafana:
+    image: grafana/grafana:latest
+    container_name: sanipatitas-grafana
+    environment:
+      GF_AUTH_ANONYMOUS_ENABLED: "true"
+      GF_AUTH_ANONYMOUS_ORG_ROLE: Admin
+      GF_PATHS_PROVISIONING: /var/lib/grafana/provisioning
+    volumes:
+      - sanipatitas-grafana-data:/var/lib/grafana
+      - ./docker/grafana/provisioning:/var/lib/grafana/provisioning:ro
+    ports:
+      - "3001:3000"
+    depends_on:
+      - observability-loki
+
 volumes:
   sanipatitas-sql-studio-data:
+  sanipatitas-loki-data:
+  sanipatitas-grafana-data:

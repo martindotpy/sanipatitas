@@ -39,6 +39,12 @@
             <artifactId>quarkus-smallrye-openapi</artifactId>
         </dependency>
 
+        <!-- JWT -->
+        <dependency>
+            <groupId>io.quarkus</groupId>
+            <artifactId>quarkus-smallrye-jwt</artifactId>
+        </dependency>
+
         <!-- Test -->
         <dependency>
             <groupId>io.quarkus</groupId>

@@ -6,6 +6,8 @@ import { initializeApp } from "@sanipatitas/auth/core/initializer"
 import { openapiMiddleware } from "@sanipatitas/auth/core/middleware/openapi-middleware"
 import { isDev } from "@sanipatitas/shared/app-context"
 import { serverLog } from "@sanipatitas/shared/log/server-logger"
+import { auditMiddleware } from "@sanipatitas/auth/core/middleware/audit-middleware"
+import { tracingMiddleware } from "@sanipatitas/auth/core/middleware/tracing-middleware"
 import { loggerMiddleware } from "@sanipatitas/shared/middleware/logger-middleware"
 import Elysia from "elysia"
 
@@ -24,7 +26,9 @@ export const api = new Elysia({ aot: true, precompile: true })
       maxAge: 3600,
     })
   )
+  .use(tracingMiddleware)
   .use(loggerMiddleware)
+  .use(auditMiddleware)
   .use(openapiMiddleware)
   .use(miscellaneousController)
   .use(authController)

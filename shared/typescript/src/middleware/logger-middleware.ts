@@ -10,11 +10,17 @@ export type Logger = ElysiaLogger
 
 // Configuration
 const loggerConfiguration: ElysiaLoggerOptions = {
-  customProps({ request: { headers } }) {
-    // Ip
-    const ip = headers.get("x-real-ip") || undefined
+  customProps(ctx) {
+    const ip = ctx.request.headers.get("x-real-ip") || undefined
+    const store = (ctx as Record<string, unknown>).store as
+      | Record<string, unknown>
+      | undefined
+    const correlationId =
+      (store?.correlationId as string) ||
+      ctx.request.headers.get("x-correlation-id") ||
+      undefined
 
-    return { ip }
+    return { ip, correlationId }
   },
 }
 

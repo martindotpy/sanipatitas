@@ -26,7 +26,7 @@ export function SanipatitasQR({ uuid }: { uuid: string }) {
       data: deepLinkUrl,
       image: logoUrl,
       dotsOptions: { type: "dots", color: "#000000" },
-      cornersSquareOptions: { type: "extra-rounded", color: "#000000" },
+      cornersSquareOptions: { type: "square", color: "#000000" },
       cornersDotOptions: { type: "dot", color: "#000000" },
       imageOptions: { crossOrigin: "anonymous", margin: 6, imageSize: 0.45 },
     })

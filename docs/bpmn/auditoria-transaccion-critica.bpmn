@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" xmlns:camunda="http://camunda.org/schema/1.0/bpmn" id="Definitions_AuditoriaTransaccionCritica" targetNamespace="https://sanipatitas.dev/bpmn">
+  <bpmn:process id="auditoria_transaccion_critica" name="Auditoria de transaccion critica" isExecutable="true">
+    <bpmn:startEvent id="Start_CriticalTransaction" name="Transaccion critica recibida">
+      <bpmn:outgoing>Flow_Start_Normalize</bpmn:outgoing>
+    </bpmn:startEvent>
+    <bpmn:serviceTask id="Task_NormalizeAuditEvent" name="Normalizar evento de auditoria" camunda:type="external" camunda:topic="audit-normalize">
+      <bpmn:incoming>Flow_Start_Normalize</bpmn:incoming>
+      <bpmn:outgoing>Flow_Normalize_Validate</bpmn:outgoing>
+    </bpmn:serviceTask>
+    <bpmn:exclusiveGateway id="Gateway_AuditComplete" name="Datos completos?">
+      <bpmn:incoming>Flow_Normalize_Validate</bpmn:incoming>
+      <bpmn:outgoing>Flow_Complete_Persist</bpmn:outgoing>
+      <bpmn:outgoing>Flow_Incomplete_Review</bpmn:outgoing>
+    </bpmn:exclusiveGateway>
+    <bpmn:serviceTask id="Task_PersistAuditLog" name="Guardar log estructurado" camunda:type="external" camunda:topic="audit-persist">
+      <bpmn:incoming>Flow_Complete_Persist</bpmn:incoming>
+      <bpmn:outgoing>Flow_Persist_AlertGateway</bpmn:outgoing>
+    </bpmn:serviceTask>
+    <bpmn:userTask id="Task_ReviewIncompleteAudit" name="Revisar auditoria incompleta" camunda:candidateGroups="admin">
+      <bpmn:incoming>Flow_Incomplete_Review</bpmn:incoming>
+      <bpmn:outgoing>Flow_Review_Persist</bpmn:outgoing>
+    </bpmn:userTask>
+    <bpmn:exclusiveGateway id="Gateway_SecurityAlert" name="Requiere alerta?">
+      <bpmn:incoming>Flow_Persist_AlertGateway</bpmn:incoming>
+      <bpmn:incoming>Flow_Review_Persist</bpmn:incoming>
+      <bpmn:outgoing>Flow_Alert_Send</bpmn:outgoing>
+      <bpmn:outgoing>Flow_NoAlert_End</bpmn:outgoing>
+    </bpmn:exclusiveGateway>
+    <bpmn:serviceTask id="Task_SendSecurityAlert" name="Notificar alerta de seguridad" camunda:type="external" camunda:topic="security-alert">
+      <bpmn:incoming>Flow_Alert_Send</bpmn:incoming>
+      <bpmn:outgoing>Flow_Send_End</bpmn:outgoing>
+    </bpmn:serviceTask>
+    <bpmn:endEvent id="End_AuditStored" name="Auditoria registrada">
+      <bpmn:incoming>Flow_NoAlert_End</bpmn:incoming>
+      <bpmn:incoming>Flow_Send_End</bpmn:incoming>
+    </bpmn:endEvent>
+    <bpmn:sequenceFlow id="Flow_Start_Normalize" sourceRef="Start_CriticalTransaction" targetRef="Task_NormalizeAuditEvent" />
+    <bpmn:sequenceFlow id="Flow_Normalize_Validate" sourceRef="Task_NormalizeAuditEvent" targetRef="Gateway_AuditComplete" />
+    <bpmn:sequenceFlow id="Flow_Complete_Persist" name="Si" sourceRef="Gateway_AuditComplete" targetRef="Task_PersistAuditLog">
+      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">${complete == true}</bpmn:conditionExpression>
+    </bpmn:sequenceFlow>
+    <bpmn:sequenceFlow id="Flow_Incomplete_Review" name="No" sourceRef="Gateway_AuditComplete" targetRef="Task_ReviewIncompleteAudit">
+      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">${complete == false}</bpmn:conditionExpression>
+    </bpmn:sequenceFlow>
+    <bpmn:sequenceFlow id="Flow_Persist_AlertGateway" sourceRef="Task_PersistAuditLog" targetRef="Gateway_SecurityAlert" />
+    <bpmn:sequenceFlow id="Flow_Review_Persist" sourceRef="Task_ReviewIncompleteAudit" targetRef="Gateway_SecurityAlert" />
+    <bpmn:sequenceFlow id="Flow_Alert_Send" name="Si" sourceRef="Gateway_SecurityAlert" targetRef="Task_SendSecurityAlert">
+      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">${requiresAlert == true}</bpmn:conditionExpression>
+    </bpmn:sequenceFlow>
+    <bpmn:sequenceFlow id="Flow_NoAlert_End" name="No" sourceRef="Gateway_SecurityAlert" targetRef="End_AuditStored">
+      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">${requiresAlert == false}</bpmn:conditionExpression>
+    </bpmn:sequenceFlow>
+    <bpmn:sequenceFlow id="Flow_Send_End" sourceRef="Task_SendSecurityAlert" targetRef="End_AuditStored" />
+  </bpmn:process>
+  <bpmndi:BPMNDiagram id="BPMNDiagram_AuditoriaTransaccionCritica">
+    <bpmndi:BPMNPlane id="BPMNPlane_AuditoriaTransaccionCritica" bpmnElement="auditoria_transaccion_critica">
+      <bpmndi:BPMNShape id="Start_CriticalTransaction_di" bpmnElement="Start_CriticalTransaction"><dc:Bounds x="160" y="160" width="36" height="36" /></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Task_NormalizeAuditEvent_di" bpmnElement="Task_NormalizeAuditEvent"><dc:Bounds x="250" y="138" width="150" height="80" /></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Gateway_AuditComplete_di" bpmnElement="Gateway_AuditComplete" isMarkerVisible="true"><dc:Bounds x="455" y="153" width="50" height="50" /></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Task_PersistAuditLog_di" bpmnElement="Task_PersistAuditLog"><dc:Bounds x="560" y="138" width="150" height="80" /></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Task_ReviewIncompleteAudit_di" bpmnElement="Task_ReviewIncompleteAudit"><dc:Bounds x="560" y="270" width="150" height="80" /></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Gateway_SecurityAlert_di" bpmnElement="Gateway_SecurityAlert" isMarkerVisible="true"><dc:Bounds x="765" y="153" width="50" height="50" /></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Task_SendSecurityAlert_di" bpmnElement="Task_SendSecurityAlert"><dc:Bounds x="870" y="270" width="150" height="80" /></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="End_AuditStored_di" bpmnElement="End_AuditStored"><dc:Bounds x="1082" y="160" width="36" height="36" /></bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="Flow_Start_Normalize_di" bpmnElement="Flow_Start_Normalize"><di:waypoint x="196" y="178" /><di:waypoint x="250" y="178" /></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_Normalize_Validate_di" bpmnElement="Flow_Normalize_Validate"><di:waypoint x="400" y="178" /><di:waypoint x="455" y="178" /></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_Complete_Persist_di" bpmnElement="Flow_Complete_Persist"><di:waypoint x="505" y="178" /><di:waypoint x="560" y="178" /></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_Incomplete_Review_di" bpmnElement="Flow_Incomplete_Review"><di:waypoint x="480" y="203" /><di:waypoint x="480" y="310" /><di:waypoint x="560" y="310" /></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_Persist_AlertGateway_di" bpmnElement="Flow_Persist_AlertGateway"><di:waypoint x="710" y="178" /><di:waypoint x="765" y="178" /></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_Review_Persist_di" bpmnElement="Flow_Review_Persist"><di:waypoint x="710" y="310" /><di:waypoint x="790" y="310" /><di:waypoint x="790" y="203" /></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_Alert_Send_di" bpmnElement="Flow_Alert_Send"><di:waypoint x="790" y="203" /><di:waypoint x="790" y="310" /><di:waypoint x="870" y="310" /></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_NoAlert_End_di" bpmnElement="Flow_NoAlert_End"><di:waypoint x="815" y="178" /><di:waypoint x="1082" y="178" /></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_Send_End_di" bpmnElement="Flow_Send_End"><di:waypoint x="1020" y="310" /><di:waypoint x="1100" y="310" /><di:waypoint x="1100" y="196" /></bpmndi:BPMNEdge>
+    </bpmndi:BPMNPlane>
+  </bpmndi:BPMNDiagram>
+</bpmn:definitions>

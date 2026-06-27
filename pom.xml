@@ -79,6 +79,12 @@
             <artifactId>mapstruct</artifactId>
             <version>1.7.0.Beta1</version>
         </dependency>
+
+        <!-- Envers (solo anotaciones, sin extension JDBC de Quarkus) -->
+        <dependency>
+            <groupId>org.hibernate.orm</groupId>
+            <artifactId>hibernate-envers</artifactId>
+        </dependency>
     </dependencies>
 
     <build>
