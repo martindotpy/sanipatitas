@@ -4096,6 +4096,7 @@ export type GetApiBreedData = {
     page?: number
     search?: string
     size?: number
+    speciesId?: Array<string>
   }
   url: "/api/breed"
 }

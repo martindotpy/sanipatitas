@@ -1,8 +1,11 @@
 package dev.martindotpy.sanipatitas.breed.application.usecase;
 
+import java.util.List;
 import java.util.UUID;
 
 import jakarta.enterprise.context.ApplicationScoped;
+
+import org.jspecify.annotations.Nullable;
 
 import dev.martindotpy.sanipatitas.breed.application.mapper.BreedMapper;
 import dev.martindotpy.sanipatitas.shared.breed.application.dto.BreedDto;
@@ -24,12 +27,11 @@ public final class FindBreedUseCase implements FindBreedPort {
     private final BreedMapper breedMapper;
 
     @Override
-    public Uni<PageResult<BreedDto>> search(String search, int page, int size) {
+    public Uni<PageResult<BreedDto>> search(String search, int page, int size, @Nullable List<UUID> speciesIds) {
         var pagination = Page.of(page, size);
-        var hasSearch = search != null && !search.isBlank();
 
-        var breedQuery = hasSearch ? breedRepository.search(search, pagination) : breedRepository.findAll(pagination);
-        var breedCountQuery = hasSearch ? breedRepository.count(search) : breedRepository.count();
+        var breedQuery = breedRepository.findBySpecies(speciesIds, search, pagination);
+        var breedCountQuery = breedRepository.countBySpecies(speciesIds, search);
 
         return Uni.combine().all()
                 .unis(breedQuery, breedCountQuery)

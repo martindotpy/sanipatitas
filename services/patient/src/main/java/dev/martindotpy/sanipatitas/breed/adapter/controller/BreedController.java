@@ -1,5 +1,6 @@
 package dev.martindotpy.sanipatitas.breed.adapter.controller;
 
+import java.util.List;
 import java.util.UUID;
 
 import jakarta.validation.constraints.Min;
@@ -42,9 +43,10 @@ public class BreedController {
     @RolesAllowed({"admin", "veterinarian", "worker"})
     public Uni<PageResponse<BreedDto>> search(
             @RestQuery @Nullable String search,
+            @RestQuery @Nullable List<UUID> speciesId,
             @RestQuery @DefaultValue("0") @Min(0) int page,
             @RestQuery @DefaultValue("20") @Min(1) int size) {
-        return findBreedPort.search(search, page, size)
+        return findBreedPort.search(search, page, size, speciesId)
                 .map(PageResponse::from)
                 .map(response -> response
                         .message("Razas encontradas exitosamente")

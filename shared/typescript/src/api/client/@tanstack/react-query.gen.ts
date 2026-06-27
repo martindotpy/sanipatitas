@@ -1387,8 +1387,8 @@ export const openapiListUsersInfiniteQueryKey = (
  */
 export const openapiListUsersInfiniteOptions = (
   options?: Options<OpenapiListUsersData>
-) =>
-  infiniteQueryOptions<
+) => {
+  const opts = infiniteQueryOptions<
     OpenapiListUsersResponse,
     OpenapiListUsersError,
     InfiniteData<OpenapiListUsersResponse>,
@@ -1427,6 +1427,8 @@ export const openapiListUsersInfiniteOptions = (
       queryKey: openapiListUsersInfiniteQueryKey(options),
     }
   )
+  return opts as Omit<typeof opts, "initialData">
+}
 
 /**
  * List user sessions
@@ -1786,8 +1788,8 @@ export const getApiBreedInfiniteQueryKey = (
  */
 export const getApiBreedInfiniteOptions = (
   options?: Options<GetApiBreedData>
-) =>
-  infiniteQueryOptions<
+) => {
+  const opts = infiniteQueryOptions<
     GetApiBreedResponse,
     GetApiBreedError,
     InfiniteData<GetApiBreedResponse>,
@@ -1825,6 +1827,8 @@ export const getApiBreedInfiniteOptions = (
       queryKey: getApiBreedInfiniteQueryKey(options),
     }
   )
+  return opts as Omit<typeof opts, "initialData">
+}
 
 /**
  * Create
@@ -1968,8 +1972,8 @@ export const getApiClientInfiniteQueryKey = (
  */
 export const getApiClientInfiniteOptions = (
   options?: Options<GetApiClientData>
-) =>
-  infiniteQueryOptions<
+) => {
+  const opts = infiniteQueryOptions<
     GetApiClientResponse,
     GetApiClientError,
     InfiniteData<GetApiClientResponse>,
@@ -2007,6 +2011,8 @@ export const getApiClientInfiniteOptions = (
       queryKey: getApiClientInfiniteQueryKey(options),
     }
   )
+  return opts as Omit<typeof opts, "initialData">
+}
 
 /**
  * Create
@@ -2152,8 +2158,8 @@ export const getApiPatientInfiniteQueryKey = (
  */
 export const getApiPatientInfiniteOptions = (
   options?: Options<GetApiPatientData>
-) =>
-  infiniteQueryOptions<
+) => {
+  const opts = infiniteQueryOptions<
     GetApiPatientResponse,
     GetApiPatientError,
     InfiniteData<GetApiPatientResponse>,
@@ -2191,6 +2197,8 @@ export const getApiPatientInfiniteOptions = (
       queryKey: getApiPatientInfiniteQueryKey(options),
     }
   )
+  return opts as Omit<typeof opts, "initialData">
+}
 
 /**
  * Create
@@ -2336,8 +2344,8 @@ export const getApiSpeciesInfiniteQueryKey = (
  */
 export const getApiSpeciesInfiniteOptions = (
   options?: Options<GetApiSpeciesData>
-) =>
-  infiniteQueryOptions<
+) => {
+  const opts = infiniteQueryOptions<
     GetApiSpeciesResponse,
     GetApiSpeciesError,
     InfiniteData<GetApiSpeciesResponse>,
@@ -2375,6 +2383,8 @@ export const getApiSpeciesInfiniteOptions = (
       queryKey: getApiSpeciesInfiniteQueryKey(options),
     }
   )
+  return opts as Omit<typeof opts, "initialData">
+}
 
 /**
  * Create
@@ -2523,8 +2533,8 @@ export const getApiAppointmentInfiniteQueryKey = (
  */
 export const getApiAppointmentInfiniteOptions = (
   options?: Options<GetApiAppointmentData>
-) =>
-  infiniteQueryOptions<
+) => {
+  const opts = infiniteQueryOptions<
     GetApiAppointmentResponse,
     GetApiAppointmentError,
     InfiniteData<GetApiAppointmentResponse>,
@@ -2562,6 +2572,8 @@ export const getApiAppointmentInfiniteOptions = (
       queryKey: getApiAppointmentInfiniteQueryKey(options),
     }
   )
+  return opts as Omit<typeof opts, "initialData">
+}
 
 /**
  * Create

@@ -1341,6 +1341,15 @@ export const zGetApiBreedQuery = z.object({
     })
     .optional()
     .default(20),
+  speciesId: z
+    .array(
+      z
+        .uuid()
+        .regex(
+          /[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}/
+        )
+    )
+    .optional(),
 })
 
 /**
