@@ -19,9 +19,6 @@ export function useAppointmentSSE() {
     const start = async () => {
       const { stream } = await client.sse.get({
         url: "/api/appointment/events",
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
         signal: controller.signal,
         onSseError: (error) => {
           console.error("SSE error:", error)
@@ -31,7 +28,13 @@ export function useAppointmentSSE() {
       try {
         for await (const _event of stream) {
           if (cancelled) break
-          queryClient.invalidateQueries({ queryKey: ["getApiAppointment"] })
+
+          queryClient.invalidateQueries({
+            predicate: (query) => {
+              const key = query.queryKey[0] as { _id?: string } | undefined
+              return key?._id === "getApiAppointment"
+            },
+          })
         }
       } catch (error) {
         if (!cancelled) console.error("SSE stream error:", error)

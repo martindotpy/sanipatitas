@@ -57,10 +57,10 @@ function RootComponent() {
       }
     }
 
-    const unSuscribe = router.subscribe("onBeforeNavigate", handleRouteChange)
+    const unSubscribe = router.subscribe("onBeforeNavigate", handleRouteChange)
 
     return () => {
-      unSuscribe()
+      unSubscribe()
     }
   }, [router, sidebarOpenMobile, setSidebarOpenMobile])
 
