@@ -51,6 +51,9 @@ interface DataTableProps<TData> extends Omit<
   tableOptionsRender?: DataTableToolbarProps<TData>["tableOptionsRender"]
   loading?: boolean
   initialState: InitialState<TData>
+  selectionActionsRender?: (
+    table: ReturnType<typeof useReactTable<TData>>
+  ) => React.ReactNode
   onPaginationChange?: (pagination: PaginationState) => void
   onSortingChange?: (sorting: SortingState) => void
   onColumnFiltersChange?: (filters: ColumnFiltersState) => void
@@ -66,6 +69,7 @@ export function DataTable<TData>({
   onColumnFiltersChange,
   onColumnVisibilityChange,
   onRowSelectionChange,
+  selectionActionsRender,
   searchRender,
   tableOptionsRender,
   loading,
@@ -174,6 +178,8 @@ export function DataTable<TData>({
         tableOptionsRender={tableOptionsRender}
         hasOneColumnVisible={hasOneColumnVisible}
       />
+
+      {selectionActionsRender?.(table)}
 
       <div className="overflow-hidden rounded-md border">
         <Table>

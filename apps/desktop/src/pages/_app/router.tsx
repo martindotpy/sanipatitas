@@ -1,3 +1,4 @@
+import { DeepLink } from "@sanipatitas/desktop/core/components/atoms/deep-link"
 import { isDev } from "@sanipatitas/desktop/core/configuration/app-configuration"
 import {
   getTanstackQueryContext,
@@ -7,6 +8,7 @@ import { routeTree } from "@sanipatitas/desktop/pages/_app/routeTree.gen"
 import { ErrorMainSection } from "@sanipatitas/ui/components/organisms/error-main-section"
 import { NotFoundMainSection } from "@sanipatitas/ui/components/organisms/not-found-main-section"
 import { DefaultLoadingPage } from "@sanipatitas/ui/components/template/default-loading-page"
+import { SidebarProvider } from "@sanipatitas/ui/components/ui/sidebar"
 import { Toaster } from "@sanipatitas/ui/components/ui/sonner"
 import { TooltipProvider } from "@sanipatitas/ui/components/ui/tooltip"
 import { dehydrate, hydrate } from "@tanstack/react-query"
@@ -42,7 +44,12 @@ export function createAppRouter(astro?: AstroGlobal) {
           <TanstackQueryProvider {...tanstackQueryContext}>
             <TooltipProvider>
               <ThemeProvider attribute="class">
-                {children}
+                <DeepLink />
+
+                <SidebarProvider defaultOpen={false} className="flex flex-col">
+                  {children}
+                </SidebarProvider>
+
                 <Toaster />
               </ThemeProvider>
             </TooltipProvider>

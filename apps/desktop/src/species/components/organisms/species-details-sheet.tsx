@@ -1,11 +1,11 @@
+import type { OpenapiSpeciesDto } from "@sanipatitas/shared/api/client/types.gen"
+import { Separator } from "@sanipatitas/ui/components/ui/separator"
 import {
   Sheet,
   SheetContent,
   SheetHeader,
   SheetTitle,
 } from "@sanipatitas/ui/components/ui/sheet"
-import { Separator } from "@sanipatitas/ui/components/ui/separator"
-import type { OpenapiSpeciesDto } from "@sanipatitas/shared/api/client/types.gen"
 
 // Types
 interface SpeciesDetailsSheetProps {
@@ -22,7 +22,11 @@ export function SpeciesDetailsSheet({
 }: SpeciesDetailsSheetProps) {
   return (
     <Sheet open={open} onOpenChange={onOpenChange}>
-      <SheetContent side="right" showCloseButton>
+      <SheetContent
+        side="right"
+        showCloseButton
+        className="max-h-main-h mt-header-h"
+      >
         <SheetHeader>
           <SheetTitle>{species?.name ?? "Detalles"}</SheetTitle>
         </SheetHeader>
@@ -37,15 +41,21 @@ export function SpeciesDetailsSheet({
             <Separator />
 
             <div className="flex flex-col gap-1">
-              <p className="text-muted-foreground text-xs font-medium">Nombre</p>
+              <p className="text-muted-foreground text-xs font-medium">
+                Nombre
+              </p>
               <p className="text-sm">{species.name}</p>
             </div>
 
             <Separator />
 
             <div className="flex flex-col gap-1">
-              <p className="text-muted-foreground text-xs font-medium">Descripción</p>
-              <p className="text-sm">{species.description ?? "Sin descripción"}</p>
+              <p className="text-muted-foreground text-xs font-medium">
+                Descripción
+              </p>
+              <p className="text-sm">
+                {species.description ?? "Sin descripción"}
+              </p>
             </div>
           </div>
         )}
