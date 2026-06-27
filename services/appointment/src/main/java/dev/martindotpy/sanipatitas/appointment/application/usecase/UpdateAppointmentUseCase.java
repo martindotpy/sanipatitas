@@ -5,6 +5,8 @@ import java.util.UUID;
 import jakarta.enterprise.context.ApplicationScoped;
 
 import dev.martindotpy.sanipatitas.appointment.application.mapper.AppointmentMapper;
+import dev.martindotpy.sanipatitas.appointment.application.service.AppointmentEvent;
+import dev.martindotpy.sanipatitas.appointment.application.service.AppointmentEventService;
 import dev.martindotpy.sanipatitas.shared.appointment.application.dto.AppointmentDto;
 import dev.martindotpy.sanipatitas.shared.appointment.application.port.UpdateAppointmentPort;
 import dev.martindotpy.sanipatitas.shared.appointment.domain.error.AppointmentNotFoundException;
@@ -29,6 +31,7 @@ public class UpdateAppointmentUseCase implements UpdateAppointmentPort {
     private final ClientRepository clientRepository;
     private final UserRepository userRepository;
     private final AppointmentMapper appointmentMapper;
+    private final AppointmentEventService eventService;
 
     @Override
     public Uni<AppointmentDto> update(UUID id, UpdateAppointmentPayload payload) {
@@ -37,28 +40,26 @@ public class UpdateAppointmentUseCase implements UpdateAppointmentPort {
         var veterinarianId = payload.getVeterinarianId();
         var appointmentBuilder = appointmentMapper.from(id, payload);
 
-        var patientQuery = patientRepository.findById(patientId)
-                .onItem().ifNull().failWith(() -> new PatientNotFoundException(patientId));
-        var clientQuery = clientRepository.findById(clientId)
-                .onItem().ifNull().failWith(() -> new ClientNotFoundException(clientId));
-        var veterinarianQuery = userRepository.findById(veterinarianId)
-                .onItem().ifNull().failWith(() -> new UserNotFoundException(veterinarianId));
-        var appointmentQuery = appointmentRepository.findById(id)
-                .onItem().ifNull().failWith(() -> new AppointmentNotFoundException(id));
-
-        return Uni.combine().all()
-                .unis(patientQuery, clientQuery, veterinarianQuery, appointmentQuery)
-                .with((patient, client, veterinarian, _) -> {
-                    @SuppressWarnings("null")
-                    var appointment = appointmentBuilder
-                            .patient(patient)
-                            .client(client)
-                            .veterinarian(veterinarian)
-                            .build();
-
-                    return appointment;
-                })
+        return patientRepository.findById(patientId)
+                .onItem().ifNull().failWith(() -> new PatientNotFoundException(patientId))
+                .chain(patient -> clientRepository.findById(clientId)
+                        .onItem().ifNull().failWith(() -> new ClientNotFoundException(clientId))
+                        .chain(client -> userRepository.findById(veterinarianId)
+                                .onItem().ifNull().failWith(() -> new UserNotFoundException(veterinarianId))
+                                .chain(veterinarian -> appointmentRepository.findById(id)
+                                        .onItem().ifNull().failWith(() -> new AppointmentNotFoundException(id))
+                                        .map(_ -> {
+                                            @SuppressWarnings("null")
+                                            var appointment = appointmentBuilder
+                                                    .patient(patient)
+                                                    .client(client)
+                                                    .veterinarian(veterinarian)
+                                                    .build();
+                                            return appointment;
+                                        }))))
                 .chain(appointmentRepository::update)
+                .invoke(appointment -> eventService.publish(
+                        new AppointmentEvent(appointment.getId(), AppointmentEvent.Type.UPDATED)))
                 .map(appointmentMapper::toDto);
     }
 }

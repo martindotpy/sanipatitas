@@ -29,7 +29,7 @@ export function PatientDetailsSheet({
       <SheetContent
         side="right"
         showCloseButton
-        className="max-h-main-h mt-header-h"
+        className="max-h-main-h mt-header-h overflow-y-auto"
       >
         <SheetHeader>
           <SheetTitle>{patient?.name ?? "Detalles"}</SheetTitle>
@@ -38,7 +38,9 @@ export function PatientDetailsSheet({
         {patient && (
           <div className="flex flex-col gap-4 px-4">
             <div className="flex flex-col gap-1">
-              <p className="text-muted-foreground text-xs font-medium">ID</p>
+              <p className="text-muted-foreground text-xs font-medium">
+                Identificador
+              </p>
               <p className="text-sm break-all">{patient.id}</p>
             </div>
 
@@ -54,12 +56,10 @@ export function PatientDetailsSheet({
             <Separator />
 
             <div className="flex flex-col gap-1">
-              <p className="text-muted-foreground text-xs font-medium">
-                Sexo
-              </p>
+              <p className="text-muted-foreground text-xs font-medium">Sexo</p>
               <p className="text-sm">
                 {patient.gender
-                  ? GENDER_LABELS[patient.gender] ?? patient.gender
+                  ? (GENDER_LABELS[patient.gender] ?? patient.gender)
                   : "—"}
               </p>
             </div>
@@ -123,9 +123,7 @@ export function PatientDetailsSheet({
             <Separator />
 
             <div className="flex flex-col gap-1">
-              <p className="text-muted-foreground text-xs font-medium">
-                Dueño
-              </p>
+              <p className="text-muted-foreground text-xs font-medium">Dueño</p>
               <p className="text-sm">
                 {patient.client.firstName} {patient.client.lastName}
                 <span className="text-muted-foreground">

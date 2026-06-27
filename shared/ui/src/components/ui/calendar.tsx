@@ -28,7 +28,6 @@ import {
   type ReactNode,
   useCallback,
   useContext,
-  useEffect,
   useMemo,
   useState,
 } from "react"
@@ -274,7 +273,7 @@ export const CalendarBody = ({ features, children }: CalendarBodyProps) => {
         </div>
         {featuresForDay.length > 3 && (
           <span className="text-muted-foreground block text-xs">
-            +{featuresForDay.length - 3} more
+            +{featuresForDay.length - 3} más
           </span>
         )}
       </div>
@@ -343,11 +342,11 @@ export const CalendarMonthPicker = ({
     <Combobox
       className={className}
       data={monthData}
-      labels={{
-        button: "Select month",
-        empty: "No month found",
-        search: "Search month",
-      }}
+        labels={{
+          button: "Seleccionar mes",
+          empty: "No se encontró mes",
+          search: "Buscar mes",
+        }}
       setValue={(value) =>
         setMonth(Number.parseInt(value, 10) as CalendarState["month"])
       }
@@ -377,9 +376,9 @@ export const CalendarYearPicker = ({
         label: (start + i).toString(),
       }))}
       labels={{
-        button: "Select year",
-        empty: "No year found",
-        search: "Search year",
+        button: "Seleccionar año",
+        empty: "No se encontró año",
+        search: "Buscar año",
       }}
       setValue={(value) => setYear(Number.parseInt(value, 10))}
       value={year.toString()}
@@ -497,108 +496,4 @@ export const CalendarProvider = ({
   </CalendarContext.Provider>
 )
 
-// Demo
-const demoStatuses: Status[] = [
-  { id: "1", name: "Planned", color: "#6B7280" },
-  { id: "2", name: "In Progress", color: "#F59E0B" },
-  { id: "3", name: "Done", color: "#10B981" },
-]
-
-function createDemoFeatures(): Feature[] {
-  const today = new Date()
-  const year = today.getFullYear()
-  const month = today.getMonth()
-
-  return [
-    {
-      id: "1",
-      name: "Design Review",
-      startAt: new Date(year, month, 1),
-      endAt: new Date(year, month, 5),
-      status: demoStatuses[2]!,
-    },
-    {
-      id: "2",
-      name: "Sprint Planning",
-      startAt: new Date(year, month, 5),
-      endAt: new Date(year, month, 8),
-      status: demoStatuses[2]!,
-    },
-    {
-      id: "3",
-      name: "API Development",
-      startAt: new Date(year, month, 8),
-      endAt: new Date(year, month, 15),
-      status: demoStatuses[1]!,
-    },
-    {
-      id: "4",
-      name: "Frontend Build",
-      startAt: new Date(year, month, 10),
-      endAt: new Date(year, month, 18),
-      status: demoStatuses[1]!,
-    },
-    {
-      id: "5",
-      name: "Testing Phase",
-      startAt: new Date(year, month, 15),
-      endAt: new Date(year, month, 22),
-      status: demoStatuses[0]!,
-    },
-    {
-      id: "6",
-      name: "Documentation",
-      startAt: new Date(year, month, 18),
-      endAt: new Date(year, month, 22),
-      status: demoStatuses[0]!,
-    },
-    {
-      id: "7",
-      name: "Code Review",
-      startAt: new Date(year, month, 20),
-      endAt: new Date(year, month, 25),
-      status: demoStatuses[0]!,
-    },
-    {
-      id: "8",
-      name: "Release Prep",
-      startAt: new Date(year, month, 25),
-      endAt: new Date(year, month, 28),
-      status: demoStatuses[0]!,
-    },
-  ]
-}
-
-export function Demo() {
-  const [mounted, setMounted] = useState(false)
-  const [features, setFeatures] = useState<Feature[]>([])
-
-  // Only render on client to avoid hydration issues
-  // biome-ignore lint/correctness/useExhaustiveDependencies: mount once
-  useEffect(() => {
-    setMounted(true)
-    setFeatures(createDemoFeatures())
-  }, [])
-
-  if (!mounted) {
-    return <div className="bg-muted/50 h-screen w-screen animate-pulse" />
-  }
-
-  return (
-    <div className="h-screen w-screen p-4">
-      <CalendarProvider className="h-full w-full rounded-lg border">
-        <CalendarDate>
-          <CalendarDatePicker>
-            <CalendarMonthPicker />
-            <CalendarYearPicker start={2020} end={2030} />
-          </CalendarDatePicker>
-          <CalendarDatePagination />
-        </CalendarDate>
-        <CalendarHeader />
-        <CalendarBody features={features}>
-          {({ feature }) => <CalendarItem feature={feature} key={feature.id} />}
-        </CalendarBody>
-      </CalendarProvider>
-    </div>
-  )
-}
+// (no demo)

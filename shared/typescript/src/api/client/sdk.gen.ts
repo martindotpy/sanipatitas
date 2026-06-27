@@ -5,6 +5,7 @@ import type {
   ClientMeta,
   Options as Options2,
   RequestResult,
+  ServerSentEventsResult,
   TDataShape,
 } from "./client"
 import { client } from "./client.gen"
@@ -29,6 +30,10 @@ import type {
   GetApiAppointmentByIdResponses,
   GetApiAppointmentData,
   GetApiAppointmentErrors,
+  GetApiAppointmentEventsData,
+  GetApiAppointmentEventsErrors,
+  GetApiAppointmentEventsResponse,
+  GetApiAppointmentEventsResponses,
   GetApiAppointmentResponses,
   GetApiAuthAccountInfoData,
   GetApiAuthAccountInfoErrors,
@@ -1634,6 +1639,22 @@ export const postApiAppointment = <ThrowOnError extends boolean = false>(
       ...options.headers,
     },
   })
+
+/**
+ * Stream Events
+ */
+export const getApiAppointmentEvents = <ThrowOnError extends boolean = false>(
+  options?: Options<
+    GetApiAppointmentEventsData,
+    ThrowOnError,
+    GetApiAppointmentEventsResponse
+  >
+): Promise<ServerSentEventsResult<GetApiAppointmentEventsResponses>> =>
+  (options?.client ?? client).sse.get<
+    GetApiAppointmentEventsResponses,
+    GetApiAppointmentEventsErrors,
+    ThrowOnError
+  >({ url: "/api/appointment/events", ...options })
 
 /**
  * Delete

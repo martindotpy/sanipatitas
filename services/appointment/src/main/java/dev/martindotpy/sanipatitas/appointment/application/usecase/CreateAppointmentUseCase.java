@@ -3,6 +3,8 @@ package dev.martindotpy.sanipatitas.appointment.application.usecase;
 import jakarta.enterprise.context.ApplicationScoped;
 
 import dev.martindotpy.sanipatitas.appointment.application.mapper.AppointmentMapper;
+import dev.martindotpy.sanipatitas.appointment.application.service.AppointmentEvent;
+import dev.martindotpy.sanipatitas.appointment.application.service.AppointmentEventService;
 import dev.martindotpy.sanipatitas.shared.appointment.application.dto.AppointmentDto;
 import dev.martindotpy.sanipatitas.shared.appointment.application.port.CreateAppointmentPort;
 import dev.martindotpy.sanipatitas.shared.appointment.domain.payload.CreateAppointmentPayload;
@@ -26,6 +28,7 @@ public class CreateAppointmentUseCase implements CreateAppointmentPort {
     private final ClientRepository clientRepository;
     private final UserRepository userRepository;
     private final AppointmentMapper appointmentMapper;
+    private final AppointmentEventService eventService;
 
     @Override
     public Uni<AppointmentDto> create(CreateAppointmentPayload payload) {
@@ -34,26 +37,24 @@ public class CreateAppointmentUseCase implements CreateAppointmentPort {
         var veterinarianId = payload.getVeterinarianId();
         var appointmentBuilder = appointmentMapper.from(payload);
 
-        var patientQuery = patientRepository.findById(patientId)
-                .onItem().ifNull().failWith(() -> new PatientNotFoundException(patientId));
-        var clientQuery = clientRepository.findById(clientId)
-                .onItem().ifNull().failWith(() -> new ClientNotFoundException(clientId));
-        var veterinarianQuery = userRepository.findById(veterinarianId)
-                .onItem().ifNull().failWith(() -> new UserNotFoundException(veterinarianId));
-
-        return Uni.combine().all()
-                .unis(patientQuery, clientQuery, veterinarianQuery)
-                .with((patient, client, veterinarian) -> {
-                    @SuppressWarnings("null")
-                    var appointment = appointmentBuilder
-                            .patient(patient)
-                            .client(client)
-                            .veterinarian(veterinarian)
-                            .build();
-
-                    return appointment;
-                })
+        return patientRepository.findById(patientId)
+                .onItem().ifNull().failWith(() -> new PatientNotFoundException(patientId))
+                .chain(patient -> clientRepository.findById(clientId)
+                        .onItem().ifNull().failWith(() -> new ClientNotFoundException(clientId))
+                        .chain(client -> userRepository.findById(veterinarianId)
+                                .onItem().ifNull().failWith(() -> new UserNotFoundException(veterinarianId))
+                                .map(veterinarian -> {
+                                    @SuppressWarnings("null")
+                                    var appointment = appointmentBuilder
+                                            .patient(patient)
+                                            .client(client)
+                                            .veterinarian(veterinarian)
+                                            .build();
+                                    return appointment;
+                                })))
                 .chain(appointmentRepository::persist)
+                .invoke(appointment -> eventService.publish(
+                        new AppointmentEvent(appointment.getId(), AppointmentEvent.Type.CREATED)))
                 .map(appointmentMapper::toDto);
     }
 }

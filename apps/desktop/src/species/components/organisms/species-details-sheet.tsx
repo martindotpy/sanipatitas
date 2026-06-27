@@ -25,7 +25,7 @@ export function SpeciesDetailsSheet({
       <SheetContent
         side="right"
         showCloseButton
-        className="max-h-main-h mt-header-h"
+        className="max-h-main-h pt-header-h"
       >
         <SheetHeader>
           <SheetTitle>{species?.name ?? "Detalles"}</SheetTitle>

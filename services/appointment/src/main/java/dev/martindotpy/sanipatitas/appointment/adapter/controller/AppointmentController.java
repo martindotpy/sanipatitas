@@ -12,6 +12,8 @@ import jakarta.ws.rs.NotFoundException;
 import jakarta.ws.rs.POST;
 import jakarta.ws.rs.PUT;
 import jakarta.ws.rs.Path;
+import jakarta.ws.rs.Produces;
+import jakarta.ws.rs.core.MediaType;
 
 import org.jboss.resteasy.reactive.ResponseStatus;
 import org.jboss.resteasy.reactive.RestPath;
@@ -20,6 +22,8 @@ import org.jspecify.annotations.Nullable;
 
 import dev.martindotpy.sanipatitas.appointment.adapter.request.CreateAppointmentRequest;
 import dev.martindotpy.sanipatitas.appointment.adapter.request.UpdateAppointmentRequest;
+import dev.martindotpy.sanipatitas.appointment.application.service.AppointmentEvent;
+import dev.martindotpy.sanipatitas.appointment.application.service.AppointmentEventService;
 import dev.martindotpy.sanipatitas.shared.appointment.application.port.CreateAppointmentPort;
 import dev.martindotpy.sanipatitas.shared.appointment.application.port.DeleteAppointmentPort;
 import dev.martindotpy.sanipatitas.shared.appointment.application.port.FindAppointmentPort;
@@ -28,6 +32,7 @@ import dev.martindotpy.sanipatitas.shared.core.adapter.response.DataResponse;
 import dev.martindotpy.sanipatitas.shared.core.adapter.response.PageResponse;
 import dev.martindotpy.sanipatitas.shared.core.domain.validation.Uuid;
 import dev.martindotpy.sanipatitas.shared.appointment.application.dto.AppointmentDto;
+import io.smallrye.mutiny.Multi;
 import io.smallrye.mutiny.Uni;
 import lombok.RequiredArgsConstructor;
 
@@ -38,6 +43,7 @@ public class AppointmentController {
     private final CreateAppointmentPort createAppointmentPort;
     private final DeleteAppointmentPort deleteAppointmentPort;
     private final UpdateAppointmentPort updateAppointmentPort;
+    private final AppointmentEventService eventService;
 
     @GET
     @RolesAllowed({"admin", "veterinarian", "worker"})
@@ -93,5 +99,13 @@ public class AppointmentController {
     @RolesAllowed({"admin"})
     public Uni<Void> delete(@Uuid @RestPath UUID id) {
         return deleteAppointmentPort.deleteById(id);
+    }
+
+    @GET
+    @Path("/events")
+    @Produces(MediaType.SERVER_SENT_EVENTS)
+    @RolesAllowed({"admin", "veterinarian", "worker"})
+    public Multi<AppointmentEvent> streamEvents() {
+        return eventService.stream();
     }
 }

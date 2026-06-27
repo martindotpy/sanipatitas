@@ -3,6 +3,7 @@ import type { LinkRoute } from "@sanipatitas/desktop/pages/_app/routes/-routes-t
 import type { IconType } from "react-icons/lib"
 import {
   TbApi,
+  TbCalendar,
   TbCategory2,
   TbLayoutDashboard,
   TbPaw,
@@ -31,6 +32,11 @@ export function useSidebarItems(): SidebarGroups {
       },
     ],
     Pacientes: [
+      {
+        to: "/appointment",
+        label: "Calendario",
+        icon: TbCalendar,
+      },
       {
         to: "/patient",
         label: "Pacientes",

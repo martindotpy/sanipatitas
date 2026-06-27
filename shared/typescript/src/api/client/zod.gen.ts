@@ -445,6 +445,13 @@ export const zOpenapiCreateAppointmentRequest = z.object({
   veterinarianId: zOpenapiUuid,
 })
 
+export const zOpenapiType = z.enum(["CREATED", "UPDATED", "DELETED"])
+
+export const zOpenapiAppointmentEvent = z.object({
+  appointmentId: zOpenapiUuid.optional(),
+  type: zOpenapiType.optional(),
+})
+
 export const zOpenapiUpdateAppointmentRequest = z.object({
   date: zOpenapiLocalDate,
   startTime: zOpenapiLocalTime,
@@ -1608,6 +1615,11 @@ export const zPostApiAppointmentBody = zOpenapiCreateAppointmentRequest
  * OK
  */
 export const zPostApiAppointmentResponse = zOpenapiDataResponseAppointmentDto
+
+/**
+ * OK
+ */
+export const zGetApiAppointmentEventsResponse = zOpenapiAppointmentEvent
 
 export const zDeleteApiAppointmentByIdPath = z.object({
   id: zOpenapiUuid,

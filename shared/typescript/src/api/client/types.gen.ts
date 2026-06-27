@@ -333,6 +333,11 @@ export type OpenapiAppointmentDto = {
   veterinarian: OpenapiUserDto
 }
 
+export type OpenapiAppointmentEvent = {
+  appointmentId?: OpenapiUuid
+  type?: OpenapiType
+}
+
 export type OpenapiAppointmentStatus =
   | "SCHEDULED"
   | "IN_PROGRESS"
@@ -369,6 +374,8 @@ export type OpenapiPageResponseAppointmentDto = {
   totalPages?: number
   message: string
 }
+
+export type OpenapiType = "CREATED" | "UPDATED" | "DELETED"
 
 export type OpenapiUpdateAppointmentRequest = {
   date: OpenapiLocalDate
@@ -4910,6 +4917,34 @@ export type PostApiAppointmentResponses = {
 
 export type PostApiAppointmentResponse =
   PostApiAppointmentResponses[keyof PostApiAppointmentResponses]
+
+export type GetApiAppointmentEventsData = {
+  body?: never
+  path?: never
+  query?: never
+  url: "/api/appointment/events"
+}
+
+export type GetApiAppointmentEventsErrors = {
+  /**
+   * Not Authorized
+   */
+  401: unknown
+  /**
+   * Not Allowed
+   */
+  403: unknown
+}
+
+export type GetApiAppointmentEventsResponses = {
+  /**
+   * OK
+   */
+  200: OpenapiAppointmentEvent
+}
+
+export type GetApiAppointmentEventsResponse =
+  GetApiAppointmentEventsResponses[keyof GetApiAppointmentEventsResponses]
 
 export type DeleteApiAppointmentByIdData = {
   body?: never
