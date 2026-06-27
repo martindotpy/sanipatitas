@@ -1,3 +1,4 @@
+import { PatientSection } from "@sanipatitas/desktop/patient/components/sections/patient-section"
 import { $title } from "@sanipatitas/desktop/home/store/title-store"
 import { createFileRoute } from "@tanstack/react-router"
 import { useEffect } from "react"
@@ -13,5 +14,5 @@ function PatientComponent() {
     $title.set("Pacientes")
   }, [])
 
-  return <></>
+  return <PatientSection />
 }

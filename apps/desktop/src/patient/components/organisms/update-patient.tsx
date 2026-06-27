@@ -1,0 +1,222 @@
+import { type DialogRoot } from "@base-ui/react"
+import { zodResolver } from "@hookform/resolvers/zod"
+import { usePatient } from "@sanipatitas/desktop/patient/hook/use-patient"
+import { getApiBreedOptions } from "@sanipatitas/shared/api/client/@tanstack/react-query.gen"
+import { getApiClientOptions } from "@sanipatitas/shared/api/client/@tanstack/react-query.gen"
+import { putApiPatientByIdMutation } from "@sanipatitas/shared/api/client/@tanstack/react-query.gen"
+import type { OpenapiBreedDto, OpenapiPatientDto } from "@sanipatitas/shared/api/client/types.gen"
+import { zOpenapiUpdatePatientRequest } from "@sanipatitas/shared/api/client/zod.gen"
+import { ControlledCheckbox } from "@sanipatitas/ui/components/form/controlled/controlled-checkbox"
+import { ControlledCombobox } from "@sanipatitas/ui/components/form/controlled/controlled-combobox"
+import { ControlledInput } from "@sanipatitas/ui/components/form/controlled/controlled-input"
+import { ControlledNumberInput } from "@sanipatitas/ui/components/form/controlled/controlled-number-input"
+import { ControlledTextarea } from "@sanipatitas/ui/components/form/controlled/controlled-textarea"
+import { Button } from "@sanipatitas/ui/components/ui/button"
+import {
+  Dialog,
+  DialogClose,
+  DialogContent,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+} from "@sanipatitas/ui/components/ui/dialog"
+import { FieldGroup } from "@sanipatitas/ui/components/ui/field"
+import { useMutation, useQuery } from "@tanstack/react-query"
+import { useEffect, useMemo, useRef } from "react"
+import { useForm } from "react-hook-form"
+
+const GENDER_OPTIONS = [
+  { value: "MALE", label: "Macho" },
+  { value: "FEMALE", label: "Hembra" },
+  { value: "UNKNOWN", label: "Desconocido" },
+]
+
+interface UpdatePatientProps {
+  patient: OpenapiPatientDto | null
+  open: boolean
+  onOpenChange: (open: boolean) => void
+}
+
+export function UpdatePatient({
+  patient,
+  open,
+  onOpenChange,
+}: UpdatePatientProps) {
+  const dialogActionsRef = useRef<DialogRoot.Actions | null>(null)
+
+  const patientQuery = usePatient()
+
+  const clientsQuery = useQuery({
+    ...getApiClientOptions({ query: { size: 1000 } }),
+  })
+
+  const breedsQuery = useQuery({
+    ...getApiBreedOptions({ query: { size: 1000 } }),
+  })
+
+  const clientOptions = useMemo(
+    () =>
+      (clientsQuery.data?.data ?? []).map((c) => ({
+        value: c.id,
+        label: `${c.firstName} ${c.lastName} (${c.idNumber})`,
+      })),
+    [clientsQuery.data]
+  )
+
+  const breedOptions = useMemo(
+    () =>
+      (breedsQuery.data?.data ?? []).map((b: OpenapiBreedDto) => ({
+        value: b.id,
+        label: b.species
+          ? `${b.name} (${b.species.name})`
+          : b.name,
+      })),
+    [breedsQuery.data]
+  )
+
+  const { control, handleSubmit, reset } = useForm({
+    resolver: zodResolver(zOpenapiUpdatePatientRequest),
+    defaultValues: {
+      name: "",
+      gender: undefined,
+      birthDate: undefined,
+      approximateAge: "",
+      weightKg: undefined,
+      description: "",
+      isSterilized: false,
+      isDeceased: false,
+      breedId: undefined,
+      clientId: "",
+    },
+  })
+
+  useEffect(() => {
+    if (patient) {
+      reset({
+        name: patient.name,
+        gender: patient.gender ?? undefined,
+        birthDate: patient.birthDate ?? undefined,
+        approximateAge: patient.approximateAge ?? "",
+        weightKg: patient.weightKg ?? undefined,
+        description: patient.description ?? "",
+        isSterilized: patient.isSterilized ?? false,
+        isDeceased: patient.isDeceased ?? false,
+        breedId: patient.breed?.id ?? undefined,
+        clientId: patient.client.id,
+      })
+    }
+  }, [patient, reset])
+
+  const updatePatientMutation = useMutation({
+    ...putApiPatientByIdMutation(),
+    onSuccess: () => {
+      dialogActionsRef.current?.close()
+      patientQuery.refetch()
+    },
+  })
+
+  const onSubmit = handleSubmit((data) => {
+    if (!patient) return
+
+    updatePatientMutation.mutate({
+      path: { id: patient.id },
+      body: {
+        ...data,
+        gender: data.gender || undefined,
+        birthDate: data.birthDate || undefined,
+        approximateAge: data.approximateAge || undefined,
+        weightKg: data.weightKg || undefined,
+        description: data.description || undefined,
+        breedId: data.breedId || undefined,
+        isSterilized: data.isSterilized || undefined,
+        isDeceased: data.isDeceased || undefined,
+      },
+    })
+  })
+
+  return (
+    <Dialog
+      open={open}
+      onOpenChange={onOpenChange}
+      actionsRef={dialogActionsRef}
+    >
+      <DialogContent render={<form onSubmit={onSubmit} />}>
+        <DialogHeader>
+          <DialogTitle>Editar paciente</DialogTitle>
+        </DialogHeader>
+
+        <FieldGroup>
+          <ControlledInput control={control} name="name" label="Nombre" />
+
+          <ControlledCombobox
+            control={control}
+            name="gender"
+            label="Sexo"
+            options={GENDER_OPTIONS}
+            placeholder="Seleccionar sexo..."
+          />
+
+          <ControlledCombobox
+            control={control}
+            name="clientId"
+            label="Dueño"
+            options={clientOptions}
+            placeholder="Buscar dueño..."
+            searchPlaceholder="Buscar dueño..."
+          />
+
+          <ControlledCombobox
+            control={control}
+            name="breedId"
+            label="Raza"
+            options={breedOptions}
+            placeholder="Seleccionar raza..."
+            searchPlaceholder="Buscar raza..."
+          />
+
+          <ControlledInput
+            control={control}
+            name="birthDate"
+            inputProps={{ type: "date" }}
+            label="Fecha de nacimiento"
+          />
+
+          <ControlledInput
+            control={control}
+            name="approximateAge"
+            label="Edad aproximada"
+          />
+
+          <ControlledNumberInput
+            control={control}
+            name="weightKg"
+            label="Peso (kg)"
+          />
+
+          <ControlledCheckbox
+            control={control}
+            name="isSterilized"
+            label="Esterilizado"
+          />
+
+          <ControlledCheckbox
+            control={control}
+            name="isDeceased"
+            label="Fallecido"
+          />
+
+          <ControlledTextarea
+            control={control}
+            name="description"
+            label="Descripción"
+          />
+        </FieldGroup>
+
+        <DialogFooter>
+          <DialogClose render={<Button variant="secondary">Cancelar</Button>} />
+          <Button type="submit">Guardar</Button>
+        </DialogFooter>
+      </DialogContent>
+    </Dialog>
+  )
+}
