@@ -31,8 +31,6 @@ export function usePersistentState<T>(
         ? (initialValue as () => T)()
         : initialValue
 
-      console.log("Rerendering")
-
     return getOrCreateStore(key, resolvedInitialValue)
     // eslint-disable-next-line react-compiler/react-compiler
     // eslint-disable-next-line react-hooks/exhaustive-deps
