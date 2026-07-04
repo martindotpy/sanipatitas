@@ -1,4 +1,5 @@
 import { db } from "@sanipatitas/database"
+import { seedDatabase } from "@sanipatitas/database/seeds"
 import { serverLog } from "@sanipatitas/shared/log/server-logger"
 import { migrate } from "drizzle-orm/bun-sql/migrator"
 
@@ -20,4 +21,7 @@ export async function initializeDatabase(migrationsFolder: string) {
   })
 
   serverLog.info("Database migrations completed")
+
+  // Seed test data
+  await seedDatabase()
 }

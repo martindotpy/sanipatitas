@@ -1,0 +1,113 @@
+// Types
+type AppointmentSeed = {
+  clientIndex: number
+  patientIndex: number
+  veterinarianIndex: number
+  date: string
+  startTime: string
+  endTime: string
+  status: "SCHEDULED" | "IN_PROGRESS" | "COMPLETED" | "CANCELLED" | "NO_SHOW"
+  appointmentClass: "AMBULATORY" | "EMERGENCY" | "HOME_VISIT"
+  reason: string
+  notes: string
+}
+
+// Appointments
+export const appointmentSeed: AppointmentSeed[] = [
+  {
+    clientIndex: 0,
+    patientIndex: 0,
+    veterinarianIndex: 0,
+    date: "2026-07-05",
+    startTime: "09:00",
+    endTime: "09:30",
+    status: "SCHEDULED",
+    appointmentClass: "AMBULATORY",
+    reason: "Control anual de vacunación",
+    notes: "Traer carnet de vacunación",
+  },
+  {
+    clientIndex: 0,
+    patientIndex: 1,
+    veterinarianIndex: 1,
+    date: "2026-07-03",
+    startTime: "10:00",
+    endTime: "10:45",
+    status: "COMPLETED",
+    appointmentClass: "AMBULATORY",
+    reason: "Castración programada",
+    notes: "Paciente en ayunas desde las 22:00 del día anterior",
+  },
+  {
+    clientIndex: 1,
+    patientIndex: 2,
+    veterinarianIndex: 0,
+    date: "2026-07-04",
+    startTime: "11:00",
+    endTime: "11:30",
+    status: "SCHEDULED",
+    appointmentClass: "AMBULATORY",
+    reason: "Revisión de piel y pelaje",
+    notes: "Presenta zonas sin pelo en el lomo",
+  },
+  {
+    clientIndex: 2,
+    patientIndex: 4,
+    veterinarianIndex: 1,
+    date: "2026-07-02",
+    startTime: "14:00",
+    endTime: "14:20",
+    status: "COMPLETED",
+    appointmentClass: "AMBULATORY",
+    reason: "Consulta por dificultad respiratoria",
+    notes: "Se indica radiografía de tórax",
+  },
+  {
+    clientIndex: 2,
+    patientIndex: 5,
+    veterinarianIndex: 0,
+    date: "2026-07-06",
+    startTime: "09:30",
+    endTime: "10:00",
+    status: "SCHEDULED",
+    appointmentClass: "HOME_VISIT",
+    reason: "Vacunación a domicilio",
+    notes: "Cliente solicita visita a domicilio por movilidad reducida",
+  },
+  {
+    clientIndex: 3,
+    patientIndex: 7,
+    veterinarianIndex: 1,
+    date: "2026-07-01",
+    startTime: "08:00",
+    endTime: "08:45",
+    status: "COMPLETED",
+    appointmentClass: "EMERGENCY",
+    reason: "Intoxicación por chocolate",
+    notes: "Se indujo vómito, paciente estable",
+  },
+  {
+    clientIndex: 4,
+    patientIndex: 9,
+    veterinarianIndex: 0,
+    date: "2026-07-07",
+    startTime: "15:00",
+    endTime: "15:30",
+    status: "SCHEDULED",
+    appointmentClass: "AMBULATORY",
+    reason: "Control post operatorio de esterilización",
+    notes: "Verificar cicatrización",
+  },
+  {
+    clientIndex: 5,
+    patientIndex: 11,
+    veterinarianIndex: 1,
+    date: "2026-06-28",
+    startTime: "10:30",
+    endTime: "11:00",
+    status: "CANCELLED",
+    appointmentClass: "AMBULATORY",
+    reason: "Consulta general",
+    notes: "Cliente canceló por emergencia personal",
+  },
+]

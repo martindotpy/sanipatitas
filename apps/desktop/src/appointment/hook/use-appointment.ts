@@ -10,8 +10,6 @@ import { useCallback } from "react"
 
 // Hooks
 export function useAppointmentQuery() {
-  useAppointmentSSE()
-
   const queryState = useStore($appointmentQuery)
 
   const query = useQuery({

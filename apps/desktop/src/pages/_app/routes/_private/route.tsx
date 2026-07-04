@@ -1,3 +1,4 @@
+import { useAppointmentSSE } from "@sanipatitas/desktop/appointment/components/organisms/appointment-sse"
 import { useAuthQuery } from "@sanipatitas/desktop/auth/hook/use-auth"
 import { HomeHeader } from "@sanipatitas/desktop/home/components/organisms/home-header"
 import { HomeSidebar } from "@sanipatitas/desktop/home/components/organisms/home-sidebar"
@@ -26,6 +27,7 @@ export const Route = createFileRoute("/_private")({
 
 function PrivateLayout() {
   useAuthQuery()
+  useAppointmentSSE()
   useEffect(() => {
     return () => {
       $title.set(null)
