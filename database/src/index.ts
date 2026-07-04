@@ -1,9 +1,16 @@
 import * as appointmentSchema from "@sanipatitas/database/appointment/schema/appointment-schema"
+import * as appointmentAudSchema from "@sanipatitas/database/audit/schema/appointment-aud-schema"
 import * as authSchema from "@sanipatitas/database/auth/schema/auth-schema"
+import * as breedAudSchema from "@sanipatitas/database/audit/schema/breed-aud-schema"
 import * as breedSchema from "@sanipatitas/database/patient/schema/breed-schema"
+import * as clientAudSchema from "@sanipatitas/database/audit/schema/client-aud-schema"
 import * as clientSchema from "@sanipatitas/database/patient/schema/client-schema"
+import * as patientAudSchema from "@sanipatitas/database/audit/schema/patient-aud-schema"
 import * as patientSchema from "@sanipatitas/database/patient/schema/patient-schema"
+import * as revinfoSchema from "@sanipatitas/database/audit/schema/revinfo-schema"
+import * as speciesAudSchema from "@sanipatitas/database/audit/schema/species-aud-schema"
 import * as speciesSchema from "@sanipatitas/database/patient/schema/species-schema"
+import * as userAudSchema from "@sanipatitas/database/audit/schema/user-aud-schema"
 import { serverLog } from "@sanipatitas/shared/log/server-logger"
 import { SQL } from "bun"
 import { drizzle } from "drizzle-orm/bun-sql"
@@ -14,11 +21,18 @@ const client = new SQL()
 // All schemas
 const allSchemas = {
   ...appointmentSchema,
+  ...appointmentAudSchema,
   ...authSchema,
-  ...speciesSchema,
+  ...breedAudSchema,
   ...breedSchema,
+  ...clientAudSchema,
   ...clientSchema,
+  ...patientAudSchema,
   ...patientSchema,
+  ...revinfoSchema,
+  ...speciesAudSchema,
+  ...speciesSchema,
+  ...userAudSchema,
 }
 
 // Schema

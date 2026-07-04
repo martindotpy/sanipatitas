@@ -3,11 +3,11 @@ import { authController } from "@sanipatitas/auth/auth/controller/auth-controlle
 import { port } from "@sanipatitas/auth/core/configuration/app-configuration"
 import { miscellaneousController } from "@sanipatitas/auth/core/controller/miscellaneous-controller"
 import { initializeApp } from "@sanipatitas/auth/core/initializer"
+import { auditMiddleware } from "@sanipatitas/auth/core/middleware/audit-middleware"
 import { openapiMiddleware } from "@sanipatitas/auth/core/middleware/openapi-middleware"
+import { tracingMiddleware } from "@sanipatitas/auth/core/middleware/tracing-middleware"
 import { isDev } from "@sanipatitas/shared/app-context"
 import { serverLog } from "@sanipatitas/shared/log/server-logger"
-import { auditMiddleware } from "@sanipatitas/auth/core/middleware/audit-middleware"
-import { tracingMiddleware } from "@sanipatitas/auth/core/middleware/tracing-middleware"
 import { loggerMiddleware } from "@sanipatitas/shared/middleware/logger-middleware"
 import Elysia from "elysia"
 
