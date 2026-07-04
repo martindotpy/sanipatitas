@@ -1,4 +1,3 @@
-import { useAppointmentSSE } from "@sanipatitas/desktop/appointment/components/organisms/appointment-sse"
 import { $appointmentQuery } from "@sanipatitas/desktop/appointment/store/appointment-query-store"
 import { getApiAppointmentOptions } from "@sanipatitas/shared/api/client/@tanstack/react-query.gen"
 import { deleteApiAppointmentByIdMutation } from "@sanipatitas/shared/api/client/@tanstack/react-query.gen"
@@ -6,7 +5,6 @@ import { postApiAppointmentMutation } from "@sanipatitas/shared/api/client/@tans
 import { putApiAppointmentByIdMutation } from "@sanipatitas/shared/api/client/@tanstack/react-query.gen"
 import { useMutation, useQuery } from "@tanstack/react-query"
 import { useStore } from "@nanostores/react"
-import { useCallback } from "react"
 
 // Hooks
 export function useAppointmentQuery() {

@@ -1,8 +1,9 @@
 import { useJwt } from "@sanipatitas/desktop/auth/store/jwt-store"
-import { client } from "@sanipatitas/shared/api/client/client.gen"
+import { getApiAppointmentEvents } from "@sanipatitas/shared/api/client/sdk.gen"
 import { useQueryClient } from "@tanstack/react-query"
 import { useEffect, useRef } from "react"
 
+// SSE hook
 export function useAppointmentSSE() {
   const token = useJwt()
   const queryClient = useQueryClient()
@@ -17,8 +18,7 @@ export function useAppointmentSSE() {
     let cancelled = false
 
     const start = async () => {
-      const { stream } = await client.sse.get({
-        url: "/api/appointment/events",
+      const { stream } = await getApiAppointmentEvents({
         signal: controller.signal,
         onSseError: (error) => {
           console.error("SSE error:", error)

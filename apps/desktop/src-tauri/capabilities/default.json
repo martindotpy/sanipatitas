@@ -18,6 +18,10 @@
     "deep-link:default",
     "deep-link:allow-register",
     "deep-link:allow-get-current",
-    "opener:default"
+    "opener:default",
+    "notification:default",
+    "notification:allow-notify",
+    "notification:allow-request-permission",
+    "notification:allow-is-permission-granted"
   ]
 }
