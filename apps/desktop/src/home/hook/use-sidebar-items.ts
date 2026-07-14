@@ -7,6 +7,7 @@ import {
   TbCategory2,
   TbLayoutDashboard,
   TbPaw,
+  TbUserCircle,
   TbUsers,
 } from "react-icons/tb"
 
@@ -29,6 +30,11 @@ export function useSidebarItems(): SidebarGroups {
         to: "/",
         label: "Dashboard",
         icon: TbLayoutDashboard,
+      },
+      {
+        to: "/profile",
+        label: "Mi Perfil",
+        icon: TbUserCircle,
       },
     ],
     Pacientes: [

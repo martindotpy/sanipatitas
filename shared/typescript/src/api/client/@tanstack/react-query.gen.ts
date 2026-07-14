@@ -40,6 +40,7 @@ import {
   getApiBillingByBillingIdPayment,
   getApiBillingByClientByClientId,
   getApiBillingById,
+  getApiBillingStats,
   getApiBreed,
   getApiBreedById,
   getApiClient,
@@ -58,6 +59,7 @@ import {
   getApiInventoryProductById,
   getApiInventoryProductCategory,
   getApiInventoryProductCategoryById,
+  getApiInventoryStats,
   getApiInventoryStockById,
   getApiInventoryStockByProduct,
   getApiInventoryStockMovementByStockByStockId,
@@ -235,6 +237,8 @@ import type {
   GetApiBillingData,
   GetApiBillingError,
   GetApiBillingResponse,
+  GetApiBillingStatsData,
+  GetApiBillingStatsResponse,
   GetApiBreedByIdData,
   GetApiBreedByIdError,
   GetApiBreedByIdResponse,
@@ -289,6 +293,8 @@ import type {
   GetApiInventoryProductData,
   GetApiInventoryProductError,
   GetApiInventoryProductResponse,
+  GetApiInventoryStatsData,
+  GetApiInventoryStatsResponse,
   GetApiInventoryStockByIdData,
   GetApiInventoryStockByIdError,
   GetApiInventoryStockByIdResponse,
@@ -4302,6 +4308,34 @@ export const putApiInventoryProductByIdMutation = (
   return mutationOptions
 }
 
+export const getApiInventoryStatsQueryKey = (
+  options?: Options<GetApiInventoryStatsData>
+) => createQueryKey("getApiInventoryStats", options)
+
+/**
+ * Get Stats
+ */
+export const getApiInventoryStatsOptions = (
+  options?: Options<GetApiInventoryStatsData>
+) =>
+  queryOptions<
+    GetApiInventoryStatsResponse,
+    DefaultError,
+    GetApiInventoryStatsResponse,
+    ReturnType<typeof getApiInventoryStatsQueryKey>
+  >({
+    queryFn: async ({ queryKey, signal }) => {
+      const { data } = await getApiInventoryStats({
+        ...options,
+        ...queryKey[0],
+        signal,
+        throwOnError: true,
+      })
+      return data
+    },
+    queryKey: getApiInventoryStatsQueryKey(options),
+  })
+
 /**
  * Create
  */
@@ -4922,6 +4956,34 @@ export const getApiBillingByClientByClientIdInfiniteOptions = (
   )
   return opts as Omit<typeof opts, "initialData">
 }
+
+export const getApiBillingStatsQueryKey = (
+  options?: Options<GetApiBillingStatsData>
+) => createQueryKey("getApiBillingStats", options)
+
+/**
+ * Get Stats
+ */
+export const getApiBillingStatsOptions = (
+  options?: Options<GetApiBillingStatsData>
+) =>
+  queryOptions<
+    GetApiBillingStatsResponse,
+    DefaultError,
+    GetApiBillingStatsResponse,
+    ReturnType<typeof getApiBillingStatsQueryKey>
+  >({
+    queryFn: async ({ queryKey, signal }) => {
+      const { data } = await getApiBillingStats({
+        ...options,
+        ...queryKey[0],
+        signal,
+        throwOnError: true,
+      })
+      return data
+    },
+    queryKey: getApiBillingStatsQueryKey(options),
+  })
 
 export const getApiBillingByBillingIdItemQueryKey = (
   options: Options<GetApiBillingByBillingIdItemData>

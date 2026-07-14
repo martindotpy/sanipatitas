@@ -1,11 +1,14 @@
 package dev.martindotpy.sanipatitas.inventory.application.usecase;
 
 import java.math.BigDecimal;
+import java.util.List;
 
 import jakarta.enterprise.context.ApplicationScoped;
 
 import dev.martindotpy.sanipatitas.shared.inventory.application.dto.InventoryStatsDto;
 import dev.martindotpy.sanipatitas.shared.inventory.application.port.FindInventoryStatsPort;
+import dev.martindotpy.sanipatitas.shared.inventory.domain.entity.Stock;
+import dev.martindotpy.sanipatitas.shared.inventory.domain.entity.Stock;
 import dev.martindotpy.sanipatitas.shared.inventory.domain.repository.ProductCategoryRepository;
 import dev.martindotpy.sanipatitas.shared.inventory.domain.repository.ProductRepository;
 import dev.martindotpy.sanipatitas.shared.inventory.domain.repository.StockRepository;
@@ -29,37 +32,35 @@ public final class FindInventoryStatsUseCase implements FindInventoryStatsPort {
         Uni<Long> totalCategories = productCategoryRepository.count();
         Uni<Long> totalSuppliers = supplierRepository.count();
 
-        // Single fetch of all stocks, reused for derived calculations
-        var stocksUni = stockRepository.findAll().list();
+        // Single fetch of all stocks — derived calculations inline to avoid 3x queries
+        return stockRepository.findAll().list()
+                .flatMap(stocks -> {
+                    long lowStockCount = stocks.stream()
+                            .filter(s -> s.getMinStock() != null && s.getQuantity() <= s.getMinStock())
+                            .count();
 
-        Uni<Long> lowStockCount = stocksUni
-                .map(stocks -> stocks.stream()
-                        .filter(s -> s.getMinStock() != null && s.getQuantity() <= s.getMinStock())
-                        .count());
+                    BigDecimal totalValue = stocks.stream()
+                            .map(s -> {
+                                var price = s.getProduct().getPrice();
+                                if (price == null) return BigDecimal.ZERO;
+                                return price.multiply(BigDecimal.valueOf(s.getQuantity()));
+                            })
+                            .reduce(BigDecimal.ZERO, BigDecimal::add);
 
-        Uni<BigDecimal> totalValue = stocksUni
-                .map(stocks -> stocks.stream()
-                        .map(s -> {
-                            var price = s.getProduct().getPrice();
-                            if (price == null) return BigDecimal.ZERO;
-                            return price.multiply(BigDecimal.valueOf(s.getQuantity()));
-                        })
-                        .reduce(BigDecimal.ZERO, BigDecimal::add));
+                    long totalQuantity = stocks.stream()
+                            .mapToLong(s -> (long) s.getQuantity())
+                            .sum();
 
-        Uni<Long> totalQuantity = stocksUni
-                .map(stocks -> stocks.stream()
-                        .mapToLong(s -> (long) s.getQuantity())
-                        .sum());
-
-        return Uni.combine().all()
-                .unis(totalProducts, totalCategories, totalSuppliers, lowStockCount, totalValue, totalQuantity)
-                .with((tp, tc, ts, lsc, tv, tq) -> InventoryStatsDto.builder()
-                        .totalProducts(tp)
-                        .totalCategories(tc)
-                        .totalSuppliers(ts)
-                        .lowStockCount(lsc)
-                        .totalStockValue(tv.longValue())
-                        .totalStockQuantity(tq)
-                        .build());
+                    return Uni.combine().all()
+                            .unis(totalProducts, totalCategories, totalSuppliers)
+                            .with((tp, tc, ts) -> InventoryStatsDto.builder()
+                                    .totalProducts(tp)
+                                    .totalCategories(tc)
+                                    .totalSuppliers(ts)
+                                    .lowStockCount(lowStockCount)
+                                    .totalStockValue(totalValue.longValue())
+                                    .totalStockQuantity(totalQuantity)
+                                    .build());
+                });
     }
 }

@@ -103,6 +103,9 @@ import type {
   GetApiBillingData,
   GetApiBillingErrors,
   GetApiBillingResponses,
+  GetApiBillingStatsData,
+  GetApiBillingStatsErrors,
+  GetApiBillingStatsResponses,
   GetApiBreedByIdData,
   GetApiBreedByIdErrors,
   GetApiBreedByIdResponses,
@@ -157,6 +160,9 @@ import type {
   GetApiInventoryProductData,
   GetApiInventoryProductErrors,
   GetApiInventoryProductResponses,
+  GetApiInventoryStatsData,
+  GetApiInventoryStatsErrors,
+  GetApiInventoryStatsResponses,
   GetApiInventoryStockByIdData,
   GetApiInventoryStockByIdErrors,
   GetApiInventoryStockByIdResponses,
@@ -2638,6 +2644,22 @@ export const putApiInventoryProductById = <
   })
 
 /**
+ * Get Stats
+ */
+export const getApiInventoryStats = <ThrowOnError extends boolean = false>(
+  options?: Options<GetApiInventoryStatsData, ThrowOnError>
+): RequestResult<
+  GetApiInventoryStatsResponses,
+  GetApiInventoryStatsErrors,
+  ThrowOnError
+> =>
+  (options?.client ?? client).get<
+    GetApiInventoryStatsResponses,
+    GetApiInventoryStatsErrors,
+    ThrowOnError
+  >({ url: "/api/inventory/stats", ...options })
+
+/**
  * Create
  */
 export const postApiInventoryStock = <ThrowOnError extends boolean = false>(
@@ -2929,6 +2951,22 @@ export const getApiBillingByClientByClientId = <
     GetApiBillingByClientByClientIdErrors,
     ThrowOnError
   >({ url: "/api/billing/by-client/{clientId}", ...options })
+
+/**
+ * Get Stats
+ */
+export const getApiBillingStats = <ThrowOnError extends boolean = false>(
+  options?: Options<GetApiBillingStatsData, ThrowOnError>
+): RequestResult<
+  GetApiBillingStatsResponses,
+  GetApiBillingStatsErrors,
+  ThrowOnError
+> =>
+  (options?.client ?? client).get<
+    GetApiBillingStatsResponses,
+    GetApiBillingStatsErrors,
+    ThrowOnError
+  >({ url: "/api/billing/stats", ...options })
 
 /**
  * List Items

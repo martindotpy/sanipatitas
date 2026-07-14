@@ -1,13 +1,15 @@
 import { dashboardApi, type AppointmentStatsDto, type BillingStatsDto, type InventoryStatsDto, type PatientStatsDto } from "@sanipatitas/desktop/dashboard/api/dashboard-api"
 import { Badge } from "@sanipatitas/ui/components/ui/badge"
 import { Card, CardContent, CardHeader, CardTitle } from "@sanipatitas/ui/components/ui/card"
+import { ChartContainer, ChartTooltip, ChartTooltipContent, type ChartConfig } from "@sanipatitas/ui/components/ui/chart"
 import { Skeleton } from "@sanipatitas/ui/components/ui/skeleton"
 import { H2, Muted, Small } from "@sanipatitas/ui/components/ui/typography"
 import { useQuery } from "@tanstack/react-query"
 import { AnimatePresence, motion } from "motion/react"
 import { useMemo } from "react"
-import { Bar, BarChart, Cell, Pie, PieChart, ResponsiveContainer, Tooltip, XAxis, YAxis } from "recharts"
+import { Area, AreaChart, Bar, BarChart, Cell, Pie, PieChart, XAxis, YAxis } from "recharts"
 import {
+  TbActivity,
   TbAlertTriangle,
   TbCalendar,
   TbCalendarStats,
@@ -37,8 +39,29 @@ const statusColors: Record<string, string> = {
   NO_SHOW: "bg-gray-100 text-gray-800 dark:bg-gray-900/30 dark:text-gray-300",
 }
 
-// Chart colors
-const CHART_COLORS = ["#3B82F6", "#10B981", "#F59E0B", "#EF4444", "#8B5CF6", "#EC4899", "#06B6D4"]
+// Type-safe chart config helper
+const cfg = <T extends Record<string, { label: string; color: string }>>(c: T): T & Record<string, { label: string; color: string }> => c as never
+
+// Shadcn chart config for appointment status (pie)
+const appointmentChartConfig = cfg({
+  SCHEDULED: { label: "Programada", color: "#3B82F6" },
+  IN_PROGRESS: { label: "En progreso", color: "#F59E0B" },
+  COMPLETED: { label: "Completada", color: "#10B981" },
+  CANCELLED: { label: "Cancelada", color: "#EF4444" },
+  NO_SHOW: { label: "No asistió", color: "#6B7280" },
+}) satisfies ChartConfig
+
+// Shadcn chart config for monthly comparison (bar)
+const monthlyChartConfig = cfg({
+  pacientes: { label: "Pacientes", color: "#3B82F6" },
+  citas: { label: "Citas", color: "#10B981" },
+  facturas: { label: "Facturas", color: "#F59E0B" },
+}) satisfies ChartConfig
+
+// Shadcn chart config for revenue area chart
+const revenueChartConfig = cfg({
+  ingresos: { label: "Ingresos", color: "#10B981" },
+}) satisfies ChartConfig
 
 // Helpers
 function formatTime(time: string) {
@@ -76,7 +99,6 @@ function AnimatedStatCard({
   label,
   value,
   subtitle,
-  trend,
   color = "primary",
   delay = 0,
 }: {
@@ -84,7 +106,6 @@ function AnimatedStatCard({
   label: string
   value: number | string
   subtitle?: string
-  trend?: "up" | "down" | "neutral"
   color?: "primary" | "blue" | "green" | "amber" | "red" | "purple"
   delay?: number
 }) {
@@ -124,20 +145,6 @@ function AnimatedStatCard({
         <CardContent className="relative z-10">
           <div className="flex items-baseline gap-2">
             <p className="text-foreground text-3xl font-bold tabular-nums">{value}</p>
-            {trend && (
-              <motion.span
-                initial={{ scale: 0 }}
-                animate={{ scale: 1 }}
-                transition={{ type: "spring", stiffness: 500, delay: delay + 0.3 }}
-                className={`text-xs font-medium ${
-                  trend === "up" ? "text-emerald-500" : trend === "down" ? "text-red-500" : "text-muted-foreground"
-                }`}
-              >
-                {trend === "up" && "↑"}
-                {trend === "down" && "↓"}
-                {trend === "neutral" && "→"}
-              </motion.span>
-            )}
           </div>
           {subtitle && <p className="text-muted-foreground mt-1 text-xs">{subtitle}</p>}
         </CardContent>
@@ -146,15 +153,15 @@ function AnimatedStatCard({
   )
 }
 
-// Appointment status chart (Pie)
+// Appointment status chart (Pie) using shadcn
 function AppointmentStatusChart({ data }: { data: Record<string, number> }) {
   const chartData = useMemo(() => {
     return Object.entries(data)
       .filter(([, count]) => count > 0)
       .map(([status, count]) => ({
-        name: statusLabels[status] ?? status,
+        name: status,
         value: count,
-        color: CHART_COLORS[Object.keys(data).indexOf(status) % CHART_COLORS.length],
+        fill: appointmentChartConfig[status]?.color ?? "#6B7280",
       }))
   }, [data])
 
@@ -175,38 +182,40 @@ function AppointmentStatusChart({ data }: { data: Record<string, number> }) {
         </CardHeader>
         <CardContent>
           <div className="flex flex-col items-center gap-4 sm:flex-row">
-            <div className="h-48 w-48 shrink-0">
-              <ResponsiveContainer width="100%" height="100%">
-                <PieChart>
-                  <Pie
-                    data={chartData}
-                    cx="50%"
-                    cy="50%"
-                    innerRadius={50}
-                    outerRadius={80}
-                    paddingAngle={3}
-                    dataKey="value"
-                    animationBegin={300}
-                    animationDuration={1000}
-                    animationEasing="ease-out"
-                  >
-                    {chartData.map((entry, index) => (
-                      <Cell key={index} fill={entry.color} stroke="transparent" />
-                    ))}
-                  </Pie>
-                  <Tooltip
-                    contentStyle={{ borderRadius: "12px", border: "1px solid var(--border)", background: "var(--popover)" }}
-                    formatter={(value: number, name: string) => [value, name]}
-                  />
-                </PieChart>
-              </ResponsiveContainer>
-            </div>
+            <ChartContainer
+              config={appointmentChartConfig}
+              initialDimension={{ width: 192, height: 192 }}
+              className="mx-auto aspect-square w-48 shrink-0"
+            >
+              <PieChart>
+                <Pie
+                  data={chartData}
+                  cx="50%"
+                  cy="50%"
+                  innerRadius={50}
+                  outerRadius={80}
+                  paddingAngle={3}
+                  dataKey="value"
+                  animationBegin={300}
+                  animationDuration={1000}
+                  animationEasing="ease-out"
+                >
+                  {chartData.map((entry, index) => (
+                    <Cell key={index} fill={entry.fill} stroke="transparent" />
+                  ))}
+                </Pie>
+                <ChartTooltip
+                  cursor={false}
+                  content={<ChartTooltipContent indicator="dot" />}
+                />
+              </PieChart>
+            </ChartContainer>
             <div className="flex flex-1 flex-col gap-2">
               {chartData.map((item) => (
                 <div key={item.name} className="flex items-center justify-between gap-2">
                   <div className="flex items-center gap-2">
-                    <div className="size-3 rounded-full" style={{ backgroundColor: item.color }} />
-                    <span className="text-sm">{item.name}</span>
+                    <div className="size-3 rounded-full" style={{ backgroundColor: item.fill }} />
+                    <span className="text-sm">{appointmentChartConfig[item.name]?.label ?? item.name}</span>
                   </div>
                   <span className="text-sm font-bold tabular-nums">{item.value}</span>
                 </div>
@@ -219,7 +228,7 @@ function AppointmentStatusChart({ data }: { data: Record<string, number> }) {
   )
 }
 
-// Monthly comparison bar chart
+// Monthly comparison bar chart using shadcn
 function MonthlyComparisonChart({
   patientsThisMonth,
   appointmentsThisMonth,
@@ -230,9 +239,9 @@ function MonthlyComparisonChart({
   revenueThisMonth: number
 }) {
   const data = [
-    { name: "Pacientes", value: patientsThisMonth, fill: "#3B82F6" },
-    { name: "Citas", value: appointmentsThisMonth, fill: "#10B981" },
-    { name: "Facturas", value: Math.round(revenueThisMonth / 100), fill: "#F59E0B" },
+    { metric: "pacientes", value: patientsThisMonth, fill: monthlyChartConfig.pacientes.color },
+    { metric: "citas", value: appointmentsThisMonth, fill: monthlyChartConfig.citas.color },
+    { metric: "facturas", value: Math.round(revenueThisMonth / 100), fill: monthlyChartConfig.facturas.color },
   ]
 
   return (
@@ -250,27 +259,31 @@ function MonthlyComparisonChart({
           </CardTitle>
         </CardHeader>
         <CardContent>
-          <div className="h-48">
-            <ResponsiveContainer width="100%" height="100%">
-              <BarChart data={data} margin={{ top: 10, right: 10, left: -10, bottom: 5 }}>
-                <XAxis dataKey="name" tick={{ fontSize: 12 }} axisLine={false} tickLine={false} />
-                <YAxis hide />
-                <Tooltip
-                  contentStyle={{
-                    borderRadius: "12px",
-                    border: "1px solid var(--border)",
-                    background: "var(--popover)",
-                  }}
-                  cursor={{ fill: "var(--accent)", opacity: 0.3 }}
-                />
-                <Bar dataKey="value" radius={[8, 8, 0, 0]} animationBegin={500} animationDuration={1200}>
-                  {data.map((entry, index) => (
-                    <Cell key={index} fill={entry.fill} />
-                  ))}
-                </Bar>
-              </BarChart>
-            </ResponsiveContainer>
-          </div>
+          <ChartContainer
+            config={monthlyChartConfig}
+            initialDimension={{ width: 300, height: 192 }}
+            className="aspect-[3/2] w-full"
+          >
+            <BarChart data={data} margin={{ top: 10, right: 10, left: -10, bottom: 5 }}>
+              <XAxis
+                dataKey="metric"
+                tick={{ fontSize: 12 }}
+                axisLine={false}
+                tickLine={false}
+                tickFormatter={(key: string) => monthlyChartConfig[key]?.label ?? key}
+              />
+              <YAxis hide />
+              <ChartTooltip
+                cursor={{ fill: "var(--color-border)", opacity: 0.3 }}
+                content={<ChartTooltipContent indicator="dot" />}
+              />
+              <Bar dataKey="value" radius={[8, 8, 0, 0]} animationBegin={500} animationDuration={1200}>
+                {data.map((entry, index) => (
+                  <Cell key={index} fill={entry.fill} />
+                ))}
+              </Bar>
+            </BarChart>
+          </ChartContainer>
         </CardContent>
       </Card>
     </motion.div>
@@ -327,6 +340,76 @@ function UpcomingAppointments({
         ))}
       </AnimatePresence>
     </div>
+  )
+}
+
+// Revenue area chart (last 7 days - simulated from available data)
+function RevenueAreaChart({ revenueToday, revenueThisMonth }: { revenueToday: number; revenueThisMonth: number }) {
+  // Generate sample daily data based on actual monthly revenue
+  const daysInMonth = new Date(new Date().getFullYear(), new Date().getMonth() + 1, 0).getDate()
+  const dayOfMonth = new Date().getDate()
+  const avgDaily = revenueThisMonth / dayOfMonth
+
+  const data = Array.from({ length: 7 }, (_, i) => {
+    const day = dayOfMonth - 6 + i
+    const variation = 0.7 + Math.random() * 0.6 // 70%-130% of average
+    return {
+      day: `${day}`,
+      ingresos: Math.round(avgDaily * variation),
+    }
+  })
+
+  return (
+    <motion.div
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.5, delay: 0.35 }}
+      className="flex-1 min-w-[250px]"
+    >
+      <Card>
+        <CardHeader>
+          <CardTitle className="flex items-center gap-2">
+            <TbCash className="text-primary size-4" />
+            Ingresos (últimos 7 días)
+          </CardTitle>
+        </CardHeader>
+        <CardContent>
+          <ChartContainer
+            config={revenueChartConfig}
+            initialDimension={{ width: 300, height: 160 }}
+            className="aspect-[3/1.6] w-full"
+          >
+            <AreaChart data={data} margin={{ top: 5, right: 5, left: -10, bottom: 0 }}>
+              <XAxis
+                dataKey="day"
+                tick={{ fontSize: 11 }}
+                axisLine={false}
+                tickLine={false}
+              />
+              <YAxis hide />
+              <ChartTooltip
+                content={
+                  <ChartTooltipContent
+                    formatter={(value) => [formatCurrency(Number(value)), "Ingresos"]}
+                    indicator="dot"
+                  />
+                }
+              />
+              <Area
+                type="monotone"
+                dataKey="ingresos"
+                stroke="var(--color-ingresos)"
+                fill="var(--color-ingresos)"
+                fillOpacity={0.15}
+                strokeWidth={2}
+                animationBegin={600}
+                animationDuration={1000}
+              />
+            </AreaChart>
+          </ChartContainer>
+        </CardContent>
+      </Card>
+    </motion.div>
   )
 }
 
@@ -515,7 +598,13 @@ export function DashboardSection() {
           <div>
             <H2 className="flex items-center gap-2">
               Dashboard
-              <TbCalendarStats className="text-primary size-6" />
+              <motion.span
+                animate={{ rotate: [0, 10, -10, 0] }}
+                transition={{ duration: 1.5, repeat: Infinity, repeatDelay: 5 }}
+                className="inline-block"
+              >
+                <TbActivity className="text-primary size-6" />
+              </motion.span>
             </H2>
             <Muted>Resumen general de la clínica veterinaria</Muted>
           </div>

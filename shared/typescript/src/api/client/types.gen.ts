@@ -841,6 +841,11 @@ export type OpenapiCreateSupplierRequest = {
   address?: string
 }
 
+export type OpenapiDataResponseInventoryStatsDto = {
+  data: OpenapiInventoryStatsDto
+  message: string
+}
+
 export type OpenapiDataResponseProductCategoryDto = {
   data: OpenapiProductCategoryDto
   message: string
@@ -864,6 +869,15 @@ export type OpenapiDataResponseStockMovementDto = {
 export type OpenapiDataResponseSupplierDto = {
   data: OpenapiSupplierDto
   message: string
+}
+
+export type OpenapiInventoryStatsDto = {
+  totalProducts: number
+  totalCategories: number
+  totalSuppliers: number
+  lowStockCount: number
+  totalStockValue: number
+  totalStockQuantity: number
 }
 
 export type OpenapiMovementType =
@@ -1028,6 +1042,15 @@ export type OpenapiBillingItemType =
   | "PRODUCT"
   | "OTHER"
 
+export type OpenapiBillingStatsDto = {
+  totalBillings: number
+  totalPaid: number
+  totalPending: number
+  billingToday: number
+  totalRevenueToday: number
+  totalRevenueThisMonth: number
+}
+
 export type OpenapiCreateBillingItemRequest = {
   id?: OpenapiUuid
   billingId: OpenapiUuid
@@ -1066,6 +1089,11 @@ export type OpenapiDataResponseBillingDto = {
 
 export type OpenapiDataResponseBillingItemDto = {
   data: OpenapiBillingItemDto
+  message: string
+}
+
+export type OpenapiDataResponseBillingStatsDto = {
+  data: OpenapiBillingStatsDto
   message: string
 }
 
@@ -7152,6 +7180,34 @@ export type PutApiInventoryProductByIdResponses = {
 export type PutApiInventoryProductByIdResponse =
   PutApiInventoryProductByIdResponses[keyof PutApiInventoryProductByIdResponses]
 
+export type GetApiInventoryStatsData = {
+  body?: never
+  path?: never
+  query?: never
+  url: "/api/inventory/stats"
+}
+
+export type GetApiInventoryStatsErrors = {
+  /**
+   * Not Authorized
+   */
+  401: unknown
+  /**
+   * Not Allowed
+   */
+  403: unknown
+}
+
+export type GetApiInventoryStatsResponses = {
+  /**
+   * OK
+   */
+  200: OpenapiDataResponseInventoryStatsDto
+}
+
+export type GetApiInventoryStatsResponse =
+  GetApiInventoryStatsResponses[keyof GetApiInventoryStatsResponses]
+
 export type PostApiInventoryStockData = {
   body: OpenapiCreateStockRequest
   path?: never
@@ -7705,6 +7761,34 @@ export type GetApiBillingByClientByClientIdResponses = {
 
 export type GetApiBillingByClientByClientIdResponse =
   GetApiBillingByClientByClientIdResponses[keyof GetApiBillingByClientByClientIdResponses]
+
+export type GetApiBillingStatsData = {
+  body?: never
+  path?: never
+  query?: never
+  url: "/api/billing/stats"
+}
+
+export type GetApiBillingStatsErrors = {
+  /**
+   * Not Authorized
+   */
+  401: unknown
+  /**
+   * Not Allowed
+   */
+  403: unknown
+}
+
+export type GetApiBillingStatsResponses = {
+  /**
+   * OK
+   */
+  200: OpenapiDataResponseBillingStatsDto
+}
+
+export type GetApiBillingStatsResponse =
+  GetApiBillingStatsResponses[keyof GetApiBillingStatsResponses]
 
 export type GetApiBillingByBillingIdItemData = {
   body?: never

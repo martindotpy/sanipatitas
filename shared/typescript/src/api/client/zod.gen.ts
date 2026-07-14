@@ -1198,6 +1198,62 @@ export const zOpenapiCreateSupplierRequest = z.object({
   address: z.string().max(500).optional(),
 })
 
+export const zOpenapiInventoryStatsDto = z.object({
+  totalProducts: z.coerce
+    .bigint()
+    .min(BigInt("-9223372036854775808"), {
+      error: "Invalid value: Expected int64 to be >= -9223372036854775808",
+    })
+    .max(BigInt("9223372036854775807"), {
+      error: "Invalid value: Expected int64 to be <= 9223372036854775807",
+    }),
+  totalCategories: z.coerce
+    .bigint()
+    .min(BigInt("-9223372036854775808"), {
+      error: "Invalid value: Expected int64 to be >= -9223372036854775808",
+    })
+    .max(BigInt("9223372036854775807"), {
+      error: "Invalid value: Expected int64 to be <= 9223372036854775807",
+    }),
+  totalSuppliers: z.coerce
+    .bigint()
+    .min(BigInt("-9223372036854775808"), {
+      error: "Invalid value: Expected int64 to be >= -9223372036854775808",
+    })
+    .max(BigInt("9223372036854775807"), {
+      error: "Invalid value: Expected int64 to be <= 9223372036854775807",
+    }),
+  lowStockCount: z.coerce
+    .bigint()
+    .min(BigInt("-9223372036854775808"), {
+      error: "Invalid value: Expected int64 to be >= -9223372036854775808",
+    })
+    .max(BigInt("9223372036854775807"), {
+      error: "Invalid value: Expected int64 to be <= 9223372036854775807",
+    }),
+  totalStockValue: z.coerce
+    .bigint()
+    .min(BigInt("-9223372036854775808"), {
+      error: "Invalid value: Expected int64 to be >= -9223372036854775808",
+    })
+    .max(BigInt("9223372036854775807"), {
+      error: "Invalid value: Expected int64 to be <= 9223372036854775807",
+    }),
+  totalStockQuantity: z.coerce
+    .bigint()
+    .min(BigInt("-9223372036854775808"), {
+      error: "Invalid value: Expected int64 to be >= -9223372036854775808",
+    })
+    .max(BigInt("9223372036854775807"), {
+      error: "Invalid value: Expected int64 to be <= 9223372036854775807",
+    }),
+})
+
+export const zOpenapiDataResponseInventoryStatsDto = z.object({
+  data: zOpenapiInventoryStatsDto,
+  message: z.string().regex(/\S/),
+})
+
 export const zOpenapiMovementType = z.enum([
   "PURCHASE_ENTRY",
   "SALE_EXIT",
@@ -1562,6 +1618,57 @@ export const zOpenapiBillingItemDto = z.object({
   createdAt: zOpenapiLocalDateTime,
 })
 
+export const zOpenapiBillingStatsDto = z.object({
+  totalBillings: z.coerce
+    .bigint()
+    .min(BigInt("-9223372036854775808"), {
+      error: "Invalid value: Expected int64 to be >= -9223372036854775808",
+    })
+    .max(BigInt("9223372036854775807"), {
+      error: "Invalid value: Expected int64 to be <= 9223372036854775807",
+    }),
+  totalPaid: z.coerce
+    .bigint()
+    .min(BigInt("-9223372036854775808"), {
+      error: "Invalid value: Expected int64 to be >= -9223372036854775808",
+    })
+    .max(BigInt("9223372036854775807"), {
+      error: "Invalid value: Expected int64 to be <= 9223372036854775807",
+    }),
+  totalPending: z.coerce
+    .bigint()
+    .min(BigInt("-9223372036854775808"), {
+      error: "Invalid value: Expected int64 to be >= -9223372036854775808",
+    })
+    .max(BigInt("9223372036854775807"), {
+      error: "Invalid value: Expected int64 to be <= 9223372036854775807",
+    }),
+  billingToday: z.coerce
+    .bigint()
+    .min(BigInt("-9223372036854775808"), {
+      error: "Invalid value: Expected int64 to be >= -9223372036854775808",
+    })
+    .max(BigInt("9223372036854775807"), {
+      error: "Invalid value: Expected int64 to be <= 9223372036854775807",
+    }),
+  totalRevenueToday: z.coerce
+    .bigint()
+    .min(BigInt("-9223372036854775808"), {
+      error: "Invalid value: Expected int64 to be >= -9223372036854775808",
+    })
+    .max(BigInt("9223372036854775807"), {
+      error: "Invalid value: Expected int64 to be <= 9223372036854775807",
+    }),
+  totalRevenueThisMonth: z.coerce
+    .bigint()
+    .min(BigInt("-9223372036854775808"), {
+      error: "Invalid value: Expected int64 to be >= -9223372036854775808",
+    })
+    .max(BigInt("9223372036854775807"), {
+      error: "Invalid value: Expected int64 to be <= 9223372036854775807",
+    }),
+})
+
 export const zOpenapiCreateBillingItemRequest = z.object({
   id: zOpenapiUuid.optional(),
   billingId: zOpenapiUuid,
@@ -1593,6 +1700,11 @@ export const zOpenapiCreateBillingRequest = z.object({
 
 export const zOpenapiDataResponseBillingItemDto = z.object({
   data: zOpenapiBillingItemDto,
+  message: z.string().regex(/\S/),
+})
+
+export const zOpenapiDataResponseBillingStatsDto = z.object({
+  data: zOpenapiBillingStatsDto,
   message: z.string().regex(/\S/),
 })
 
@@ -3297,6 +3409,12 @@ export const zPutApiInventoryProductByIdPath = z.object({
 export const zPutApiInventoryProductByIdResponse =
   zOpenapiDataResponseProductDto
 
+/**
+ * OK
+ */
+export const zGetApiInventoryStatsResponse =
+  zOpenapiDataResponseInventoryStatsDto
+
 export const zPostApiInventoryStockBody = zOpenapiCreateStockRequest
 
 /**
@@ -3503,6 +3621,11 @@ export const zGetApiBillingByClientByClientIdQuery = z.object({
  */
 export const zGetApiBillingByClientByClientIdResponse =
   zOpenapiPageResponseBillingDto
+
+/**
+ * OK
+ */
+export const zGetApiBillingStatsResponse = zOpenapiDataResponseBillingStatsDto
 
 export const zGetApiBillingByBillingIdItemPath = z.object({
   billingId: zOpenapiUuid,
