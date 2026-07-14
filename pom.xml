@@ -13,6 +13,8 @@
         <module>services/patient</module>
         <module>services/appointment</module>
         <module>services/ehr</module>
+        <module>services/inventory</module>
+        <module>services/payment</module>
     </modules>
 
     <properties>

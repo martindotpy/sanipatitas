@@ -1152,6 +1152,572 @@ export const zOpenapiUpdateAppointmentRequest = z.object({
   veterinarianId: zOpenapiUuid,
 })
 
+export const zOpenapiCreateProductCategoryRequest = z.object({
+  id: zOpenapiUuid.optional(),
+  name: z.string().max(255).regex(/\S/),
+  description: z.string().max(1000).optional(),
+})
+
+export const zOpenapiCreateProductRequest = z.object({
+  id: zOpenapiUuid.optional(),
+  name: z.string().max(255).regex(/\S/),
+  code: z.string().max(100).optional(),
+  description: z.string().max(2000).optional(),
+  price: z.number().optional(),
+  categoryId: zOpenapiUuid.optional(),
+  supplierId: zOpenapiUuid.optional(),
+})
+
+export const zOpenapiCreateStockRequest = z.object({
+  id: zOpenapiUuid.optional(),
+  productId: zOpenapiUuid,
+  quantity: z
+    .int()
+    .gte(0)
+    .max(2147483647, {
+      error: "Invalid value: Expected int32 to be <= 2147483647",
+    })
+    .optional(),
+  location: z.string().optional(),
+  minStock: z
+    .int()
+    .gte(0)
+    .max(2147483647, {
+      error: "Invalid value: Expected int32 to be <= 2147483647",
+    })
+    .optional(),
+})
+
+export const zOpenapiCreateSupplierRequest = z.object({
+  id: zOpenapiUuid.optional(),
+  name: z.string().max(255).regex(/\S/),
+  ruc: z.string().max(20).optional(),
+  contactName: z.string().max(255).optional(),
+  contactPhone: z.string().max(50).optional(),
+  email: z.string().max(255).optional(),
+  address: z.string().max(500).optional(),
+})
+
+export const zOpenapiMovementType = z.enum([
+  "PURCHASE_ENTRY",
+  "SALE_EXIT",
+  "ADJUSTMENT",
+  "RETURN",
+  "TRANSFER",
+])
+
+export const zOpenapiCreateStockMovementRequest = z.object({
+  id: zOpenapiUuid.optional(),
+  type: zOpenapiMovementType,
+  quantity: z
+    .int()
+    .gte(1)
+    .max(2147483647, {
+      error: "Invalid value: Expected int32 to be <= 2147483647",
+    })
+    .optional(),
+  unitCost: z.number().optional(),
+  unitPrice: z.number().optional(),
+  discount: z.number().optional(),
+  reference: z.string().optional(),
+  notes: z.string().optional(),
+  stockId: zOpenapiUuid,
+})
+
+export const zOpenapiProductCategoryDto = z.object({
+  id: zOpenapiUuid,
+  name: z.string().regex(/\S/),
+  description: z.string().optional(),
+  createdAt: zOpenapiLocalDateTime,
+  updatedAt: zOpenapiLocalDateTime,
+})
+
+export const zOpenapiDataResponseProductCategoryDto = z.object({
+  data: zOpenapiProductCategoryDto,
+  message: z.string().regex(/\S/),
+})
+
+export const zOpenapiPageResponseProductCategoryDto = z.object({
+  data: z.array(zOpenapiProductCategoryDto),
+  page: z
+    .int()
+    .min(-2147483648, {
+      error: "Invalid value: Expected int32 to be >= -2147483648",
+    })
+    .max(2147483647, {
+      error: "Invalid value: Expected int32 to be <= 2147483647",
+    })
+    .optional(),
+  size: z
+    .int()
+    .min(-2147483648, {
+      error: "Invalid value: Expected int32 to be >= -2147483648",
+    })
+    .max(2147483647, {
+      error: "Invalid value: Expected int32 to be <= 2147483647",
+    })
+    .optional(),
+  totalElements: z.coerce
+    .bigint()
+    .min(BigInt("-9223372036854775808"), {
+      error: "Invalid value: Expected int64 to be >= -9223372036854775808",
+    })
+    .max(BigInt("9223372036854775807"), {
+      error: "Invalid value: Expected int64 to be <= 9223372036854775807",
+    })
+    .optional(),
+  totalPages: z
+    .int()
+    .min(-2147483648, {
+      error: "Invalid value: Expected int32 to be >= -2147483648",
+    })
+    .max(2147483647, {
+      error: "Invalid value: Expected int32 to be <= 2147483647",
+    })
+    .optional(),
+  message: z.string().regex(/\S/),
+})
+
+export const zOpenapiSupplierDto = z.object({
+  id: zOpenapiUuid,
+  name: z.string().regex(/\S/),
+  ruc: z.string().optional(),
+  contactName: z.string().optional(),
+  contactPhone: z.string().optional(),
+  email: z.string().optional(),
+  address: z.string().optional(),
+  createdAt: zOpenapiLocalDateTime,
+  updatedAt: zOpenapiLocalDateTime,
+})
+
+export const zOpenapiDataResponseSupplierDto = z.object({
+  data: zOpenapiSupplierDto,
+  message: z.string().regex(/\S/),
+})
+
+export const zOpenapiPageResponseSupplierDto = z.object({
+  data: z.array(zOpenapiSupplierDto),
+  page: z
+    .int()
+    .min(-2147483648, {
+      error: "Invalid value: Expected int32 to be >= -2147483648",
+    })
+    .max(2147483647, {
+      error: "Invalid value: Expected int32 to be <= 2147483647",
+    })
+    .optional(),
+  size: z
+    .int()
+    .min(-2147483648, {
+      error: "Invalid value: Expected int32 to be >= -2147483648",
+    })
+    .max(2147483647, {
+      error: "Invalid value: Expected int32 to be <= 2147483647",
+    })
+    .optional(),
+  totalElements: z.coerce
+    .bigint()
+    .min(BigInt("-9223372036854775808"), {
+      error: "Invalid value: Expected int64 to be >= -9223372036854775808",
+    })
+    .max(BigInt("9223372036854775807"), {
+      error: "Invalid value: Expected int64 to be <= 9223372036854775807",
+    })
+    .optional(),
+  totalPages: z
+    .int()
+    .min(-2147483648, {
+      error: "Invalid value: Expected int32 to be >= -2147483648",
+    })
+    .max(2147483647, {
+      error: "Invalid value: Expected int32 to be <= 2147483647",
+    })
+    .optional(),
+  message: z.string().regex(/\S/),
+})
+
+export const zOpenapiProductDto = z.object({
+  id: zOpenapiUuid,
+  name: z.string().regex(/\S/),
+  code: z.string().optional(),
+  description: z.string().optional(),
+  price: z.number().optional(),
+  category: zOpenapiProductCategoryDto.optional(),
+  supplier: zOpenapiSupplierDto.optional(),
+  createdAt: zOpenapiLocalDateTime,
+  updatedAt: zOpenapiLocalDateTime,
+})
+
+export const zOpenapiDataResponseProductDto = z.object({
+  data: zOpenapiProductDto,
+  message: z.string().regex(/\S/),
+})
+
+export const zOpenapiPageResponseProductDto = z.object({
+  data: z.array(zOpenapiProductDto),
+  page: z
+    .int()
+    .min(-2147483648, {
+      error: "Invalid value: Expected int32 to be >= -2147483648",
+    })
+    .max(2147483647, {
+      error: "Invalid value: Expected int32 to be <= 2147483647",
+    })
+    .optional(),
+  size: z
+    .int()
+    .min(-2147483648, {
+      error: "Invalid value: Expected int32 to be >= -2147483648",
+    })
+    .max(2147483647, {
+      error: "Invalid value: Expected int32 to be <= 2147483647",
+    })
+    .optional(),
+  totalElements: z.coerce
+    .bigint()
+    .min(BigInt("-9223372036854775808"), {
+      error: "Invalid value: Expected int64 to be >= -9223372036854775808",
+    })
+    .max(BigInt("9223372036854775807"), {
+      error: "Invalid value: Expected int64 to be <= 9223372036854775807",
+    })
+    .optional(),
+  totalPages: z
+    .int()
+    .min(-2147483648, {
+      error: "Invalid value: Expected int32 to be >= -2147483648",
+    })
+    .max(2147483647, {
+      error: "Invalid value: Expected int32 to be <= 2147483647",
+    })
+    .optional(),
+  message: z.string().regex(/\S/),
+})
+
+export const zOpenapiStockDto = z.object({
+  id: zOpenapiUuid,
+  product: zOpenapiProductDto,
+  quantity: z
+    .int()
+    .min(-2147483648, {
+      error: "Invalid value: Expected int32 to be >= -2147483648",
+    })
+    .max(2147483647, {
+      error: "Invalid value: Expected int32 to be <= 2147483647",
+    })
+    .optional(),
+  location: z.string().optional(),
+  minStock: z
+    .int()
+    .min(-2147483648, {
+      error: "Invalid value: Expected int32 to be >= -2147483648",
+    })
+    .max(2147483647, {
+      error: "Invalid value: Expected int32 to be <= 2147483647",
+    })
+    .optional(),
+  createdAt: zOpenapiLocalDateTime,
+  updatedAt: zOpenapiLocalDateTime,
+})
+
+export const zOpenapiDataResponseStockDto = z.object({
+  data: zOpenapiStockDto,
+  message: z.string().regex(/\S/),
+})
+
+export const zOpenapiStockMovementDto = z.object({
+  id: zOpenapiUuid,
+  type: zOpenapiMovementType,
+  quantity: z
+    .int()
+    .min(-2147483648, {
+      error: "Invalid value: Expected int32 to be >= -2147483648",
+    })
+    .max(2147483647, {
+      error: "Invalid value: Expected int32 to be <= 2147483647",
+    })
+    .optional(),
+  unitCost: z.number().optional(),
+  unitPrice: z.number().optional(),
+  discount: z.number().optional(),
+  reference: z.string().optional(),
+  notes: z.string().optional(),
+  stock: zOpenapiStockDto,
+  createdAt: zOpenapiLocalDateTime,
+})
+
+export const zOpenapiDataResponseStockMovementDto = z.object({
+  data: zOpenapiStockMovementDto,
+  message: z.string().regex(/\S/),
+})
+
+export const zOpenapiPageResponseStockMovementDto = z.object({
+  data: z.array(zOpenapiStockMovementDto),
+  page: z
+    .int()
+    .min(-2147483648, {
+      error: "Invalid value: Expected int32 to be >= -2147483648",
+    })
+    .max(2147483647, {
+      error: "Invalid value: Expected int32 to be <= 2147483647",
+    })
+    .optional(),
+  size: z
+    .int()
+    .min(-2147483648, {
+      error: "Invalid value: Expected int32 to be >= -2147483648",
+    })
+    .max(2147483647, {
+      error: "Invalid value: Expected int32 to be <= 2147483647",
+    })
+    .optional(),
+  totalElements: z.coerce
+    .bigint()
+    .min(BigInt("-9223372036854775808"), {
+      error: "Invalid value: Expected int64 to be >= -9223372036854775808",
+    })
+    .max(BigInt("9223372036854775807"), {
+      error: "Invalid value: Expected int64 to be <= 9223372036854775807",
+    })
+    .optional(),
+  totalPages: z
+    .int()
+    .min(-2147483648, {
+      error: "Invalid value: Expected int32 to be >= -2147483648",
+    })
+    .max(2147483647, {
+      error: "Invalid value: Expected int32 to be <= 2147483647",
+    })
+    .optional(),
+  message: z.string().regex(/\S/),
+})
+
+export const zOpenapiUpdateProductCategoryRequest = z.object({
+  name: z.string().max(255).regex(/\S/),
+  description: z.string().max(1000).optional(),
+})
+
+export const zOpenapiUpdateProductRequest = z.object({
+  name: z.string().max(255).regex(/\S/),
+  code: z.string().max(100).optional(),
+  description: z.string().max(2000).optional(),
+  price: z.number().optional(),
+  categoryId: zOpenapiUuid.optional(),
+  supplierId: zOpenapiUuid.optional(),
+})
+
+export const zOpenapiUpdateStockRequest = z.object({
+  productId: zOpenapiUuid,
+  quantity: z
+    .int()
+    .gte(0)
+    .max(2147483647, {
+      error: "Invalid value: Expected int32 to be <= 2147483647",
+    })
+    .optional(),
+  location: z.string().optional(),
+  minStock: z
+    .int()
+    .gte(0)
+    .max(2147483647, {
+      error: "Invalid value: Expected int32 to be <= 2147483647",
+    })
+    .optional(),
+})
+
+export const zOpenapiUpdateSupplierRequest = z.object({
+  name: z.string().max(255).regex(/\S/),
+  ruc: z.string().max(20).optional(),
+  contactName: z.string().max(255).optional(),
+  contactPhone: z.string().max(50).optional(),
+  email: z.string().max(255).optional(),
+  address: z.string().max(500).optional(),
+})
+
+export const zOpenapiBillingItemType = z.enum([
+  "CONSULTATION",
+  "PROCEDURE",
+  "MEDICATION",
+  "PRODUCT",
+  "OTHER",
+])
+
+export const zOpenapiBillingItemDto = z.object({
+  id: zOpenapiUuid,
+  billingId: zOpenapiUuid,
+  description: z.string(),
+  quantity: z
+    .int()
+    .min(-2147483648, {
+      error: "Invalid value: Expected int32 to be >= -2147483648",
+    })
+    .max(2147483647, {
+      error: "Invalid value: Expected int32 to be <= 2147483647",
+    })
+    .optional(),
+  unitPrice: z.number(),
+  total: z.number(),
+  itemType: zOpenapiBillingItemType,
+  referenceId: zOpenapiUuid.optional(),
+  createdAt: zOpenapiLocalDateTime,
+})
+
+export const zOpenapiCreateBillingItemRequest = z.object({
+  id: zOpenapiUuid.optional(),
+  billingId: zOpenapiUuid,
+  description: z.string().max(255).regex(/\S/),
+  quantity: z
+    .int()
+    .min(-2147483648, {
+      error: "Invalid value: Expected int32 to be >= -2147483648",
+    })
+    .max(2147483647, {
+      error: "Invalid value: Expected int32 to be <= 2147483647",
+    })
+    .optional(),
+  unitPrice: z.number(),
+  itemType: zOpenapiBillingItemType,
+  referenceId: zOpenapiUuid.optional(),
+})
+
+export const zOpenapiCreateBillingRequest = z.object({
+  id: zOpenapiUuid.optional(),
+  clientId: zOpenapiUuid,
+  appointmentId: zOpenapiUuid.optional(),
+  subtotal: z.number(),
+  discount: z.number(),
+  taxAmount: z.number(),
+  totalAmount: z.number(),
+  notes: z.string().max(500).optional(),
+})
+
+export const zOpenapiDataResponseBillingItemDto = z.object({
+  data: zOpenapiBillingItemDto,
+  message: z.string().regex(/\S/),
+})
+
+export const zOpenapiDataResponseListBillingItemDto = z.object({
+  data: z.array(zOpenapiBillingItemDto),
+  message: z.string().regex(/\S/),
+})
+
+export const zOpenapiPaymentMethod = z.enum([
+  "CASH",
+  "CARD",
+  "TRANSFER",
+  "YAPE",
+  "PLIN",
+  "OTHER",
+])
+
+export const zOpenapiCreatePaymentRequest = z.object({
+  id: zOpenapiUuid.optional(),
+  billingId: zOpenapiUuid,
+  amount: z.number(),
+  paymentMethod: zOpenapiPaymentMethod,
+  reference: z.string().max(255).optional(),
+  paidAt: zOpenapiLocalDateTime.optional(),
+  notes: z.string().max(500).optional(),
+})
+
+export const zOpenapiPaymentDto = z.object({
+  id: zOpenapiUuid,
+  billingId: zOpenapiUuid,
+  amount: z.number(),
+  paymentMethod: zOpenapiPaymentMethod,
+  reference: z.string().optional(),
+  paidAt: zOpenapiLocalDateTime,
+  notes: z.string().optional(),
+  createdAt: zOpenapiLocalDateTime,
+})
+
+export const zOpenapiDataResponseListPaymentDto = z.object({
+  data: z.array(zOpenapiPaymentDto),
+  message: z.string().regex(/\S/),
+})
+
+export const zOpenapiDataResponsePaymentDto = z.object({
+  data: zOpenapiPaymentDto,
+  message: z.string().regex(/\S/),
+})
+
+export const zOpenapiPaymentStatus = z.enum([
+  "PENDING",
+  "PARTIAL",
+  "PAID",
+  "REFUNDED",
+  "CANCELLED",
+])
+
+export const zOpenapiBillingDto = z.object({
+  id: zOpenapiUuid,
+  clientId: zOpenapiUuid,
+  appointmentId: zOpenapiUuid.optional(),
+  subtotal: z.number(),
+  discount: z.number(),
+  taxAmount: z.number(),
+  totalAmount: z.number(),
+  paymentStatus: zOpenapiPaymentStatus,
+  invoiceNumber: z.string().optional(),
+  notes: z.string().optional(),
+  createdAt: zOpenapiLocalDateTime,
+  updatedAt: zOpenapiLocalDateTime,
+})
+
+export const zOpenapiDataResponseBillingDto = z.object({
+  data: zOpenapiBillingDto,
+  message: z.string().regex(/\S/),
+})
+
+export const zOpenapiPageResponseBillingDto = z.object({
+  data: z.array(zOpenapiBillingDto),
+  page: z
+    .int()
+    .min(-2147483648, {
+      error: "Invalid value: Expected int32 to be >= -2147483648",
+    })
+    .max(2147483647, {
+      error: "Invalid value: Expected int32 to be <= 2147483647",
+    })
+    .optional(),
+  size: z
+    .int()
+    .min(-2147483648, {
+      error: "Invalid value: Expected int32 to be >= -2147483648",
+    })
+    .max(2147483647, {
+      error: "Invalid value: Expected int32 to be <= 2147483647",
+    })
+    .optional(),
+  totalElements: z.coerce
+    .bigint()
+    .min(BigInt("-9223372036854775808"), {
+      error: "Invalid value: Expected int64 to be >= -9223372036854775808",
+    })
+    .max(BigInt("9223372036854775807"), {
+      error: "Invalid value: Expected int64 to be <= 9223372036854775807",
+    })
+    .optional(),
+  totalPages: z
+    .int()
+    .min(-2147483648, {
+      error: "Invalid value: Expected int32 to be >= -2147483648",
+    })
+    .max(2147483647, {
+      error: "Invalid value: Expected int32 to be <= 2147483647",
+    })
+    .optional(),
+  message: z.string().regex(/\S/),
+})
+
+export const zOpenapiUpdateBillingRequest = z.object({
+  subtotal: z.number(),
+  discount: z.number(),
+  taxAmount: z.number(),
+  totalAmount: z.number(),
+  notes: z.string().max(500).optional(),
+})
+
 export const zOpenapiUserWritable = z.object({
   name: z.string(),
   email: z.string(),
@@ -2602,3 +3168,423 @@ export const zPutApiAppointmentByIdPath = z.object({
  * OK
  */
 export const zPutApiAppointmentByIdResponse = zOpenapiDataResponseAppointmentDto
+
+export const zGetApiInventoryProductQuery = z.object({
+  page: z
+    .int()
+    .gte(0)
+    .max(2147483647, {
+      error: "Invalid value: Expected int32 to be <= 2147483647",
+    })
+    .optional()
+    .default(0),
+  size: z
+    .int()
+    .gte(1)
+    .max(2147483647, {
+      error: "Invalid value: Expected int32 to be <= 2147483647",
+    })
+    .optional()
+    .default(20),
+})
+
+/**
+ * OK
+ */
+export const zGetApiInventoryProductResponse = zOpenapiPageResponseProductDto
+
+export const zPostApiInventoryProductBody = zOpenapiCreateProductRequest
+
+/**
+ * OK
+ */
+export const zPostApiInventoryProductResponse = zOpenapiDataResponseProductDto
+
+export const zGetApiInventoryProductCategoryQuery = z.object({
+  page: z
+    .int()
+    .gte(0)
+    .max(2147483647, {
+      error: "Invalid value: Expected int32 to be <= 2147483647",
+    })
+    .optional()
+    .default(0),
+  size: z
+    .int()
+    .gte(1)
+    .max(2147483647, {
+      error: "Invalid value: Expected int32 to be <= 2147483647",
+    })
+    .optional()
+    .default(20),
+})
+
+/**
+ * OK
+ */
+export const zGetApiInventoryProductCategoryResponse =
+  zOpenapiPageResponseProductCategoryDto
+
+export const zPostApiInventoryProductCategoryBody =
+  zOpenapiCreateProductCategoryRequest
+
+/**
+ * OK
+ */
+export const zPostApiInventoryProductCategoryResponse =
+  zOpenapiDataResponseProductCategoryDto
+
+export const zDeleteApiInventoryProductCategoryByIdPath = z.object({
+  id: zOpenapiUuid,
+})
+
+/**
+ * No Content
+ */
+export const zDeleteApiInventoryProductCategoryByIdResponse = z.void()
+
+export const zGetApiInventoryProductCategoryByIdPath = z.object({
+  id: zOpenapiUuid,
+})
+
+/**
+ * OK
+ */
+export const zGetApiInventoryProductCategoryByIdResponse =
+  zOpenapiDataResponseProductCategoryDto
+
+export const zPutApiInventoryProductCategoryByIdBody =
+  zOpenapiUpdateProductCategoryRequest
+
+export const zPutApiInventoryProductCategoryByIdPath = z.object({
+  id: zOpenapiUuid,
+})
+
+/**
+ * OK
+ */
+export const zPutApiInventoryProductCategoryByIdResponse =
+  zOpenapiDataResponseProductCategoryDto
+
+export const zDeleteApiInventoryProductByIdPath = z.object({
+  id: zOpenapiUuid,
+})
+
+/**
+ * No Content
+ */
+export const zDeleteApiInventoryProductByIdResponse = z.void()
+
+export const zGetApiInventoryProductByIdPath = z.object({
+  id: zOpenapiUuid,
+})
+
+/**
+ * OK
+ */
+export const zGetApiInventoryProductByIdResponse =
+  zOpenapiDataResponseProductDto
+
+export const zPutApiInventoryProductByIdBody = zOpenapiUpdateProductRequest
+
+export const zPutApiInventoryProductByIdPath = z.object({
+  id: zOpenapiUuid,
+})
+
+/**
+ * OK
+ */
+export const zPutApiInventoryProductByIdResponse =
+  zOpenapiDataResponseProductDto
+
+export const zPostApiInventoryStockBody = zOpenapiCreateStockRequest
+
+/**
+ * OK
+ */
+export const zPostApiInventoryStockResponse = zOpenapiDataResponseStockDto
+
+export const zPostApiInventoryStockMovementBody =
+  zOpenapiCreateStockMovementRequest
+
+/**
+ * OK
+ */
+export const zPostApiInventoryStockMovementResponse =
+  zOpenapiDataResponseStockMovementDto
+
+export const zGetApiInventoryStockMovementByStockByStockIdPath = z.object({
+  stockId: zOpenapiUuid,
+})
+
+export const zGetApiInventoryStockMovementByStockByStockIdQuery = z.object({
+  page: z
+    .int()
+    .gte(0)
+    .max(2147483647, {
+      error: "Invalid value: Expected int32 to be <= 2147483647",
+    })
+    .optional()
+    .default(0),
+  size: z
+    .int()
+    .gte(1)
+    .max(2147483647, {
+      error: "Invalid value: Expected int32 to be <= 2147483647",
+    })
+    .optional()
+    .default(20),
+})
+
+/**
+ * OK
+ */
+export const zGetApiInventoryStockMovementByStockByStockIdResponse =
+  zOpenapiPageResponseStockMovementDto
+
+export const zGetApiInventoryStockByProductQuery = z.object({
+  productId: zOpenapiUuid.optional(),
+})
+
+/**
+ * OK
+ */
+export const zGetApiInventoryStockByProductResponse =
+  zOpenapiDataResponseStockDto
+
+export const zGetApiInventoryStockByIdPath = z.object({
+  id: zOpenapiUuid,
+})
+
+/**
+ * OK
+ */
+export const zGetApiInventoryStockByIdResponse = zOpenapiDataResponseStockDto
+
+export const zPutApiInventoryStockByIdBody = zOpenapiUpdateStockRequest
+
+export const zPutApiInventoryStockByIdPath = z.object({
+  id: zOpenapiUuid,
+})
+
+/**
+ * OK
+ */
+export const zPutApiInventoryStockByIdResponse = zOpenapiDataResponseStockDto
+
+export const zGetApiInventorySupplierQuery = z.object({
+  page: z
+    .int()
+    .gte(0)
+    .max(2147483647, {
+      error: "Invalid value: Expected int32 to be <= 2147483647",
+    })
+    .optional()
+    .default(0),
+  size: z
+    .int()
+    .gte(1)
+    .max(2147483647, {
+      error: "Invalid value: Expected int32 to be <= 2147483647",
+    })
+    .optional()
+    .default(20),
+})
+
+/**
+ * OK
+ */
+export const zGetApiInventorySupplierResponse = zOpenapiPageResponseSupplierDto
+
+export const zPostApiInventorySupplierBody = zOpenapiCreateSupplierRequest
+
+/**
+ * OK
+ */
+export const zPostApiInventorySupplierResponse = zOpenapiDataResponseSupplierDto
+
+export const zDeleteApiInventorySupplierByIdPath = z.object({
+  id: zOpenapiUuid,
+})
+
+/**
+ * No Content
+ */
+export const zDeleteApiInventorySupplierByIdResponse = z.void()
+
+export const zGetApiInventorySupplierByIdPath = z.object({
+  id: zOpenapiUuid,
+})
+
+/**
+ * OK
+ */
+export const zGetApiInventorySupplierByIdResponse =
+  zOpenapiDataResponseSupplierDto
+
+export const zPutApiInventorySupplierByIdBody = zOpenapiUpdateSupplierRequest
+
+export const zPutApiInventorySupplierByIdPath = z.object({
+  id: zOpenapiUuid,
+})
+
+/**
+ * OK
+ */
+export const zPutApiInventorySupplierByIdResponse =
+  zOpenapiDataResponseSupplierDto
+
+export const zGetApiBillingQuery = z.object({
+  page: z
+    .int()
+    .gte(0)
+    .max(2147483647, {
+      error: "Invalid value: Expected int32 to be <= 2147483647",
+    })
+    .optional()
+    .default(0),
+  size: z
+    .int()
+    .gte(1)
+    .max(2147483647, {
+      error: "Invalid value: Expected int32 to be <= 2147483647",
+    })
+    .optional()
+    .default(20),
+})
+
+/**
+ * OK
+ */
+export const zGetApiBillingResponse = zOpenapiPageResponseBillingDto
+
+export const zPostApiBillingBody = zOpenapiCreateBillingRequest
+
+/**
+ * OK
+ */
+export const zPostApiBillingResponse = zOpenapiDataResponseBillingDto
+
+export const zGetApiBillingByAppointmentByAppointmentIdPath = z.object({
+  appointmentId: zOpenapiUuid,
+})
+
+/**
+ * OK
+ */
+export const zGetApiBillingByAppointmentByAppointmentIdResponse =
+  zOpenapiDataResponseBillingDto
+
+export const zGetApiBillingByClientByClientIdPath = z.object({
+  clientId: zOpenapiUuid,
+})
+
+export const zGetApiBillingByClientByClientIdQuery = z.object({
+  page: z
+    .int()
+    .gte(0)
+    .max(2147483647, {
+      error: "Invalid value: Expected int32 to be <= 2147483647",
+    })
+    .optional()
+    .default(0),
+  size: z
+    .int()
+    .gte(1)
+    .max(2147483647, {
+      error: "Invalid value: Expected int32 to be <= 2147483647",
+    })
+    .optional()
+    .default(20),
+})
+
+/**
+ * OK
+ */
+export const zGetApiBillingByClientByClientIdResponse =
+  zOpenapiPageResponseBillingDto
+
+export const zGetApiBillingByBillingIdItemPath = z.object({
+  billingId: zOpenapiUuid,
+})
+
+/**
+ * OK
+ */
+export const zGetApiBillingByBillingIdItemResponse =
+  zOpenapiDataResponseListBillingItemDto
+
+export const zPostApiBillingByBillingIdItemBody =
+  zOpenapiCreateBillingItemRequest
+
+export const zPostApiBillingByBillingIdItemPath = z.object({
+  billingId: zOpenapiUuid,
+})
+
+/**
+ * OK
+ */
+export const zPostApiBillingByBillingIdItemResponse =
+  zOpenapiDataResponseBillingItemDto
+
+export const zDeleteApiBillingByBillingIdItemByItemIdPath = z.object({
+  billingId: zOpenapiUuid,
+  itemId: zOpenapiUuid,
+})
+
+/**
+ * No Content
+ */
+export const zDeleteApiBillingByBillingIdItemByItemIdResponse = z.void()
+
+export const zGetApiBillingByBillingIdPaymentPath = z.object({
+  billingId: zOpenapiUuid,
+})
+
+/**
+ * OK
+ */
+export const zGetApiBillingByBillingIdPaymentResponse =
+  zOpenapiDataResponseListPaymentDto
+
+export const zPostApiBillingByBillingIdPaymentBody =
+  zOpenapiCreatePaymentRequest
+
+export const zPostApiBillingByBillingIdPaymentPath = z.object({
+  billingId: zOpenapiUuid,
+})
+
+/**
+ * OK
+ */
+export const zPostApiBillingByBillingIdPaymentResponse =
+  zOpenapiDataResponsePaymentDto
+
+export const zDeleteApiBillingByIdPath = z.object({
+  id: zOpenapiUuid,
+})
+
+/**
+ * No Content
+ */
+export const zDeleteApiBillingByIdResponse = z.void()
+
+export const zGetApiBillingByIdPath = z.object({
+  id: zOpenapiUuid,
+})
+
+/**
+ * OK
+ */
+export const zGetApiBillingByIdResponse = zOpenapiDataResponseBillingDto
+
+export const zPutApiBillingByIdBody = zOpenapiUpdateBillingRequest
+
+export const zPutApiBillingByIdPath = z.object({
+  id: zOpenapiUuid,
+})
+
+/**
+ * OK
+ */
+export const zPutApiBillingByIdResponse = zOpenapiDataResponseBillingDto

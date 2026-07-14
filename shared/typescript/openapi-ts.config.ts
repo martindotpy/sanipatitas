@@ -6,6 +6,8 @@ export default defineConfig({
     { path: "http://localhost:8080/api/patient/openapi.json" },
     { path: "http://localhost:8082/api/clinical/openapi.json" },
     { path: "http://localhost:8081/api/appointment/openapi.json" },
+    { path: "http://localhost:8083/api/inventory/openapi.json" },
+    { path: "http://localhost:8084/api/billing/openapi.json" },
   ],
   output: {
     path: "src/api/client",

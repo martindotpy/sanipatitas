@@ -13,6 +13,12 @@ import type {
   DeleteApiAppointmentByIdData,
   DeleteApiAppointmentByIdErrors,
   DeleteApiAppointmentByIdResponses,
+  DeleteApiBillingByBillingIdItemByItemIdData,
+  DeleteApiBillingByBillingIdItemByItemIdErrors,
+  DeleteApiBillingByBillingIdItemByItemIdResponses,
+  DeleteApiBillingByIdData,
+  DeleteApiBillingByIdErrors,
+  DeleteApiBillingByIdResponses,
   DeleteApiBreedByIdData,
   DeleteApiBreedByIdErrors,
   DeleteApiBreedByIdResponses,
@@ -34,6 +40,15 @@ import type {
   DeleteApiClinicalProcedureByIdData,
   DeleteApiClinicalProcedureByIdErrors,
   DeleteApiClinicalProcedureByIdResponses,
+  DeleteApiInventoryProductByIdData,
+  DeleteApiInventoryProductByIdErrors,
+  DeleteApiInventoryProductByIdResponses,
+  DeleteApiInventoryProductCategoryByIdData,
+  DeleteApiInventoryProductCategoryByIdErrors,
+  DeleteApiInventoryProductCategoryByIdResponses,
+  DeleteApiInventorySupplierByIdData,
+  DeleteApiInventorySupplierByIdErrors,
+  DeleteApiInventorySupplierByIdResponses,
   DeleteApiPatientByIdData,
   DeleteApiPatientByIdErrors,
   DeleteApiPatientByIdResponses,
@@ -70,6 +85,24 @@ import type {
   GetApiAuthVerifyEmailData,
   GetApiAuthVerifyEmailErrors,
   GetApiAuthVerifyEmailResponses,
+  GetApiBillingByAppointmentByAppointmentIdData,
+  GetApiBillingByAppointmentByAppointmentIdErrors,
+  GetApiBillingByAppointmentByAppointmentIdResponses,
+  GetApiBillingByBillingIdItemData,
+  GetApiBillingByBillingIdItemErrors,
+  GetApiBillingByBillingIdItemResponses,
+  GetApiBillingByBillingIdPaymentData,
+  GetApiBillingByBillingIdPaymentErrors,
+  GetApiBillingByBillingIdPaymentResponses,
+  GetApiBillingByClientByClientIdData,
+  GetApiBillingByClientByClientIdErrors,
+  GetApiBillingByClientByClientIdResponses,
+  GetApiBillingByIdData,
+  GetApiBillingByIdErrors,
+  GetApiBillingByIdResponses,
+  GetApiBillingData,
+  GetApiBillingErrors,
+  GetApiBillingResponses,
   GetApiBreedByIdData,
   GetApiBreedByIdErrors,
   GetApiBreedByIdResponses,
@@ -112,6 +145,33 @@ import type {
   GetApiClinicalProcedureData,
   GetApiClinicalProcedureErrors,
   GetApiClinicalProcedureResponses,
+  GetApiInventoryProductByIdData,
+  GetApiInventoryProductByIdErrors,
+  GetApiInventoryProductByIdResponses,
+  GetApiInventoryProductCategoryByIdData,
+  GetApiInventoryProductCategoryByIdErrors,
+  GetApiInventoryProductCategoryByIdResponses,
+  GetApiInventoryProductCategoryData,
+  GetApiInventoryProductCategoryErrors,
+  GetApiInventoryProductCategoryResponses,
+  GetApiInventoryProductData,
+  GetApiInventoryProductErrors,
+  GetApiInventoryProductResponses,
+  GetApiInventoryStockByIdData,
+  GetApiInventoryStockByIdErrors,
+  GetApiInventoryStockByIdResponses,
+  GetApiInventoryStockByProductData,
+  GetApiInventoryStockByProductErrors,
+  GetApiInventoryStockByProductResponses,
+  GetApiInventoryStockMovementByStockByStockIdData,
+  GetApiInventoryStockMovementByStockByStockIdErrors,
+  GetApiInventoryStockMovementByStockByStockIdResponses,
+  GetApiInventorySupplierByIdData,
+  GetApiInventorySupplierByIdErrors,
+  GetApiInventorySupplierByIdResponses,
+  GetApiInventorySupplierData,
+  GetApiInventorySupplierErrors,
+  GetApiInventorySupplierResponses,
   GetApiPatientByIdData,
   GetApiPatientByIdErrors,
   GetApiPatientByIdResponses,
@@ -257,6 +317,15 @@ import type {
   PostApiAuthUnlinkAccountData,
   PostApiAuthUnlinkAccountErrors,
   PostApiAuthUnlinkAccountResponses,
+  PostApiBillingByBillingIdItemData,
+  PostApiBillingByBillingIdItemErrors,
+  PostApiBillingByBillingIdItemResponses,
+  PostApiBillingByBillingIdPaymentData,
+  PostApiBillingByBillingIdPaymentErrors,
+  PostApiBillingByBillingIdPaymentResponses,
+  PostApiBillingData,
+  PostApiBillingErrors,
+  PostApiBillingResponses,
   PostApiBreedData,
   PostApiBreedErrors,
   PostApiBreedResponses,
@@ -278,6 +347,21 @@ import type {
   PostApiClinicalProcedureData,
   PostApiClinicalProcedureErrors,
   PostApiClinicalProcedureResponses,
+  PostApiInventoryProductCategoryData,
+  PostApiInventoryProductCategoryErrors,
+  PostApiInventoryProductCategoryResponses,
+  PostApiInventoryProductData,
+  PostApiInventoryProductErrors,
+  PostApiInventoryProductResponses,
+  PostApiInventoryStockData,
+  PostApiInventoryStockErrors,
+  PostApiInventoryStockMovementData,
+  PostApiInventoryStockMovementErrors,
+  PostApiInventoryStockMovementResponses,
+  PostApiInventoryStockResponses,
+  PostApiInventorySupplierData,
+  PostApiInventorySupplierErrors,
+  PostApiInventorySupplierResponses,
   PostApiPatientData,
   PostApiPatientErrors,
   PostApiPatientResponses,
@@ -287,6 +371,9 @@ import type {
   PutApiAppointmentByIdData,
   PutApiAppointmentByIdErrors,
   PutApiAppointmentByIdResponses,
+  PutApiBillingByIdData,
+  PutApiBillingByIdErrors,
+  PutApiBillingByIdResponses,
   PutApiBreedByIdData,
   PutApiBreedByIdErrors,
   PutApiBreedByIdResponses,
@@ -308,6 +395,18 @@ import type {
   PutApiClinicalProcedureByIdData,
   PutApiClinicalProcedureByIdErrors,
   PutApiClinicalProcedureByIdResponses,
+  PutApiInventoryProductByIdData,
+  PutApiInventoryProductByIdErrors,
+  PutApiInventoryProductByIdResponses,
+  PutApiInventoryProductCategoryByIdData,
+  PutApiInventoryProductCategoryByIdErrors,
+  PutApiInventoryProductCategoryByIdResponses,
+  PutApiInventoryStockByIdData,
+  PutApiInventoryStockByIdErrors,
+  PutApiInventoryStockByIdResponses,
+  PutApiInventorySupplierByIdData,
+  PutApiInventorySupplierByIdErrors,
+  PutApiInventorySupplierByIdResponses,
   PutApiPatientByIdData,
   PutApiPatientByIdErrors,
   PutApiPatientByIdResponses,
@@ -2327,6 +2426,662 @@ export const putApiAppointmentById = <ThrowOnError extends boolean = false>(
     ThrowOnError
   >({
     url: "/api/appointment/{id}",
+    ...options,
+    headers: {
+      "Content-Type": "application/json",
+      ...options.headers,
+    },
+  })
+
+/**
+ * Find All
+ */
+export const getApiInventoryProduct = <ThrowOnError extends boolean = false>(
+  options?: Options<GetApiInventoryProductData, ThrowOnError>
+): RequestResult<
+  GetApiInventoryProductResponses,
+  GetApiInventoryProductErrors,
+  ThrowOnError
+> =>
+  (options?.client ?? client).get<
+    GetApiInventoryProductResponses,
+    GetApiInventoryProductErrors,
+    ThrowOnError
+  >({ url: "/api/inventory/product", ...options })
+
+/**
+ * Create
+ */
+export const postApiInventoryProduct = <ThrowOnError extends boolean = false>(
+  options: Options<PostApiInventoryProductData, ThrowOnError>
+): RequestResult<
+  PostApiInventoryProductResponses,
+  PostApiInventoryProductErrors,
+  ThrowOnError
+> =>
+  (options.client ?? client).post<
+    PostApiInventoryProductResponses,
+    PostApiInventoryProductErrors,
+    ThrowOnError
+  >({
+    url: "/api/inventory/product",
+    ...options,
+    headers: {
+      "Content-Type": "application/json",
+      ...options.headers,
+    },
+  })
+
+/**
+ * Find All
+ */
+export const getApiInventoryProductCategory = <
+  ThrowOnError extends boolean = false,
+>(
+  options?: Options<GetApiInventoryProductCategoryData, ThrowOnError>
+): RequestResult<
+  GetApiInventoryProductCategoryResponses,
+  GetApiInventoryProductCategoryErrors,
+  ThrowOnError
+> =>
+  (options?.client ?? client).get<
+    GetApiInventoryProductCategoryResponses,
+    GetApiInventoryProductCategoryErrors,
+    ThrowOnError
+  >({ url: "/api/inventory/product-category", ...options })
+
+/**
+ * Create
+ */
+export const postApiInventoryProductCategory = <
+  ThrowOnError extends boolean = false,
+>(
+  options: Options<PostApiInventoryProductCategoryData, ThrowOnError>
+): RequestResult<
+  PostApiInventoryProductCategoryResponses,
+  PostApiInventoryProductCategoryErrors,
+  ThrowOnError
+> =>
+  (options.client ?? client).post<
+    PostApiInventoryProductCategoryResponses,
+    PostApiInventoryProductCategoryErrors,
+    ThrowOnError
+  >({
+    url: "/api/inventory/product-category",
+    ...options,
+    headers: {
+      "Content-Type": "application/json",
+      ...options.headers,
+    },
+  })
+
+/**
+ * Delete
+ */
+export const deleteApiInventoryProductCategoryById = <
+  ThrowOnError extends boolean = false,
+>(
+  options: Options<DeleteApiInventoryProductCategoryByIdData, ThrowOnError>
+): RequestResult<
+  DeleteApiInventoryProductCategoryByIdResponses,
+  DeleteApiInventoryProductCategoryByIdErrors,
+  ThrowOnError
+> =>
+  (options.client ?? client).delete<
+    DeleteApiInventoryProductCategoryByIdResponses,
+    DeleteApiInventoryProductCategoryByIdErrors,
+    ThrowOnError
+  >({ url: "/api/inventory/product-category/{id}", ...options })
+
+/**
+ * Get By Id
+ */
+export const getApiInventoryProductCategoryById = <
+  ThrowOnError extends boolean = false,
+>(
+  options: Options<GetApiInventoryProductCategoryByIdData, ThrowOnError>
+): RequestResult<
+  GetApiInventoryProductCategoryByIdResponses,
+  GetApiInventoryProductCategoryByIdErrors,
+  ThrowOnError
+> =>
+  (options.client ?? client).get<
+    GetApiInventoryProductCategoryByIdResponses,
+    GetApiInventoryProductCategoryByIdErrors,
+    ThrowOnError
+  >({ url: "/api/inventory/product-category/{id}", ...options })
+
+/**
+ * Update
+ */
+export const putApiInventoryProductCategoryById = <
+  ThrowOnError extends boolean = false,
+>(
+  options: Options<PutApiInventoryProductCategoryByIdData, ThrowOnError>
+): RequestResult<
+  PutApiInventoryProductCategoryByIdResponses,
+  PutApiInventoryProductCategoryByIdErrors,
+  ThrowOnError
+> =>
+  (options.client ?? client).put<
+    PutApiInventoryProductCategoryByIdResponses,
+    PutApiInventoryProductCategoryByIdErrors,
+    ThrowOnError
+  >({
+    url: "/api/inventory/product-category/{id}",
+    ...options,
+    headers: {
+      "Content-Type": "application/json",
+      ...options.headers,
+    },
+  })
+
+/**
+ * Delete
+ */
+export const deleteApiInventoryProductById = <
+  ThrowOnError extends boolean = false,
+>(
+  options: Options<DeleteApiInventoryProductByIdData, ThrowOnError>
+): RequestResult<
+  DeleteApiInventoryProductByIdResponses,
+  DeleteApiInventoryProductByIdErrors,
+  ThrowOnError
+> =>
+  (options.client ?? client).delete<
+    DeleteApiInventoryProductByIdResponses,
+    DeleteApiInventoryProductByIdErrors,
+    ThrowOnError
+  >({ url: "/api/inventory/product/{id}", ...options })
+
+/**
+ * Get By Id
+ */
+export const getApiInventoryProductById = <
+  ThrowOnError extends boolean = false,
+>(
+  options: Options<GetApiInventoryProductByIdData, ThrowOnError>
+): RequestResult<
+  GetApiInventoryProductByIdResponses,
+  GetApiInventoryProductByIdErrors,
+  ThrowOnError
+> =>
+  (options.client ?? client).get<
+    GetApiInventoryProductByIdResponses,
+    GetApiInventoryProductByIdErrors,
+    ThrowOnError
+  >({ url: "/api/inventory/product/{id}", ...options })
+
+/**
+ * Update
+ */
+export const putApiInventoryProductById = <
+  ThrowOnError extends boolean = false,
+>(
+  options: Options<PutApiInventoryProductByIdData, ThrowOnError>
+): RequestResult<
+  PutApiInventoryProductByIdResponses,
+  PutApiInventoryProductByIdErrors,
+  ThrowOnError
+> =>
+  (options.client ?? client).put<
+    PutApiInventoryProductByIdResponses,
+    PutApiInventoryProductByIdErrors,
+    ThrowOnError
+  >({
+    url: "/api/inventory/product/{id}",
+    ...options,
+    headers: {
+      "Content-Type": "application/json",
+      ...options.headers,
+    },
+  })
+
+/**
+ * Create
+ */
+export const postApiInventoryStock = <ThrowOnError extends boolean = false>(
+  options: Options<PostApiInventoryStockData, ThrowOnError>
+): RequestResult<
+  PostApiInventoryStockResponses,
+  PostApiInventoryStockErrors,
+  ThrowOnError
+> =>
+  (options.client ?? client).post<
+    PostApiInventoryStockResponses,
+    PostApiInventoryStockErrors,
+    ThrowOnError
+  >({
+    url: "/api/inventory/stock",
+    ...options,
+    headers: {
+      "Content-Type": "application/json",
+      ...options.headers,
+    },
+  })
+
+/**
+ * Create
+ */
+export const postApiInventoryStockMovement = <
+  ThrowOnError extends boolean = false,
+>(
+  options: Options<PostApiInventoryStockMovementData, ThrowOnError>
+): RequestResult<
+  PostApiInventoryStockMovementResponses,
+  PostApiInventoryStockMovementErrors,
+  ThrowOnError
+> =>
+  (options.client ?? client).post<
+    PostApiInventoryStockMovementResponses,
+    PostApiInventoryStockMovementErrors,
+    ThrowOnError
+  >({
+    url: "/api/inventory/stock-movement",
+    ...options,
+    headers: {
+      "Content-Type": "application/json",
+      ...options.headers,
+    },
+  })
+
+/**
+ * Find By Stock Id
+ */
+export const getApiInventoryStockMovementByStockByStockId = <
+  ThrowOnError extends boolean = false,
+>(
+  options: Options<
+    GetApiInventoryStockMovementByStockByStockIdData,
+    ThrowOnError
+  >
+): RequestResult<
+  GetApiInventoryStockMovementByStockByStockIdResponses,
+  GetApiInventoryStockMovementByStockByStockIdErrors,
+  ThrowOnError
+> =>
+  (options.client ?? client).get<
+    GetApiInventoryStockMovementByStockByStockIdResponses,
+    GetApiInventoryStockMovementByStockByStockIdErrors,
+    ThrowOnError
+  >({ url: "/api/inventory/stock-movement/by-stock/{stockId}", ...options })
+
+/**
+ * Find By Product Id
+ */
+export const getApiInventoryStockByProduct = <
+  ThrowOnError extends boolean = false,
+>(
+  options?: Options<GetApiInventoryStockByProductData, ThrowOnError>
+): RequestResult<
+  GetApiInventoryStockByProductResponses,
+  GetApiInventoryStockByProductErrors,
+  ThrowOnError
+> =>
+  (options?.client ?? client).get<
+    GetApiInventoryStockByProductResponses,
+    GetApiInventoryStockByProductErrors,
+    ThrowOnError
+  >({ url: "/api/inventory/stock/by-product", ...options })
+
+/**
+ * Get By Id
+ */
+export const getApiInventoryStockById = <ThrowOnError extends boolean = false>(
+  options: Options<GetApiInventoryStockByIdData, ThrowOnError>
+): RequestResult<
+  GetApiInventoryStockByIdResponses,
+  GetApiInventoryStockByIdErrors,
+  ThrowOnError
+> =>
+  (options.client ?? client).get<
+    GetApiInventoryStockByIdResponses,
+    GetApiInventoryStockByIdErrors,
+    ThrowOnError
+  >({ url: "/api/inventory/stock/{id}", ...options })
+
+/**
+ * Update
+ */
+export const putApiInventoryStockById = <ThrowOnError extends boolean = false>(
+  options: Options<PutApiInventoryStockByIdData, ThrowOnError>
+): RequestResult<
+  PutApiInventoryStockByIdResponses,
+  PutApiInventoryStockByIdErrors,
+  ThrowOnError
+> =>
+  (options.client ?? client).put<
+    PutApiInventoryStockByIdResponses,
+    PutApiInventoryStockByIdErrors,
+    ThrowOnError
+  >({
+    url: "/api/inventory/stock/{id}",
+    ...options,
+    headers: {
+      "Content-Type": "application/json",
+      ...options.headers,
+    },
+  })
+
+/**
+ * Find All
+ */
+export const getApiInventorySupplier = <ThrowOnError extends boolean = false>(
+  options?: Options<GetApiInventorySupplierData, ThrowOnError>
+): RequestResult<
+  GetApiInventorySupplierResponses,
+  GetApiInventorySupplierErrors,
+  ThrowOnError
+> =>
+  (options?.client ?? client).get<
+    GetApiInventorySupplierResponses,
+    GetApiInventorySupplierErrors,
+    ThrowOnError
+  >({ url: "/api/inventory/supplier", ...options })
+
+/**
+ * Create
+ */
+export const postApiInventorySupplier = <ThrowOnError extends boolean = false>(
+  options: Options<PostApiInventorySupplierData, ThrowOnError>
+): RequestResult<
+  PostApiInventorySupplierResponses,
+  PostApiInventorySupplierErrors,
+  ThrowOnError
+> =>
+  (options.client ?? client).post<
+    PostApiInventorySupplierResponses,
+    PostApiInventorySupplierErrors,
+    ThrowOnError
+  >({
+    url: "/api/inventory/supplier",
+    ...options,
+    headers: {
+      "Content-Type": "application/json",
+      ...options.headers,
+    },
+  })
+
+/**
+ * Delete
+ */
+export const deleteApiInventorySupplierById = <
+  ThrowOnError extends boolean = false,
+>(
+  options: Options<DeleteApiInventorySupplierByIdData, ThrowOnError>
+): RequestResult<
+  DeleteApiInventorySupplierByIdResponses,
+  DeleteApiInventorySupplierByIdErrors,
+  ThrowOnError
+> =>
+  (options.client ?? client).delete<
+    DeleteApiInventorySupplierByIdResponses,
+    DeleteApiInventorySupplierByIdErrors,
+    ThrowOnError
+  >({ url: "/api/inventory/supplier/{id}", ...options })
+
+/**
+ * Get By Id
+ */
+export const getApiInventorySupplierById = <
+  ThrowOnError extends boolean = false,
+>(
+  options: Options<GetApiInventorySupplierByIdData, ThrowOnError>
+): RequestResult<
+  GetApiInventorySupplierByIdResponses,
+  GetApiInventorySupplierByIdErrors,
+  ThrowOnError
+> =>
+  (options.client ?? client).get<
+    GetApiInventorySupplierByIdResponses,
+    GetApiInventorySupplierByIdErrors,
+    ThrowOnError
+  >({ url: "/api/inventory/supplier/{id}", ...options })
+
+/**
+ * Update
+ */
+export const putApiInventorySupplierById = <
+  ThrowOnError extends boolean = false,
+>(
+  options: Options<PutApiInventorySupplierByIdData, ThrowOnError>
+): RequestResult<
+  PutApiInventorySupplierByIdResponses,
+  PutApiInventorySupplierByIdErrors,
+  ThrowOnError
+> =>
+  (options.client ?? client).put<
+    PutApiInventorySupplierByIdResponses,
+    PutApiInventorySupplierByIdErrors,
+    ThrowOnError
+  >({
+    url: "/api/inventory/supplier/{id}",
+    ...options,
+    headers: {
+      "Content-Type": "application/json",
+      ...options.headers,
+    },
+  })
+
+/**
+ * Find All
+ */
+export const getApiBilling = <ThrowOnError extends boolean = false>(
+  options?: Options<GetApiBillingData, ThrowOnError>
+): RequestResult<GetApiBillingResponses, GetApiBillingErrors, ThrowOnError> =>
+  (options?.client ?? client).get<
+    GetApiBillingResponses,
+    GetApiBillingErrors,
+    ThrowOnError
+  >({ url: "/api/billing", ...options })
+
+/**
+ * Create
+ */
+export const postApiBilling = <ThrowOnError extends boolean = false>(
+  options: Options<PostApiBillingData, ThrowOnError>
+): RequestResult<PostApiBillingResponses, PostApiBillingErrors, ThrowOnError> =>
+  (options.client ?? client).post<
+    PostApiBillingResponses,
+    PostApiBillingErrors,
+    ThrowOnError
+  >({
+    url: "/api/billing",
+    ...options,
+    headers: {
+      "Content-Type": "application/json",
+      ...options.headers,
+    },
+  })
+
+/**
+ * Get By Appointment Id
+ */
+export const getApiBillingByAppointmentByAppointmentId = <
+  ThrowOnError extends boolean = false,
+>(
+  options: Options<GetApiBillingByAppointmentByAppointmentIdData, ThrowOnError>
+): RequestResult<
+  GetApiBillingByAppointmentByAppointmentIdResponses,
+  GetApiBillingByAppointmentByAppointmentIdErrors,
+  ThrowOnError
+> =>
+  (options.client ?? client).get<
+    GetApiBillingByAppointmentByAppointmentIdResponses,
+    GetApiBillingByAppointmentByAppointmentIdErrors,
+    ThrowOnError
+  >({ url: "/api/billing/by-appointment/{appointmentId}", ...options })
+
+/**
+ * Get By Client Id
+ */
+export const getApiBillingByClientByClientId = <
+  ThrowOnError extends boolean = false,
+>(
+  options: Options<GetApiBillingByClientByClientIdData, ThrowOnError>
+): RequestResult<
+  GetApiBillingByClientByClientIdResponses,
+  GetApiBillingByClientByClientIdErrors,
+  ThrowOnError
+> =>
+  (options.client ?? client).get<
+    GetApiBillingByClientByClientIdResponses,
+    GetApiBillingByClientByClientIdErrors,
+    ThrowOnError
+  >({ url: "/api/billing/by-client/{clientId}", ...options })
+
+/**
+ * List Items
+ */
+export const getApiBillingByBillingIdItem = <
+  ThrowOnError extends boolean = false,
+>(
+  options: Options<GetApiBillingByBillingIdItemData, ThrowOnError>
+): RequestResult<
+  GetApiBillingByBillingIdItemResponses,
+  GetApiBillingByBillingIdItemErrors,
+  ThrowOnError
+> =>
+  (options.client ?? client).get<
+    GetApiBillingByBillingIdItemResponses,
+    GetApiBillingByBillingIdItemErrors,
+    ThrowOnError
+  >({ url: "/api/billing/{billingId}/item", ...options })
+
+/**
+ * Create Item
+ */
+export const postApiBillingByBillingIdItem = <
+  ThrowOnError extends boolean = false,
+>(
+  options: Options<PostApiBillingByBillingIdItemData, ThrowOnError>
+): RequestResult<
+  PostApiBillingByBillingIdItemResponses,
+  PostApiBillingByBillingIdItemErrors,
+  ThrowOnError
+> =>
+  (options.client ?? client).post<
+    PostApiBillingByBillingIdItemResponses,
+    PostApiBillingByBillingIdItemErrors,
+    ThrowOnError
+  >({
+    url: "/api/billing/{billingId}/item",
+    ...options,
+    headers: {
+      "Content-Type": "application/json",
+      ...options.headers,
+    },
+  })
+
+/**
+ * Delete Item
+ */
+export const deleteApiBillingByBillingIdItemByItemId = <
+  ThrowOnError extends boolean = false,
+>(
+  options: Options<DeleteApiBillingByBillingIdItemByItemIdData, ThrowOnError>
+): RequestResult<
+  DeleteApiBillingByBillingIdItemByItemIdResponses,
+  DeleteApiBillingByBillingIdItemByItemIdErrors,
+  ThrowOnError
+> =>
+  (options.client ?? client).delete<
+    DeleteApiBillingByBillingIdItemByItemIdResponses,
+    DeleteApiBillingByBillingIdItemByItemIdErrors,
+    ThrowOnError
+  >({ url: "/api/billing/{billingId}/item/{itemId}", ...options })
+
+/**
+ * List Payments
+ */
+export const getApiBillingByBillingIdPayment = <
+  ThrowOnError extends boolean = false,
+>(
+  options: Options<GetApiBillingByBillingIdPaymentData, ThrowOnError>
+): RequestResult<
+  GetApiBillingByBillingIdPaymentResponses,
+  GetApiBillingByBillingIdPaymentErrors,
+  ThrowOnError
+> =>
+  (options.client ?? client).get<
+    GetApiBillingByBillingIdPaymentResponses,
+    GetApiBillingByBillingIdPaymentErrors,
+    ThrowOnError
+  >({ url: "/api/billing/{billingId}/payment", ...options })
+
+/**
+ * Create Payment
+ */
+export const postApiBillingByBillingIdPayment = <
+  ThrowOnError extends boolean = false,
+>(
+  options: Options<PostApiBillingByBillingIdPaymentData, ThrowOnError>
+): RequestResult<
+  PostApiBillingByBillingIdPaymentResponses,
+  PostApiBillingByBillingIdPaymentErrors,
+  ThrowOnError
+> =>
+  (options.client ?? client).post<
+    PostApiBillingByBillingIdPaymentResponses,
+    PostApiBillingByBillingIdPaymentErrors,
+    ThrowOnError
+  >({
+    url: "/api/billing/{billingId}/payment",
+    ...options,
+    headers: {
+      "Content-Type": "application/json",
+      ...options.headers,
+    },
+  })
+
+/**
+ * Delete
+ */
+export const deleteApiBillingById = <ThrowOnError extends boolean = false>(
+  options: Options<DeleteApiBillingByIdData, ThrowOnError>
+): RequestResult<
+  DeleteApiBillingByIdResponses,
+  DeleteApiBillingByIdErrors,
+  ThrowOnError
+> =>
+  (options.client ?? client).delete<
+    DeleteApiBillingByIdResponses,
+    DeleteApiBillingByIdErrors,
+    ThrowOnError
+  >({ url: "/api/billing/{id}", ...options })
+
+/**
+ * Get By Id
+ */
+export const getApiBillingById = <ThrowOnError extends boolean = false>(
+  options: Options<GetApiBillingByIdData, ThrowOnError>
+): RequestResult<
+  GetApiBillingByIdResponses,
+  GetApiBillingByIdErrors,
+  ThrowOnError
+> =>
+  (options.client ?? client).get<
+    GetApiBillingByIdResponses,
+    GetApiBillingByIdErrors,
+    ThrowOnError
+  >({ url: "/api/billing/{id}", ...options })
+
+/**
+ * Update
+ */
+export const putApiBillingById = <ThrowOnError extends boolean = false>(
+  options: Options<PutApiBillingByIdData, ThrowOnError>
+): RequestResult<
+  PutApiBillingByIdResponses,
+  PutApiBillingByIdErrors,
+  ThrowOnError
+> =>
+  (options.client ?? client).put<
+    PutApiBillingByIdResponses,
+    PutApiBillingByIdErrors,
+    ThrowOnError
+  >({
+    url: "/api/billing/{id}",
     ...options,
     headers: {
       "Content-Type": "application/json",

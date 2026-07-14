@@ -39,7 +39,7 @@ public final class FindPrescriptionUseCase implements FindPrescriptionPort {
 
     @Override
     public Uni<PrescriptionDto> findById(UUID id) {
-        return prescriptionRepository.findById(id)
+        return prescriptionRepository.findByIdWithItems(id)
                 .onItem().ifNull().failWith(() -> new PrescriptionNotFoundException(id))
                 .map(prescriptionMapper::toDto);
     }

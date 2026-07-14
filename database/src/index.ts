@@ -19,6 +19,9 @@ import * as procedureAudSchema from "@sanipatitas/database/audit/schema/procedur
 import * as procedureSchema from "@sanipatitas/database/patient/schema/procedure-schema"
 import * as patientAudSchema from "@sanipatitas/database/audit/schema/patient-aud-schema"
 import * as patientSchema from "@sanipatitas/database/patient/schema/patient-schema"
+import * as paymentBillingItemSchema from "@sanipatitas/database/payment/schema/billing-item-schema"
+import * as paymentBillingSchema from "@sanipatitas/database/payment/schema/billing-schema"
+import * as paymentPaymentSchema from "@sanipatitas/database/payment/schema/payment-schema"
 import * as revinfoSchema from "@sanipatitas/database/audit/schema/revinfo-schema"
 import * as speciesAudSchema from "@sanipatitas/database/audit/schema/species-aud-schema"
 import * as speciesSchema from "@sanipatitas/database/patient/schema/species-schema"
@@ -53,6 +56,9 @@ const allSchemas = {
   ...procedureSchema,
   ...patientAudSchema,
   ...patientSchema,
+  ...paymentBillingItemSchema,
+  ...paymentBillingSchema,
+  ...paymentPaymentSchema,
   ...revinfoSchema,
   ...speciesAudSchema,
   ...speciesSchema,

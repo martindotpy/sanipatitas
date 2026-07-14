@@ -5,7 +5,7 @@ import {
 } from "@sanipatitas/auth/core/configuration/app-configuration"
 import { db } from "@sanipatitas/database"
 import { userTable } from "@sanipatitas/database/auth/schema/auth-schema"
-import { seedAppointments } from "@sanipatitas/database/seeds"
+import { seedAppointments, seedBilling } from "@sanipatitas/database/seeds"
 import { serverLog } from "@sanipatitas/shared/log/server-logger"
 
 // Test users
@@ -56,6 +56,9 @@ export async function initializeAuth() {
     // Seed appointments if users exist
     await seedAppointments()
 
+    // Seed billing data
+    await seedBilling()
+
     return
   }
 
@@ -98,4 +101,7 @@ export async function initializeAuth() {
 
   // Seed appointments after users are created
   await seedAppointments()
+
+  // Seed billing data
+  await seedBilling()
 }

@@ -1,12 +1,21 @@
 import { db } from "@sanipatitas/database"
 import { appointmentTable } from "@sanipatitas/database/appointment/schema/appointment-schema"
+import { billingItemTable, type BillingItemType } from "@sanipatitas/database/payment/schema/billing-item-schema"
+import { billingTable, type PaymentStatus } from "@sanipatitas/database/payment/schema/billing-schema"
+import { paymentTable, type PaymentMethod } from "@sanipatitas/database/payment/schema/payment-schema"
 import { breedTable } from "@sanipatitas/database/patient/schema/breed-schema"
 import { clientTable } from "@sanipatitas/database/patient/schema/client-schema"
 import { patientTable } from "@sanipatitas/database/patient/schema/patient-schema"
 import { speciesTable } from "@sanipatitas/database/patient/schema/species-schema"
 import { userTable } from "@sanipatitas/database/auth/schema/auth-schema"
 import { serverLog } from "@sanipatitas/shared/log/server-logger"
-import { eq } from "drizzle-orm"
+import { eq, sql } from "drizzle-orm"
+
+// Inventory seed data
+import { productCategorySeed, supplierSeed } from "@sanipatitas/database/seeds/data/inventory"
+
+// Billing seed data
+import { billingSeed, billingItemSeed, paymentSeed } from "@sanipatitas/database/seeds/data/billing"
 
 // Data
 import { appointmentSeed } from "@sanipatitas/database/seeds/data/appointments"
@@ -135,4 +144,153 @@ export async function seedAppointments() {
   await db.insert(appointmentTable).values(appointmentValues)
 
   serverLog.info("Appointments seeded: %d records", appointmentValues.length)
+}
+
+// Seed inventory (product categories and suppliers)
+export async function seedInventory() {
+  const existing = await db.execute(sql.raw("SELECT id FROM product_category LIMIT 1"))
+
+  if (Array.isArray(existing) && existing.length > 0) {
+    serverLog.debug("Inventory already seeded, skipping")
+
+    return
+  }
+
+  serverLog.info("Seeding inventory data...")
+
+  for (const category of productCategorySeed) {
+    await db.execute(
+      sql`INSERT INTO product_category (id, name, description, created_at, updated_at) VALUES (${category.id}, ${category.name}, ${category.description}, NOW(), NOW())`,
+    )
+  }
+
+  for (const supplier of supplierSeed) {
+    await db.execute(
+      sql`INSERT INTO supplier (id, name, ruc, contact_phone, created_at, updated_at) VALUES (${supplier.id}, ${supplier.name}, ${supplier.ruc}, ${supplier.contactPhone}, NOW(), NOW())`,
+    )
+  }
+
+  serverLog.info(
+    "Inventory seeded: %d categories, %d suppliers",
+    productCategorySeed.length,
+    supplierSeed.length,
+  )
+}
+
+// Seed billing (bills, items, and payments)
+export async function seedBilling() {
+  const [existing] = await db.select().from(billingTable).limit(1)
+
+  if (existing) {
+    serverLog.debug("Billing already seeded, skipping")
+
+    return
+  }
+
+  serverLog.info("Seeding billing data...")
+
+  // Get existing clients
+  const clients = await db.select().from(clientTable)
+
+  const now = new Date()
+
+  // Insert billings
+  const insertedBillings = await db
+    .insert(billingTable)
+    .values(
+      billingSeed.map((b) => {
+        const client = clients[b.clientIndex]
+        if (!client) {
+          throw new Error(`Client at index ${b.clientIndex} not found`)
+        }
+
+        return {
+          clientId: client.id,
+          subtotal: b.subtotal.toString(),
+          discount: b.discount.toString(),
+          taxAmount: b.taxAmount.toString(),
+          totalAmount: b.totalAmount.toString(),
+          paymentStatus: "PENDING" as PaymentStatus,
+          notes: b.notes,
+          createdAt: now,
+          updatedAt: now,
+        }
+      })
+    )
+    .returning()
+
+  // Insert billing items
+  await db
+    .insert(billingItemTable)
+    .values(
+      billingItemSeed.map((item) => {
+        const billing = insertedBillings[item.billingIndex]
+        if (!billing) {
+          throw new Error(`Billing at index ${item.billingIndex} not found`)
+        }
+
+        return {
+          billingId: billing.id,
+          description: item.description,
+          quantity: item.quantity,
+          unitPrice: item.unitPrice.toString(),
+          total: item.total.toString(),
+          itemType: item.itemType as BillingItemType,
+          createdAt: now,
+        }
+      })
+    )
+
+  // Insert payments
+  for (const payment of paymentSeed) {
+    const billing = insertedBillings[payment.billingIndex]
+    if (!billing) {
+      throw new Error(`Billing at index ${payment.billingIndex} not found`)
+    }
+
+    const paidAt = new Date()
+
+    await db.insert(paymentTable).values({
+      billingId: billing.id,
+      amount: payment.amount.toString(),
+      paymentMethod: payment.paymentMethod as PaymentMethod,
+      reference: payment.reference,
+      paidAt,
+      createdAt: paidAt,
+    })
+
+    // Calculate total paid for this billing
+    const payments = await db
+      .select({ totalPaid: sql<string>`COALESCE(SUM(${paymentTable.amount}), 0)::numeric` })
+      .from(paymentTable)
+      .where(eq(paymentTable.billingId, billing.id))
+
+    const totalPaid = Number(payments[0]?.totalPaid ?? 0)
+    const billingTotal = Number(billing.totalAmount)
+
+    if (totalPaid >= billingTotal) {
+      await db
+        .update(billingTable)
+        .set({
+          paymentStatus: "PAID" as PaymentStatus,
+          updatedAt: new Date(),
+        })
+        .where(eq(billingTable.id, billing.id))
+    } else if (totalPaid > 0) {
+      await db
+        .update(billingTable)
+        .set({
+          paymentStatus: "PARTIAL" as PaymentStatus,
+          updatedAt: new Date(),
+        })
+        .where(eq(billingTable.id, billing.id))
+    }
+  }
+
+  serverLog.info(
+    "Billing seeded: %d bills, %d items, %d payments",
+    billingSeed.length,
+    billingItemSeed.length,
+    paymentSeed.length,
+  )
 }

@@ -11,6 +11,8 @@ import {
 import { client } from "../client.gen"
 import {
   deleteApiAppointmentById,
+  deleteApiBillingByBillingIdItemByItemId,
+  deleteApiBillingById,
   deleteApiBreedById,
   deleteApiClientById,
   deleteApiClinicalConditionById,
@@ -18,6 +20,9 @@ import {
   deleteApiClinicalObservationById,
   deleteApiClinicalPrescriptionById,
   deleteApiClinicalProcedureById,
+  deleteApiInventoryProductById,
+  deleteApiInventoryProductCategoryById,
+  deleteApiInventorySupplierById,
   deleteApiPatientById,
   deleteApiSpeciesById,
   getApiAppointment,
@@ -29,6 +34,12 @@ import {
   getApiAuthError,
   getApiAuthOk,
   getApiAuthVerifyEmail,
+  getApiBilling,
+  getApiBillingByAppointmentByAppointmentId,
+  getApiBillingByBillingIdItem,
+  getApiBillingByBillingIdPayment,
+  getApiBillingByClientByClientId,
+  getApiBillingById,
   getApiBreed,
   getApiBreedById,
   getApiClient,
@@ -43,6 +54,15 @@ import {
   getApiClinicalPrescriptionById,
   getApiClinicalProcedure,
   getApiClinicalProcedureById,
+  getApiInventoryProduct,
+  getApiInventoryProductById,
+  getApiInventoryProductCategory,
+  getApiInventoryProductCategoryById,
+  getApiInventoryStockById,
+  getApiInventoryStockByProduct,
+  getApiInventoryStockMovementByStockByStockId,
+  getApiInventorySupplier,
+  getApiInventorySupplierById,
   getApiPatient,
   getApiPatientById,
   getApiPatientStats,
@@ -93,6 +113,9 @@ import {
   postApiAuthRevokeSession,
   postApiAuthRevokeSessions,
   postApiAuthUnlinkAccount,
+  postApiBilling,
+  postApiBillingByBillingIdItem,
+  postApiBillingByBillingIdPayment,
   postApiBreed,
   postApiClient,
   postApiClinicalCondition,
@@ -100,9 +123,15 @@ import {
   postApiClinicalObservation,
   postApiClinicalPrescription,
   postApiClinicalProcedure,
+  postApiInventoryProduct,
+  postApiInventoryProductCategory,
+  postApiInventoryStock,
+  postApiInventoryStockMovement,
+  postApiInventorySupplier,
   postApiPatient,
   postApiSpecies,
   putApiAppointmentById,
+  putApiBillingById,
   putApiBreedById,
   putApiClientById,
   putApiClinicalConditionById,
@@ -110,6 +139,10 @@ import {
   putApiClinicalObservationById,
   putApiClinicalPrescriptionById,
   putApiClinicalProcedureById,
+  putApiInventoryProductById,
+  putApiInventoryProductCategoryById,
+  putApiInventoryStockById,
+  putApiInventorySupplierById,
   putApiPatientById,
   putApiSpeciesById,
 } from "../sdk.gen"
@@ -117,6 +150,12 @@ import type {
   DeleteApiAppointmentByIdData,
   DeleteApiAppointmentByIdError,
   DeleteApiAppointmentByIdResponse,
+  DeleteApiBillingByBillingIdItemByItemIdData,
+  DeleteApiBillingByBillingIdItemByItemIdError,
+  DeleteApiBillingByBillingIdItemByItemIdResponse,
+  DeleteApiBillingByIdData,
+  DeleteApiBillingByIdError,
+  DeleteApiBillingByIdResponse,
   DeleteApiBreedByIdData,
   DeleteApiBreedByIdError,
   DeleteApiBreedByIdResponse,
@@ -138,6 +177,15 @@ import type {
   DeleteApiClinicalProcedureByIdData,
   DeleteApiClinicalProcedureByIdError,
   DeleteApiClinicalProcedureByIdResponse,
+  DeleteApiInventoryProductByIdData,
+  DeleteApiInventoryProductByIdError,
+  DeleteApiInventoryProductByIdResponse,
+  DeleteApiInventoryProductCategoryByIdData,
+  DeleteApiInventoryProductCategoryByIdError,
+  DeleteApiInventoryProductCategoryByIdResponse,
+  DeleteApiInventorySupplierByIdData,
+  DeleteApiInventorySupplierByIdError,
+  DeleteApiInventorySupplierByIdResponse,
   DeleteApiPatientByIdData,
   DeleteApiPatientByIdError,
   DeleteApiPatientByIdResponse,
@@ -169,6 +217,24 @@ import type {
   GetApiAuthVerifyEmailData,
   GetApiAuthVerifyEmailError,
   GetApiAuthVerifyEmailResponse,
+  GetApiBillingByAppointmentByAppointmentIdData,
+  GetApiBillingByAppointmentByAppointmentIdError,
+  GetApiBillingByAppointmentByAppointmentIdResponse,
+  GetApiBillingByBillingIdItemData,
+  GetApiBillingByBillingIdItemError,
+  GetApiBillingByBillingIdItemResponse,
+  GetApiBillingByBillingIdPaymentData,
+  GetApiBillingByBillingIdPaymentError,
+  GetApiBillingByBillingIdPaymentResponse,
+  GetApiBillingByClientByClientIdData,
+  GetApiBillingByClientByClientIdError,
+  GetApiBillingByClientByClientIdResponse,
+  GetApiBillingByIdData,
+  GetApiBillingByIdError,
+  GetApiBillingByIdResponse,
+  GetApiBillingData,
+  GetApiBillingError,
+  GetApiBillingResponse,
   GetApiBreedByIdData,
   GetApiBreedByIdError,
   GetApiBreedByIdResponse,
@@ -211,6 +277,33 @@ import type {
   GetApiClinicalProcedureData,
   GetApiClinicalProcedureError,
   GetApiClinicalProcedureResponse,
+  GetApiInventoryProductByIdData,
+  GetApiInventoryProductByIdError,
+  GetApiInventoryProductByIdResponse,
+  GetApiInventoryProductCategoryByIdData,
+  GetApiInventoryProductCategoryByIdError,
+  GetApiInventoryProductCategoryByIdResponse,
+  GetApiInventoryProductCategoryData,
+  GetApiInventoryProductCategoryError,
+  GetApiInventoryProductCategoryResponse,
+  GetApiInventoryProductData,
+  GetApiInventoryProductError,
+  GetApiInventoryProductResponse,
+  GetApiInventoryStockByIdData,
+  GetApiInventoryStockByIdError,
+  GetApiInventoryStockByIdResponse,
+  GetApiInventoryStockByProductData,
+  GetApiInventoryStockByProductError,
+  GetApiInventoryStockByProductResponse,
+  GetApiInventoryStockMovementByStockByStockIdData,
+  GetApiInventoryStockMovementByStockByStockIdError,
+  GetApiInventoryStockMovementByStockByStockIdResponse,
+  GetApiInventorySupplierByIdData,
+  GetApiInventorySupplierByIdError,
+  GetApiInventorySupplierByIdResponse,
+  GetApiInventorySupplierData,
+  GetApiInventorySupplierError,
+  GetApiInventorySupplierResponse,
   GetApiPatientByIdData,
   GetApiPatientByIdError,
   GetApiPatientByIdResponse,
@@ -355,6 +448,15 @@ import type {
   PostApiAuthUnlinkAccountData,
   PostApiAuthUnlinkAccountError,
   PostApiAuthUnlinkAccountResponse,
+  PostApiBillingByBillingIdItemData,
+  PostApiBillingByBillingIdItemError,
+  PostApiBillingByBillingIdItemResponse,
+  PostApiBillingByBillingIdPaymentData,
+  PostApiBillingByBillingIdPaymentError,
+  PostApiBillingByBillingIdPaymentResponse,
+  PostApiBillingData,
+  PostApiBillingError,
+  PostApiBillingResponse,
   PostApiBreedData,
   PostApiBreedError,
   PostApiBreedResponse,
@@ -376,6 +478,21 @@ import type {
   PostApiClinicalProcedureData,
   PostApiClinicalProcedureError,
   PostApiClinicalProcedureResponse,
+  PostApiInventoryProductCategoryData,
+  PostApiInventoryProductCategoryError,
+  PostApiInventoryProductCategoryResponse,
+  PostApiInventoryProductData,
+  PostApiInventoryProductError,
+  PostApiInventoryProductResponse,
+  PostApiInventoryStockData,
+  PostApiInventoryStockError,
+  PostApiInventoryStockMovementData,
+  PostApiInventoryStockMovementError,
+  PostApiInventoryStockMovementResponse,
+  PostApiInventoryStockResponse,
+  PostApiInventorySupplierData,
+  PostApiInventorySupplierError,
+  PostApiInventorySupplierResponse,
   PostApiPatientData,
   PostApiPatientError,
   PostApiPatientResponse,
@@ -385,6 +502,9 @@ import type {
   PutApiAppointmentByIdData,
   PutApiAppointmentByIdError,
   PutApiAppointmentByIdResponse,
+  PutApiBillingByIdData,
+  PutApiBillingByIdError,
+  PutApiBillingByIdResponse,
   PutApiBreedByIdData,
   PutApiBreedByIdError,
   PutApiBreedByIdResponse,
@@ -406,6 +526,18 @@ import type {
   PutApiClinicalProcedureByIdData,
   PutApiClinicalProcedureByIdError,
   PutApiClinicalProcedureByIdResponse,
+  PutApiInventoryProductByIdData,
+  PutApiInventoryProductByIdError,
+  PutApiInventoryProductByIdResponse,
+  PutApiInventoryProductCategoryByIdData,
+  PutApiInventoryProductCategoryByIdError,
+  PutApiInventoryProductCategoryByIdResponse,
+  PutApiInventoryStockByIdData,
+  PutApiInventoryStockByIdError,
+  PutApiInventoryStockByIdResponse,
+  PutApiInventorySupplierByIdData,
+  PutApiInventorySupplierByIdError,
+  PutApiInventorySupplierByIdResponse,
   PutApiPatientByIdData,
   PutApiPatientByIdError,
   PutApiPatientByIdResponse,
@@ -3782,6 +3914,1224 @@ export const putApiAppointmentByIdMutation = (
   > = {
     mutationFn: async (fnOptions) => {
       const { data } = await putApiAppointmentById({
+        ...options,
+        ...fnOptions,
+        throwOnError: true,
+      })
+      return data
+    },
+  }
+  return mutationOptions
+}
+
+export const getApiInventoryProductQueryKey = (
+  options?: Options<GetApiInventoryProductData>
+) => createQueryKey("getApiInventoryProduct", options)
+
+/**
+ * Find All
+ */
+export const getApiInventoryProductOptions = (
+  options?: Options<GetApiInventoryProductData>
+) =>
+  queryOptions<
+    GetApiInventoryProductResponse,
+    GetApiInventoryProductError,
+    GetApiInventoryProductResponse,
+    ReturnType<typeof getApiInventoryProductQueryKey>
+  >({
+    queryFn: async ({ queryKey, signal }) => {
+      const { data } = await getApiInventoryProduct({
+        ...options,
+        ...queryKey[0],
+        signal,
+        throwOnError: true,
+      })
+      return data
+    },
+    queryKey: getApiInventoryProductQueryKey(options),
+  })
+
+export const getApiInventoryProductInfiniteQueryKey = (
+  options?: Options<GetApiInventoryProductData>
+): QueryKey<Options<GetApiInventoryProductData>> =>
+  createQueryKey("getApiInventoryProduct", options, true)
+
+/**
+ * Find All
+ */
+export const getApiInventoryProductInfiniteOptions = (
+  options?: Options<GetApiInventoryProductData>
+) => {
+  const opts = infiniteQueryOptions<
+    GetApiInventoryProductResponse,
+    GetApiInventoryProductError,
+    InfiniteData<GetApiInventoryProductResponse>,
+    QueryKey<Options<GetApiInventoryProductData>>,
+    | number
+    | Pick<
+        QueryKey<Options<GetApiInventoryProductData>>[0],
+        "body" | "headers" | "path" | "query"
+      >
+  >(
+    // @ts-ignore
+    {
+      queryFn: async ({ pageParam, queryKey, signal }) => {
+        // @ts-ignore
+        const page: Pick<
+          QueryKey<Options<GetApiInventoryProductData>>[0],
+          "body" | "headers" | "path" | "query"
+        > =
+          typeof pageParam === "object"
+            ? pageParam
+            : {
+                query: {
+                  page: pageParam,
+                },
+              }
+        const params = createInfiniteParams(queryKey, page)
+        const { data } = await getApiInventoryProduct({
+          ...options,
+          ...params,
+          signal,
+          throwOnError: true,
+        })
+        return data
+      },
+      queryKey: getApiInventoryProductInfiniteQueryKey(options),
+    }
+  )
+  return opts as Omit<typeof opts, "initialData">
+}
+
+/**
+ * Create
+ */
+export const postApiInventoryProductMutation = (
+  options?: Partial<Options<PostApiInventoryProductData>>
+): UseMutationOptions<
+  PostApiInventoryProductResponse,
+  PostApiInventoryProductError,
+  Options<PostApiInventoryProductData>
+> => {
+  const mutationOptions: UseMutationOptions<
+    PostApiInventoryProductResponse,
+    PostApiInventoryProductError,
+    Options<PostApiInventoryProductData>
+  > = {
+    mutationFn: async (fnOptions) => {
+      const { data } = await postApiInventoryProduct({
+        ...options,
+        ...fnOptions,
+        throwOnError: true,
+      })
+      return data
+    },
+  }
+  return mutationOptions
+}
+
+export const getApiInventoryProductCategoryQueryKey = (
+  options?: Options<GetApiInventoryProductCategoryData>
+) => createQueryKey("getApiInventoryProductCategory", options)
+
+/**
+ * Find All
+ */
+export const getApiInventoryProductCategoryOptions = (
+  options?: Options<GetApiInventoryProductCategoryData>
+) =>
+  queryOptions<
+    GetApiInventoryProductCategoryResponse,
+    GetApiInventoryProductCategoryError,
+    GetApiInventoryProductCategoryResponse,
+    ReturnType<typeof getApiInventoryProductCategoryQueryKey>
+  >({
+    queryFn: async ({ queryKey, signal }) => {
+      const { data } = await getApiInventoryProductCategory({
+        ...options,
+        ...queryKey[0],
+        signal,
+        throwOnError: true,
+      })
+      return data
+    },
+    queryKey: getApiInventoryProductCategoryQueryKey(options),
+  })
+
+export const getApiInventoryProductCategoryInfiniteQueryKey = (
+  options?: Options<GetApiInventoryProductCategoryData>
+): QueryKey<Options<GetApiInventoryProductCategoryData>> =>
+  createQueryKey("getApiInventoryProductCategory", options, true)
+
+/**
+ * Find All
+ */
+export const getApiInventoryProductCategoryInfiniteOptions = (
+  options?: Options<GetApiInventoryProductCategoryData>
+) => {
+  const opts = infiniteQueryOptions<
+    GetApiInventoryProductCategoryResponse,
+    GetApiInventoryProductCategoryError,
+    InfiniteData<GetApiInventoryProductCategoryResponse>,
+    QueryKey<Options<GetApiInventoryProductCategoryData>>,
+    | number
+    | Pick<
+        QueryKey<Options<GetApiInventoryProductCategoryData>>[0],
+        "body" | "headers" | "path" | "query"
+      >
+  >(
+    // @ts-ignore
+    {
+      queryFn: async ({ pageParam, queryKey, signal }) => {
+        // @ts-ignore
+        const page: Pick<
+          QueryKey<Options<GetApiInventoryProductCategoryData>>[0],
+          "body" | "headers" | "path" | "query"
+        > =
+          typeof pageParam === "object"
+            ? pageParam
+            : {
+                query: {
+                  page: pageParam,
+                },
+              }
+        const params = createInfiniteParams(queryKey, page)
+        const { data } = await getApiInventoryProductCategory({
+          ...options,
+          ...params,
+          signal,
+          throwOnError: true,
+        })
+        return data
+      },
+      queryKey: getApiInventoryProductCategoryInfiniteQueryKey(options),
+    }
+  )
+  return opts as Omit<typeof opts, "initialData">
+}
+
+/**
+ * Create
+ */
+export const postApiInventoryProductCategoryMutation = (
+  options?: Partial<Options<PostApiInventoryProductCategoryData>>
+): UseMutationOptions<
+  PostApiInventoryProductCategoryResponse,
+  PostApiInventoryProductCategoryError,
+  Options<PostApiInventoryProductCategoryData>
+> => {
+  const mutationOptions: UseMutationOptions<
+    PostApiInventoryProductCategoryResponse,
+    PostApiInventoryProductCategoryError,
+    Options<PostApiInventoryProductCategoryData>
+  > = {
+    mutationFn: async (fnOptions) => {
+      const { data } = await postApiInventoryProductCategory({
+        ...options,
+        ...fnOptions,
+        throwOnError: true,
+      })
+      return data
+    },
+  }
+  return mutationOptions
+}
+
+/**
+ * Delete
+ */
+export const deleteApiInventoryProductCategoryByIdMutation = (
+  options?: Partial<Options<DeleteApiInventoryProductCategoryByIdData>>
+): UseMutationOptions<
+  DeleteApiInventoryProductCategoryByIdResponse,
+  DeleteApiInventoryProductCategoryByIdError,
+  Options<DeleteApiInventoryProductCategoryByIdData>
+> => {
+  const mutationOptions: UseMutationOptions<
+    DeleteApiInventoryProductCategoryByIdResponse,
+    DeleteApiInventoryProductCategoryByIdError,
+    Options<DeleteApiInventoryProductCategoryByIdData>
+  > = {
+    mutationFn: async (fnOptions) => {
+      const { data } = await deleteApiInventoryProductCategoryById({
+        ...options,
+        ...fnOptions,
+        throwOnError: true,
+      })
+      return data
+    },
+  }
+  return mutationOptions
+}
+
+export const getApiInventoryProductCategoryByIdQueryKey = (
+  options: Options<GetApiInventoryProductCategoryByIdData>
+) => createQueryKey("getApiInventoryProductCategoryById", options)
+
+/**
+ * Get By Id
+ */
+export const getApiInventoryProductCategoryByIdOptions = (
+  options: Options<GetApiInventoryProductCategoryByIdData>
+) =>
+  queryOptions<
+    GetApiInventoryProductCategoryByIdResponse,
+    GetApiInventoryProductCategoryByIdError,
+    GetApiInventoryProductCategoryByIdResponse,
+    ReturnType<typeof getApiInventoryProductCategoryByIdQueryKey>
+  >({
+    queryFn: async ({ queryKey, signal }) => {
+      const { data } = await getApiInventoryProductCategoryById({
+        ...options,
+        ...queryKey[0],
+        signal,
+        throwOnError: true,
+      })
+      return data
+    },
+    queryKey: getApiInventoryProductCategoryByIdQueryKey(options),
+  })
+
+/**
+ * Update
+ */
+export const putApiInventoryProductCategoryByIdMutation = (
+  options?: Partial<Options<PutApiInventoryProductCategoryByIdData>>
+): UseMutationOptions<
+  PutApiInventoryProductCategoryByIdResponse,
+  PutApiInventoryProductCategoryByIdError,
+  Options<PutApiInventoryProductCategoryByIdData>
+> => {
+  const mutationOptions: UseMutationOptions<
+    PutApiInventoryProductCategoryByIdResponse,
+    PutApiInventoryProductCategoryByIdError,
+    Options<PutApiInventoryProductCategoryByIdData>
+  > = {
+    mutationFn: async (fnOptions) => {
+      const { data } = await putApiInventoryProductCategoryById({
+        ...options,
+        ...fnOptions,
+        throwOnError: true,
+      })
+      return data
+    },
+  }
+  return mutationOptions
+}
+
+/**
+ * Delete
+ */
+export const deleteApiInventoryProductByIdMutation = (
+  options?: Partial<Options<DeleteApiInventoryProductByIdData>>
+): UseMutationOptions<
+  DeleteApiInventoryProductByIdResponse,
+  DeleteApiInventoryProductByIdError,
+  Options<DeleteApiInventoryProductByIdData>
+> => {
+  const mutationOptions: UseMutationOptions<
+    DeleteApiInventoryProductByIdResponse,
+    DeleteApiInventoryProductByIdError,
+    Options<DeleteApiInventoryProductByIdData>
+  > = {
+    mutationFn: async (fnOptions) => {
+      const { data } = await deleteApiInventoryProductById({
+        ...options,
+        ...fnOptions,
+        throwOnError: true,
+      })
+      return data
+    },
+  }
+  return mutationOptions
+}
+
+export const getApiInventoryProductByIdQueryKey = (
+  options: Options<GetApiInventoryProductByIdData>
+) => createQueryKey("getApiInventoryProductById", options)
+
+/**
+ * Get By Id
+ */
+export const getApiInventoryProductByIdOptions = (
+  options: Options<GetApiInventoryProductByIdData>
+) =>
+  queryOptions<
+    GetApiInventoryProductByIdResponse,
+    GetApiInventoryProductByIdError,
+    GetApiInventoryProductByIdResponse,
+    ReturnType<typeof getApiInventoryProductByIdQueryKey>
+  >({
+    queryFn: async ({ queryKey, signal }) => {
+      const { data } = await getApiInventoryProductById({
+        ...options,
+        ...queryKey[0],
+        signal,
+        throwOnError: true,
+      })
+      return data
+    },
+    queryKey: getApiInventoryProductByIdQueryKey(options),
+  })
+
+/**
+ * Update
+ */
+export const putApiInventoryProductByIdMutation = (
+  options?: Partial<Options<PutApiInventoryProductByIdData>>
+): UseMutationOptions<
+  PutApiInventoryProductByIdResponse,
+  PutApiInventoryProductByIdError,
+  Options<PutApiInventoryProductByIdData>
+> => {
+  const mutationOptions: UseMutationOptions<
+    PutApiInventoryProductByIdResponse,
+    PutApiInventoryProductByIdError,
+    Options<PutApiInventoryProductByIdData>
+  > = {
+    mutationFn: async (fnOptions) => {
+      const { data } = await putApiInventoryProductById({
+        ...options,
+        ...fnOptions,
+        throwOnError: true,
+      })
+      return data
+    },
+  }
+  return mutationOptions
+}
+
+/**
+ * Create
+ */
+export const postApiInventoryStockMutation = (
+  options?: Partial<Options<PostApiInventoryStockData>>
+): UseMutationOptions<
+  PostApiInventoryStockResponse,
+  PostApiInventoryStockError,
+  Options<PostApiInventoryStockData>
+> => {
+  const mutationOptions: UseMutationOptions<
+    PostApiInventoryStockResponse,
+    PostApiInventoryStockError,
+    Options<PostApiInventoryStockData>
+  > = {
+    mutationFn: async (fnOptions) => {
+      const { data } = await postApiInventoryStock({
+        ...options,
+        ...fnOptions,
+        throwOnError: true,
+      })
+      return data
+    },
+  }
+  return mutationOptions
+}
+
+/**
+ * Create
+ */
+export const postApiInventoryStockMovementMutation = (
+  options?: Partial<Options<PostApiInventoryStockMovementData>>
+): UseMutationOptions<
+  PostApiInventoryStockMovementResponse,
+  PostApiInventoryStockMovementError,
+  Options<PostApiInventoryStockMovementData>
+> => {
+  const mutationOptions: UseMutationOptions<
+    PostApiInventoryStockMovementResponse,
+    PostApiInventoryStockMovementError,
+    Options<PostApiInventoryStockMovementData>
+  > = {
+    mutationFn: async (fnOptions) => {
+      const { data } = await postApiInventoryStockMovement({
+        ...options,
+        ...fnOptions,
+        throwOnError: true,
+      })
+      return data
+    },
+  }
+  return mutationOptions
+}
+
+export const getApiInventoryStockMovementByStockByStockIdQueryKey = (
+  options: Options<GetApiInventoryStockMovementByStockByStockIdData>
+) => createQueryKey("getApiInventoryStockMovementByStockByStockId", options)
+
+/**
+ * Find By Stock Id
+ */
+export const getApiInventoryStockMovementByStockByStockIdOptions = (
+  options: Options<GetApiInventoryStockMovementByStockByStockIdData>
+) =>
+  queryOptions<
+    GetApiInventoryStockMovementByStockByStockIdResponse,
+    GetApiInventoryStockMovementByStockByStockIdError,
+    GetApiInventoryStockMovementByStockByStockIdResponse,
+    ReturnType<typeof getApiInventoryStockMovementByStockByStockIdQueryKey>
+  >({
+    queryFn: async ({ queryKey, signal }) => {
+      const { data } = await getApiInventoryStockMovementByStockByStockId({
+        ...options,
+        ...queryKey[0],
+        signal,
+        throwOnError: true,
+      })
+      return data
+    },
+    queryKey: getApiInventoryStockMovementByStockByStockIdQueryKey(options),
+  })
+
+export const getApiInventoryStockMovementByStockByStockIdInfiniteQueryKey = (
+  options: Options<GetApiInventoryStockMovementByStockByStockIdData>
+): QueryKey<Options<GetApiInventoryStockMovementByStockByStockIdData>> =>
+  createQueryKey("getApiInventoryStockMovementByStockByStockId", options, true)
+
+/**
+ * Find By Stock Id
+ */
+export const getApiInventoryStockMovementByStockByStockIdInfiniteOptions = (
+  options: Options<GetApiInventoryStockMovementByStockByStockIdData>
+) => {
+  const opts = infiniteQueryOptions<
+    GetApiInventoryStockMovementByStockByStockIdResponse,
+    GetApiInventoryStockMovementByStockByStockIdError,
+    InfiniteData<GetApiInventoryStockMovementByStockByStockIdResponse>,
+    QueryKey<Options<GetApiInventoryStockMovementByStockByStockIdData>>,
+    | number
+    | Pick<
+        QueryKey<Options<GetApiInventoryStockMovementByStockByStockIdData>>[0],
+        "body" | "headers" | "path" | "query"
+      >
+  >(
+    // @ts-ignore
+    {
+      queryFn: async ({ pageParam, queryKey, signal }) => {
+        // @ts-ignore
+        const page: Pick<
+          QueryKey<
+            Options<GetApiInventoryStockMovementByStockByStockIdData>
+          >[0],
+          "body" | "headers" | "path" | "query"
+        > =
+          typeof pageParam === "object"
+            ? pageParam
+            : {
+                query: {
+                  page: pageParam,
+                },
+              }
+        const params = createInfiniteParams(queryKey, page)
+        const { data } = await getApiInventoryStockMovementByStockByStockId({
+          ...options,
+          ...params,
+          signal,
+          throwOnError: true,
+        })
+        return data
+      },
+      queryKey:
+        getApiInventoryStockMovementByStockByStockIdInfiniteQueryKey(options),
+    }
+  )
+  return opts as Omit<typeof opts, "initialData">
+}
+
+export const getApiInventoryStockByProductQueryKey = (
+  options?: Options<GetApiInventoryStockByProductData>
+) => createQueryKey("getApiInventoryStockByProduct", options)
+
+/**
+ * Find By Product Id
+ */
+export const getApiInventoryStockByProductOptions = (
+  options?: Options<GetApiInventoryStockByProductData>
+) =>
+  queryOptions<
+    GetApiInventoryStockByProductResponse,
+    GetApiInventoryStockByProductError,
+    GetApiInventoryStockByProductResponse,
+    ReturnType<typeof getApiInventoryStockByProductQueryKey>
+  >({
+    queryFn: async ({ queryKey, signal }) => {
+      const { data } = await getApiInventoryStockByProduct({
+        ...options,
+        ...queryKey[0],
+        signal,
+        throwOnError: true,
+      })
+      return data
+    },
+    queryKey: getApiInventoryStockByProductQueryKey(options),
+  })
+
+export const getApiInventoryStockByIdQueryKey = (
+  options: Options<GetApiInventoryStockByIdData>
+) => createQueryKey("getApiInventoryStockById", options)
+
+/**
+ * Get By Id
+ */
+export const getApiInventoryStockByIdOptions = (
+  options: Options<GetApiInventoryStockByIdData>
+) =>
+  queryOptions<
+    GetApiInventoryStockByIdResponse,
+    GetApiInventoryStockByIdError,
+    GetApiInventoryStockByIdResponse,
+    ReturnType<typeof getApiInventoryStockByIdQueryKey>
+  >({
+    queryFn: async ({ queryKey, signal }) => {
+      const { data } = await getApiInventoryStockById({
+        ...options,
+        ...queryKey[0],
+        signal,
+        throwOnError: true,
+      })
+      return data
+    },
+    queryKey: getApiInventoryStockByIdQueryKey(options),
+  })
+
+/**
+ * Update
+ */
+export const putApiInventoryStockByIdMutation = (
+  options?: Partial<Options<PutApiInventoryStockByIdData>>
+): UseMutationOptions<
+  PutApiInventoryStockByIdResponse,
+  PutApiInventoryStockByIdError,
+  Options<PutApiInventoryStockByIdData>
+> => {
+  const mutationOptions: UseMutationOptions<
+    PutApiInventoryStockByIdResponse,
+    PutApiInventoryStockByIdError,
+    Options<PutApiInventoryStockByIdData>
+  > = {
+    mutationFn: async (fnOptions) => {
+      const { data } = await putApiInventoryStockById({
+        ...options,
+        ...fnOptions,
+        throwOnError: true,
+      })
+      return data
+    },
+  }
+  return mutationOptions
+}
+
+export const getApiInventorySupplierQueryKey = (
+  options?: Options<GetApiInventorySupplierData>
+) => createQueryKey("getApiInventorySupplier", options)
+
+/**
+ * Find All
+ */
+export const getApiInventorySupplierOptions = (
+  options?: Options<GetApiInventorySupplierData>
+) =>
+  queryOptions<
+    GetApiInventorySupplierResponse,
+    GetApiInventorySupplierError,
+    GetApiInventorySupplierResponse,
+    ReturnType<typeof getApiInventorySupplierQueryKey>
+  >({
+    queryFn: async ({ queryKey, signal }) => {
+      const { data } = await getApiInventorySupplier({
+        ...options,
+        ...queryKey[0],
+        signal,
+        throwOnError: true,
+      })
+      return data
+    },
+    queryKey: getApiInventorySupplierQueryKey(options),
+  })
+
+export const getApiInventorySupplierInfiniteQueryKey = (
+  options?: Options<GetApiInventorySupplierData>
+): QueryKey<Options<GetApiInventorySupplierData>> =>
+  createQueryKey("getApiInventorySupplier", options, true)
+
+/**
+ * Find All
+ */
+export const getApiInventorySupplierInfiniteOptions = (
+  options?: Options<GetApiInventorySupplierData>
+) => {
+  const opts = infiniteQueryOptions<
+    GetApiInventorySupplierResponse,
+    GetApiInventorySupplierError,
+    InfiniteData<GetApiInventorySupplierResponse>,
+    QueryKey<Options<GetApiInventorySupplierData>>,
+    | number
+    | Pick<
+        QueryKey<Options<GetApiInventorySupplierData>>[0],
+        "body" | "headers" | "path" | "query"
+      >
+  >(
+    // @ts-ignore
+    {
+      queryFn: async ({ pageParam, queryKey, signal }) => {
+        // @ts-ignore
+        const page: Pick<
+          QueryKey<Options<GetApiInventorySupplierData>>[0],
+          "body" | "headers" | "path" | "query"
+        > =
+          typeof pageParam === "object"
+            ? pageParam
+            : {
+                query: {
+                  page: pageParam,
+                },
+              }
+        const params = createInfiniteParams(queryKey, page)
+        const { data } = await getApiInventorySupplier({
+          ...options,
+          ...params,
+          signal,
+          throwOnError: true,
+        })
+        return data
+      },
+      queryKey: getApiInventorySupplierInfiniteQueryKey(options),
+    }
+  )
+  return opts as Omit<typeof opts, "initialData">
+}
+
+/**
+ * Create
+ */
+export const postApiInventorySupplierMutation = (
+  options?: Partial<Options<PostApiInventorySupplierData>>
+): UseMutationOptions<
+  PostApiInventorySupplierResponse,
+  PostApiInventorySupplierError,
+  Options<PostApiInventorySupplierData>
+> => {
+  const mutationOptions: UseMutationOptions<
+    PostApiInventorySupplierResponse,
+    PostApiInventorySupplierError,
+    Options<PostApiInventorySupplierData>
+  > = {
+    mutationFn: async (fnOptions) => {
+      const { data } = await postApiInventorySupplier({
+        ...options,
+        ...fnOptions,
+        throwOnError: true,
+      })
+      return data
+    },
+  }
+  return mutationOptions
+}
+
+/**
+ * Delete
+ */
+export const deleteApiInventorySupplierByIdMutation = (
+  options?: Partial<Options<DeleteApiInventorySupplierByIdData>>
+): UseMutationOptions<
+  DeleteApiInventorySupplierByIdResponse,
+  DeleteApiInventorySupplierByIdError,
+  Options<DeleteApiInventorySupplierByIdData>
+> => {
+  const mutationOptions: UseMutationOptions<
+    DeleteApiInventorySupplierByIdResponse,
+    DeleteApiInventorySupplierByIdError,
+    Options<DeleteApiInventorySupplierByIdData>
+  > = {
+    mutationFn: async (fnOptions) => {
+      const { data } = await deleteApiInventorySupplierById({
+        ...options,
+        ...fnOptions,
+        throwOnError: true,
+      })
+      return data
+    },
+  }
+  return mutationOptions
+}
+
+export const getApiInventorySupplierByIdQueryKey = (
+  options: Options<GetApiInventorySupplierByIdData>
+) => createQueryKey("getApiInventorySupplierById", options)
+
+/**
+ * Get By Id
+ */
+export const getApiInventorySupplierByIdOptions = (
+  options: Options<GetApiInventorySupplierByIdData>
+) =>
+  queryOptions<
+    GetApiInventorySupplierByIdResponse,
+    GetApiInventorySupplierByIdError,
+    GetApiInventorySupplierByIdResponse,
+    ReturnType<typeof getApiInventorySupplierByIdQueryKey>
+  >({
+    queryFn: async ({ queryKey, signal }) => {
+      const { data } = await getApiInventorySupplierById({
+        ...options,
+        ...queryKey[0],
+        signal,
+        throwOnError: true,
+      })
+      return data
+    },
+    queryKey: getApiInventorySupplierByIdQueryKey(options),
+  })
+
+/**
+ * Update
+ */
+export const putApiInventorySupplierByIdMutation = (
+  options?: Partial<Options<PutApiInventorySupplierByIdData>>
+): UseMutationOptions<
+  PutApiInventorySupplierByIdResponse,
+  PutApiInventorySupplierByIdError,
+  Options<PutApiInventorySupplierByIdData>
+> => {
+  const mutationOptions: UseMutationOptions<
+    PutApiInventorySupplierByIdResponse,
+    PutApiInventorySupplierByIdError,
+    Options<PutApiInventorySupplierByIdData>
+  > = {
+    mutationFn: async (fnOptions) => {
+      const { data } = await putApiInventorySupplierById({
+        ...options,
+        ...fnOptions,
+        throwOnError: true,
+      })
+      return data
+    },
+  }
+  return mutationOptions
+}
+
+export const getApiBillingQueryKey = (options?: Options<GetApiBillingData>) =>
+  createQueryKey("getApiBilling", options)
+
+/**
+ * Find All
+ */
+export const getApiBillingOptions = (options?: Options<GetApiBillingData>) =>
+  queryOptions<
+    GetApiBillingResponse,
+    GetApiBillingError,
+    GetApiBillingResponse,
+    ReturnType<typeof getApiBillingQueryKey>
+  >({
+    queryFn: async ({ queryKey, signal }) => {
+      const { data } = await getApiBilling({
+        ...options,
+        ...queryKey[0],
+        signal,
+        throwOnError: true,
+      })
+      return data
+    },
+    queryKey: getApiBillingQueryKey(options),
+  })
+
+export const getApiBillingInfiniteQueryKey = (
+  options?: Options<GetApiBillingData>
+): QueryKey<Options<GetApiBillingData>> =>
+  createQueryKey("getApiBilling", options, true)
+
+/**
+ * Find All
+ */
+export const getApiBillingInfiniteOptions = (
+  options?: Options<GetApiBillingData>
+) => {
+  const opts = infiniteQueryOptions<
+    GetApiBillingResponse,
+    GetApiBillingError,
+    InfiniteData<GetApiBillingResponse>,
+    QueryKey<Options<GetApiBillingData>>,
+    | number
+    | Pick<
+        QueryKey<Options<GetApiBillingData>>[0],
+        "body" | "headers" | "path" | "query"
+      >
+  >(
+    // @ts-ignore
+    {
+      queryFn: async ({ pageParam, queryKey, signal }) => {
+        // @ts-ignore
+        const page: Pick<
+          QueryKey<Options<GetApiBillingData>>[0],
+          "body" | "headers" | "path" | "query"
+        > =
+          typeof pageParam === "object"
+            ? pageParam
+            : {
+                query: {
+                  page: pageParam,
+                },
+              }
+        const params = createInfiniteParams(queryKey, page)
+        const { data } = await getApiBilling({
+          ...options,
+          ...params,
+          signal,
+          throwOnError: true,
+        })
+        return data
+      },
+      queryKey: getApiBillingInfiniteQueryKey(options),
+    }
+  )
+  return opts as Omit<typeof opts, "initialData">
+}
+
+/**
+ * Create
+ */
+export const postApiBillingMutation = (
+  options?: Partial<Options<PostApiBillingData>>
+): UseMutationOptions<
+  PostApiBillingResponse,
+  PostApiBillingError,
+  Options<PostApiBillingData>
+> => {
+  const mutationOptions: UseMutationOptions<
+    PostApiBillingResponse,
+    PostApiBillingError,
+    Options<PostApiBillingData>
+  > = {
+    mutationFn: async (fnOptions) => {
+      const { data } = await postApiBilling({
+        ...options,
+        ...fnOptions,
+        throwOnError: true,
+      })
+      return data
+    },
+  }
+  return mutationOptions
+}
+
+export const getApiBillingByAppointmentByAppointmentIdQueryKey = (
+  options: Options<GetApiBillingByAppointmentByAppointmentIdData>
+) => createQueryKey("getApiBillingByAppointmentByAppointmentId", options)
+
+/**
+ * Get By Appointment Id
+ */
+export const getApiBillingByAppointmentByAppointmentIdOptions = (
+  options: Options<GetApiBillingByAppointmentByAppointmentIdData>
+) =>
+  queryOptions<
+    GetApiBillingByAppointmentByAppointmentIdResponse,
+    GetApiBillingByAppointmentByAppointmentIdError,
+    GetApiBillingByAppointmentByAppointmentIdResponse,
+    ReturnType<typeof getApiBillingByAppointmentByAppointmentIdQueryKey>
+  >({
+    queryFn: async ({ queryKey, signal }) => {
+      const { data } = await getApiBillingByAppointmentByAppointmentId({
+        ...options,
+        ...queryKey[0],
+        signal,
+        throwOnError: true,
+      })
+      return data
+    },
+    queryKey: getApiBillingByAppointmentByAppointmentIdQueryKey(options),
+  })
+
+export const getApiBillingByClientByClientIdQueryKey = (
+  options: Options<GetApiBillingByClientByClientIdData>
+) => createQueryKey("getApiBillingByClientByClientId", options)
+
+/**
+ * Get By Client Id
+ */
+export const getApiBillingByClientByClientIdOptions = (
+  options: Options<GetApiBillingByClientByClientIdData>
+) =>
+  queryOptions<
+    GetApiBillingByClientByClientIdResponse,
+    GetApiBillingByClientByClientIdError,
+    GetApiBillingByClientByClientIdResponse,
+    ReturnType<typeof getApiBillingByClientByClientIdQueryKey>
+  >({
+    queryFn: async ({ queryKey, signal }) => {
+      const { data } = await getApiBillingByClientByClientId({
+        ...options,
+        ...queryKey[0],
+        signal,
+        throwOnError: true,
+      })
+      return data
+    },
+    queryKey: getApiBillingByClientByClientIdQueryKey(options),
+  })
+
+export const getApiBillingByClientByClientIdInfiniteQueryKey = (
+  options: Options<GetApiBillingByClientByClientIdData>
+): QueryKey<Options<GetApiBillingByClientByClientIdData>> =>
+  createQueryKey("getApiBillingByClientByClientId", options, true)
+
+/**
+ * Get By Client Id
+ */
+export const getApiBillingByClientByClientIdInfiniteOptions = (
+  options: Options<GetApiBillingByClientByClientIdData>
+) => {
+  const opts = infiniteQueryOptions<
+    GetApiBillingByClientByClientIdResponse,
+    GetApiBillingByClientByClientIdError,
+    InfiniteData<GetApiBillingByClientByClientIdResponse>,
+    QueryKey<Options<GetApiBillingByClientByClientIdData>>,
+    | number
+    | Pick<
+        QueryKey<Options<GetApiBillingByClientByClientIdData>>[0],
+        "body" | "headers" | "path" | "query"
+      >
+  >(
+    // @ts-ignore
+    {
+      queryFn: async ({ pageParam, queryKey, signal }) => {
+        // @ts-ignore
+        const page: Pick<
+          QueryKey<Options<GetApiBillingByClientByClientIdData>>[0],
+          "body" | "headers" | "path" | "query"
+        > =
+          typeof pageParam === "object"
+            ? pageParam
+            : {
+                query: {
+                  page: pageParam,
+                },
+              }
+        const params = createInfiniteParams(queryKey, page)
+        const { data } = await getApiBillingByClientByClientId({
+          ...options,
+          ...params,
+          signal,
+          throwOnError: true,
+        })
+        return data
+      },
+      queryKey: getApiBillingByClientByClientIdInfiniteQueryKey(options),
+    }
+  )
+  return opts as Omit<typeof opts, "initialData">
+}
+
+export const getApiBillingByBillingIdItemQueryKey = (
+  options: Options<GetApiBillingByBillingIdItemData>
+) => createQueryKey("getApiBillingByBillingIdItem", options)
+
+/**
+ * List Items
+ */
+export const getApiBillingByBillingIdItemOptions = (
+  options: Options<GetApiBillingByBillingIdItemData>
+) =>
+  queryOptions<
+    GetApiBillingByBillingIdItemResponse,
+    GetApiBillingByBillingIdItemError,
+    GetApiBillingByBillingIdItemResponse,
+    ReturnType<typeof getApiBillingByBillingIdItemQueryKey>
+  >({
+    queryFn: async ({ queryKey, signal }) => {
+      const { data } = await getApiBillingByBillingIdItem({
+        ...options,
+        ...queryKey[0],
+        signal,
+        throwOnError: true,
+      })
+      return data
+    },
+    queryKey: getApiBillingByBillingIdItemQueryKey(options),
+  })
+
+/**
+ * Create Item
+ */
+export const postApiBillingByBillingIdItemMutation = (
+  options?: Partial<Options<PostApiBillingByBillingIdItemData>>
+): UseMutationOptions<
+  PostApiBillingByBillingIdItemResponse,
+  PostApiBillingByBillingIdItemError,
+  Options<PostApiBillingByBillingIdItemData>
+> => {
+  const mutationOptions: UseMutationOptions<
+    PostApiBillingByBillingIdItemResponse,
+    PostApiBillingByBillingIdItemError,
+    Options<PostApiBillingByBillingIdItemData>
+  > = {
+    mutationFn: async (fnOptions) => {
+      const { data } = await postApiBillingByBillingIdItem({
+        ...options,
+        ...fnOptions,
+        throwOnError: true,
+      })
+      return data
+    },
+  }
+  return mutationOptions
+}
+
+/**
+ * Delete Item
+ */
+export const deleteApiBillingByBillingIdItemByItemIdMutation = (
+  options?: Partial<Options<DeleteApiBillingByBillingIdItemByItemIdData>>
+): UseMutationOptions<
+  DeleteApiBillingByBillingIdItemByItemIdResponse,
+  DeleteApiBillingByBillingIdItemByItemIdError,
+  Options<DeleteApiBillingByBillingIdItemByItemIdData>
+> => {
+  const mutationOptions: UseMutationOptions<
+    DeleteApiBillingByBillingIdItemByItemIdResponse,
+    DeleteApiBillingByBillingIdItemByItemIdError,
+    Options<DeleteApiBillingByBillingIdItemByItemIdData>
+  > = {
+    mutationFn: async (fnOptions) => {
+      const { data } = await deleteApiBillingByBillingIdItemByItemId({
+        ...options,
+        ...fnOptions,
+        throwOnError: true,
+      })
+      return data
+    },
+  }
+  return mutationOptions
+}
+
+export const getApiBillingByBillingIdPaymentQueryKey = (
+  options: Options<GetApiBillingByBillingIdPaymentData>
+) => createQueryKey("getApiBillingByBillingIdPayment", options)
+
+/**
+ * List Payments
+ */
+export const getApiBillingByBillingIdPaymentOptions = (
+  options: Options<GetApiBillingByBillingIdPaymentData>
+) =>
+  queryOptions<
+    GetApiBillingByBillingIdPaymentResponse,
+    GetApiBillingByBillingIdPaymentError,
+    GetApiBillingByBillingIdPaymentResponse,
+    ReturnType<typeof getApiBillingByBillingIdPaymentQueryKey>
+  >({
+    queryFn: async ({ queryKey, signal }) => {
+      const { data } = await getApiBillingByBillingIdPayment({
+        ...options,
+        ...queryKey[0],
+        signal,
+        throwOnError: true,
+      })
+      return data
+    },
+    queryKey: getApiBillingByBillingIdPaymentQueryKey(options),
+  })
+
+/**
+ * Create Payment
+ */
+export const postApiBillingByBillingIdPaymentMutation = (
+  options?: Partial<Options<PostApiBillingByBillingIdPaymentData>>
+): UseMutationOptions<
+  PostApiBillingByBillingIdPaymentResponse,
+  PostApiBillingByBillingIdPaymentError,
+  Options<PostApiBillingByBillingIdPaymentData>
+> => {
+  const mutationOptions: UseMutationOptions<
+    PostApiBillingByBillingIdPaymentResponse,
+    PostApiBillingByBillingIdPaymentError,
+    Options<PostApiBillingByBillingIdPaymentData>
+  > = {
+    mutationFn: async (fnOptions) => {
+      const { data } = await postApiBillingByBillingIdPayment({
+        ...options,
+        ...fnOptions,
+        throwOnError: true,
+      })
+      return data
+    },
+  }
+  return mutationOptions
+}
+
+/**
+ * Delete
+ */
+export const deleteApiBillingByIdMutation = (
+  options?: Partial<Options<DeleteApiBillingByIdData>>
+): UseMutationOptions<
+  DeleteApiBillingByIdResponse,
+  DeleteApiBillingByIdError,
+  Options<DeleteApiBillingByIdData>
+> => {
+  const mutationOptions: UseMutationOptions<
+    DeleteApiBillingByIdResponse,
+    DeleteApiBillingByIdError,
+    Options<DeleteApiBillingByIdData>
+  > = {
+    mutationFn: async (fnOptions) => {
+      const { data } = await deleteApiBillingById({
+        ...options,
+        ...fnOptions,
+        throwOnError: true,
+      })
+      return data
+    },
+  }
+  return mutationOptions
+}
+
+export const getApiBillingByIdQueryKey = (
+  options: Options<GetApiBillingByIdData>
+) => createQueryKey("getApiBillingById", options)
+
+/**
+ * Get By Id
+ */
+export const getApiBillingByIdOptions = (
+  options: Options<GetApiBillingByIdData>
+) =>
+  queryOptions<
+    GetApiBillingByIdResponse,
+    GetApiBillingByIdError,
+    GetApiBillingByIdResponse,
+    ReturnType<typeof getApiBillingByIdQueryKey>
+  >({
+    queryFn: async ({ queryKey, signal }) => {
+      const { data } = await getApiBillingById({
+        ...options,
+        ...queryKey[0],
+        signal,
+        throwOnError: true,
+      })
+      return data
+    },
+    queryKey: getApiBillingByIdQueryKey(options),
+  })
+
+/**
+ * Update
+ */
+export const putApiBillingByIdMutation = (
+  options?: Partial<Options<PutApiBillingByIdData>>
+): UseMutationOptions<
+  PutApiBillingByIdResponse,
+  PutApiBillingByIdError,
+  Options<PutApiBillingByIdData>
+> => {
+  const mutationOptions: UseMutationOptions<
+    PutApiBillingByIdResponse,
+    PutApiBillingByIdError,
+    Options<PutApiBillingByIdData>
+  > = {
+    mutationFn: async (fnOptions) => {
+      const { data } = await putApiBillingById({
         ...options,
         ...fnOptions,
         throwOnError: true,
