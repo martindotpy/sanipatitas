@@ -29,7 +29,7 @@ export const stockMovementTable = pgTable(
     stockId: uuid()
       .notNull()
       .references(() => stockTable.id),
-    createdAt: timestamp({ withTimezone: true }).defaultNow().notNull(),
+    createdAt: timestamp().defaultNow().notNull(),
   },
   (table) => [
     check(

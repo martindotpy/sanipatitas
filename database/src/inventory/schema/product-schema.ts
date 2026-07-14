@@ -13,8 +13,8 @@ export const productTable = pgTable("product", {
   price: decimal({ precision: 10, scale: 2 }),
   categoryId: uuid().references(() => productCategoryTable.id),
   supplierId: uuid().references(() => supplierTable.id),
-  createdAt: timestamp({ withTimezone: true }).defaultNow().notNull(),
-  updatedAt: timestamp({ withTimezone: true })
+  createdAt: timestamp().defaultNow().notNull(),
+  updatedAt: timestamp()
     .defaultNow()
     .$onUpdate(() => new Date())
     .notNull(),

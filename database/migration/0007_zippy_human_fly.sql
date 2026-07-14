@@ -2,8 +2,8 @@ CREATE TABLE "product_category" (
 	"id" uuid PRIMARY KEY NOT NULL,
 	"name" varchar(255) NOT NULL,
 	"description" varchar(1000),
-	"created_at" timestamp with time zone DEFAULT now() NOT NULL,
-	"updated_at" timestamp with time zone DEFAULT now() NOT NULL,
+	"created_at" timestamp DEFAULT now() NOT NULL,
+	"updated_at" timestamp DEFAULT now() NOT NULL,
 	CONSTRAINT "product_category_name_unique" UNIQUE("name")
 );
 --> statement-breakpoint
@@ -15,8 +15,8 @@ CREATE TABLE "product" (
 	"price" numeric(10, 2),
 	"category_id" uuid,
 	"supplier_id" uuid,
-	"created_at" timestamp with time zone DEFAULT now() NOT NULL,
-	"updated_at" timestamp with time zone DEFAULT now() NOT NULL
+	"created_at" timestamp DEFAULT now() NOT NULL,
+	"updated_at" timestamp DEFAULT now() NOT NULL
 );
 --> statement-breakpoint
 CREATE TABLE "stock_movement" (
@@ -29,7 +29,7 @@ CREATE TABLE "stock_movement" (
 	"reference" varchar(255),
 	"notes" varchar(500),
 	"stock_id" uuid NOT NULL,
-	"created_at" timestamp with time zone DEFAULT now() NOT NULL,
+	"created_at" timestamp DEFAULT now() NOT NULL,
 	CONSTRAINT "movement_type_check" CHECK ("stock_movement"."type" IN ('PURCHASE_ENTRY', 'SALE_EXIT', 'ADJUSTMENT', 'RETURN', 'TRANSFER'))
 );
 --> statement-breakpoint
@@ -39,8 +39,8 @@ CREATE TABLE "stock" (
 	"quantity" integer DEFAULT 0 NOT NULL,
 	"location" varchar(255),
 	"min_stock" integer,
-	"created_at" timestamp with time zone DEFAULT now() NOT NULL,
-	"updated_at" timestamp with time zone DEFAULT now() NOT NULL
+	"created_at" timestamp DEFAULT now() NOT NULL,
+	"updated_at" timestamp DEFAULT now() NOT NULL
 );
 --> statement-breakpoint
 CREATE TABLE "supplier" (
@@ -51,8 +51,8 @@ CREATE TABLE "supplier" (
 	"contact_phone" varchar(50),
 	"email" varchar(255),
 	"address" varchar(500),
-	"created_at" timestamp with time zone DEFAULT now() NOT NULL,
-	"updated_at" timestamp with time zone DEFAULT now() NOT NULL
+	"created_at" timestamp DEFAULT now() NOT NULL,
+	"updated_at" timestamp DEFAULT now() NOT NULL
 );
 --> statement-breakpoint
 ALTER TABLE "product" ADD CONSTRAINT "product_category_id_product_category_id_fk" FOREIGN KEY ("category_id") REFERENCES "public"."product_category"("id") ON DELETE no action ON UPDATE no action;--> statement-breakpoint

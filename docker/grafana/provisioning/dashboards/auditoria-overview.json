@@ -31,7 +31,7 @@
       "options": { "legend": { "calcs": [], "displayMode": "list", "placement": "bottom" }, "tooltip": { "mode": "multi", "sort": "desc" } },
       "targets": [
         {
-          "expr": "sum by (service) (count_over_time({service=~\"patient|appointment|auth\"} | json | type=\"audit\" [$__auto]))",
+          "expr": "sum by (service) (count_over_time({service=~\"patient|appointment|auth|ehr|inventory|payment\"} | json | type=\"audit\" [$__auto]))",
           "refId": "A"
         }
       ],
@@ -55,7 +55,7 @@
       "pluginVersion": "9.5.0",
       "targets": [
         {
-          "expr": "sum(count_over_time({service=~\"patient|appointment|auth\"} | json | type=\"audit\" [$__auto]))",
+          "expr": "sum(count_over_time({service=~\"patient|appointment|auth|ehr|inventory|payment\"} | json | type=\"audit\" [$__auto]))",
           "refId": "A"
         }
       ],
@@ -79,7 +79,7 @@
       "pluginVersion": "9.5.0",
       "targets": [
         {
-          "expr": "sum(count_over_time({service=~\"patient|appointment|auth\"} | json | type=\"audit\" | status >= 400 [$__auto]))",
+          "expr": "sum(count_over_time({service=~\"patient|appointment|auth|ehr|inventory|payment\"} | json | type=\"audit\" | status >= 400 [$__auto]))",
           "refId": "A"
         }
       ],
@@ -111,7 +111,7 @@
       "options": { "legend": { "calcs": [], "displayMode": "list", "placement": "bottom" }, "tooltip": { "mode": "multi", "sort": "desc" } },
       "targets": [
         {
-          "expr": "sum by (action) (count_over_time({service=~\"patient|appointment|auth\"} | json | type=\"audit\" [$__auto]))",
+          "expr": "sum by (action) (count_over_time({service=~\"patient|appointment|auth|ehr|inventory|payment\"} | json | type=\"audit\" [$__auto]))",
           "refId": "A"
         }
       ],
@@ -135,7 +135,7 @@
       "options": { "legend": { "calcs": [], "displayMode": "list", "placement": "bottom" }, "tooltip": { "mode": "multi", "sort": "desc" } },
       "targets": [
         {
-          "expr": "sum by (who, role) (count_over_time({service=~\"patient|appointment|auth\"} | json | type=\"audit\" [$__auto]))",
+          "expr": "sum by (who, role) (count_over_time({service=~\"patient|appointment|auth|ehr|inventory|payment\"} | json | type=\"audit\" [$__auto]))",
           "refId": "A"
         }
       ],
@@ -159,7 +159,7 @@
       "pluginVersion": "9.5.0",
       "targets": [
         {
-          "expr": "{service=~\"patient|appointment|auth\"} | json | type=\"audit\"",
+          "expr": "{service=~\"patient|appointment|auth|ehr|inventory|payment\"} | json | type=\"audit\"",
           "refId": "A"
         }
       ],
@@ -197,7 +197,7 @@
       "pluginVersion": "9.5.0",
       "targets": [
         {
-          "expr": "{service=~\"patient|appointment|auth\"} | json | type=\"audit\" | line_format \"\u2022 {{.service}} [{{.action}}] {{.who}} ({{.role}}) \u2192 {{.path}} \u2192 {{.status}} en {{.durationMs}}ms\"",
+          "expr": "{service=~\"patient|appointment|auth|ehr|inventory|payment\"} | json | type=\"audit\" | line_format \"\u2022 {{.service}} [{{.action}}] {{.who}} ({{.role}}) \u2192 {{.path}} \u2192 {{.status}} en {{.durationMs}}ms\"",
           "refId": "A"
         }
       ],

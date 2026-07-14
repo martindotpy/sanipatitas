@@ -1,0 +1,374 @@
+{
+  "annotations": { "list": [] },
+  "editable": true,
+  "fiscalYearStartMonth": 0,
+  "graphTooltip": 1,
+  "id": null,
+  "links": [],
+  "panels": [
+    {
+      "collapsed": false,
+      "gridPos": { "h": 1, "w": 24, "x": 0, "y": 0 },
+      "id": 100,
+      "panels": [],
+      "title": "🏥 Estado de Servicios",
+      "type": "row"
+    },
+    {
+      "datasource": { "type": "loki", "uid": "loki" },
+      "fieldConfig": {
+        "defaults": {
+          "color": { "mode": "thresholds" },
+          "mappings": [
+            { "options": { "0": { "color": "red", "text": "🔴 Sin datos" }, "1": { "color": "green", "text": "🟢 Activo" } }, "type": "value" }
+          ],
+          "thresholds": { "mode": "absolute", "steps": [{ "color": "red", "value": null }, { "color": "green", "value": 1 }] },
+          "unit": "none"
+        },
+        "overrides": []
+      },
+      "gridPos": { "h": 4, "w": 3, "x": 0, "y": 1 },
+      "id": 1,
+      "options": {
+        "colorMode": "value",
+        "graphMode": "none",
+        "justifyMode": "auto",
+        "orientation": "auto",
+        "reduceOptions": { "calcs": ["lastNotNull"], "fields": "", "values": false },
+        "textMode": "auto"
+      },
+      "pluginVersion": "9.5.0",
+      "targets": [
+        { "expr": "count_over_time({service=\"auth\"} |= \"started\" [$__auto])", "refId": "A" }
+      ],
+      "title": "Auth",
+      "type": "stat"
+    },
+    {
+      "datasource": { "type": "loki", "uid": "loki" },
+      "fieldConfig": {
+        "defaults": {
+          "color": { "mode": "thresholds" },
+          "mappings": [
+            { "options": { "0": { "color": "red", "text": "🔴 Sin datos" }, "1": { "color": "green", "text": "🟢 Activo" } }, "type": "value" }
+          ],
+          "thresholds": { "mode": "absolute", "steps": [{ "color": "red", "value": null }, { "color": "green", "value": 1 }] },
+          "unit": "none"
+        },
+        "overrides": []
+      },
+      "gridPos": { "h": 4, "w": 3, "x": 3, "y": 1 },
+      "id": 2,
+      "options": { "colorMode": "value", "graphMode": "none", "justifyMode": "auto", "orientation": "auto", "reduceOptions": { "calcs": ["lastNotNull"], "fields": "", "values": false }, "textMode": "auto" },
+      "pluginVersion": "9.5.0",
+      "targets": [
+        { "expr": "count_over_time({service=\"patient\"} |= \"started\" [$__auto])", "refId": "A" }
+      ],
+      "title": "Patient",
+      "type": "stat"
+    },
+    {
+      "datasource": { "type": "loki", "uid": "loki" },
+      "fieldConfig": {
+        "defaults": {
+          "color": { "mode": "thresholds" },
+          "mappings": [
+            { "options": { "0": { "color": "red", "text": "🔴 Sin datos" }, "1": { "color": "green", "text": "🟢 Activo" } }, "type": "value" }
+          ],
+          "thresholds": { "mode": "absolute", "steps": [{ "color": "red", "value": null }, { "color": "green", "value": 1 }] },
+          "unit": "none"
+        },
+        "overrides": []
+      },
+      "gridPos": { "h": 4, "w": 3, "x": 6, "y": 1 },
+      "id": 3,
+      "options": { "colorMode": "value", "graphMode": "none", "justifyMode": "auto", "orientation": "auto", "reduceOptions": { "calcs": ["lastNotNull"], "fields": "", "values": false }, "textMode": "auto" },
+      "pluginVersion": "9.5.0",
+      "targets": [
+        { "expr": "count_over_time({service=\"ehr\"} |= \"started\" [$__auto])", "refId": "A" }
+      ],
+      "title": "EHR",
+      "type": "stat"
+    },
+    {
+      "datasource": { "type": "loki", "uid": "loki" },
+      "fieldConfig": {
+        "defaults": {
+          "color": { "mode": "thresholds" },
+          "mappings": [
+            { "options": { "0": { "color": "red", "text": "🔴 Sin datos" }, "1": { "color": "green", "text": "🟢 Activo" } }, "type": "value" }
+          ],
+          "thresholds": { "mode": "absolute", "steps": [{ "color": "red", "value": null }, { "color": "green", "value": 1 }] },
+          "unit": "none"
+        },
+        "overrides": []
+      },
+      "gridPos": { "h": 4, "w": 3, "x": 9, "y": 1 },
+      "id": 4,
+      "options": { "colorMode": "value", "graphMode": "none", "justifyMode": "auto", "orientation": "auto", "reduceOptions": { "calcs": ["lastNotNull"], "fields": "", "values": false }, "textMode": "auto" },
+      "pluginVersion": "9.5.0",
+      "targets": [
+        { "expr": "count_over_time({service=\"appointment\"} |= \"started\" [$__auto])", "refId": "A" }
+      ],
+      "title": "Appointment",
+      "type": "stat"
+    },
+    {
+      "datasource": { "type": "loki", "uid": "loki" },
+      "fieldConfig": {
+        "defaults": {
+          "color": { "mode": "thresholds" },
+          "mappings": [
+            { "options": { "0": { "color": "red", "text": "🔴 Sin datos" }, "1": { "color": "green", "text": "🟢 Activo" } }, "type": "value" }
+          ],
+          "thresholds": { "mode": "absolute", "steps": [{ "color": "red", "value": null }, { "color": "green", "value": 1 }] },
+          "unit": "none"
+        },
+        "overrides": []
+      },
+      "gridPos": { "h": 4, "w": 3, "x": 12, "y": 1 },
+      "id": 5,
+      "options": { "colorMode": "value", "graphMode": "none", "justifyMode": "auto", "orientation": "auto", "reduceOptions": { "calcs": ["lastNotNull"], "fields": "", "values": false }, "textMode": "auto" },
+      "pluginVersion": "9.5.0",
+      "targets": [
+        { "expr": "count_over_time({service=\"inventory\"} |= \"started\" [$__auto])", "refId": "A" }
+      ],
+      "title": "Inventory",
+      "type": "stat"
+    },
+    {
+      "datasource": { "type": "loki", "uid": "loki" },
+      "fieldConfig": {
+        "defaults": {
+          "color": { "mode": "thresholds" },
+          "mappings": [
+            { "options": { "0": { "color": "red", "text": "🔴 Sin datos" }, "1": { "color": "green", "text": "🟢 Activo" } }, "type": "value" }
+          ],
+          "thresholds": { "mode": "absolute", "steps": [{ "color": "red", "value": null }, { "color": "green", "value": 1 }] },
+          "unit": "none"
+        },
+        "overrides": []
+      },
+      "gridPos": { "h": 4, "w": 3, "x": 15, "y": 1 },
+      "id": 6,
+      "options": { "colorMode": "value", "graphMode": "none", "justifyMode": "auto", "orientation": "auto", "reduceOptions": { "calcs": ["lastNotNull"], "fields": "", "values": false }, "textMode": "auto" },
+      "pluginVersion": "9.5.0",
+      "targets": [
+        { "expr": "count_over_time({service=\"payment\"} |= \"started\" [$__auto])", "refId": "A" }
+      ],
+      "title": "Payment",
+      "type": "stat"
+    },
+    {
+      "datasource": { "type": "loki", "uid": "loki" },
+      "fieldConfig": {
+        "defaults": {
+          "color": { "mode": "thresholds" },
+          "mappings": [
+            { "options": { "0": { "color": "red", "text": "🔴 Sin datos" }, "1": { "color": "green", "text": "🟢 Activo" } }, "type": "value" }
+          ],
+          "thresholds": { "mode": "absolute", "steps": [{ "color": "red", "value": null }, { "color": "green", "value": 1 }] },
+          "unit": "none"
+        },
+        "overrides": []
+      },
+      "gridPos": { "h": 4, "w": 6, "x": 18, "y": 1 },
+      "id": 7,
+      "options": { "colorMode": "value", "graphMode": "none", "justifyMode": "auto", "orientation": "auto", "reduceOptions": { "calcs": ["lastNotNull"], "fields": "", "values": false }, "textMode": "auto" },
+      "pluginVersion": "9.5.0",
+      "targets": [
+        { "expr": "count_over_time({service=~\".+\"} [$__auto])", "refId": "A" }
+      ],
+      "title": "✅ Todos los servicios",
+      "type": "stat"
+    },
+    {
+      "collapsed": false,
+      "gridPos": { "h": 1, "w": 24, "x": 0, "y": 5 },
+      "id": 200,
+      "panels": [],
+      "title": "📊 Rendimiento",
+      "type": "row"
+    },
+    {
+      "datasource": { "type": "loki", "uid": "loki" },
+      "fieldConfig": {
+        "defaults": {
+          "color": { "mode": "palette-classic" },
+          "custom": {
+            "axisBorderShow": false, "axisCenteredZero": false, "axisColorMode": "text",
+            "axisLabel": "", "axisPlacement": "auto", "barAlignment": 0,
+            "drawStyle": "line", "fillOpacity": 30, "gradientMode": "opacity",
+            "hideFrom": { "legend": false, "tooltip": false, "viz": false },
+            "lineInterpolation": "smooth", "lineWidth": 2,
+            "pointSize": 4, "scaleDistribution": { "type": "linear" },
+            "showPoints": "never", "spanNulls": true,
+            "stacking": { "group": "A", "mode": "none" },
+            "thresholdsStyle": { "mode": "off" }
+          },
+          "mappings": [],
+          "thresholds": { "mode": "absolute", "steps": [{ "color": "green", "value": null }] },
+          "unit": "req/s"
+        },
+        "overrides": []
+      },
+      "gridPos": { "h": 8, "w": 12, "x": 0, "y": 6 },
+      "id": 8,
+      "options": {
+        "legend": { "calcs": [], "displayMode": "table", "placement": "bottom", "showLegend": true },
+        "tooltip": { "mode": "multi", "sort": "desc" }
+      },
+      "pluginVersion": "9.5.0",
+      "targets": [
+        {
+          "expr": "sum by (service) (count_over_time({service=~\".+\"} | json [$__interval]))",
+          "legendFormat": "{{service}}",
+          "refId": "A"
+        }
+      ],
+      "title": "Solicitudes por minuto por servicio",
+      "type": "timeseries"
+    },
+    {
+      "datasource": { "type": "loki", "uid": "loki" },
+      "fieldConfig": {
+        "defaults": {
+          "color": { "mode": "palette-classic" },
+          "custom": {
+            "axisBorderShow": false, "axisCenteredZero": false, "axisColorMode": "text",
+            "axisLabel": "", "axisPlacement": "auto", "barAlignment": 0,
+            "drawStyle": "line", "fillOpacity": 30, "gradientMode": "opacity",
+            "hideFrom": { "legend": false, "tooltip": false, "viz": false },
+            "lineInterpolation": "smooth", "lineWidth": 2,
+            "pointSize": 4, "scaleDistribution": { "type": "linear" },
+            "showPoints": "never", "spanNulls": true,
+            "stacking": { "group": "A", "mode": "none" },
+            "thresholdsStyle": { "mode": "off" }
+          },
+          "mappings": [],
+          "thresholds": { "mode": "absolute", "steps": [{ "color": "green", "value": null }, { "color": "red", "value": 400 }] },
+          "unit": "short"
+        },
+        "overrides": []
+      },
+      "gridPos": { "h": 8, "w": 12, "x": 12, "y": 6 },
+      "id": 9,
+      "options": {
+        "legend": { "calcs": [], "displayMode": "table", "placement": "bottom", "showLegend": true },
+        "tooltip": { "mode": "multi", "sort": "desc" }
+      },
+      "pluginVersion": "9.5.0",
+      "targets": [
+        {
+          "expr": "sum by (service) (count_over_time({service=~\".+\"} | json | status >= 400 [$__interval]))",
+          "legendFormat": "{{service}}-errores",
+          "refId": "A"
+        }
+      ],
+      "title": "Errores (HTTP 4xx/5xx) por servicio",
+      "type": "timeseries"
+    },
+    {
+      "datasource": { "type": "loki", "uid": "loki" },
+      "fieldConfig": {
+        "defaults": {
+          "color": { "mode": "thresholds" },
+          "custom": {
+            "align": "auto",
+            "cellOptions": { "type": "auto" },
+            "inspect": false
+          },
+          "mappings": [],
+          "thresholds": { "mode": "absolute", "steps": [{ "color": "red", "value": null }, { "color": "yellow", "value": 1 }, { "color": "green", "value": 5 }] },
+          "unit": "short"
+        },
+        "overrides": []
+      },
+      "gridPos": { "h": 8, "w": 24, "x": 0, "y": 14 },
+      "id": 10,
+      "options": {
+        "cellHeight": "sm",
+        "footer": { "countRows": false, "fields": "", "reducer": ["sum"], "show": false },
+        "showHeader": true
+      },
+      "pluginVersion": "9.5.0",
+      "targets": [
+        {
+          "expr": "{service=~\".+\"} | json | status >= 400 | line_format \"🚨 [{{.service}}] {{.method}} {{.path}} → {{.status}} ({{.durationMs}}ms)\"",
+          "refId": "A"
+        }
+      ],
+      "title": "🚨 Errores recientes",
+      "type": "table"
+    },
+    {
+      "collapsed": false,
+      "gridPos": { "h": 1, "w": 24, "x": 0, "y": 22 },
+      "id": 300,
+      "panels": [],
+      "title": "📝 Logs en vivo",
+      "type": "row"
+    },
+    {
+      "datasource": { "type": "loki", "uid": "loki" },
+      "fieldConfig": {
+        "defaults": {
+          "color": { "mode": "thresholds" },
+          "custom": {
+            "align": "auto",
+            "cellOptions": { "type": "auto" },
+            "inspect": false
+          },
+          "mappings": [],
+          "thresholds": { "mode": "absolute", "steps": [{ "color": "green", "value": null }] }
+        },
+        "overrides": []
+      },
+      "gridPos": { "h": 10, "w": 24, "x": 0, "y": 23 },
+      "id": 11,
+      "options": {
+        "cellHeight": "sm",
+        "footer": { "countRows": false, "fields": "", "reducer": ["sum"], "show": false },
+        "showHeader": true
+      },
+      "pluginVersion": "9.5.0",
+      "targets": [
+        {
+          "expr": "{service=~\".+\"} | json | line_format \"🕐 {{.__timestamp__}} | [{{.service}}] {{.level}} | {{.message}}\"",
+          "refId": "A"
+        }
+      ],
+      "title": "Logs centralizados",
+      "type": "logs"
+    }
+  ],
+  "refresh": "10s",
+  "schemaVersion": 38,
+  "style": "dark",
+  "tags": ["operations", "monitoring"],
+  "templating": {
+    "list": [
+      {
+        "current": { "selected": false, "text": "Loki", "value": "loki" },
+        "hide": 0,
+        "includeAll": false,
+        "label": "Datasource",
+        "multi": false,
+        "name": "DS_LOKI",
+        "options": [],
+        "query": "loki",
+        "refresh": 1,
+        "regex": "",
+        "skipUrlSync": false,
+        "type": "datasource"
+      }
+    ]
+  },
+  "time": { "from": "now-30m", "to": "now" },
+  "timepicker": {},
+  "timezone": "America/Lima",
+  "title": "⚡ Operaciones - Sanipatitas",
+  "uid": "sanipatitas-ops",
+  "version": 1,
+  "weekStart": ""
+}

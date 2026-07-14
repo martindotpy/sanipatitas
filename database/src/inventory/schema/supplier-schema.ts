@@ -11,8 +11,8 @@ export const supplierTable = pgTable("supplier", {
   contactPhone: varchar({ length: 50 }),
   email: varchar({ length: 255 }),
   address: varchar({ length: 500 }),
-  createdAt: timestamp({ withTimezone: true }).defaultNow().notNull(),
-  updatedAt: timestamp({ withTimezone: true })
+  createdAt: timestamp().defaultNow().notNull(),
+  updatedAt: timestamp()
     .defaultNow()
     .$onUpdate(() => new Date())
     .notNull(),

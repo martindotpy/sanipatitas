@@ -12,8 +12,8 @@ export const stockTable = pgTable("stock", {
   quantity: integer().notNull().default(0),
   location: varchar({ length: 255 }),
   minStock: integer(),
-  createdAt: timestamp({ withTimezone: true }).defaultNow().notNull(),
-  updatedAt: timestamp({ withTimezone: true })
+  createdAt: timestamp().defaultNow().notNull(),
+  updatedAt: timestamp()
     .defaultNow()
     .$onUpdate(() => new Date())
     .notNull(),

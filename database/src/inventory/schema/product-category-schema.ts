@@ -7,8 +7,8 @@ export const productCategoryTable = pgTable("product_category", {
     .$defaultFn(() => Bun.randomUUIDv7()),
   name: varchar({ length: 255 }).notNull().unique(),
   description: varchar({ length: 1000 }),
-  createdAt: timestamp({ withTimezone: true }).defaultNow().notNull(),
-  updatedAt: timestamp({ withTimezone: true })
+  createdAt: timestamp().defaultNow().notNull(),
+  updatedAt: timestamp()
     .defaultNow()
     .$onUpdate(() => new Date())
     .notNull(),

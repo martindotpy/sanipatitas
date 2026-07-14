@@ -1,0 +1,549 @@
+{
+  "annotations": { "list": [] },
+  "editable": true,
+  "fiscalYearStartMonth": 0,
+  "graphTooltip": 1,
+  "id": null,
+  "links": [],
+  "panels": [
+    {
+      "collapsed": false,
+      "gridPos": { "h": 1, "w": 24, "x": 0, "y": 0 },
+      "id": 100,
+      "panels": [],
+      "title": "🐾 Pacientes",
+      "type": "row"
+    },
+    {
+      "datasource": { "type": "loki", "uid": "loki" },
+      "fieldConfig": {
+        "defaults": {
+          "color": { "mode": "thresholds" },
+          "mappings": [],
+          "thresholds": { "mode": "absolute", "steps": [{ "color": "green", "value": null }] },
+          "unit": "short"
+        },
+        "overrides": []
+      },
+      "gridPos": { "h": 4, "w": 6, "x": 0, "y": 1 },
+      "id": 1,
+      "options": {
+        "colorMode": "value",
+        "graphMode": "area",
+        "justifyMode": "auto",
+        "orientation": "auto",
+        "reduceOptions": { "calcs": ["lastNotNull"], "fields": "", "values": false },
+        "textMode": "auto"
+      },
+      "pluginVersion": "9.5.0",
+      "targets": [
+        {
+          "expr": "sum(count_over_time({service=\"patient\"} | json | action=\"CREATE_PATIENT\" [$__auto]))",
+          "refId": "A"
+        }
+      ],
+      "title": "🆕 Pacientes registrados (hoy)",
+      "type": "stat"
+    },
+    {
+      "datasource": { "type": "loki", "uid": "loki" },
+      "fieldConfig": {
+        "defaults": {
+          "color": { "mode": "thresholds" },
+          "mappings": [],
+          "thresholds": { "mode": "absolute", "steps": [{ "color": "green", "value": null }] },
+          "unit": "short"
+        },
+        "overrides": []
+      },
+      "gridPos": { "h": 4, "w": 6, "x": 6, "y": 1 },
+      "id": 2,
+      "options": {
+        "colorMode": "value",
+        "graphMode": "area",
+        "justifyMode": "auto",
+        "orientation": "auto",
+        "reduceOptions": { "calcs": ["lastNotNull"], "fields": "", "values": false },
+        "textMode": "auto"
+      },
+      "pluginVersion": "9.5.0",
+      "targets": [
+        {
+          "expr": "sum(count_over_time({service=\"patient\"} | json | action=\"CREATE_CLIENT\" [$__auto]))",
+          "refId": "A"
+        }
+      ],
+      "title": "🆕 Clientes registrados (hoy)",
+      "type": "stat"
+    },
+    {
+      "datasource": { "type": "loki", "uid": "loki" },
+      "fieldConfig": {
+        "defaults": {
+          "color": { "mode": "thresholds" },
+          "mappings": [],
+          "thresholds": { "mode": "absolute", "steps": [{ "color": "green", "value": null }] },
+          "unit": "short"
+        },
+        "overrides": []
+      },
+      "gridPos": { "h": 4, "w": 6, "x": 12, "y": 1 },
+      "id": 3,
+      "options": {
+        "colorMode": "value",
+        "graphMode": "area",
+        "justifyMode": "auto",
+        "orientation": "auto",
+        "reduceOptions": { "calcs": ["sum"], "fields": "", "values": false },
+        "textMode": "auto"
+      },
+      "pluginVersion": "9.5.0",
+      "targets": [
+        {
+          "expr": "sum(count_over_time({service=\"patient\"} | json | action=~\"CREATE_PATIENT|UPDATE_PATIENT\" [$__auto]))",
+          "refId": "A"
+        }
+      ],
+      "title": "📈 Total operaciones pacientes",
+      "type": "stat"
+    },
+    {
+      "datasource": { "type": "loki", "uid": "loki" },
+      "fieldConfig": {
+        "defaults": {
+          "color": { "mode": "palette-classic" },
+          "custom": {
+            "axisBorderShow": false, "axisCenteredZero": false, "axisColorMode": "text",
+            "axisLabel": "", "axisPlacement": "auto", "barAlignment": 0,
+            "drawStyle": "line", "fillOpacity": 40, "gradientMode": "opacity",
+            "hideFrom": { "legend": false, "tooltip": false, "viz": false },
+            "lineInterpolation": "smooth", "lineWidth": 2,
+            "pointSize": 4, "scaleDistribution": { "type": "linear" },
+            "showPoints": "never", "spanNulls": true,
+            "stacking": { "group": "A", "mode": "none" },
+            "thresholdsStyle": { "mode": "off" }
+          },
+          "mappings": [],
+          "thresholds": { "mode": "absolute", "steps": [{ "color": "green", "value": null }] },
+          "unit": "short"
+        },
+        "overrides": []
+      },
+      "gridPos": { "h": 8, "w": 12, "x": 0, "y": 5 },
+      "id": 4,
+      "options": {
+        "legend": { "calcs": [], "displayMode": "table", "placement": "bottom", "showLegend": true },
+        "tooltip": { "mode": "multi", "sort": "desc" }
+      },
+      "pluginVersion": "9.5.0",
+      "targets": [
+        {
+          "expr": "sum by (action) (count_over_time({service=\"patient\"} | json | action=~\"CREATE_PATIENT|CREATE_CLIENT\" [$__interval]))",
+          "legendFormat": "{{action}}",
+          "refId": "A"
+        }
+      ],
+      "title": "Registros de pacientes y clientes en el tiempo",
+      "type": "timeseries"
+    },
+    {
+      "datasource": { "type": "loki", "uid": "loki" },
+      "fieldConfig": {
+        "defaults": {
+          "color": { "mode": "palette-classic" },
+          "custom": {
+            "axisBorderShow": false, "axisCenteredZero": false, "axisColorMode": "text",
+            "axisLabel": "", "axisPlacement": "auto", "barAlignment": 0,
+            "drawStyle": "line", "fillOpacity": 40, "gradientMode": "opacity",
+            "hideFrom": { "legend": false, "tooltip": false, "viz": false },
+            "lineInterpolation": "smooth", "lineWidth": 2,
+            "pointSize": 4, "scaleDistribution": { "type": "linear" },
+            "showPoints": "never", "spanNulls": true,
+            "stacking": { "group": "A", "mode": "none" },
+            "thresholdsStyle": { "mode": "off" }
+          },
+          "mappings": [],
+          "thresholds": { "mode": "absolute", "steps": [{ "color": "green", "value": null }] },
+          "unit": "short"
+        },
+        "overrides": []
+      },
+      "gridPos": { "h": 8, "w": 12, "x": 12, "y": 5 },
+      "id": 5,
+      "options": {
+        "legend": { "calcs": [], "displayMode": "table", "placement": "bottom", "showLegend": true },
+        "tooltip": { "mode": "multi", "sort": "desc" }
+      },
+      "pluginVersion": "9.5.0",
+      "targets": [
+        {
+          "expr": "sum by (action) (count_over_time({service=\"ehr\"} | json [$__interval]))",
+          "legendFormat": "{{action}}",
+          "refId": "A"
+        }
+      ],
+      "title": "Actividad clínica (EHR) en el tiempo",
+      "type": "timeseries"
+    },
+    {
+      "collapsed": false,
+      "gridPos": { "h": 1, "w": 24, "x": 0, "y": 13 },
+      "id": 200,
+      "panels": [],
+      "title": "📅 Citas",
+      "type": "row"
+    },
+    {
+      "datasource": { "type": "loki", "uid": "loki" },
+      "fieldConfig": {
+        "defaults": {
+          "color": { "mode": "thresholds" },
+          "mappings": [],
+          "thresholds": { "mode": "absolute", "steps": [{ "color": "green", "value": null }] },
+          "unit": "short"
+        },
+        "overrides": []
+      },
+      "gridPos": { "h": 4, "w": 6, "x": 0, "y": 14 },
+      "id": 6,
+      "options": {
+        "colorMode": "value",
+        "graphMode": "area",
+        "justifyMode": "auto",
+        "orientation": "auto",
+        "reduceOptions": { "calcs": ["lastNotNull"], "fields": "", "values": false },
+        "textMode": "auto"
+      },
+      "pluginVersion": "9.5.0",
+      "targets": [
+        {
+          "expr": "sum(count_over_time({service=\"appointment\"} | json | action=\"CREATE_APPOINTMENT\" [$__auto]))",
+          "refId": "A"
+        }
+      ],
+      "title": "🆕 Citas creadas (hoy)",
+      "type": "stat"
+    },
+    {
+      "datasource": { "type": "loki", "uid": "loki" },
+      "fieldConfig": {
+        "defaults": {
+          "color": { "mode": "thresholds" },
+          "mappings": [],
+          "thresholds": { "mode": "absolute", "steps": [{ "color": "green", "value": null }] },
+          "unit": "short"
+        },
+        "overrides": []
+      },
+      "gridPos": { "h": 4, "w": 6, "x": 6, "y": 14 },
+      "id": 7,
+      "options": {
+        "colorMode": "value",
+        "graphMode": "area",
+        "justifyMode": "auto",
+        "orientation": "auto",
+        "reduceOptions": { "calcs": ["lastNotNull"], "fields": "", "values": false },
+        "textMode": "auto"
+      },
+      "pluginVersion": "9.5.0",
+      "targets": [
+        {
+          "expr": "sum(count_over_time({service=\"appointment\"} | json | action=\"UPDATE_APPOINTMENT_STATUS\" [$__auto]))",
+          "refId": "A"
+        }
+      ],
+      "title": "🔄 Cambios de estado (hoy)",
+      "type": "stat"
+    },
+    {
+      "datasource": { "type": "loki", "uid": "loki" },
+      "fieldConfig": {
+        "defaults": {
+          "color": { "mode": "thresholds" },
+          "mappings": [],
+          "thresholds": { "mode": "absolute", "steps": [{ "color": "green", "value": null }] },
+          "unit": "short"
+        },
+        "overrides": []
+      },
+      "gridPos": { "h": 4, "w": 6, "x": 12, "y": 14 },
+      "id": 8,
+      "options": {
+        "colorMode": "value",
+        "graphMode": "area",
+        "justifyMode": "auto",
+        "orientation": "auto",
+        "reduceOptions": { "calcs": ["lastNotNull"], "fields": "", "values": false },
+        "textMode": "auto"
+      },
+      "pluginVersion": "9.5.0",
+      "targets": [
+        {
+          "expr": "sum(count_over_time({service=\"appointment\"} | json | status > 400 [$__auto]))",
+          "refId": "A"
+        }
+      ],
+      "title": "❌ Citas con error",
+      "type": "stat"
+    },
+    {
+      "datasource": { "type": "loki", "uid": "loki" },
+      "fieldConfig": {
+        "defaults": {
+          "color": { "mode": "palette-classic" },
+          "custom": {
+            "axisBorderShow": false, "axisCenteredZero": false, "axisColorMode": "text",
+            "axisLabel": "", "axisPlacement": "auto", "barAlignment": 0,
+            "drawStyle": "line", "fillOpacity": 40, "gradientMode": "opacity",
+            "hideFrom": { "legend": false, "tooltip": false, "viz": false },
+            "lineInterpolation": "smooth", "lineWidth": 2,
+            "pointSize": 4, "scaleDistribution": { "type": "linear" },
+            "showPoints": "never", "spanNulls": true,
+            "stacking": { "group": "A", "mode": "none" },
+            "thresholdsStyle": { "mode": "off" }
+          },
+          "mappings": [],
+          "thresholds": { "mode": "absolute", "steps": [{ "color": "green", "value": null }] },
+          "unit": "short"
+        },
+        "overrides": []
+      },
+      "gridPos": { "h": 8, "w": 24, "x": 0, "y": 18 },
+      "id": 9,
+      "options": {
+        "legend": { "calcs": [], "displayMode": "table", "placement": "bottom", "showLegend": true },
+        "tooltip": { "mode": "multi", "sort": "desc" }
+      },
+      "pluginVersion": "9.5.0",
+      "targets": [
+        {
+          "expr": "sum by (action) (count_over_time({service=\"appointment\"} | json [$__interval]))",
+          "legendFormat": "{{action}}",
+          "refId": "A"
+        }
+      ],
+      "title": "Actividad de citas en el tiempo",
+      "type": "timeseries"
+    },
+    {
+      "collapsed": false,
+      "gridPos": { "h": 1, "w": 24, "x": 0, "y": 26 },
+      "id": 300,
+      "panels": [],
+      "title": "💰 Facturación",
+      "type": "row"
+    },
+    {
+      "datasource": { "type": "loki", "uid": "loki" },
+      "fieldConfig": {
+        "defaults": {
+          "color": { "mode": "thresholds" },
+          "mappings": [],
+          "thresholds": { "mode": "absolute", "steps": [{ "color": "green", "value": null }] },
+          "unit": "currencyUSD"
+        },
+        "overrides": []
+      },
+      "gridPos": { "h": 4, "w": 8, "x": 0, "y": 27 },
+      "id": 10,
+      "options": {
+        "colorMode": "value",
+        "graphMode": "area",
+        "justifyMode": "auto",
+        "orientation": "auto",
+        "reduceOptions": { "calcs": ["lastNotNull"], "fields": "", "values": false },
+        "textMode": "auto"
+      },
+      "pluginVersion": "9.5.0",
+      "targets": [
+        {
+          "expr": "sum(count_over_time({service=\"payment\"} | json | action=\"CREATE_PAYMENT\" [$__auto]))",
+          "refId": "A"
+        }
+      ],
+      "title": "💳 Pagos registrados (hoy)",
+      "type": "stat"
+    },
+    {
+      "datasource": { "type": "loki", "uid": "loki" },
+      "fieldConfig": {
+        "defaults": {
+          "color": { "mode": "thresholds" },
+          "mappings": [],
+          "thresholds": { "mode": "absolute", "steps": [{ "color": "green", "value": null }] },
+          "unit": "currencyUSD"
+        },
+        "overrides": []
+      },
+      "gridPos": { "h": 4, "w": 8, "x": 8, "y": 27 },
+      "id": 11,
+      "options": {
+        "colorMode": "value",
+        "graphMode": "area",
+        "justifyMode": "auto",
+        "orientation": "auto",
+        "reduceOptions": { "calcs": ["lastNotNull"], "fields": "", "values": false },
+        "textMode": "auto"
+      },
+      "pluginVersion": "9.5.0",
+      "targets": [
+        {
+          "expr": "sum(count_over_time({service=\"payment\"} | json [$__auto]))",
+          "refId": "A"
+        }
+      ],
+      "title": "📊 Total operaciones billing",
+      "type": "stat"
+    },
+    {
+      "datasource": { "type": "loki", "uid": "loki" },
+      "fieldConfig": {
+        "defaults": {
+          "color": { "mode": "palette-classic" },
+          "custom": {
+            "axisBorderShow": false, "axisCenteredZero": false, "axisColorMode": "text",
+            "axisLabel": "", "axisPlacement": "auto", "barAlignment": 0,
+            "drawStyle": "line", "fillOpacity": 40, "gradientMode": "opacity",
+            "hideFrom": { "legend": false, "tooltip": false, "viz": false },
+            "lineInterpolation": "smooth", "lineWidth": 2,
+            "pointSize": 4, "scaleDistribution": { "type": "linear" },
+            "showPoints": "never", "spanNulls": true,
+            "stacking": { "group": "A", "mode": "none" },
+            "thresholdsStyle": { "mode": "off" }
+          },
+          "mappings": [],
+          "thresholds": { "mode": "absolute", "steps": [{ "color": "green", "value": null }] },
+          "unit": "short"
+        },
+        "overrides": []
+      },
+      "gridPos": { "h": 8, "w": 12, "x": 0, "y": 31 },
+      "id": 12,
+      "options": {
+        "legend": { "calcs": [], "displayMode": "table", "placement": "bottom", "showLegend": true },
+        "tooltip": { "mode": "multi", "sort": "desc" }
+      },
+      "pluginVersion": "9.5.0",
+      "targets": [
+        {
+          "expr": "sum by (action) (count_over_time({service=\"payment\"} | json [$__interval]))",
+          "legendFormat": "{{action}}",
+          "refId": "A"
+        }
+      ],
+      "title": "Actividad de facturación en el tiempo",
+      "type": "timeseries"
+    },
+    {
+      "datasource": { "type": "loki", "uid": "loki" },
+      "fieldConfig": {
+        "defaults": {
+          "color": { "mode": "palette-classic" },
+          "custom": {
+            "axisBorderShow": false, "axisCenteredZero": false, "axisColorMode": "text",
+            "axisLabel": "", "axisPlacement": "auto", "barAlignment": 0,
+            "drawStyle": "line", "fillOpacity": 40, "gradientMode": "opacity",
+            "hideFrom": { "legend": false, "tooltip": false, "viz": false },
+            "lineInterpolation": "smooth", "lineWidth": 2,
+            "pointSize": 4, "scaleDistribution": { "type": "linear" },
+            "showPoints": "never", "spanNulls": true,
+            "stacking": { "group": "A", "mode": "none" },
+            "thresholdsStyle": { "mode": "off" }
+          },
+          "mappings": [],
+          "thresholds": { "mode": "absolute", "steps": [{ "color": "green", "value": null }] },
+          "unit": "short"
+        },
+        "overrides": []
+      },
+      "gridPos": { "h": 8, "w": 12, "x": 12, "y": 31 },
+      "id": 13,
+      "options": {
+        "legend": { "calcs": [], "displayMode": "table", "placement": "bottom", "showLegend": true },
+        "tooltip": { "mode": "multi", "sort": "desc" }
+      },
+      "pluginVersion": "9.5.0",
+      "targets": [
+        {
+          "expr": "sum by (action) (count_over_time({service=\"inventory\"} | json [$__interval]))",
+          "legendFormat": "{{action}}",
+          "refId": "A"
+        }
+      ],
+      "title": "Actividad de inventario en el tiempo",
+      "type": "timeseries"
+    },
+    {
+      "collapsed": false,
+      "gridPos": { "h": 1, "w": 24, "x": 0, "y": 39 },
+      "id": 400,
+      "panels": [],
+      "title": "📋 Resumen general",
+      "type": "row"
+    },
+    {
+      "datasource": { "type": "loki", "uid": "loki" },
+      "fieldConfig": {
+        "defaults": {
+          "color": { "mode": "thresholds" },
+          "custom": {
+            "align": "auto",
+            "cellOptions": { "type": "auto" },
+            "inspect": false
+          },
+          "mappings": [],
+          "thresholds": { "mode": "absolute", "steps": [{ "color": "green", "value": null }] }
+        },
+        "overrides": []
+      },
+      "gridPos": { "h": 10, "w": 24, "x": 0, "y": 40 },
+      "id": 14,
+      "options": {
+        "cellHeight": "sm",
+        "footer": { "countRows": false, "fields": "", "reducer": ["sum"], "show": false },
+        "showHeader": true
+      },
+      "pluginVersion": "9.5.0",
+      "targets": [
+        {
+          "expr": "sum by (service, action) (count_over_time({service=~\".+\"} | json [$__auto]))",
+          "refId": "A"
+        }
+      ],
+      "title": "Resumen de actividad por servicio y tipo",
+      "transformations": [
+        { "id": "organize", "options": { "excludeByName": {}, "indexByName": {}, "renameByName": { "service": "Servicio", "action": "Acción", "Value": "Cantidad" } } }
+      ],
+      "type": "table"
+    }
+  ],
+  "refresh": "15s",
+  "schemaVersion": 38,
+  "style": "dark",
+  "tags": ["business", "kpi"],
+  "templating": {
+    "list": [
+      {
+        "current": { "selected": false, "text": "Loki", "value": "loki" },
+        "hide": 0,
+        "includeAll": false,
+        "label": "Datasource",
+        "multi": false,
+        "name": "DS_LOKI",
+        "options": [],
+        "query": "loki",
+        "refresh": 1,
+        "regex": "",
+        "skipUrlSync": false,
+        "type": "datasource"
+      }
+    ]
+  },
+  "time": { "from": "now-1h", "to": "now" },
+  "timepicker": {},
+  "timezone": "America/Lima",
+  "title": "📈 Negocio - Sanipatitas",
+  "uid": "sanipatitas-business",
+  "version": 1,
+  "weekStart": ""
+}
