@@ -1,0 +1,360 @@
+erDiagram
+    %% ==========================================
+    %% SANIPATITAS - Entity Relationship Diagram
+    %% ==========================================
+
+    %% ==========================================
+    %% AUTH MODULE
+    %% ==========================================
+
+    user {
+        uuid id PK
+        text name "NOT NULL"
+        text email "NOT NULL, UK"
+        boolean email_verified
+        text image
+        timestamp created_at
+        timestamp updated_at
+        text role
+        boolean banned
+        text ban_reason
+        timestamp ban_expires
+        text last_name "NOT NULL"
+    }
+
+    account {
+        uuid id PK
+        text account_id "NOT NULL"
+        text provider_id "NOT NULL"
+        uuid user_id FK
+        text access_token
+        text refresh_token
+        text id_token
+        text password
+        timestamp created_at
+        timestamp updated_at
+    }
+
+    jwks {
+        uuid id PK
+        text public_key "NOT NULL"
+        text private_key "NOT NULL"
+        timestamp created_at
+        timestamp expires_at
+    }
+
+    verification {
+        uuid id PK
+        text identifier "NOT NULL"
+        text value "NOT NULL"
+        timestamp expires_at "NOT NULL"
+        timestamp created_at
+        timestamp updated_at
+    }
+
+    %% Auth relationships
+    user ||--o{ account : "has"
+
+    %% ==========================================
+    %% PATIENT MODULE
+    %% ==========================================
+
+    species {
+        uuid id PK
+        varchar_255 name "NOT NULL, UK"
+        varchar_2000 description
+        tsvector search_vector
+    }
+
+    breed {
+        uuid id PK
+        uuid species_id FK
+        varchar_255 name "NOT NULL"
+        varchar_2000 description
+        tsvector search_vector
+    }
+
+    client {
+        uuid id PK
+        uuid user_id FK
+        varchar_100 first_name "NOT NULL"
+        varchar_100 last_name "NOT NULL"
+        varchar_20 id_type "NOT NULL"
+        varchar_20 id_number "NOT NULL, UK"
+        varchar_15 phone "NOT NULL"
+        varchar_15 phone_alt
+        varchar_255 email
+        varchar_500 address
+        text notes
+        boolean is_active
+        timestamp created_at
+        timestamp updated_at
+        tsvector search_vector
+    }
+
+    patient {
+        uuid id PK
+        uuid client_id FK "NOT NULL"
+        varchar_500 name "NOT NULL"
+        uuid breed_id FK
+        varchar_10 gender
+        date birth_date
+        varchar_50 approximate_age
+        decimal weight_kg
+        text description
+        boolean is_sterilized
+        boolean is_deceased
+        timestamp created_at
+        timestamp updated_at
+        tsvector search_vector
+    }
+
+    %% Patient relationships
+    species ||--o{ breed : "tiene"
+    user ||--o| client : "registra"
+    client ||--o{ patient : "tiene"
+    breed ||--o{ patient : "pertenece"
+
+    %% ==========================================
+    %% CLINICAL / EHR MODULE
+    %% ==========================================
+
+    medical_condition {
+        uuid id PK
+        uuid patient_id FK "NOT NULL"
+        uuid veterinarian_id FK "NOT NULL"
+        varchar_20 code
+        varchar_255 name "NOT NULL"
+        text description
+        timestamp onset_date
+        varchar_20 status
+        varchar_20 severity
+        timestamp created_at
+        timestamp updated_at
+    }
+
+    immunization {
+        uuid id PK
+        uuid patient_id FK "NOT NULL"
+        uuid veterinarian_id FK "NOT NULL"
+        varchar_100 vaccine_code "NOT NULL"
+        varchar_255 vaccine_name "NOT NULL"
+        varchar_255 manufacturer
+        varchar_100 lot_number
+        timestamp expiration_date
+        timestamp administration_date "NOT NULL"
+        varchar_50 dose_number
+        varchar_30 route
+        varchar_20 status
+        timestamp created_at
+        timestamp updated_at
+    }
+
+    medical_observation {
+        uuid id PK
+        uuid patient_id FK "NOT NULL"
+        uuid veterinarian_id FK "NOT NULL"
+        varchar_30 category
+        varchar_100 code "NOT NULL"
+        varchar_500 value "NOT NULL"
+        varchar_50 unit
+        varchar_50 interpretation
+        varchar_100 body_site
+        varchar_100 method
+        varchar_500 reference_range
+        varchar_20 status
+        timestamp issued_date
+        timestamp created_at
+        timestamp updated_at
+    }
+
+    prescription {
+        uuid id PK
+        uuid patient_id FK "NOT NULL"
+        uuid veterinarian_id FK "NOT NULL"
+        timestamp issue_date "NOT NULL"
+        timestamp expiration_date
+        text notes
+        varchar_20 status
+        timestamp created_at
+        timestamp updated_at
+    }
+
+    prescription_item {
+        uuid id PK
+        uuid prescription_id FK "NOT NULL"
+        varchar_255 medication_name "NOT NULL"
+        varchar_100 dosage
+        varchar_255 frequency
+        varchar_100 duration
+        varchar_100 route
+        varchar_500 notes
+        timestamp created_at
+        timestamp updated_at
+    }
+
+    procedure_entity {
+        uuid id PK
+        uuid patient_id FK "NOT NULL"
+        uuid veterinarian_id FK "NOT NULL"
+        varchar_100 code
+        varchar_255 name "NOT NULL"
+        varchar_30 category
+        text reason
+        text outcome
+        text complications
+        timestamp performed_date
+        varchar_20 status
+        timestamp created_at
+        timestamp updated_at
+    }
+
+    %% Clinical relationships
+    patient ||--o{ medical_condition : "tiene"
+    patient ||--o{ immunization : "recibe"
+    patient ||--o{ medical_observation : "tiene"
+    patient ||--o{ prescription : "tiene"
+    prescription ||--o{ prescription_item : "contiene"
+    patient ||--o{ procedure_entity : "se_somete"
+    user ||--o{ medical_condition : "diagnostica"
+    user ||--o{ immunization : "administra"
+    user ||--o{ prescription : "prescribe"
+    user ||--o{ procedure_entity : "realiza"
+
+    %% ==========================================
+    %% APPOINTMENT MODULE
+    %% ==========================================
+
+    appointment {
+        uuid id PK
+        uuid patient_id FK "NOT NULL"
+        uuid client_id FK "NOT NULL"
+        uuid veterinarian_id FK "NOT NULL"
+        date date "NOT NULL"
+        time start_time "NOT NULL"
+        time end_time
+        varchar_20 status "NOT NULL"
+        varchar_20 class
+        text reason
+        text notes
+        timestamp created_at
+        timestamp updated_at
+    }
+
+    %% Appointment relationships
+    patient ||--o{ appointment : "asiste"
+    client ||--o{ appointment : "agenda"
+    user ||--o{ appointment : "atiende"
+
+    %% ==========================================
+    %% INVENTORY MODULE
+    %% ==========================================
+
+    product_category {
+        uuid id PK
+        varchar_255 name "NOT NULL, UK"
+        varchar_1000 description
+        timestamp created_at
+        timestamp updated_at
+    }
+
+    supplier {
+        uuid id PK
+        varchar_255 name "NOT NULL"
+        varchar_20 ruc
+        varchar_255 contact_name
+        varchar_50 contact_phone
+        varchar_255 email
+        varchar_500 address
+        timestamp created_at
+        timestamp updated_at
+    }
+
+    product {
+        uuid id PK
+        varchar_255 name "NOT NULL"
+        varchar_100 code
+        text description
+        decimal price
+        uuid category_id FK
+        uuid supplier_id FK
+        timestamp created_at
+        timestamp updated_at
+    }
+
+    stock {
+        uuid id PK
+        uuid product_id FK "NOT NULL"
+        int quantity "NOT NULL"
+        varchar_255 location
+        int min_stock
+        timestamp created_at
+        timestamp updated_at
+    }
+
+    stock_movement {
+        uuid id PK
+        varchar_20 type "NOT NULL"
+        int quantity "NOT NULL"
+        decimal unit_cost
+        decimal unit_price
+        decimal discount
+        varchar_255 reference
+        text notes
+        uuid stock_id FK "NOT NULL"
+        timestamp created_at
+    }
+
+    %% Inventory relationships
+    product_category ||--o{ product : "clasifica"
+    supplier ||--o{ product : "provee"
+    product ||--o{ stock : "tiene"
+    stock ||--o{ stock_movement : "registra"
+
+    %% ==========================================
+    %% PAYMENT / BILLING MODULE
+    %% ==========================================
+
+    billing {
+        uuid id PK
+        uuid client_id FK "NOT NULL"
+        uuid appointment_id FK
+        decimal subtotal "NOT NULL"
+        decimal discount "NOT NULL"
+        decimal tax_amount "NOT NULL"
+        decimal total_amount "NOT NULL"
+        varchar_20 payment_status
+        varchar_50 invoice_number
+        text notes
+        timestamp created_at
+        timestamp updated_at
+    }
+
+    billing_item {
+        uuid id PK
+        uuid billing_id FK "NOT NULL"
+        varchar_255 description "NOT NULL"
+        int quantity "NOT NULL"
+        decimal unit_price "NOT NULL"
+        decimal total "NOT NULL"
+        varchar_20 item_type "NOT NULL"
+        uuid reference_id
+        timestamp created_at
+    }
+
+    payment_record {
+        uuid id PK
+        uuid billing_id FK "NOT NULL"
+        decimal amount "NOT NULL"
+        varchar_20 payment_method "NOT NULL"
+        varchar_255 reference
+        timestamp paid_at "NOT NULL"
+        text notes
+        timestamp created_at
+    }
+
+    %% Payment relationships
+    client ||--o{ billing : "recibe"
+    appointment ||--o| billing : "genera"
+    billing ||--o{ billing_item : "contiene"
+    billing ||--o{ payment_record : "tiene"

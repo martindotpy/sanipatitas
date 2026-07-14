@@ -11,8 +11,21 @@ import { userTable } from "@sanipatitas/database/auth/schema/auth-schema"
 import { serverLog } from "@sanipatitas/shared/log/server-logger"
 import { eq, sql } from "drizzle-orm"
 
+// Inventory schemas
+import { productCategoryTable } from "@sanipatitas/database/inventory/schema/product-category-schema"
+import { supplierTable } from "@sanipatitas/database/inventory/schema/supplier-schema"
+import { productTable } from "@sanipatitas/database/inventory/schema/product-schema"
+import { stockTable } from "@sanipatitas/database/inventory/schema/stock-schema"
+import { stockMovementTable } from "@sanipatitas/database/inventory/schema/stock-movement-schema"
+
 // Inventory seed data
-import { productCategorySeed, supplierSeed } from "@sanipatitas/database/seeds/data/inventory"
+import {
+  productCategorySeed,
+  productSeed,
+  stockMovementSeed,
+  stockSeed,
+  supplierSeed,
+} from "@sanipatitas/database/seeds/data/inventory"
 
 // Billing seed data
 import { billingSeed, billingItemSeed, paymentSeed } from "@sanipatitas/database/seeds/data/billing"
@@ -146,11 +159,11 @@ export async function seedAppointments() {
   serverLog.info("Appointments seeded: %d records", appointmentValues.length)
 }
 
-// Seed inventory (product categories and suppliers)
+// Seed inventory (categories, suppliers, products, stock, stock movements)
 export async function seedInventory() {
-  const existing = await db.execute(sql.raw("SELECT id FROM product_category LIMIT 1"))
+  const [existing] = await db.select().from(productCategoryTable).limit(1)
 
-  if (Array.isArray(existing) && existing.length > 0) {
+  if (existing) {
     serverLog.debug("Inventory already seeded, skipping")
 
     return
@@ -158,22 +171,56 @@ export async function seedInventory() {
 
   serverLog.info("Seeding inventory data...")
 
-  for (const category of productCategorySeed) {
-    await db.execute(
-      sql`INSERT INTO product_category (id, name, description, created_at, updated_at) VALUES (${category.id}, ${category.name}, ${category.description}, NOW(), NOW())`,
-    )
-  }
+  // Product categories
+  await db.insert(productCategoryTable).values(productCategorySeed)
 
-  for (const supplier of supplierSeed) {
-    await db.execute(
-      sql`INSERT INTO supplier (id, name, ruc, contact_phone, created_at, updated_at) VALUES (${supplier.id}, ${supplier.name}, ${supplier.ruc}, ${supplier.contactPhone}, NOW(), NOW())`,
-    )
-  }
+  // Suppliers
+  await db.insert(supplierTable).values(supplierSeed)
+
+  // Products
+  await db.insert(productTable).values(
+    productSeed.map((p) => ({
+      id: p.id,
+      name: p.name,
+      code: p.code,
+      description: p.description,
+      price: p.price.toString(),
+      categoryId: p.categoryId,
+      supplierId: p.supplierId,
+    })),
+  )
+
+  // Stock
+  await db.insert(stockTable).values(
+    stockSeed.map((s) => ({
+      id: s.id,
+      productId: s.productId,
+      quantity: s.quantity,
+      location: s.location,
+      minStock: s.minStock,
+    })),
+  )
+
+  // Stock movements
+  await db.insert(stockMovementTable).values(
+    stockMovementSeed.map((m) => ({
+      type: m.type,
+      quantity: m.quantity,
+      unitCost: m.unitCost.toString(),
+      unitPrice: m.unitPrice.toString(),
+      reference: m.reference,
+      notes: m.notes,
+      stockId: m.stockId,
+    })),
+  )
 
   serverLog.info(
-    "Inventory seeded: %d categories, %d suppliers",
+    "Inventory seeded: %d categories, %d suppliers, %d products, %d stock records, %d movements",
     productCategorySeed.length,
     supplierSeed.length,
+    productSeed.length,
+    stockSeed.length,
+    stockMovementSeed.length,
   )
 }
 

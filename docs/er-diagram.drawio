@@ -1,0 +1,229 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<mxfile host="draw.io" version="24.7.8">
+  <diagram name="Sanipatitas ERD" id="sanipatitas-erd">
+    <mxGraphModel dx="1420" dy="980" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="0" pageScale="1" pageWidth="1169" pageHeight="1654" math="0" shadow="0">
+      <root>
+        <mxCell id="0"/>
+        <mxCell id="1" parent="0"/>
+
+        <!-- ======================== -->
+        <!-- AUTH MODULE -->
+        <!-- ======================== -->
+
+        <!-- user -->
+        <mxCell id="user" value="&lt;b&gt;user&lt;/b&gt;&lt;hr&gt;id: uuid PK&lt;br&gt;name: text NOT NULL&lt;br&gt;email: text NOT NULL UK&lt;br&gt;email_verified: bool&lt;br&gt;image: text&lt;br&gt;created_at: timestamp&lt;br&gt;updated_at: timestamp&lt;br&gt;role: text&lt;br&gt;banned: bool&lt;br&gt;ban_reason: text&lt;br&gt;ban_expires: timestamp&lt;br&gt;last_name: text NOT NULL" style="shape=table;whiteSpace=wrap;html=1;rounded=1;fillColor=#E3F2FD;strokeColor=#1565C0;" parent="1" vertex="1">
+          <mxGeometry x="40" y="40" width="260" height="260"/>
+        </mxCell>
+
+        <!-- account -->
+        <mxCell id="account" value="&lt;b&gt;account&lt;/b&gt;&lt;hr&gt;id: uuid PK&lt;br&gt;account_id: text NOT NULL&lt;br&gt;provider_id: text NOT NULL&lt;br&gt;user_id: uuid FK→user&lt;br&gt;access_token: text&lt;br&gt;refresh_token: text&lt;br&gt;id_token: text&lt;br&gt;password: text&lt;br&gt;created_at: timestamp&lt;br&gt;updated_at: timestamp" style="shape=table;whiteSpace=wrap;html=1;rounded=1;fillColor=#E3F2FD;strokeColor=#1565C0;" parent="1" vertex="1">
+          <mxGeometry x="380" y="40" width="240" height="200"/>
+        </mxCell>
+        <mxCell id="user-account" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=1;exitY=0.5;entryX=0;entryY=0.5;strokeColor=#1565C0;dashed=0;" parent="1" source="user" target="account" edge="1">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+
+        <!-- jwks -->
+        <mxCell id="jwks" value="&lt;b&gt;jwks&lt;/b&gt;&lt;hr&gt;id: uuid PK&lt;br&gt;public_key: text NOT NULL&lt;br&gt;private_key: text NOT NULL&lt;br&gt;created_at: timestamp&lt;br&gt;expires_at: timestamp" style="shape=table;whiteSpace=wrap;html=1;rounded=1;fillColor=#E3F2FD;strokeColor=#1565C0;" parent="1" vertex="1">
+          <mxGeometry x="40" y="340" width="240" height="140"/>
+        </mxCell>
+
+        <!-- ======================== -->
+        <!-- PATIENT MODULE -->
+        <!-- ======================== -->
+
+        <!-- species -->
+        <mxCell id="species" value="&lt;b&gt;species&lt;/b&gt;&lt;hr&gt;id: uuid PK&lt;br&gt;name: varchar(255) NOT NULL UK&lt;br&gt;description: varchar(2000)&lt;br&gt;search_vector: tsvector" style="shape=table;whiteSpace=wrap;html=1;rounded=1;fillColor=#E8F5E9;strokeColor=#2E7D32;" parent="1" vertex="1">
+          <mxGeometry x="40" y="520" width="240" height="120"/>
+        </mxCell>
+
+        <!-- breed -->
+        <mxCell id="breed" value="&lt;b&gt;breed&lt;/b&gt;&lt;hr&gt;id: uuid PK&lt;br&gt;species_id: uuid FK→species&lt;br&gt;name: varchar(255) NOT NULL&lt;br&gt;description: varchar(2000)&lt;br&gt;search_vector: tsvector" style="shape=table;whiteSpace=wrap;html=1;rounded=1;fillColor=#E8F5E9;strokeColor=#2E7D32;" parent="1" vertex="1">
+          <mxGeometry x="380" y="520" width="260" height="130"/>
+        </mxCell>
+        <mxCell id="species-breed" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=1;exitY=0.5;entryX=0;entryY=0.5;strokeColor=#2E7D32;" parent="1" source="species" target="breed" edge="1">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+
+        <!-- client -->
+        <mxCell id="client" value="&lt;b&gt;client&lt;/b&gt;&lt;hr&gt;id: uuid PK&lt;br&gt;user_id: uuid FK→user&lt;br&gt;first_name: varchar(100) NOT NULL&lt;br&gt;last_name: varchar(100) NOT NULL&lt;br&gt;id_type: varchar(20) NOT NULL&lt;br&gt;id_number: varchar(20) NOT NULL UK&lt;br&gt;phone: varchar(15) NOT NULL&lt;br&gt;phone_alt: varchar(15)&lt;br&gt;email: varchar(255)&lt;br&gt;address: varchar(500)&lt;br&gt;notes: text&lt;br&gt;is_active: bool&lt;br&gt;created_at: timestamp&lt;br&gt;updated_at: timestamp&lt;br&gt;search_vector: tsvector" style="shape=table;whiteSpace=wrap;html=1;rounded=1;fillColor=#E8F5E9;strokeColor=#2E7D32;" parent="1" vertex="1">
+          <mxGeometry x="720" y="420" width="260" height="280"/>
+        </mxCell>
+        <mxCell id="user-client" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0;exitY=0.8;entryX=1;entryY=0.1;strokeColor=#1565C0;dashed=1;" parent="1" source="user" target="client" edge="1">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+
+        <!-- patient -->
+        <mxCell id="patient" value="&lt;b&gt;patient&lt;/b&gt;&lt;hr&gt;id: uuid PK&lt;br&gt;client_id: uuid FK→client&lt;br&gt;name: varchar(500) NOT NULL&lt;br&gt;breed_id: uuid FK→breed&lt;br&gt;gender: varchar(10)&lt;br&gt;birth_date: date&lt;br&gt;approximate_age: varchar(50)&lt;br&gt;weight_kg: decimal(5,2)&lt;br&gt;description: text&lt;br&gt;is_sterilized: bool&lt;br&gt;is_deceased: bool&lt;br&gt;created_at: timestamp&lt;br&gt;updated_at: timestamp&lt;br&gt;search_vector: tsvector" style="shape=table;whiteSpace=wrap;html=1;rounded=1;fillColor=#E8F5E9;strokeColor=#2E7D32;" parent="1" vertex="1">
+          <mxGeometry x="720" y="740" width="260" height="290"/>
+        </mxCell>
+        <mxCell id="client-patient" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=1;entryX=0.5;entryY=0;strokeColor=#2E7D32;" parent="1" source="client" target="patient" edge="1">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="breed-patient" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=1;exitY=0.5;entryX=0;entryY=0.3;strokeColor=#2E7D32;" parent="1" source="breed" target="patient" edge="1">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+
+        <!-- medical_condition -->
+        <mxCell id="medical_condition" value="&lt;b&gt;medical_condition&lt;/b&gt;&lt;hr&gt;id: uuid PK&lt;br&gt;patient_id: uuid FK→patient&lt;br&gt;veterinarian_id: uuid FK→user&lt;br&gt;code: varchar(20)&lt;br&gt;name: varchar(255) NOT NULL&lt;br&gt;description: text&lt;br&gt;onset_date: timestamp&lt;br&gt;status: varchar(20)&lt;br&gt;severity: varchar(20)&lt;br&gt;created_at: timestamp&lt;br&gt;updated_at: timestamp" style="shape=table;whiteSpace=wrap;html=1;rounded=1;fillColor=#FFF3E0;strokeColor=#E65100;" parent="1" vertex="1">
+          <mxGeometry x="1060" y="560" width="260" height="220"/>
+        </mxCell>
+        <mxCell id="patient-condition" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=1;exitY=0.1;entryX=0;entryY=0.4;strokeColor=#E65100;" parent="1" source="patient" target="medical_condition" edge="1">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="user-condition" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=1;exitY=0.3;entryX=0;entryY=0.6;strokeColor=#1565C0;dashed=1;" parent="1" source="user" target="medical_condition" edge="1">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+
+        <!-- immunization -->
+        <mxCell id="immunization" value="&lt;b&gt;immunization&lt;/b&gt;&lt;hr&gt;id: uuid PK&lt;br&gt;patient_id: uuid FK→patient&lt;br&gt;veterinarian_id: uuid FK→user&lt;br&gt;vaccine_code: varchar(100) NOT NULL&lt;br&gt;vaccine_name: varchar(255) NOT NULL&lt;br&gt;manufacturer: varchar(255)&lt;br&gt;lot_number: varchar(100)&lt;br&gt;expiration_date: timestamp&lt;br&gt;administration_date: timestamp&lt;br&gt;dose_number: varchar(50)&lt;br&gt;route: varchar(30)&lt;br&gt;status: varchar(20)&lt;br&gt;created_at: timestamp&lt;br&gt;updated_at: timestamp" style="shape=table;whiteSpace=wrap;html=1;rounded=1;fillColor=#FFF3E0;strokeColor=#E65100;" parent="1" vertex="1">
+          <mxGeometry x="1060" y="40" width="260" height="270"/>
+        </mxCell>
+        <mxCell id="patient-immunization" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=0;entryX=0.5;entryY=1;strokeColor=#E65100;" parent="1" source="patient" target="immunization" edge="1">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+
+        <!-- observation -->
+        <mxCell id="observation" value="&lt;b&gt;observation&lt;/b&gt;&lt;hr&gt;id: uuid PK&lt;br&gt;patient_id: uuid FK→patient&lt;br&gt;veterinarian_id: uuid FK→user&lt;br&gt;category: varchar(30)&lt;br&gt;code: varchar(100) NOT NULL&lt;br&gt;value: varchar(500) NOT NULL&lt;br&gt;unit: varchar(50)&lt;br&gt;interpretation: varchar(50)&lt;br&gt;body_site: varchar(100)&lt;br&gt;method: varchar(100)&lt;br&gt;reference_range: varchar(500)&lt;br&gt;status: varchar(20)&lt;br&gt;issued_date: timestamp&lt;br&gt;created_at: timestamp&lt;br&gt;updated_at: timestamp" style="shape=table;whiteSpace=wrap;html=1;rounded=1;fillColor=#FFF3E0;strokeColor=#E65100;" parent="1" vertex="1">
+          <mxGeometry x="1060" y="340" width="260" height="290"/>
+        </mxCell>
+        <mxCell id="patient-observation" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=1;exitY=0.5;entryX=0;entryY=0.3;strokeColor=#E65100;" parent="1" source="patient" target="observation" edge="1">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+
+        <!-- prescription -->
+        <mxCell id="prescription" value="&lt;b&gt;prescription&lt;/b&gt;&lt;hr&gt;id: uuid PK&lt;br&gt;patient_id: uuid FK→patient&lt;br&gt;veterinarian_id: uuid FK→user&lt;br&gt;issue_date: timestamp NOT NULL&lt;br&gt;expiration_date: timestamp&lt;br&gt;notes: text&lt;br&gt;status: varchar(20)&lt;br&gt;created_at: timestamp&lt;br&gt;updated_at: timestamp" style="shape=table;whiteSpace=wrap;html=1;rounded=1;fillColor=#FFF3E0;strokeColor=#E65100;" parent="1" vertex="1">
+          <mxGeometry x="1060" y="800" width="260" height="210"/>
+        </mxCell>
+        <mxCell id="patient-prescription" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=1;exitY=0.7;entryX=0;entryY=0.2;strokeColor=#E65100;" parent="1" source="patient" target="prescription" edge="1">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+
+        <!-- prescription_item -->
+        <mxCell id="prescription_item" value="&lt;b&gt;prescription_item&lt;/b&gt;&lt;hr&gt;id: uuid PK&lt;br&gt;prescription_id: uuid FK→prescription&lt;br&gt;medication_name: varchar(255) NOT NULL&lt;br&gt;dosage: varchar(100)&lt;br&gt;frequency: varchar(255)&lt;br&gt;duration: varchar(100)&lt;br&gt;route: varchar(100)&lt;br&gt;notes: varchar(500)&lt;br&gt;created_at: timestamp&lt;br&gt;updated_at: timestamp" style="shape=table;whiteSpace=wrap;html=1;rounded=1;fillColor=#FFCC80;strokeColor=#E65100;" parent="1" vertex="1">
+          <mxGeometry x="1400" y="800" width="260" height="200"/>
+        </mxCell>
+        <mxCell id="prescription-item" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=1;exitY=0.4;entryX=0;entryY=0.3;strokeColor=#E65100;" parent="1" source="prescription" target="prescription_item" edge="1">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+
+        <!-- procedure -->
+        <mxCell id="procedure" value="&lt;b&gt;procedure&lt;/b&gt;&lt;hr&gt;id: uuid PK&lt;br&gt;patient_id: uuid FK→patient&lt;br&gt;veterinarian_id: uuid FK→user&lt;br&gt;code: varchar(100)&lt;br&gt;name: varchar(255) NOT NULL&lt;br&gt;category: varchar(30)&lt;br&gt;reason: text&lt;br&gt;outcome: text&lt;br&gt;complications: text&lt;br&gt;performed_date: timestamp&lt;br&gt;status: varchar(20)&lt;br&gt;created_at: timestamp&lt;br&gt;updated_at: timestamp" style="shape=table;whiteSpace=wrap;html=1;rounded=1;fillColor=#FFF3E0;strokeColor=#E65100;" parent="1" vertex="1">
+          <mxGeometry x="1400" y="40" width="260" height="240"/>
+        </mxCell>
+        <mxCell id="patient-procedure" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=0;entryX=0.5;entryY=1;strokeColor=#E65100;" parent="1" source="procedure" target="patient" edge="1">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+
+        <!-- ======================== -->
+        <!-- APPOINTMENT MODULE -->
+        <!-- ======================== -->
+
+        <!-- appointment -->
+        <mxCell id="appointment" value="&lt;b&gt;appointment&lt;/b&gt;&lt;hr&gt;id: uuid PK&lt;br&gt;patient_id: uuid FK→patient&lt;br&gt;client_id: uuid FK→client&lt;br&gt;veterinarian_id: uuid FK→user&lt;br&gt;date: date NOT NULL&lt;br&gt;start_time: time NOT NULL&lt;br&gt;end_time: time&lt;br&gt;status: varchar(20) NOT NULL&lt;br&gt;class: varchar(20)&lt;br&gt;reason: text&lt;br&gt;notes: text&lt;br&gt;created_at: timestamp&lt;br&gt;updated_at: timestamp" style="shape=table;whiteSpace=wrap;html=1;rounded=1;fillColor=#F3E5F5;strokeColor=#7B1FA2;" parent="1" vertex="1">
+          <mxGeometry x="720" y="1060" width="260" height="260"/>
+        </mxCell>
+        <mxCell id="patient-appointment" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=1;entryX=0.3;entryY=0;strokeColor=#7B1FA2;" parent="1" source="patient" target="appointment" edge="1">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="client-appointment" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=1;entryX=0.5;entryY=0;strokeColor=#7B1FA2;" parent="1" source="client" target="appointment" edge="1">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+
+        <!-- ======================== -->
+        <!-- INVENTORY MODULE -->
+        <!-- ======================== -->
+
+        <!-- product_category -->
+        <mxCell id="product_category" value="&lt;b&gt;product_category&lt;/b&gt;&lt;hr&gt;id: uuid PK&lt;br&gt;name: varchar(255) NOT NULL UK&lt;br&gt;description: varchar(1000)&lt;br&gt;created_at: timestamp&lt;br&gt;updated_at: timestamp" style="shape=table;whiteSpace=wrap;html=1;rounded=1;fillColor=#FCE4EC;strokeColor=#C62828;" parent="1" vertex="1">
+          <mxGeometry x="40" y="700" width="240" height="130"/>
+        </mxCell>
+
+        <!-- supplier -->
+        <mxCell id="supplier" value="&lt;b&gt;supplier&lt;/b&gt;&lt;hr&gt;id: uuid PK&lt;br&gt;name: varchar(255) NOT NULL&lt;br&gt;ruc: varchar(20)&lt;br&gt;contact_name: varchar(255)&lt;br&gt;contact_phone: varchar(50)&lt;br&gt;email: varchar(255)&lt;br&gt;address: varchar(500)&lt;br&gt;created_at: timestamp&lt;br&gt;updated_at: timestamp" style="shape=table;whiteSpace=wrap;html=1;rounded=1;fillColor=#FCE4EC;strokeColor=#C62828;" parent="1" vertex="1">
+          <mxGeometry x="380" y="700" width="240" height="180"/>
+        </mxCell>
+
+        <!-- product -->
+        <mxCell id="product" value="&lt;b&gt;product&lt;/b&gt;&lt;hr&gt;id: uuid PK&lt;br&gt;name: varchar(255) NOT NULL&lt;br&gt;code: varchar(100)&lt;br&gt;description: text&lt;br&gt;price: decimal(10,2)&lt;br&gt;category_id: uuid FK→category&lt;br&gt;supplier_id: uuid FK→supplier&lt;br&gt;created_at: timestamp&lt;br&gt;updated_at: timestamp" style="shape=table;whiteSpace=wrap;html=1;rounded=1;fillColor=#FCE4EC;strokeColor=#C62828;" parent="1" vertex="1">
+          <mxGeometry x="40" y="880" width="240" height="210"/>
+        </mxCell>
+        <mxCell id="category-product" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=1;exitY=0.5;entryX=0;entryY=0.2;strokeColor=#C62828;" parent="1" source="product_category" target="product" edge="1">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="supplier-product" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0;exitY=1;entryX=1;entryY=0.3;strokeColor=#C62828;" parent="1" source="supplier" target="product" edge="1">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+
+        <!-- stock -->
+        <mxCell id="stock" value="&lt;b&gt;stock&lt;/b&gt;&lt;hr&gt;id: uuid PK&lt;br&gt;product_id: uuid FK→product&lt;br&gt;quantity: integer NOT NULL&lt;br&gt;location: varchar(255)&lt;br&gt;min_stock: integer&lt;br&gt;created_at: timestamp&lt;br&gt;updated_at: timestamp" style="shape=table;whiteSpace=wrap;html=1;rounded=1;fillColor=#FCE4EC;strokeColor=#C62828;" parent="1" vertex="1">
+          <mxGeometry x="40" y="1140" width="240" height="170"/>
+        </mxCell>
+        <mxCell id="product-stock" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=1;entryX=0.5;entryY=0;strokeColor=#C62828;" parent="1" source="product" target="stock" edge="1">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+
+        <!-- stock_movement -->
+        <mxCell id="stock_movement" value="&lt;b&gt;stock_movement&lt;/b&gt;&lt;hr&gt;id: uuid PK&lt;br&gt;type: varchar(20) NOT NULL&lt;br&gt;quantity: integer NOT NULL&lt;br&gt;unit_cost: decimal(10,2)&lt;br&gt;unit_price: decimal(10,2)&lt;br&gt;discount: decimal(10,2)&lt;br&gt;reference: varchar(255)&lt;br&gt;notes: text&lt;br&gt;stock_id: uuid FK→stock&lt;br&gt;created_at: timestamp" style="shape=table;whiteSpace=wrap;html=1;rounded=1;fillColor=#FCE4EC;strokeColor=#C62828;" parent="1" vertex="1">
+          <mxGeometry x="380" y="1140" width="240" height="230"/>
+        </mxCell>
+        <mxCell id="stock-movement" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=1;exitY=0.5;entryX=0;entryY=0.3;strokeColor=#C62828;" parent="1" source="stock" target="stock_movement" edge="1">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+
+        <!-- ======================== -->
+        <!-- PAYMENT MODULE -->
+        <!-- ======================== -->
+
+        <!-- billing -->
+        <mxCell id="billing" value="&lt;b&gt;billing&lt;/b&gt;&lt;hr&gt;id: uuid PK&lt;br&gt;client_id: uuid FK→client&lt;br&gt;appointment_id: uuid FK→appt&lt;br&gt;subtotal: decimal(10,2) NOT NULL&lt;br&gt;discount: decimal(10,2) NOT NULL&lt;br&gt;tax_amount: decimal(10,2) NOT NULL&lt;br&gt;total_amount: decimal(10,2) NOT NULL&lt;br&gt;payment_status: varchar(20)&lt;br&gt;invoice_number: varchar(50)&lt;br&gt;notes: text&lt;br&gt;created_at: timestamp&lt;br&gt;updated_at: timestamp" style="shape=table;whiteSpace=wrap;html=1;rounded=1;fillColor=#FFF8E1;strokeColor=#F57F17;" parent="1" vertex="1">
+          <mxGeometry x="720" y="1360" width="260" height="250"/>
+        </mxCell>
+        <mxCell id="client-billing" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.4;exitY=1;entryX=0.3;entryY=0;strokeColor=#F57F17;dashed=1;" parent="1" source="client" target="billing" edge="1">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="billing-appt" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.7;exitY=1;entryX=0.5;entryY=0;strokeColor=#F57F17;dashed=1;" parent="1" source="appointment" target="billing" edge="1">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+
+        <!-- billing_item -->
+        <mxCell id="billing_item" value="&lt;b&gt;billing_item&lt;/b&gt;&lt;hr&gt;id: uuid PK&lt;br&gt;billing_id: uuid FK→billing&lt;br&gt;description: varchar(255) NOT NULL&lt;br&gt;quantity: integer NOT NULL&lt;br&gt;unit_price: decimal(10,2) NOT NULL&lt;br&gt;total: decimal(10,2) NOT NULL&lt;br&gt;item_type: varchar(20) NOT NULL&lt;br&gt;reference_id: uuid&lt;br&gt;created_at: timestamp" style="shape=table;whiteSpace=wrap;html=1;rounded=1;fillColor=#FFF8E1;strokeColor=#F57F17;" parent="1" vertex="1">
+          <mxGeometry x="1060" y="1350" width="260" height="230"/>
+        </mxCell>
+        <mxCell id="billing-item" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=1;exitY=0.2;entryX=0;entryY=0.3;strokeColor=#F57F17;" parent="1" source="billing" target="billing_item" edge="1">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+
+        <!-- payment -->
+        <mxCell id="payment" value="&lt;b&gt;payment&lt;/b&gt;&lt;hr&gt;id: uuid PK&lt;br&gt;billing_id: uuid FK→billing&lt;br&gt;amount: decimal(10,2) NOT NULL&lt;br&gt;payment_method: varchar(20) NOT NULL&lt;br&gt;reference: varchar(255)&lt;br&gt;paid_at: timestamp NOT NULL&lt;br&gt;notes: text&lt;br&gt;created_at: timestamp" style="shape=table;whiteSpace=wrap;html=1;rounded=1;fillColor=#FFF8E1;strokeColor=#F57F17;" parent="1" vertex="1">
+          <mxGeometry x="1060" y="1620" width="260" height="190"/>
+        </mxCell>
+        <mxCell id="billing-payment" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=1;exitY=0.5;entryX=0;entryY=0.2;strokeColor=#F57F17;" parent="1" source="billing" target="payment" edge="1">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+
+        <!-- ======================== -->
+        <!-- LEGEND -->
+        <!-- ======================== -->
+        <mxCell id="legend_auth" value="&lt;b&gt;Auth Module&lt;/b&gt;" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontStyle=1;fontSize=14;" parent="1" vertex="1">
+          <mxGeometry x="40" y="10" width="120" height="20"/>
+        </mxCell>
+        <mxCell id="legend_patient" value="&lt;b&gt;Patient Module&lt;/b&gt;" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontStyle=1;fontSize=14;fontColor=#2E7D32;" parent="1" vertex="1">
+          <mxGeometry x="40" y="490" width="120" height="20"/>
+        </mxCell>
+        <mxCell id="legend_ehr" value="&lt;b&gt;EHR Module&lt;/b&gt;" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontStyle=1;fontSize=14;fontColor=#E65100;" parent="1" vertex="1">
+          <mxGeometry x="1060" y="10" width="120" height="20"/>
+        </mxCell>
+        <mxCell id="legend_appt" value="&lt;b&gt;Appointment Module&lt;/b&gt;" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontStyle=1;fontSize=14;fontColor=#7B1FA2;" parent="1" vertex="1">
+          <mxGeometry x="720" y="1030" width="160" height="20"/>
+        </mxCell>
+        <mxCell id="legend_inv" value="&lt;b&gt;Inventory Module&lt;/b&gt;" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontStyle=1;fontSize=14;fontColor=#C62828;" parent="1" vertex="1">
+          <mxGeometry x="40" y="670" width="120" height="20"/>
+        </mxCell>
+        <mxCell id="legend_pay" value="&lt;b&gt;Payment Module&lt;/b&gt;" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontStyle=1;fontSize=14;fontColor=#F57F17;" parent="1" vertex="1">
+          <mxGeometry x="720" y="1330" width="140" height="20"/>
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

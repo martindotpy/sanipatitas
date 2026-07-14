@@ -7,6 +7,11 @@ import * as clientAudSchema from "@sanipatitas/database/audit/schema/client-aud-
 import * as clientSchema from "@sanipatitas/database/patient/schema/client-schema"
 import * as immunizationAudSchema from "@sanipatitas/database/audit/schema/immunization-aud-schema"
 import * as immunizationSchema from "@sanipatitas/database/patient/schema/immunization-schema"
+import * as inventoryProductCategorySchema from "@sanipatitas/database/inventory/schema/product-category-schema"
+import * as inventoryProductSchema from "@sanipatitas/database/inventory/schema/product-schema"
+import * as inventoryStockSchema from "@sanipatitas/database/inventory/schema/stock-schema"
+import * as inventoryStockMovementSchema from "@sanipatitas/database/inventory/schema/stock-movement-schema"
+import * as inventorySupplierSchema from "@sanipatitas/database/inventory/schema/supplier-schema"
 import * as medicalConditionAudSchema from "@sanipatitas/database/audit/schema/medical-condition-aud-schema"
 import * as medicalConditionSchema from "@sanipatitas/database/patient/schema/medical-condition-schema"
 import * as medicalObservationAudSchema from "@sanipatitas/database/audit/schema/medical-observation-aud-schema"
@@ -44,6 +49,11 @@ const allSchemas = {
   ...clientSchema,
   ...immunizationAudSchema,
   ...immunizationSchema,
+  ...inventoryProductCategorySchema,
+  ...inventoryProductSchema,
+  ...inventoryStockSchema,
+  ...inventoryStockMovementSchema,
+  ...inventorySupplierSchema,
   ...medicalConditionAudSchema,
   ...medicalConditionSchema,
   ...medicalObservationAudSchema,
