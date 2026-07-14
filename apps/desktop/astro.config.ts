@@ -78,6 +78,7 @@ export default defineConfig({
         "/api/species": "http://localhost:8080",
         "/api/patient": "http://localhost:8080",
         "/api/client": "http://localhost:8080",
+        "/api/clinical": "http://localhost:8080",
       },
     },
     ssr: {

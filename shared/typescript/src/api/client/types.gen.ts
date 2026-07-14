@@ -130,6 +130,11 @@ export type OpenapiDataResponsePatientDto = {
   message: string
 }
 
+export type OpenapiDataResponsePatientStatsDto = {
+  data: OpenapiPatientStatsDto
+  message: string
+}
+
 export type OpenapiDataResponseSpeciesDto = {
   data: OpenapiSpeciesDto
   message: string
@@ -253,6 +258,13 @@ export type OpenapiPatientDto = {
   client: OpenapiClientDto
 }
 
+export type OpenapiPatientStatsDto = {
+  totalPatients: number
+  patientsCreatedToday: number
+  patientsCreatedThisMonth: number
+  totalClients: number
+}
+
 export type OpenapiSpeciesDto = {
   id: OpenapiUuid
   name: string
@@ -315,6 +327,385 @@ export type OpenapiViolation = {
   message: string
 }
 
+export type OpenapiConditionSeverity = "MILD" | "MODERATE" | "SEVERE"
+
+export type OpenapiConditionStatus = "ACTIVE" | "RESOLVED" | "RELAPSE"
+
+export type OpenapiCreateImmunizationRequest = {
+  id?: OpenapiUuid
+  vaccineCode?: string
+  vaccineName: string
+  manufacturer?: string
+  lotNumber?: string
+  expirationDate?: OpenapiLocalDateTime
+  administrationDate: OpenapiLocalDateTime
+  doseNumber?: string
+  doseUnit?: string
+  route?: OpenapiImmunizationRoute
+  site?: string
+  reaction?: string
+  status?: OpenapiImmunizationStatus
+  patientId: OpenapiUuid
+  veterinarianId: OpenapiUuid
+}
+
+export type OpenapiCreateMedicalConditionRequest = {
+  id?: OpenapiUuid
+  name: string
+  code?: string
+  description?: string
+  onsetDate?: OpenapiOffsetDateTime
+  status?: OpenapiConditionStatus
+  severity?: OpenapiConditionSeverity
+  patientId: OpenapiUuid
+  veterinarianId: OpenapiUuid
+}
+
+export type OpenapiCreateMedicalObservationRequest = {
+  id?: OpenapiUuid
+  code?: string
+  value: string
+  unit?: string
+  interpretation?: string
+  bodySite?: string
+  method?: string
+  referenceRange?: string
+  category?: OpenapiObservationCategory
+  status?: OpenapiObservationStatus
+  issuedDate?: OpenapiLocalDateTime
+  patientId: OpenapiUuid
+  veterinarianId: OpenapiUuid
+}
+
+export type OpenapiCreatePrescriptionItemRequest = {
+  id?: OpenapiUuid
+  medicationName: string
+  dosage?: string
+  frequency?: string
+  duration?: string
+  route?: string
+  notes?: string
+}
+
+export type OpenapiCreatePrescriptionRequest = {
+  id?: OpenapiUuid
+  issueDate: OpenapiLocalDateTime
+  expirationDate?: OpenapiLocalDateTime
+  notes?: string
+  status?: OpenapiPrescriptionStatus
+  patientId: OpenapiUuid
+  veterinarianId: OpenapiUuid
+  items: Array<OpenapiCreatePrescriptionItemRequest>
+}
+
+export type OpenapiCreateProcedureRequest = {
+  id?: OpenapiUuid
+  code?: string
+  name: string
+  category?: OpenapiProcedureCategory
+  reason?: string
+  outcome?: string
+  complications?: string
+  performedDate?: OpenapiLocalDateTime
+  status?: OpenapiProcedureStatus
+  patientId: OpenapiUuid
+  veterinarianId: OpenapiUuid
+}
+
+export type OpenapiDataResponseImmunizationDto = {
+  data: OpenapiImmunizationDto
+  message: string
+}
+
+export type OpenapiDataResponseMedicalConditionDto = {
+  data: OpenapiMedicalConditionDto
+  message: string
+}
+
+export type OpenapiDataResponseMedicalObservationDto = {
+  data: OpenapiMedicalObservationDto
+  message: string
+}
+
+export type OpenapiDataResponsePrescriptionDto = {
+  data: OpenapiPrescriptionDto
+  message: string
+}
+
+export type OpenapiDataResponseProcedureDto = {
+  data: OpenapiProcedureDto
+  message: string
+}
+
+export type OpenapiImmunizationDto = {
+  id: OpenapiUuid
+  vaccineCode?: string
+  vaccineName: string
+  manufacturer?: string
+  lotNumber?: string
+  expirationDate?: OpenapiLocalDateTime
+  administrationDate: OpenapiLocalDateTime
+  doseNumber?: string
+  doseUnit?: string
+  route?: OpenapiImmunizationRoute
+  site?: string
+  reaction?: string
+  status: OpenapiImmunizationStatus
+  createdAt: OpenapiLocalDateTime
+  updatedAt: OpenapiLocalDateTime
+  patient: OpenapiPatientDto
+  veterinarian: OpenapiUserDto
+}
+
+export type OpenapiImmunizationRoute =
+  | "SUBCUTANEOUS"
+  | "INTRAMUSCULAR"
+  | "ORAL"
+  | "INTRADERMAL"
+  | "TOPICAL"
+
+export type OpenapiImmunizationStatus =
+  | "COMPLETED"
+  | "ENTERED_IN_ERROR"
+  | "NOT_DONE"
+
+export type OpenapiLocalDateTime = string
+
+export type OpenapiMedicalConditionDto = {
+  id: OpenapiUuid
+  name: string
+  code?: string
+  description?: string
+  onsetDate?: OpenapiOffsetDateTime
+  status: OpenapiConditionStatus
+  severity?: OpenapiConditionSeverity
+  createdAt: OpenapiOffsetDateTime
+  updatedAt: OpenapiOffsetDateTime
+  patient: OpenapiPatientDto
+  veterinarian: OpenapiUserDto
+}
+
+export type OpenapiMedicalObservationDto = {
+  id: OpenapiUuid
+  code?: string
+  value: string
+  unit?: string
+  interpretation?: string
+  bodySite?: string
+  method?: string
+  referenceRange?: string
+  category?: OpenapiObservationCategory
+  status: OpenapiObservationStatus
+  issuedDate?: OpenapiLocalDateTime
+  createdAt: OpenapiLocalDateTime
+  updatedAt: OpenapiLocalDateTime
+  patient: OpenapiPatientDto
+  veterinarian: OpenapiUserDto
+}
+
+export type OpenapiObservationCategory =
+  | "VITAL_SIGNS"
+  | "LABORATORY"
+  | "EXAM"
+  | "GENERAL"
+
+export type OpenapiObservationStatus =
+  | "PRELIMINARY"
+  | "FINAL"
+  | "AMENDED"
+  | "CANCELLED"
+
+export type OpenapiPageResponseImmunizationDto = {
+  data: Array<OpenapiImmunizationDto>
+  page?: number
+  size?: number
+  totalElements?: number
+  totalPages?: number
+  message: string
+}
+
+export type OpenapiPageResponseMedicalConditionDto = {
+  data: Array<OpenapiMedicalConditionDto>
+  page?: number
+  size?: number
+  totalElements?: number
+  totalPages?: number
+  message: string
+}
+
+export type OpenapiPageResponseMedicalObservationDto = {
+  data: Array<OpenapiMedicalObservationDto>
+  page?: number
+  size?: number
+  totalElements?: number
+  totalPages?: number
+  message: string
+}
+
+export type OpenapiPageResponsePrescriptionDto = {
+  data: Array<OpenapiPrescriptionDto>
+  page?: number
+  size?: number
+  totalElements?: number
+  totalPages?: number
+  message: string
+}
+
+export type OpenapiPageResponseProcedureDto = {
+  data: Array<OpenapiProcedureDto>
+  page?: number
+  size?: number
+  totalElements?: number
+  totalPages?: number
+  message: string
+}
+
+export type OpenapiPrescriptionDto = {
+  id: OpenapiUuid
+  issueDate: OpenapiLocalDateTime
+  expirationDate?: OpenapiLocalDateTime
+  notes?: string
+  status: OpenapiPrescriptionStatus
+  createdAt: OpenapiLocalDateTime
+  updatedAt: OpenapiLocalDateTime
+  patient: OpenapiPatientDto
+  veterinarian: OpenapiUserDto
+  items: Array<OpenapiPrescriptionItemDto>
+}
+
+export type OpenapiPrescriptionItemDto = {
+  id: OpenapiUuid
+  medicationName: string
+  dosage?: string
+  frequency?: string
+  duration?: string
+  route?: string
+  notes?: string
+  createdAt: OpenapiLocalDateTime
+  updatedAt: OpenapiLocalDateTime
+}
+
+export type OpenapiPrescriptionStatus = "ACTIVE" | "COMPLETED" | "CANCELLED"
+
+export type OpenapiProcedureCategory =
+  | "SURGICAL"
+  | "DIAGNOSTIC"
+  | "THERAPEUTIC"
+  | "PREVENTIVE"
+  | "OTHER"
+
+export type OpenapiProcedureDto = {
+  id: OpenapiUuid
+  code?: string
+  name: string
+  category?: OpenapiProcedureCategory
+  reason?: string
+  outcome?: string
+  complications?: string
+  performedDate?: OpenapiLocalDateTime
+  status: OpenapiProcedureStatus
+  createdAt: OpenapiLocalDateTime
+  updatedAt: OpenapiLocalDateTime
+  patient: OpenapiPatientDto
+  veterinarian: OpenapiUserDto
+}
+
+export type OpenapiProcedureStatus =
+  | "PREPARATION"
+  | "IN_PROGRESS"
+  | "COMPLETED"
+  | "ABANDONED"
+
+export type OpenapiUpdateImmunizationRequest = {
+  vaccineCode?: string
+  vaccineName: string
+  manufacturer?: string
+  lotNumber?: string
+  expirationDate?: OpenapiLocalDateTime
+  administrationDate: OpenapiLocalDateTime
+  doseNumber?: string
+  doseUnit?: string
+  route?: OpenapiImmunizationRoute
+  site?: string
+  reaction?: string
+  status?: OpenapiImmunizationStatus
+  patientId: OpenapiUuid
+  veterinarianId: OpenapiUuid
+}
+
+export type OpenapiUpdateMedicalConditionRequest = {
+  name: string
+  code?: string
+  description?: string
+  onsetDate?: OpenapiOffsetDateTime
+  status?: OpenapiConditionStatus
+  severity?: OpenapiConditionSeverity
+  patientId: OpenapiUuid
+  veterinarianId: OpenapiUuid
+}
+
+export type OpenapiUpdateMedicalObservationRequest = {
+  code?: string
+  value: string
+  unit?: string
+  interpretation?: string
+  bodySite?: string
+  method?: string
+  referenceRange?: string
+  category?: OpenapiObservationCategory
+  status?: OpenapiObservationStatus
+  issuedDate?: OpenapiLocalDateTime
+  patientId: OpenapiUuid
+  veterinarianId: OpenapiUuid
+}
+
+export type OpenapiUpdatePrescriptionItemRequest = {
+  medicationName: string
+  dosage?: string
+  frequency?: string
+  duration?: string
+  route?: string
+  notes?: string
+}
+
+export type OpenapiUpdatePrescriptionRequest = {
+  issueDate: OpenapiLocalDateTime
+  expirationDate?: OpenapiLocalDateTime
+  notes?: string
+  status?: OpenapiPrescriptionStatus
+  patientId: OpenapiUuid
+  veterinarianId: OpenapiUuid
+  items: Array<OpenapiUpdatePrescriptionItemRequest>
+}
+
+export type OpenapiUpdateProcedureRequest = {
+  code?: string
+  name: string
+  category?: OpenapiProcedureCategory
+  reason?: string
+  outcome?: string
+  complications?: string
+  performedDate?: OpenapiLocalDateTime
+  status?: OpenapiProcedureStatus
+  patientId: OpenapiUuid
+  veterinarianId: OpenapiUuid
+}
+
+export type OpenapiUserDto = {
+  id: OpenapiUuid
+  name: string
+  email: string
+  emailVerified: boolean
+  image?: string
+  role?: string
+  banned?: boolean
+  banReason?: string
+  banExpires?: OpenapiOffsetDateTime
+  lastName: string
+  createdAt: OpenapiOffsetDateTime
+  updatedAt: OpenapiOffsetDateTime
+}
+
 export type OpenapiAppointmentClass = "AMBULATORY" | "EMERGENCY" | "HOME_VISIT"
 
 export type OpenapiAppointmentDto = {
@@ -336,6 +727,15 @@ export type OpenapiAppointmentDto = {
 export type OpenapiAppointmentEvent = {
   appointmentId?: OpenapiUuid
   type?: OpenapiType
+}
+
+export type OpenapiAppointmentStatsDto = {
+  appointmentsToday: number
+  appointmentsTodayByStatus: {
+    [key: string]: number
+  }
+  appointmentsThisMonth: number
+  upcomingAppointments: Array<OpenapiAppointmentDto>
 }
 
 export type OpenapiAppointmentStatus =
@@ -364,6 +764,11 @@ export type OpenapiDataResponseAppointmentDto = {
   message: string
 }
 
+export type OpenapiDataResponseAppointmentStatsDto = {
+  data: OpenapiAppointmentStatsDto
+  message: string
+}
+
 export type OpenapiLocalTime = string
 
 export type OpenapiPageResponseAppointmentDto = {
@@ -388,21 +793,6 @@ export type OpenapiUpdateAppointmentRequest = {
   patientId: OpenapiUuid
   clientId: OpenapiUuid
   veterinarianId: OpenapiUuid
-}
-
-export type OpenapiUserDto = {
-  id: OpenapiUuid
-  name: string
-  email: string
-  emailVerified: boolean
-  image?: string
-  role?: string
-  banned?: boolean
-  banReason?: string
-  banExpires?: OpenapiOffsetDateTime
-  lastName: string
-  createdAt: OpenapiOffsetDateTime
-  updatedAt: OpenapiOffsetDateTime
 }
 
 export type OpenapiUserWritable = {
@@ -4544,6 +4934,34 @@ export type PostApiPatientResponses = {
 export type PostApiPatientResponse =
   PostApiPatientResponses[keyof PostApiPatientResponses]
 
+export type GetApiPatientStatsData = {
+  body?: never
+  path?: never
+  query?: never
+  url: "/api/patient/stats"
+}
+
+export type GetApiPatientStatsErrors = {
+  /**
+   * Not Authorized
+   */
+  401: unknown
+  /**
+   * Not Allowed
+   */
+  403: unknown
+}
+
+export type GetApiPatientStatsResponses = {
+  /**
+   * OK
+   */
+  200: OpenapiDataResponsePatientStatsDto
+}
+
+export type GetApiPatientStatsResponse =
+  GetApiPatientStatsResponses[keyof GetApiPatientStatsResponses]
+
 export type DeleteApiPatientByIdData = {
   body?: never
   path: {
@@ -4843,6 +5261,951 @@ export type PutApiSpeciesByIdResponses = {
 export type PutApiSpeciesByIdResponse =
   PutApiSpeciesByIdResponses[keyof PutApiSpeciesByIdResponses]
 
+export type GetApiClinicalConditionData = {
+  body?: never
+  path?: never
+  query?: {
+    page?: number
+    patientId?: OpenapiUuid
+    size?: number
+  }
+  url: "/api/clinical/condition"
+}
+
+export type GetApiClinicalConditionErrors = {
+  /**
+   * Not Authorized
+   */
+  401: unknown
+  /**
+   * Not Allowed
+   */
+  403: unknown
+  /**
+   * Constraint Violation
+   */
+  422: OpenapiHttpValidationProblem
+}
+
+export type GetApiClinicalConditionError =
+  GetApiClinicalConditionErrors[keyof GetApiClinicalConditionErrors]
+
+export type GetApiClinicalConditionResponses = {
+  /**
+   * OK
+   */
+  200: OpenapiPageResponseMedicalConditionDto
+}
+
+export type GetApiClinicalConditionResponse =
+  GetApiClinicalConditionResponses[keyof GetApiClinicalConditionResponses]
+
+export type PostApiClinicalConditionData = {
+  body: OpenapiCreateMedicalConditionRequest
+  path?: never
+  query?: never
+  url: "/api/clinical/condition"
+}
+
+export type PostApiClinicalConditionErrors = {
+  /**
+   * Not Authorized
+   */
+  401: unknown
+  /**
+   * Not Allowed
+   */
+  403: unknown
+  /**
+   * Constraint Violation
+   */
+  422: OpenapiHttpValidationProblem
+}
+
+export type PostApiClinicalConditionError =
+  PostApiClinicalConditionErrors[keyof PostApiClinicalConditionErrors]
+
+export type PostApiClinicalConditionResponses = {
+  /**
+   * OK
+   */
+  200: OpenapiDataResponseMedicalConditionDto
+}
+
+export type PostApiClinicalConditionResponse =
+  PostApiClinicalConditionResponses[keyof PostApiClinicalConditionResponses]
+
+export type DeleteApiClinicalConditionByIdData = {
+  body?: never
+  path: {
+    id: OpenapiUuid
+  }
+  query?: never
+  url: "/api/clinical/condition/{id}"
+}
+
+export type DeleteApiClinicalConditionByIdErrors = {
+  /**
+   * Not Authorized
+   */
+  401: unknown
+  /**
+   * Not Allowed
+   */
+  403: unknown
+  /**
+   * Constraint Violation
+   */
+  422: OpenapiHttpValidationProblem
+}
+
+export type DeleteApiClinicalConditionByIdError =
+  DeleteApiClinicalConditionByIdErrors[keyof DeleteApiClinicalConditionByIdErrors]
+
+export type DeleteApiClinicalConditionByIdResponses = {
+  /**
+   * No Content
+   */
+  204: void
+}
+
+export type DeleteApiClinicalConditionByIdResponse =
+  DeleteApiClinicalConditionByIdResponses[keyof DeleteApiClinicalConditionByIdResponses]
+
+export type GetApiClinicalConditionByIdData = {
+  body?: never
+  path: {
+    id: OpenapiUuid
+  }
+  query?: never
+  url: "/api/clinical/condition/{id}"
+}
+
+export type GetApiClinicalConditionByIdErrors = {
+  /**
+   * Not Authorized
+   */
+  401: unknown
+  /**
+   * Not Allowed
+   */
+  403: unknown
+  /**
+   * Not Found: server cannot find the requested resource
+   */
+  404: OpenapiHttpProblem
+  /**
+   * Constraint Violation
+   */
+  422: OpenapiHttpValidationProblem
+}
+
+export type GetApiClinicalConditionByIdError =
+  GetApiClinicalConditionByIdErrors[keyof GetApiClinicalConditionByIdErrors]
+
+export type GetApiClinicalConditionByIdResponses = {
+  /**
+   * OK
+   */
+  200: OpenapiDataResponseMedicalConditionDto
+}
+
+export type GetApiClinicalConditionByIdResponse =
+  GetApiClinicalConditionByIdResponses[keyof GetApiClinicalConditionByIdResponses]
+
+export type PutApiClinicalConditionByIdData = {
+  body: OpenapiUpdateMedicalConditionRequest
+  path: {
+    id: OpenapiUuid
+  }
+  query?: never
+  url: "/api/clinical/condition/{id}"
+}
+
+export type PutApiClinicalConditionByIdErrors = {
+  /**
+   * Not Authorized
+   */
+  401: unknown
+  /**
+   * Not Allowed
+   */
+  403: unknown
+  /**
+   * Constraint Violation
+   */
+  422: OpenapiHttpValidationProblem
+}
+
+export type PutApiClinicalConditionByIdError =
+  PutApiClinicalConditionByIdErrors[keyof PutApiClinicalConditionByIdErrors]
+
+export type PutApiClinicalConditionByIdResponses = {
+  /**
+   * OK
+   */
+  200: OpenapiDataResponseMedicalConditionDto
+}
+
+export type PutApiClinicalConditionByIdResponse =
+  PutApiClinicalConditionByIdResponses[keyof PutApiClinicalConditionByIdResponses]
+
+export type GetApiClinicalImmunizationData = {
+  body?: never
+  path?: never
+  query?: {
+    page?: number
+    patientId?: OpenapiUuid
+    size?: number
+  }
+  url: "/api/clinical/immunization"
+}
+
+export type GetApiClinicalImmunizationErrors = {
+  /**
+   * Not Authorized
+   */
+  401: unknown
+  /**
+   * Not Allowed
+   */
+  403: unknown
+  /**
+   * Constraint Violation
+   */
+  422: OpenapiHttpValidationProblem
+}
+
+export type GetApiClinicalImmunizationError =
+  GetApiClinicalImmunizationErrors[keyof GetApiClinicalImmunizationErrors]
+
+export type GetApiClinicalImmunizationResponses = {
+  /**
+   * OK
+   */
+  200: OpenapiPageResponseImmunizationDto
+}
+
+export type GetApiClinicalImmunizationResponse =
+  GetApiClinicalImmunizationResponses[keyof GetApiClinicalImmunizationResponses]
+
+export type PostApiClinicalImmunizationData = {
+  body: OpenapiCreateImmunizationRequest
+  path?: never
+  query?: never
+  url: "/api/clinical/immunization"
+}
+
+export type PostApiClinicalImmunizationErrors = {
+  /**
+   * Not Authorized
+   */
+  401: unknown
+  /**
+   * Not Allowed
+   */
+  403: unknown
+  /**
+   * Constraint Violation
+   */
+  422: OpenapiHttpValidationProblem
+}
+
+export type PostApiClinicalImmunizationError =
+  PostApiClinicalImmunizationErrors[keyof PostApiClinicalImmunizationErrors]
+
+export type PostApiClinicalImmunizationResponses = {
+  /**
+   * OK
+   */
+  200: OpenapiDataResponseImmunizationDto
+}
+
+export type PostApiClinicalImmunizationResponse =
+  PostApiClinicalImmunizationResponses[keyof PostApiClinicalImmunizationResponses]
+
+export type DeleteApiClinicalImmunizationByIdData = {
+  body?: never
+  path: {
+    id: OpenapiUuid
+  }
+  query?: never
+  url: "/api/clinical/immunization/{id}"
+}
+
+export type DeleteApiClinicalImmunizationByIdErrors = {
+  /**
+   * Not Authorized
+   */
+  401: unknown
+  /**
+   * Not Allowed
+   */
+  403: unknown
+  /**
+   * Constraint Violation
+   */
+  422: OpenapiHttpValidationProblem
+}
+
+export type DeleteApiClinicalImmunizationByIdError =
+  DeleteApiClinicalImmunizationByIdErrors[keyof DeleteApiClinicalImmunizationByIdErrors]
+
+export type DeleteApiClinicalImmunizationByIdResponses = {
+  /**
+   * No Content
+   */
+  204: void
+}
+
+export type DeleteApiClinicalImmunizationByIdResponse =
+  DeleteApiClinicalImmunizationByIdResponses[keyof DeleteApiClinicalImmunizationByIdResponses]
+
+export type GetApiClinicalImmunizationByIdData = {
+  body?: never
+  path: {
+    id: OpenapiUuid
+  }
+  query?: never
+  url: "/api/clinical/immunization/{id}"
+}
+
+export type GetApiClinicalImmunizationByIdErrors = {
+  /**
+   * Not Authorized
+   */
+  401: unknown
+  /**
+   * Not Allowed
+   */
+  403: unknown
+  /**
+   * Not Found: server cannot find the requested resource
+   */
+  404: OpenapiHttpProblem
+  /**
+   * Constraint Violation
+   */
+  422: OpenapiHttpValidationProblem
+}
+
+export type GetApiClinicalImmunizationByIdError =
+  GetApiClinicalImmunizationByIdErrors[keyof GetApiClinicalImmunizationByIdErrors]
+
+export type GetApiClinicalImmunizationByIdResponses = {
+  /**
+   * OK
+   */
+  200: OpenapiDataResponseImmunizationDto
+}
+
+export type GetApiClinicalImmunizationByIdResponse =
+  GetApiClinicalImmunizationByIdResponses[keyof GetApiClinicalImmunizationByIdResponses]
+
+export type PutApiClinicalImmunizationByIdData = {
+  body: OpenapiUpdateImmunizationRequest
+  path: {
+    id: OpenapiUuid
+  }
+  query?: never
+  url: "/api/clinical/immunization/{id}"
+}
+
+export type PutApiClinicalImmunizationByIdErrors = {
+  /**
+   * Not Authorized
+   */
+  401: unknown
+  /**
+   * Not Allowed
+   */
+  403: unknown
+  /**
+   * Constraint Violation
+   */
+  422: OpenapiHttpValidationProblem
+}
+
+export type PutApiClinicalImmunizationByIdError =
+  PutApiClinicalImmunizationByIdErrors[keyof PutApiClinicalImmunizationByIdErrors]
+
+export type PutApiClinicalImmunizationByIdResponses = {
+  /**
+   * OK
+   */
+  200: OpenapiDataResponseImmunizationDto
+}
+
+export type PutApiClinicalImmunizationByIdResponse =
+  PutApiClinicalImmunizationByIdResponses[keyof PutApiClinicalImmunizationByIdResponses]
+
+export type GetApiClinicalObservationData = {
+  body?: never
+  path?: never
+  query?: {
+    page?: number
+    patientId?: OpenapiUuid
+    size?: number
+  }
+  url: "/api/clinical/observation"
+}
+
+export type GetApiClinicalObservationErrors = {
+  /**
+   * Not Authorized
+   */
+  401: unknown
+  /**
+   * Not Allowed
+   */
+  403: unknown
+  /**
+   * Constraint Violation
+   */
+  422: OpenapiHttpValidationProblem
+}
+
+export type GetApiClinicalObservationError =
+  GetApiClinicalObservationErrors[keyof GetApiClinicalObservationErrors]
+
+export type GetApiClinicalObservationResponses = {
+  /**
+   * OK
+   */
+  200: OpenapiPageResponseMedicalObservationDto
+}
+
+export type GetApiClinicalObservationResponse =
+  GetApiClinicalObservationResponses[keyof GetApiClinicalObservationResponses]
+
+export type PostApiClinicalObservationData = {
+  body: OpenapiCreateMedicalObservationRequest
+  path?: never
+  query?: never
+  url: "/api/clinical/observation"
+}
+
+export type PostApiClinicalObservationErrors = {
+  /**
+   * Not Authorized
+   */
+  401: unknown
+  /**
+   * Not Allowed
+   */
+  403: unknown
+  /**
+   * Constraint Violation
+   */
+  422: OpenapiHttpValidationProblem
+}
+
+export type PostApiClinicalObservationError =
+  PostApiClinicalObservationErrors[keyof PostApiClinicalObservationErrors]
+
+export type PostApiClinicalObservationResponses = {
+  /**
+   * OK
+   */
+  200: OpenapiDataResponseMedicalObservationDto
+}
+
+export type PostApiClinicalObservationResponse =
+  PostApiClinicalObservationResponses[keyof PostApiClinicalObservationResponses]
+
+export type DeleteApiClinicalObservationByIdData = {
+  body?: never
+  path: {
+    id: OpenapiUuid
+  }
+  query?: never
+  url: "/api/clinical/observation/{id}"
+}
+
+export type DeleteApiClinicalObservationByIdErrors = {
+  /**
+   * Not Authorized
+   */
+  401: unknown
+  /**
+   * Not Allowed
+   */
+  403: unknown
+  /**
+   * Constraint Violation
+   */
+  422: OpenapiHttpValidationProblem
+}
+
+export type DeleteApiClinicalObservationByIdError =
+  DeleteApiClinicalObservationByIdErrors[keyof DeleteApiClinicalObservationByIdErrors]
+
+export type DeleteApiClinicalObservationByIdResponses = {
+  /**
+   * No Content
+   */
+  204: void
+}
+
+export type DeleteApiClinicalObservationByIdResponse =
+  DeleteApiClinicalObservationByIdResponses[keyof DeleteApiClinicalObservationByIdResponses]
+
+export type GetApiClinicalObservationByIdData = {
+  body?: never
+  path: {
+    id: OpenapiUuid
+  }
+  query?: never
+  url: "/api/clinical/observation/{id}"
+}
+
+export type GetApiClinicalObservationByIdErrors = {
+  /**
+   * Not Authorized
+   */
+  401: unknown
+  /**
+   * Not Allowed
+   */
+  403: unknown
+  /**
+   * Not Found: server cannot find the requested resource
+   */
+  404: OpenapiHttpProblem
+  /**
+   * Constraint Violation
+   */
+  422: OpenapiHttpValidationProblem
+}
+
+export type GetApiClinicalObservationByIdError =
+  GetApiClinicalObservationByIdErrors[keyof GetApiClinicalObservationByIdErrors]
+
+export type GetApiClinicalObservationByIdResponses = {
+  /**
+   * OK
+   */
+  200: OpenapiDataResponseMedicalObservationDto
+}
+
+export type GetApiClinicalObservationByIdResponse =
+  GetApiClinicalObservationByIdResponses[keyof GetApiClinicalObservationByIdResponses]
+
+export type PutApiClinicalObservationByIdData = {
+  body: OpenapiUpdateMedicalObservationRequest
+  path: {
+    id: OpenapiUuid
+  }
+  query?: never
+  url: "/api/clinical/observation/{id}"
+}
+
+export type PutApiClinicalObservationByIdErrors = {
+  /**
+   * Not Authorized
+   */
+  401: unknown
+  /**
+   * Not Allowed
+   */
+  403: unknown
+  /**
+   * Constraint Violation
+   */
+  422: OpenapiHttpValidationProblem
+}
+
+export type PutApiClinicalObservationByIdError =
+  PutApiClinicalObservationByIdErrors[keyof PutApiClinicalObservationByIdErrors]
+
+export type PutApiClinicalObservationByIdResponses = {
+  /**
+   * OK
+   */
+  200: OpenapiDataResponseMedicalObservationDto
+}
+
+export type PutApiClinicalObservationByIdResponse =
+  PutApiClinicalObservationByIdResponses[keyof PutApiClinicalObservationByIdResponses]
+
+export type GetApiClinicalPrescriptionData = {
+  body?: never
+  path?: never
+  query?: {
+    page?: number
+    patientId?: OpenapiUuid
+    size?: number
+  }
+  url: "/api/clinical/prescription"
+}
+
+export type GetApiClinicalPrescriptionErrors = {
+  /**
+   * Not Authorized
+   */
+  401: unknown
+  /**
+   * Not Allowed
+   */
+  403: unknown
+  /**
+   * Constraint Violation
+   */
+  422: OpenapiHttpValidationProblem
+}
+
+export type GetApiClinicalPrescriptionError =
+  GetApiClinicalPrescriptionErrors[keyof GetApiClinicalPrescriptionErrors]
+
+export type GetApiClinicalPrescriptionResponses = {
+  /**
+   * OK
+   */
+  200: OpenapiPageResponsePrescriptionDto
+}
+
+export type GetApiClinicalPrescriptionResponse =
+  GetApiClinicalPrescriptionResponses[keyof GetApiClinicalPrescriptionResponses]
+
+export type PostApiClinicalPrescriptionData = {
+  body: OpenapiCreatePrescriptionRequest
+  path?: never
+  query?: never
+  url: "/api/clinical/prescription"
+}
+
+export type PostApiClinicalPrescriptionErrors = {
+  /**
+   * Not Authorized
+   */
+  401: unknown
+  /**
+   * Not Allowed
+   */
+  403: unknown
+  /**
+   * Constraint Violation
+   */
+  422: OpenapiHttpValidationProblem
+}
+
+export type PostApiClinicalPrescriptionError =
+  PostApiClinicalPrescriptionErrors[keyof PostApiClinicalPrescriptionErrors]
+
+export type PostApiClinicalPrescriptionResponses = {
+  /**
+   * OK
+   */
+  200: OpenapiDataResponsePrescriptionDto
+}
+
+export type PostApiClinicalPrescriptionResponse =
+  PostApiClinicalPrescriptionResponses[keyof PostApiClinicalPrescriptionResponses]
+
+export type DeleteApiClinicalPrescriptionByIdData = {
+  body?: never
+  path: {
+    id: OpenapiUuid
+  }
+  query?: never
+  url: "/api/clinical/prescription/{id}"
+}
+
+export type DeleteApiClinicalPrescriptionByIdErrors = {
+  /**
+   * Not Authorized
+   */
+  401: unknown
+  /**
+   * Not Allowed
+   */
+  403: unknown
+  /**
+   * Constraint Violation
+   */
+  422: OpenapiHttpValidationProblem
+}
+
+export type DeleteApiClinicalPrescriptionByIdError =
+  DeleteApiClinicalPrescriptionByIdErrors[keyof DeleteApiClinicalPrescriptionByIdErrors]
+
+export type DeleteApiClinicalPrescriptionByIdResponses = {
+  /**
+   * No Content
+   */
+  204: void
+}
+
+export type DeleteApiClinicalPrescriptionByIdResponse =
+  DeleteApiClinicalPrescriptionByIdResponses[keyof DeleteApiClinicalPrescriptionByIdResponses]
+
+export type GetApiClinicalPrescriptionByIdData = {
+  body?: never
+  path: {
+    id: OpenapiUuid
+  }
+  query?: never
+  url: "/api/clinical/prescription/{id}"
+}
+
+export type GetApiClinicalPrescriptionByIdErrors = {
+  /**
+   * Not Authorized
+   */
+  401: unknown
+  /**
+   * Not Allowed
+   */
+  403: unknown
+  /**
+   * Not Found: server cannot find the requested resource
+   */
+  404: OpenapiHttpProblem
+  /**
+   * Constraint Violation
+   */
+  422: OpenapiHttpValidationProblem
+}
+
+export type GetApiClinicalPrescriptionByIdError =
+  GetApiClinicalPrescriptionByIdErrors[keyof GetApiClinicalPrescriptionByIdErrors]
+
+export type GetApiClinicalPrescriptionByIdResponses = {
+  /**
+   * OK
+   */
+  200: OpenapiDataResponsePrescriptionDto
+}
+
+export type GetApiClinicalPrescriptionByIdResponse =
+  GetApiClinicalPrescriptionByIdResponses[keyof GetApiClinicalPrescriptionByIdResponses]
+
+export type PutApiClinicalPrescriptionByIdData = {
+  body: OpenapiUpdatePrescriptionRequest
+  path: {
+    id: OpenapiUuid
+  }
+  query?: never
+  url: "/api/clinical/prescription/{id}"
+}
+
+export type PutApiClinicalPrescriptionByIdErrors = {
+  /**
+   * Not Authorized
+   */
+  401: unknown
+  /**
+   * Not Allowed
+   */
+  403: unknown
+  /**
+   * Constraint Violation
+   */
+  422: OpenapiHttpValidationProblem
+}
+
+export type PutApiClinicalPrescriptionByIdError =
+  PutApiClinicalPrescriptionByIdErrors[keyof PutApiClinicalPrescriptionByIdErrors]
+
+export type PutApiClinicalPrescriptionByIdResponses = {
+  /**
+   * OK
+   */
+  200: OpenapiDataResponsePrescriptionDto
+}
+
+export type PutApiClinicalPrescriptionByIdResponse =
+  PutApiClinicalPrescriptionByIdResponses[keyof PutApiClinicalPrescriptionByIdResponses]
+
+export type GetApiClinicalProcedureData = {
+  body?: never
+  path?: never
+  query?: {
+    page?: number
+    patientId?: OpenapiUuid
+    size?: number
+  }
+  url: "/api/clinical/procedure"
+}
+
+export type GetApiClinicalProcedureErrors = {
+  /**
+   * Not Authorized
+   */
+  401: unknown
+  /**
+   * Not Allowed
+   */
+  403: unknown
+  /**
+   * Constraint Violation
+   */
+  422: OpenapiHttpValidationProblem
+}
+
+export type GetApiClinicalProcedureError =
+  GetApiClinicalProcedureErrors[keyof GetApiClinicalProcedureErrors]
+
+export type GetApiClinicalProcedureResponses = {
+  /**
+   * OK
+   */
+  200: OpenapiPageResponseProcedureDto
+}
+
+export type GetApiClinicalProcedureResponse =
+  GetApiClinicalProcedureResponses[keyof GetApiClinicalProcedureResponses]
+
+export type PostApiClinicalProcedureData = {
+  body: OpenapiCreateProcedureRequest
+  path?: never
+  query?: never
+  url: "/api/clinical/procedure"
+}
+
+export type PostApiClinicalProcedureErrors = {
+  /**
+   * Not Authorized
+   */
+  401: unknown
+  /**
+   * Not Allowed
+   */
+  403: unknown
+  /**
+   * Constraint Violation
+   */
+  422: OpenapiHttpValidationProblem
+}
+
+export type PostApiClinicalProcedureError =
+  PostApiClinicalProcedureErrors[keyof PostApiClinicalProcedureErrors]
+
+export type PostApiClinicalProcedureResponses = {
+  /**
+   * OK
+   */
+  200: OpenapiDataResponseProcedureDto
+}
+
+export type PostApiClinicalProcedureResponse =
+  PostApiClinicalProcedureResponses[keyof PostApiClinicalProcedureResponses]
+
+export type DeleteApiClinicalProcedureByIdData = {
+  body?: never
+  path: {
+    id: OpenapiUuid
+  }
+  query?: never
+  url: "/api/clinical/procedure/{id}"
+}
+
+export type DeleteApiClinicalProcedureByIdErrors = {
+  /**
+   * Not Authorized
+   */
+  401: unknown
+  /**
+   * Not Allowed
+   */
+  403: unknown
+  /**
+   * Constraint Violation
+   */
+  422: OpenapiHttpValidationProblem
+}
+
+export type DeleteApiClinicalProcedureByIdError =
+  DeleteApiClinicalProcedureByIdErrors[keyof DeleteApiClinicalProcedureByIdErrors]
+
+export type DeleteApiClinicalProcedureByIdResponses = {
+  /**
+   * No Content
+   */
+  204: void
+}
+
+export type DeleteApiClinicalProcedureByIdResponse =
+  DeleteApiClinicalProcedureByIdResponses[keyof DeleteApiClinicalProcedureByIdResponses]
+
+export type GetApiClinicalProcedureByIdData = {
+  body?: never
+  path: {
+    id: OpenapiUuid
+  }
+  query?: never
+  url: "/api/clinical/procedure/{id}"
+}
+
+export type GetApiClinicalProcedureByIdErrors = {
+  /**
+   * Not Authorized
+   */
+  401: unknown
+  /**
+   * Not Allowed
+   */
+  403: unknown
+  /**
+   * Not Found: server cannot find the requested resource
+   */
+  404: OpenapiHttpProblem
+  /**
+   * Constraint Violation
+   */
+  422: OpenapiHttpValidationProblem
+}
+
+export type GetApiClinicalProcedureByIdError =
+  GetApiClinicalProcedureByIdErrors[keyof GetApiClinicalProcedureByIdErrors]
+
+export type GetApiClinicalProcedureByIdResponses = {
+  /**
+   * OK
+   */
+  200: OpenapiDataResponseProcedureDto
+}
+
+export type GetApiClinicalProcedureByIdResponse =
+  GetApiClinicalProcedureByIdResponses[keyof GetApiClinicalProcedureByIdResponses]
+
+export type PutApiClinicalProcedureByIdData = {
+  body: OpenapiUpdateProcedureRequest
+  path: {
+    id: OpenapiUuid
+  }
+  query?: never
+  url: "/api/clinical/procedure/{id}"
+}
+
+export type PutApiClinicalProcedureByIdErrors = {
+  /**
+   * Not Authorized
+   */
+  401: unknown
+  /**
+   * Not Allowed
+   */
+  403: unknown
+  /**
+   * Constraint Violation
+   */
+  422: OpenapiHttpValidationProblem
+}
+
+export type PutApiClinicalProcedureByIdError =
+  PutApiClinicalProcedureByIdErrors[keyof PutApiClinicalProcedureByIdErrors]
+
+export type PutApiClinicalProcedureByIdResponses = {
+  /**
+   * OK
+   */
+  200: OpenapiDataResponseProcedureDto
+}
+
+export type PutApiClinicalProcedureByIdResponse =
+  PutApiClinicalProcedureByIdResponses[keyof PutApiClinicalProcedureByIdResponses]
+
 export type GetApiAppointmentData = {
   body?: never
   path?: never
@@ -4945,6 +6308,34 @@ export type GetApiAppointmentEventsResponses = {
 
 export type GetApiAppointmentEventsResponse =
   GetApiAppointmentEventsResponses[keyof GetApiAppointmentEventsResponses]
+
+export type GetApiAppointmentStatsData = {
+  body?: never
+  path?: never
+  query?: never
+  url: "/api/appointment/stats"
+}
+
+export type GetApiAppointmentStatsErrors = {
+  /**
+   * Not Authorized
+   */
+  401: unknown
+  /**
+   * Not Allowed
+   */
+  403: unknown
+}
+
+export type GetApiAppointmentStatsResponses = {
+  /**
+   * OK
+   */
+  200: OpenapiDataResponseAppointmentStatsDto
+}
+
+export type GetApiAppointmentStatsResponse =
+  GetApiAppointmentStatsResponses[keyof GetApiAppointmentStatsResponses]
 
 export type DeleteApiAppointmentByIdData = {
   body?: never

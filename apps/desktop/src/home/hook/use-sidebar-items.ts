@@ -54,6 +54,18 @@ export function useSidebarItems(): SidebarGroups {
       },
     ],
 
+    Administración: [
+      ...(isAdmin
+        ? [
+            {
+              to: "/admin/users" as const,
+              label: "Usuarios",
+              icon: TbUsers,
+            },
+          ]
+        : []),
+    ],
+
     ...(isAdmin && {
       Desarrollo: [
         {

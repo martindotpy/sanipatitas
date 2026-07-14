@@ -20,6 +20,7 @@ import { Route as PrivateClientRouteImport } from "./routes/_private/client"
 import { Route as PrivateBreedRouteImport } from "./routes/_private/breed"
 import { Route as PrivateAppointmentRouteImport } from "./routes/_private/appointment"
 import { Route as PrivatePatientUuidRouteImport } from "./routes/_private/patient.$uuid"
+import { Route as PrivateAdminUsersRouteImport } from "./routes/_private/admin.users"
 
 const PublicRouteRoute = PublicRouteRouteImport.update({
   id: "/_public",
@@ -74,6 +75,11 @@ const PrivatePatientUuidRoute = PrivatePatientUuidRouteImport.update({
   path: "/$uuid",
   getParentRoute: () => PrivatePatientRoute,
 } as any)
+const PrivateAdminUsersRoute = PrivateAdminUsersRouteImport.update({
+  id: "/admin/users",
+  path: "/admin/users",
+  getParentRoute: () => PrivateRouteRoute,
+} as any)
 
 export interface FileRoutesByFullPath {
   "/": typeof PrivateIndexRoute
@@ -84,6 +90,7 @@ export interface FileRoutesByFullPath {
   "/profile": typeof PrivateProfileRoute
   "/species": typeof PrivateSpeciesRoute
   "/sign-in": typeof PublicSignInRoute
+  "/admin/users": typeof PrivateAdminUsersRoute
   "/patient/$uuid": typeof PrivatePatientUuidRoute
 }
 export interface FileRoutesByTo {
@@ -95,6 +102,7 @@ export interface FileRoutesByTo {
   "/profile": typeof PrivateProfileRoute
   "/species": typeof PrivateSpeciesRoute
   "/sign-in": typeof PublicSignInRoute
+  "/admin/users": typeof PrivateAdminUsersRoute
   "/patient/$uuid": typeof PrivatePatientUuidRoute
 }
 export interface FileRoutesById {
@@ -109,6 +117,7 @@ export interface FileRoutesById {
   "/_private/species": typeof PrivateSpeciesRoute
   "/_public/sign-in": typeof PublicSignInRoute
   "/_private/": typeof PrivateIndexRoute
+  "/_private/admin/users": typeof PrivateAdminUsersRoute
   "/_private/patient/$uuid": typeof PrivatePatientUuidRoute
 }
 export interface FileRouteTypes {
@@ -122,6 +131,7 @@ export interface FileRouteTypes {
     | "/profile"
     | "/species"
     | "/sign-in"
+    | "/admin/users"
     | "/patient/$uuid"
   fileRoutesByTo: FileRoutesByTo
   to:
@@ -133,6 +143,7 @@ export interface FileRouteTypes {
     | "/profile"
     | "/species"
     | "/sign-in"
+    | "/admin/users"
     | "/patient/$uuid"
   id:
     | "__root__"
@@ -146,6 +157,7 @@ export interface FileRouteTypes {
     | "/_private/species"
     | "/_public/sign-in"
     | "/_private/"
+    | "/_private/admin/users"
     | "/_private/patient/$uuid"
   fileRoutesById: FileRoutesById
 }
@@ -233,6 +245,13 @@ declare module "@tanstack/react-router" {
       preLoaderRoute: typeof PrivatePatientUuidRouteImport
       parentRoute: typeof PrivatePatientRoute
     }
+    "/_private/admin/users": {
+      id: "/_private/admin/users"
+      path: "/admin/users"
+      fullPath: "/admin/users"
+      preLoaderRoute: typeof PrivateAdminUsersRouteImport
+      parentRoute: typeof PrivateRouteRoute
+    }
   }
 }
 
@@ -256,6 +275,7 @@ interface PrivateRouteRouteChildren {
   PrivateProfileRoute: typeof PrivateProfileRoute
   PrivateSpeciesRoute: typeof PrivateSpeciesRoute
   PrivateIndexRoute: typeof PrivateIndexRoute
+  PrivateAdminUsersRoute: typeof PrivateAdminUsersRoute
 }
 
 const PrivateRouteRouteChildren: PrivateRouteRouteChildren = {
@@ -266,6 +286,7 @@ const PrivateRouteRouteChildren: PrivateRouteRouteChildren = {
   PrivateProfileRoute: PrivateProfileRoute,
   PrivateSpeciesRoute: PrivateSpeciesRoute,
   PrivateIndexRoute: PrivateIndexRoute,
+  PrivateAdminUsersRoute: PrivateAdminUsersRoute,
 }
 
 const PrivateRouteRouteWithChildren = PrivateRouteRoute._addFileChildren(

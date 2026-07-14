@@ -17,6 +17,7 @@ COPY pom.xml checkstyle-suppressions.xml spotbugs-exclude.xml ./
 COPY shared/java/pom.xml ./shared/java/pom.xml
 COPY services/patient/pom.xml ./services/patient/pom.xml
 COPY services/appointment/pom.xml ./services/appointment/pom.xml
+COPY services/ehr/pom.xml ./services/ehr/pom.xml
 
 RUN --mount=type=cache,target=/root/.m2/repository \
   ./mvnw -B -pl services/appointment -am dependency:go-offline

@@ -12,6 +12,7 @@
         <module>shared/java</module>
         <module>services/patient</module>
         <module>services/appointment</module>
+        <module>services/ehr</module>
     </modules>
 
     <properties>

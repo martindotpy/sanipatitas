@@ -19,6 +19,21 @@ import type {
   DeleteApiClientByIdData,
   DeleteApiClientByIdErrors,
   DeleteApiClientByIdResponses,
+  DeleteApiClinicalConditionByIdData,
+  DeleteApiClinicalConditionByIdErrors,
+  DeleteApiClinicalConditionByIdResponses,
+  DeleteApiClinicalImmunizationByIdData,
+  DeleteApiClinicalImmunizationByIdErrors,
+  DeleteApiClinicalImmunizationByIdResponses,
+  DeleteApiClinicalObservationByIdData,
+  DeleteApiClinicalObservationByIdErrors,
+  DeleteApiClinicalObservationByIdResponses,
+  DeleteApiClinicalPrescriptionByIdData,
+  DeleteApiClinicalPrescriptionByIdErrors,
+  DeleteApiClinicalPrescriptionByIdResponses,
+  DeleteApiClinicalProcedureByIdData,
+  DeleteApiClinicalProcedureByIdErrors,
+  DeleteApiClinicalProcedureByIdResponses,
   DeleteApiPatientByIdData,
   DeleteApiPatientByIdErrors,
   DeleteApiPatientByIdResponses,
@@ -35,6 +50,9 @@ import type {
   GetApiAppointmentEventsResponse,
   GetApiAppointmentEventsResponses,
   GetApiAppointmentResponses,
+  GetApiAppointmentStatsData,
+  GetApiAppointmentStatsErrors,
+  GetApiAppointmentStatsResponses,
   GetApiAuthAccountInfoData,
   GetApiAuthAccountInfoErrors,
   GetApiAuthAccountInfoResponses,
@@ -64,12 +82,45 @@ import type {
   GetApiClientData,
   GetApiClientErrors,
   GetApiClientResponses,
+  GetApiClinicalConditionByIdData,
+  GetApiClinicalConditionByIdErrors,
+  GetApiClinicalConditionByIdResponses,
+  GetApiClinicalConditionData,
+  GetApiClinicalConditionErrors,
+  GetApiClinicalConditionResponses,
+  GetApiClinicalImmunizationByIdData,
+  GetApiClinicalImmunizationByIdErrors,
+  GetApiClinicalImmunizationByIdResponses,
+  GetApiClinicalImmunizationData,
+  GetApiClinicalImmunizationErrors,
+  GetApiClinicalImmunizationResponses,
+  GetApiClinicalObservationByIdData,
+  GetApiClinicalObservationByIdErrors,
+  GetApiClinicalObservationByIdResponses,
+  GetApiClinicalObservationData,
+  GetApiClinicalObservationErrors,
+  GetApiClinicalObservationResponses,
+  GetApiClinicalPrescriptionByIdData,
+  GetApiClinicalPrescriptionByIdErrors,
+  GetApiClinicalPrescriptionByIdResponses,
+  GetApiClinicalPrescriptionData,
+  GetApiClinicalPrescriptionErrors,
+  GetApiClinicalPrescriptionResponses,
+  GetApiClinicalProcedureByIdData,
+  GetApiClinicalProcedureByIdErrors,
+  GetApiClinicalProcedureByIdResponses,
+  GetApiClinicalProcedureData,
+  GetApiClinicalProcedureErrors,
+  GetApiClinicalProcedureResponses,
   GetApiPatientByIdData,
   GetApiPatientByIdErrors,
   GetApiPatientByIdResponses,
   GetApiPatientData,
   GetApiPatientErrors,
   GetApiPatientResponses,
+  GetApiPatientStatsData,
+  GetApiPatientStatsErrors,
+  GetApiPatientStatsResponses,
   GetApiSpeciesByIdData,
   GetApiSpeciesByIdErrors,
   GetApiSpeciesByIdResponses,
@@ -212,6 +263,21 @@ import type {
   PostApiClientData,
   PostApiClientErrors,
   PostApiClientResponses,
+  PostApiClinicalConditionData,
+  PostApiClinicalConditionErrors,
+  PostApiClinicalConditionResponses,
+  PostApiClinicalImmunizationData,
+  PostApiClinicalImmunizationErrors,
+  PostApiClinicalImmunizationResponses,
+  PostApiClinicalObservationData,
+  PostApiClinicalObservationErrors,
+  PostApiClinicalObservationResponses,
+  PostApiClinicalPrescriptionData,
+  PostApiClinicalPrescriptionErrors,
+  PostApiClinicalPrescriptionResponses,
+  PostApiClinicalProcedureData,
+  PostApiClinicalProcedureErrors,
+  PostApiClinicalProcedureResponses,
   PostApiPatientData,
   PostApiPatientErrors,
   PostApiPatientResponses,
@@ -227,6 +293,21 @@ import type {
   PutApiClientByIdData,
   PutApiClientByIdErrors,
   PutApiClientByIdResponses,
+  PutApiClinicalConditionByIdData,
+  PutApiClinicalConditionByIdErrors,
+  PutApiClinicalConditionByIdResponses,
+  PutApiClinicalImmunizationByIdData,
+  PutApiClinicalImmunizationByIdErrors,
+  PutApiClinicalImmunizationByIdResponses,
+  PutApiClinicalObservationByIdData,
+  PutApiClinicalObservationByIdErrors,
+  PutApiClinicalObservationByIdResponses,
+  PutApiClinicalPrescriptionByIdData,
+  PutApiClinicalPrescriptionByIdErrors,
+  PutApiClinicalPrescriptionByIdResponses,
+  PutApiClinicalProcedureByIdData,
+  PutApiClinicalProcedureByIdErrors,
+  PutApiClinicalProcedureByIdResponses,
   PutApiPatientByIdData,
   PutApiPatientByIdErrors,
   PutApiPatientByIdResponses,
@@ -1461,6 +1542,22 @@ export const postApiPatient = <ThrowOnError extends boolean = false>(
   })
 
 /**
+ * Get Stats
+ */
+export const getApiPatientStats = <ThrowOnError extends boolean = false>(
+  options?: Options<GetApiPatientStatsData, ThrowOnError>
+): RequestResult<
+  GetApiPatientStatsResponses,
+  GetApiPatientStatsErrors,
+  ThrowOnError
+> =>
+  (options?.client ?? client).get<
+    GetApiPatientStatsResponses,
+    GetApiPatientStatsErrors,
+    ThrowOnError
+  >({ url: "/api/patient/stats", ...options })
+
+/**
  * Delete
  */
 export const deleteApiPatientById = <ThrowOnError extends boolean = false>(
@@ -1602,6 +1699,516 @@ export const putApiSpeciesById = <ThrowOnError extends boolean = false>(
   })
 
 /**
+ * Find By Patient Id
+ */
+export const getApiClinicalCondition = <ThrowOnError extends boolean = false>(
+  options?: Options<GetApiClinicalConditionData, ThrowOnError>
+): RequestResult<
+  GetApiClinicalConditionResponses,
+  GetApiClinicalConditionErrors,
+  ThrowOnError
+> =>
+  (options?.client ?? client).get<
+    GetApiClinicalConditionResponses,
+    GetApiClinicalConditionErrors,
+    ThrowOnError
+  >({ url: "/api/clinical/condition", ...options })
+
+/**
+ * Create
+ */
+export const postApiClinicalCondition = <ThrowOnError extends boolean = false>(
+  options: Options<PostApiClinicalConditionData, ThrowOnError>
+): RequestResult<
+  PostApiClinicalConditionResponses,
+  PostApiClinicalConditionErrors,
+  ThrowOnError
+> =>
+  (options.client ?? client).post<
+    PostApiClinicalConditionResponses,
+    PostApiClinicalConditionErrors,
+    ThrowOnError
+  >({
+    url: "/api/clinical/condition",
+    ...options,
+    headers: {
+      "Content-Type": "application/json",
+      ...options.headers,
+    },
+  })
+
+/**
+ * Delete
+ */
+export const deleteApiClinicalConditionById = <
+  ThrowOnError extends boolean = false,
+>(
+  options: Options<DeleteApiClinicalConditionByIdData, ThrowOnError>
+): RequestResult<
+  DeleteApiClinicalConditionByIdResponses,
+  DeleteApiClinicalConditionByIdErrors,
+  ThrowOnError
+> =>
+  (options.client ?? client).delete<
+    DeleteApiClinicalConditionByIdResponses,
+    DeleteApiClinicalConditionByIdErrors,
+    ThrowOnError
+  >({ url: "/api/clinical/condition/{id}", ...options })
+
+/**
+ * Get By Id
+ */
+export const getApiClinicalConditionById = <
+  ThrowOnError extends boolean = false,
+>(
+  options: Options<GetApiClinicalConditionByIdData, ThrowOnError>
+): RequestResult<
+  GetApiClinicalConditionByIdResponses,
+  GetApiClinicalConditionByIdErrors,
+  ThrowOnError
+> =>
+  (options.client ?? client).get<
+    GetApiClinicalConditionByIdResponses,
+    GetApiClinicalConditionByIdErrors,
+    ThrowOnError
+  >({ url: "/api/clinical/condition/{id}", ...options })
+
+/**
+ * Update
+ */
+export const putApiClinicalConditionById = <
+  ThrowOnError extends boolean = false,
+>(
+  options: Options<PutApiClinicalConditionByIdData, ThrowOnError>
+): RequestResult<
+  PutApiClinicalConditionByIdResponses,
+  PutApiClinicalConditionByIdErrors,
+  ThrowOnError
+> =>
+  (options.client ?? client).put<
+    PutApiClinicalConditionByIdResponses,
+    PutApiClinicalConditionByIdErrors,
+    ThrowOnError
+  >({
+    url: "/api/clinical/condition/{id}",
+    ...options,
+    headers: {
+      "Content-Type": "application/json",
+      ...options.headers,
+    },
+  })
+
+/**
+ * Find By Patient Id
+ */
+export const getApiClinicalImmunization = <
+  ThrowOnError extends boolean = false,
+>(
+  options?: Options<GetApiClinicalImmunizationData, ThrowOnError>
+): RequestResult<
+  GetApiClinicalImmunizationResponses,
+  GetApiClinicalImmunizationErrors,
+  ThrowOnError
+> =>
+  (options?.client ?? client).get<
+    GetApiClinicalImmunizationResponses,
+    GetApiClinicalImmunizationErrors,
+    ThrowOnError
+  >({ url: "/api/clinical/immunization", ...options })
+
+/**
+ * Create
+ */
+export const postApiClinicalImmunization = <
+  ThrowOnError extends boolean = false,
+>(
+  options: Options<PostApiClinicalImmunizationData, ThrowOnError>
+): RequestResult<
+  PostApiClinicalImmunizationResponses,
+  PostApiClinicalImmunizationErrors,
+  ThrowOnError
+> =>
+  (options.client ?? client).post<
+    PostApiClinicalImmunizationResponses,
+    PostApiClinicalImmunizationErrors,
+    ThrowOnError
+  >({
+    url: "/api/clinical/immunization",
+    ...options,
+    headers: {
+      "Content-Type": "application/json",
+      ...options.headers,
+    },
+  })
+
+/**
+ * Delete
+ */
+export const deleteApiClinicalImmunizationById = <
+  ThrowOnError extends boolean = false,
+>(
+  options: Options<DeleteApiClinicalImmunizationByIdData, ThrowOnError>
+): RequestResult<
+  DeleteApiClinicalImmunizationByIdResponses,
+  DeleteApiClinicalImmunizationByIdErrors,
+  ThrowOnError
+> =>
+  (options.client ?? client).delete<
+    DeleteApiClinicalImmunizationByIdResponses,
+    DeleteApiClinicalImmunizationByIdErrors,
+    ThrowOnError
+  >({ url: "/api/clinical/immunization/{id}", ...options })
+
+/**
+ * Get By Id
+ */
+export const getApiClinicalImmunizationById = <
+  ThrowOnError extends boolean = false,
+>(
+  options: Options<GetApiClinicalImmunizationByIdData, ThrowOnError>
+): RequestResult<
+  GetApiClinicalImmunizationByIdResponses,
+  GetApiClinicalImmunizationByIdErrors,
+  ThrowOnError
+> =>
+  (options.client ?? client).get<
+    GetApiClinicalImmunizationByIdResponses,
+    GetApiClinicalImmunizationByIdErrors,
+    ThrowOnError
+  >({ url: "/api/clinical/immunization/{id}", ...options })
+
+/**
+ * Update
+ */
+export const putApiClinicalImmunizationById = <
+  ThrowOnError extends boolean = false,
+>(
+  options: Options<PutApiClinicalImmunizationByIdData, ThrowOnError>
+): RequestResult<
+  PutApiClinicalImmunizationByIdResponses,
+  PutApiClinicalImmunizationByIdErrors,
+  ThrowOnError
+> =>
+  (options.client ?? client).put<
+    PutApiClinicalImmunizationByIdResponses,
+    PutApiClinicalImmunizationByIdErrors,
+    ThrowOnError
+  >({
+    url: "/api/clinical/immunization/{id}",
+    ...options,
+    headers: {
+      "Content-Type": "application/json",
+      ...options.headers,
+    },
+  })
+
+/**
+ * Find By Patient Id
+ */
+export const getApiClinicalObservation = <ThrowOnError extends boolean = false>(
+  options?: Options<GetApiClinicalObservationData, ThrowOnError>
+): RequestResult<
+  GetApiClinicalObservationResponses,
+  GetApiClinicalObservationErrors,
+  ThrowOnError
+> =>
+  (options?.client ?? client).get<
+    GetApiClinicalObservationResponses,
+    GetApiClinicalObservationErrors,
+    ThrowOnError
+  >({ url: "/api/clinical/observation", ...options })
+
+/**
+ * Create
+ */
+export const postApiClinicalObservation = <
+  ThrowOnError extends boolean = false,
+>(
+  options: Options<PostApiClinicalObservationData, ThrowOnError>
+): RequestResult<
+  PostApiClinicalObservationResponses,
+  PostApiClinicalObservationErrors,
+  ThrowOnError
+> =>
+  (options.client ?? client).post<
+    PostApiClinicalObservationResponses,
+    PostApiClinicalObservationErrors,
+    ThrowOnError
+  >({
+    url: "/api/clinical/observation",
+    ...options,
+    headers: {
+      "Content-Type": "application/json",
+      ...options.headers,
+    },
+  })
+
+/**
+ * Delete
+ */
+export const deleteApiClinicalObservationById = <
+  ThrowOnError extends boolean = false,
+>(
+  options: Options<DeleteApiClinicalObservationByIdData, ThrowOnError>
+): RequestResult<
+  DeleteApiClinicalObservationByIdResponses,
+  DeleteApiClinicalObservationByIdErrors,
+  ThrowOnError
+> =>
+  (options.client ?? client).delete<
+    DeleteApiClinicalObservationByIdResponses,
+    DeleteApiClinicalObservationByIdErrors,
+    ThrowOnError
+  >({ url: "/api/clinical/observation/{id}", ...options })
+
+/**
+ * Get By Id
+ */
+export const getApiClinicalObservationById = <
+  ThrowOnError extends boolean = false,
+>(
+  options: Options<GetApiClinicalObservationByIdData, ThrowOnError>
+): RequestResult<
+  GetApiClinicalObservationByIdResponses,
+  GetApiClinicalObservationByIdErrors,
+  ThrowOnError
+> =>
+  (options.client ?? client).get<
+    GetApiClinicalObservationByIdResponses,
+    GetApiClinicalObservationByIdErrors,
+    ThrowOnError
+  >({ url: "/api/clinical/observation/{id}", ...options })
+
+/**
+ * Update
+ */
+export const putApiClinicalObservationById = <
+  ThrowOnError extends boolean = false,
+>(
+  options: Options<PutApiClinicalObservationByIdData, ThrowOnError>
+): RequestResult<
+  PutApiClinicalObservationByIdResponses,
+  PutApiClinicalObservationByIdErrors,
+  ThrowOnError
+> =>
+  (options.client ?? client).put<
+    PutApiClinicalObservationByIdResponses,
+    PutApiClinicalObservationByIdErrors,
+    ThrowOnError
+  >({
+    url: "/api/clinical/observation/{id}",
+    ...options,
+    headers: {
+      "Content-Type": "application/json",
+      ...options.headers,
+    },
+  })
+
+/**
+ * Find By Patient Id
+ */
+export const getApiClinicalPrescription = <
+  ThrowOnError extends boolean = false,
+>(
+  options?: Options<GetApiClinicalPrescriptionData, ThrowOnError>
+): RequestResult<
+  GetApiClinicalPrescriptionResponses,
+  GetApiClinicalPrescriptionErrors,
+  ThrowOnError
+> =>
+  (options?.client ?? client).get<
+    GetApiClinicalPrescriptionResponses,
+    GetApiClinicalPrescriptionErrors,
+    ThrowOnError
+  >({ url: "/api/clinical/prescription", ...options })
+
+/**
+ * Create
+ */
+export const postApiClinicalPrescription = <
+  ThrowOnError extends boolean = false,
+>(
+  options: Options<PostApiClinicalPrescriptionData, ThrowOnError>
+): RequestResult<
+  PostApiClinicalPrescriptionResponses,
+  PostApiClinicalPrescriptionErrors,
+  ThrowOnError
+> =>
+  (options.client ?? client).post<
+    PostApiClinicalPrescriptionResponses,
+    PostApiClinicalPrescriptionErrors,
+    ThrowOnError
+  >({
+    url: "/api/clinical/prescription",
+    ...options,
+    headers: {
+      "Content-Type": "application/json",
+      ...options.headers,
+    },
+  })
+
+/**
+ * Delete
+ */
+export const deleteApiClinicalPrescriptionById = <
+  ThrowOnError extends boolean = false,
+>(
+  options: Options<DeleteApiClinicalPrescriptionByIdData, ThrowOnError>
+): RequestResult<
+  DeleteApiClinicalPrescriptionByIdResponses,
+  DeleteApiClinicalPrescriptionByIdErrors,
+  ThrowOnError
+> =>
+  (options.client ?? client).delete<
+    DeleteApiClinicalPrescriptionByIdResponses,
+    DeleteApiClinicalPrescriptionByIdErrors,
+    ThrowOnError
+  >({ url: "/api/clinical/prescription/{id}", ...options })
+
+/**
+ * Get By Id
+ */
+export const getApiClinicalPrescriptionById = <
+  ThrowOnError extends boolean = false,
+>(
+  options: Options<GetApiClinicalPrescriptionByIdData, ThrowOnError>
+): RequestResult<
+  GetApiClinicalPrescriptionByIdResponses,
+  GetApiClinicalPrescriptionByIdErrors,
+  ThrowOnError
+> =>
+  (options.client ?? client).get<
+    GetApiClinicalPrescriptionByIdResponses,
+    GetApiClinicalPrescriptionByIdErrors,
+    ThrowOnError
+  >({ url: "/api/clinical/prescription/{id}", ...options })
+
+/**
+ * Update
+ */
+export const putApiClinicalPrescriptionById = <
+  ThrowOnError extends boolean = false,
+>(
+  options: Options<PutApiClinicalPrescriptionByIdData, ThrowOnError>
+): RequestResult<
+  PutApiClinicalPrescriptionByIdResponses,
+  PutApiClinicalPrescriptionByIdErrors,
+  ThrowOnError
+> =>
+  (options.client ?? client).put<
+    PutApiClinicalPrescriptionByIdResponses,
+    PutApiClinicalPrescriptionByIdErrors,
+    ThrowOnError
+  >({
+    url: "/api/clinical/prescription/{id}",
+    ...options,
+    headers: {
+      "Content-Type": "application/json",
+      ...options.headers,
+    },
+  })
+
+/**
+ * Find By Patient Id
+ */
+export const getApiClinicalProcedure = <ThrowOnError extends boolean = false>(
+  options?: Options<GetApiClinicalProcedureData, ThrowOnError>
+): RequestResult<
+  GetApiClinicalProcedureResponses,
+  GetApiClinicalProcedureErrors,
+  ThrowOnError
+> =>
+  (options?.client ?? client).get<
+    GetApiClinicalProcedureResponses,
+    GetApiClinicalProcedureErrors,
+    ThrowOnError
+  >({ url: "/api/clinical/procedure", ...options })
+
+/**
+ * Create
+ */
+export const postApiClinicalProcedure = <ThrowOnError extends boolean = false>(
+  options: Options<PostApiClinicalProcedureData, ThrowOnError>
+): RequestResult<
+  PostApiClinicalProcedureResponses,
+  PostApiClinicalProcedureErrors,
+  ThrowOnError
+> =>
+  (options.client ?? client).post<
+    PostApiClinicalProcedureResponses,
+    PostApiClinicalProcedureErrors,
+    ThrowOnError
+  >({
+    url: "/api/clinical/procedure",
+    ...options,
+    headers: {
+      "Content-Type": "application/json",
+      ...options.headers,
+    },
+  })
+
+/**
+ * Delete
+ */
+export const deleteApiClinicalProcedureById = <
+  ThrowOnError extends boolean = false,
+>(
+  options: Options<DeleteApiClinicalProcedureByIdData, ThrowOnError>
+): RequestResult<
+  DeleteApiClinicalProcedureByIdResponses,
+  DeleteApiClinicalProcedureByIdErrors,
+  ThrowOnError
+> =>
+  (options.client ?? client).delete<
+    DeleteApiClinicalProcedureByIdResponses,
+    DeleteApiClinicalProcedureByIdErrors,
+    ThrowOnError
+  >({ url: "/api/clinical/procedure/{id}", ...options })
+
+/**
+ * Get By Id
+ */
+export const getApiClinicalProcedureById = <
+  ThrowOnError extends boolean = false,
+>(
+  options: Options<GetApiClinicalProcedureByIdData, ThrowOnError>
+): RequestResult<
+  GetApiClinicalProcedureByIdResponses,
+  GetApiClinicalProcedureByIdErrors,
+  ThrowOnError
+> =>
+  (options.client ?? client).get<
+    GetApiClinicalProcedureByIdResponses,
+    GetApiClinicalProcedureByIdErrors,
+    ThrowOnError
+  >({ url: "/api/clinical/procedure/{id}", ...options })
+
+/**
+ * Update
+ */
+export const putApiClinicalProcedureById = <
+  ThrowOnError extends boolean = false,
+>(
+  options: Options<PutApiClinicalProcedureByIdData, ThrowOnError>
+): RequestResult<
+  PutApiClinicalProcedureByIdResponses,
+  PutApiClinicalProcedureByIdErrors,
+  ThrowOnError
+> =>
+  (options.client ?? client).put<
+    PutApiClinicalProcedureByIdResponses,
+    PutApiClinicalProcedureByIdErrors,
+    ThrowOnError
+  >({
+    url: "/api/clinical/procedure/{id}",
+    ...options,
+    headers: {
+      "Content-Type": "application/json",
+      ...options.headers,
+    },
+  })
+
+/**
  * Find By Date Range
  */
 export const getApiAppointment = <ThrowOnError extends boolean = false>(
@@ -1655,6 +2262,22 @@ export const getApiAppointmentEvents = <ThrowOnError extends boolean = false>(
     GetApiAppointmentEventsErrors,
     ThrowOnError
   >({ url: "/api/appointment/events", ...options })
+
+/**
+ * Get Stats
+ */
+export const getApiAppointmentStats = <ThrowOnError extends boolean = false>(
+  options?: Options<GetApiAppointmentStatsData, ThrowOnError>
+): RequestResult<
+  GetApiAppointmentStatsResponses,
+  GetApiAppointmentStatsErrors,
+  ThrowOnError
+> =>
+  (options?.client ?? client).get<
+    GetApiAppointmentStatsResponses,
+    GetApiAppointmentStatsErrors,
+    ThrowOnError
+  >({ url: "/api/appointment/stats", ...options })
 
 /**
  * Delete

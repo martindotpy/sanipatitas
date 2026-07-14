@@ -5,6 +5,18 @@ import * as breedAudSchema from "@sanipatitas/database/audit/schema/breed-aud-sc
 import * as breedSchema from "@sanipatitas/database/patient/schema/breed-schema"
 import * as clientAudSchema from "@sanipatitas/database/audit/schema/client-aud-schema"
 import * as clientSchema from "@sanipatitas/database/patient/schema/client-schema"
+import * as immunizationAudSchema from "@sanipatitas/database/audit/schema/immunization-aud-schema"
+import * as immunizationSchema from "@sanipatitas/database/patient/schema/immunization-schema"
+import * as medicalConditionAudSchema from "@sanipatitas/database/audit/schema/medical-condition-aud-schema"
+import * as medicalConditionSchema from "@sanipatitas/database/patient/schema/medical-condition-schema"
+import * as medicalObservationAudSchema from "@sanipatitas/database/audit/schema/medical-observation-aud-schema"
+import * as medicalObservationSchema from "@sanipatitas/database/patient/schema/medical-observation-schema"
+import * as prescriptionAudSchema from "@sanipatitas/database/audit/schema/prescription-aud-schema"
+import * as prescriptionItemAudSchema from "@sanipatitas/database/audit/schema/prescription-item-aud-schema"
+import * as prescriptionItemSchema from "@sanipatitas/database/patient/schema/prescription-item-schema"
+import * as prescriptionSchema from "@sanipatitas/database/patient/schema/prescription-schema"
+import * as procedureAudSchema from "@sanipatitas/database/audit/schema/procedure-aud-schema"
+import * as procedureSchema from "@sanipatitas/database/patient/schema/procedure-schema"
 import * as patientAudSchema from "@sanipatitas/database/audit/schema/patient-aud-schema"
 import * as patientSchema from "@sanipatitas/database/patient/schema/patient-schema"
 import * as revinfoSchema from "@sanipatitas/database/audit/schema/revinfo-schema"
@@ -27,6 +39,18 @@ const allSchemas = {
   ...breedSchema,
   ...clientAudSchema,
   ...clientSchema,
+  ...immunizationAudSchema,
+  ...immunizationSchema,
+  ...medicalConditionAudSchema,
+  ...medicalConditionSchema,
+  ...medicalObservationAudSchema,
+  ...medicalObservationSchema,
+  ...prescriptionAudSchema,
+  ...prescriptionItemAudSchema,
+  ...prescriptionItemSchema,
+  ...prescriptionSchema,
+  ...procedureAudSchema,
+  ...procedureSchema,
   ...patientAudSchema,
   ...patientSchema,
   ...revinfoSchema,

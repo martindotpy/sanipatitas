@@ -3,7 +3,6 @@ package dev.martindotpy.sanipatitas.shared.core.adapter.audit;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import jakarta.annotation.PostConstruct;
 import jakarta.annotation.PreDestroy;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.enterprise.context.Initialized;
@@ -20,7 +19,9 @@ public class LokiLogSetup {
 
     // CDI
     void onStart(@Observes @Initialized(ApplicationScoped.class) Object event) {
-        if (!"true".equalsIgnoreCase(LOKI_ENABLED)) return;
+        if (!"true".equalsIgnoreCase(LOKI_ENABLED)) {
+            return;
+        }
 
         handler = new LokiLogHandler();
         handler.setLevel(Level.INFO);

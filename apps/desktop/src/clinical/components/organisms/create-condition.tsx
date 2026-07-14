@@ -1,0 +1,171 @@
+import { type DialogRoot } from "@base-ui/react"
+import { zodResolver } from "@hookform/resolvers/zod"
+import { useCreateCondition } from "@sanipatitas/desktop/clinical/hook/use-condition"
+import { authClient } from "@sanipatitas/desktop/auth/client/auth-client"
+import { zOpenapiCreateMedicalConditionRequest } from "@sanipatitas/shared/api/client/zod.gen"
+import { Button } from "@sanipatitas/ui/components/ui/button"
+import {
+  Dialog,
+  DialogClose,
+  DialogContent,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@sanipatitas/ui/components/ui/dialog"
+import { FieldGroup } from "@sanipatitas/ui/components/ui/field"
+import { ControlledInput } from "@sanipatitas/ui/components/form/controlled/controlled-input"
+import { ControlledCombobox } from "@sanipatitas/ui/components/form/controlled/controlled-combobox"
+import { ControlledTextarea } from "@sanipatitas/ui/components/form/controlled/controlled-textarea"
+import { useQuery } from "@tanstack/react-query"
+import { useMemo, useRef } from "react"
+import { useForm } from "react-hook-form"
+import { TbPlus } from "react-icons/tb"
+
+// Options
+const STATUS_OPTIONS = [
+  { value: "ACTIVE", label: "Activa" },
+  { value: "RESOLVED", label: "Resuelta" },
+  { value: "RELAPSE", label: "Recaída" },
+]
+
+const SEVERITY_OPTIONS = [
+  { value: "MILD", label: "Leve" },
+  { value: "MODERATE", label: "Moderada" },
+  { value: "SEVERE", label: "Grave" },
+]
+
+// Props
+interface CreateConditionProps {
+  patientId: string
+}
+
+// Component
+export function CreateCondition({ patientId }: CreateConditionProps) {
+  const dialogActionsRef = useRef<DialogRoot.Actions | null>(null)
+  const createMutation = useCreateCondition()
+
+  const usersQuery = useQuery({
+    queryKey: ["auth-users"],
+    queryFn: async () => {
+      const result = await authClient.admin.listUsers({
+        query: { limit: 100 },
+        fetchOptions: { throw: true },
+      })
+      return result
+    },
+  })
+
+  const userOptions = useMemo(
+    () =>
+      (usersQuery.data?.users ?? []).map((u: { id: string; name: string; lastName?: string }) => ({
+        value: u.id,
+        label: `${u.name} ${u.lastName ?? ""}`,
+      })),
+    [usersQuery.data]
+  )
+
+  const { control, handleSubmit, reset } = useForm({
+    resolver: zodResolver(zOpenapiCreateMedicalConditionRequest),
+    defaultValues: {
+      name: "",
+      code: undefined,
+      description: undefined,
+      onsetDate: undefined,
+      status: undefined,
+      severity: undefined,
+      patientId,
+      veterinarianId: "",
+    },
+  })
+
+  const onSubmit = handleSubmit((data) => {
+    createMutation.mutate(
+      {
+        body: {
+          ...data,
+          patientId,
+          code: data.code || undefined,
+          description: data.description || undefined,
+          onsetDate: data.onsetDate || undefined,
+          status: data.status || undefined,
+          severity: data.severity || undefined,
+        },
+      },
+      {
+        onSuccess: () => {
+          dialogActionsRef.current?.close()
+          reset()
+        },
+      }
+    )
+  })
+
+  return (
+    <Dialog actionsRef={dialogActionsRef}>
+      <DialogTrigger
+        render={
+          <Button variant="secondary" size="sm">
+            <TbPlus className="size-4" />
+            Agregar
+          </Button>
+        }
+      />
+
+      <DialogContent render={<form onSubmit={onSubmit} />}>
+        <DialogHeader>
+          <DialogTitle>Crear condición médica</DialogTitle>
+        </DialogHeader>
+
+        <FieldGroup>
+          <ControlledInput control={control} name="name" label="Nombre" />
+
+          <ControlledInput control={control} name="code" label="Código (CIE-10)" />
+
+          <ControlledCombobox
+            control={control}
+            name="status"
+            label="Estado"
+            options={STATUS_OPTIONS}
+            placeholder="Seleccionar estado..."
+          />
+
+          <ControlledCombobox
+            control={control}
+            name="severity"
+            label="Severidad"
+            options={SEVERITY_OPTIONS}
+            placeholder="Seleccionar severidad..."
+          />
+
+          <ControlledCombobox
+            control={control}
+            name="veterinarianId"
+            label="Veterinario"
+            options={userOptions}
+            placeholder="Seleccionar veterinario..."
+            searchPlaceholder="Buscar veterinario..."
+          />
+
+          <ControlledInput
+            control={control}
+            name="onsetDate"
+            inputProps={{ type: "datetime-local" }}
+            label="Fecha de inicio"
+          />
+
+          <ControlledTextarea
+            control={control}
+            name="description"
+            label="Descripción"
+          />
+        </FieldGroup>
+
+        <DialogFooter>
+          <DialogClose render={<Button variant="secondary">Cancelar</Button>} />
+          <Button type="submit">Crear</Button>
+        </DialogFooter>
+      </DialogContent>
+    </Dialog>
+  )
+}

@@ -50,7 +50,7 @@ services:
       POSTGRES_PASSWORD: sanipatitas-password
       POSTGRES_DB: sanipatitas-db
     ports:
-      - "5432:5432"
+      - "5433:5432"
     healthcheck:
       test:
         - CMD-SHELL
@@ -72,7 +72,7 @@ services:
     volumes:
       - healthcheck-sql-studio-data:/data
     ports:
-      - "4983:4983"
+      - "4984:4983"
 
   # - Redis
   database-redis:

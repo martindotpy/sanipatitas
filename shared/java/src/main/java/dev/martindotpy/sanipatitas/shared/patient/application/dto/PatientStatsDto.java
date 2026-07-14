@@ -1,0 +1,21 @@
+package dev.martindotpy.sanipatitas.shared.patient.application.dto;
+
+import jakarta.validation.constraints.NotNull;
+
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+
+@Getter
+@Builder
+@AllArgsConstructor
+public class PatientStatsDto {
+    @NotNull
+    private final long totalPatients;
+    @NotNull
+    private final long patientsCreatedToday;
+    @NotNull
+    private final long patientsCreatedThisMonth;
+    @NotNull
+    private final long totalClients;
+}

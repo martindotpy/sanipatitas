@@ -53,7 +53,11 @@ public class LokiLogHandler extends Handler {
         if (!LOKI_ENABLED || !isLoggable(record) || record.getLevel().intValue() < Level.INFO.intValue()) {
             return;
         }
-        queue.offer(record);
+        boolean accepted = queue.offer(record);
+        if (!accepted) {
+            String message = "Loki log queue is full, dropping record: %s".formatted(record.getMessage());
+            reportError(message, new IllegalStateException(message), 1);
+        }
     }
 
     // Send loop
@@ -62,7 +66,9 @@ public class LokiLogHandler extends Handler {
         while (running) {
             try {
                 LogRecord first = queue.poll(2, TimeUnit.SECONDS);
-                if (first == null) continue;
+                if (first == null) {
+                    continue;
+                }
                 batch.clear();
                 batch.add(first);
                 queue.drainTo(batch, BATCH_SIZE - 1);
@@ -128,7 +134,9 @@ public class LokiLogHandler extends Handler {
     }
 
     private static boolean isJson(String s) {
-        if (s == null || s.isEmpty()) return false;
+        if (s == null || s.isEmpty()) {
+            return false;
+        }
         char first = s.charAt(0);
         return first == '{' || first == '[';
     }
