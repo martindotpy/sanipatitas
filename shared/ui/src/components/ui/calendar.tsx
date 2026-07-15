@@ -187,6 +187,40 @@ const OutOfBoundsDay = ({ day }: OutOfBoundsDayProps) => (
   </div>
 )
 
+interface CalendarOverflowPopoverProps {
+  count: number
+  features: Feature[]
+  renderFeature: (props: { feature: Feature }) => ReactNode
+}
+
+const CalendarOverflowPopover = ({
+  count,
+  features,
+  renderFeature,
+}: CalendarOverflowPopoverProps) => {
+  const [open, setOpen] = useState(false)
+
+  return (
+    <Popover onOpenChange={setOpen} open={open}>
+      <PopoverTrigger
+        render={
+          <button
+            className="text-muted-foreground hover:bg-accent hover:text-foreground block w-fit rounded px-1 text-left text-xs transition-colors"
+            type="button"
+          />
+        }
+      >
+        +{count} más
+      </PopoverTrigger>
+      <PopoverContent className="w-64 p-2">
+        <div className="flex flex-col gap-1" onClick={() => setOpen(false)}>
+          {features.map((feature) => renderFeature({ feature }))}
+        </div>
+      </PopoverContent>
+    </Popover>
+  )
+}
+
 export interface CalendarBodyProps {
   features: Feature[]
   children: (props: { feature: Feature }) => ReactNode
@@ -272,9 +306,11 @@ export const CalendarBody = ({ features, children }: CalendarBodyProps) => {
           {featuresForDay.slice(0, 3).map((feature) => children({ feature }))}
         </div>
         {featuresForDay.length > 3 && (
-          <span className="text-muted-foreground block text-xs">
-            +{featuresForDay.length - 3} más
-          </span>
+          <CalendarOverflowPopover
+            count={featuresForDay.length - 3}
+            features={featuresForDay}
+            renderFeature={children}
+          />
         )}
       </div>
     )
@@ -296,7 +332,7 @@ export const CalendarBody = ({ features, children }: CalendarBodyProps) => {
       {days.map((day, index) => (
         <div
           className={cn(
-            "relative aspect-square overflow-hidden border-t border-r",
+            "hover:bg-muted/20 relative aspect-square overflow-hidden border-t border-r transition-colors",
             index % 7 === 6 && "border-r-0"
           )}
           key={index}
