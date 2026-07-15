@@ -7,7 +7,7 @@ import { H2, Muted, Small } from "@sanipatitas/ui/components/ui/typography"
 import { useQuery } from "@tanstack/react-query"
 import { AnimatePresence, motion } from "motion/react"
 import { useMemo } from "react"
-import { Area, AreaChart, Bar, BarChart, Cell, Pie, PieChart, XAxis, YAxis } from "recharts"
+import { Area, AreaChart, Cell, Pie, PieChart, XAxis, YAxis } from "recharts"
 import {
   TbActivity,
   TbAlertTriangle,
@@ -55,7 +55,7 @@ const appointmentChartConfig = cfg({
 const monthlyChartConfig = cfg({
   pacientes: { label: "Pacientes", color: "#3B82F6" },
   citas: { label: "Citas", color: "#10B981" },
-  facturas: { label: "Facturas", color: "#F59E0B" },
+  facturas: { label: "Ingresos", color: "#F59E0B" },
 }) satisfies ChartConfig
 
 // Shadcn chart config for revenue area chart
@@ -228,7 +228,7 @@ function AppointmentStatusChart({ data }: { data: Record<string, number> }) {
   )
 }
 
-// Monthly comparison bar chart using shadcn
+// Monthly comparison bars
 function MonthlyComparisonChart({
   patientsThisMonth,
   appointmentsThisMonth,
@@ -239,17 +239,37 @@ function MonthlyComparisonChart({
   revenueThisMonth: number
 }) {
   const data = [
-    { metric: "pacientes", value: patientsThisMonth, fill: monthlyChartConfig.pacientes.color },
-    { metric: "citas", value: appointmentsThisMonth, fill: monthlyChartConfig.citas.color },
-    { metric: "facturas", value: Math.round(revenueThisMonth / 100), fill: monthlyChartConfig.facturas.color },
+    {
+      key: "pacientes",
+      label: monthlyChartConfig.pacientes.label,
+      value: patientsThisMonth,
+      display: String(patientsThisMonth),
+      color: monthlyChartConfig.pacientes.color,
+    },
+    {
+      key: "citas",
+      label: monthlyChartConfig.citas.label,
+      value: appointmentsThisMonth,
+      display: String(appointmentsThisMonth),
+      color: monthlyChartConfig.citas.color,
+    },
+    {
+      key: "facturas",
+      label: monthlyChartConfig.facturas.label,
+      value: revenueThisMonth,
+      display: formatCurrency(revenueThisMonth),
+      color: monthlyChartConfig.facturas.color,
+    },
   ]
+
+  const maxValue = Math.max(...data.map((item) => item.value), 1)
 
   return (
     <motion.div
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.5, delay: 0.5 }}
-      className="flex-1 min-w-0"
+      className="min-w-0 flex-1"
     >
       <Card>
         <CardHeader>
@@ -259,31 +279,29 @@ function MonthlyComparisonChart({
           </CardTitle>
         </CardHeader>
         <CardContent>
-          <ChartContainer
-            config={monthlyChartConfig}
-            initialDimension={{ width: 300, height: 192 }}
-            className="aspect-[3/2] w-full"
-          >
-            <BarChart data={data} margin={{ top: 10, right: 10, left: -10, bottom: 5 }}>
-              <XAxis
-                dataKey="metric"
-                tick={{ fontSize: 12 }}
-                axisLine={false}
-                tickLine={false}
-                tickFormatter={(key: string) => monthlyChartConfig[key]?.label ?? key}
-              />
-              <YAxis hide />
-              <ChartTooltip
-                cursor={{ fill: "var(--color-border)", opacity: 0.3 }}
-                content={<ChartTooltipContent indicator="dot" />}
-              />
-              <Bar dataKey="value" radius={[8, 8, 0, 0]} animationBegin={500} animationDuration={1200}>
-                {data.map((entry, index) => (
-                  <Cell key={index} fill={entry.fill} />
-                ))}
-              </Bar>
-            </BarChart>
-          </ChartContainer>
+          <div className="flex h-52 items-end gap-4 px-1">
+            {data.map((item) => {
+              const heightPercent = Math.max((item.value / maxValue) * 100, item.value > 0 ? 8 : 0)
+
+              return (
+                <div key={item.key} className="flex min-w-0 flex-1 flex-col items-center gap-2">
+                  <span className="text-foreground text-center text-sm font-bold tabular-nums">
+                    {item.display}
+                  </span>
+                  <div className="bg-muted/60 flex h-40 w-full items-end overflow-hidden rounded-lg">
+                    <div
+                      className="w-full rounded-lg transition-[height] duration-500 ease-out motion-reduce:transition-none"
+                      style={{
+                        height: `${heightPercent}%`,
+                        backgroundColor: item.color,
+                      }}
+                    />
+                  </div>
+                  <span className="text-muted-foreground text-xs">{item.label}</span>
+                </div>
+              )
+            })}
+          </div>
         </CardContent>
       </Card>
     </motion.div>
