@@ -61,66 +61,13 @@ function AnimatedCard({
 }) {
   return (
     <motion.div
-      initial={{ opacity: 0, y: 16 }}
+      initial={{ opacity: 0, y: 12 }}
       animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.4, delay, ease: "easeOut" }}
+      transition={{ duration: 0.35, delay, ease: "easeOut" }}
+      className={className}
     >
-      <Card className={className}>{children}</Card>
+      <Card className="flex h-full flex-col">{children}</Card>
     </motion.div>
-  )
-}
-
-// Avatar with upload area
-function AvatarSection() {
-  const user = useUser()
-
-  const initials = `${user.name?.[0] ?? ""}${user.lastName?.[0] ?? ""}`
-  const fullName = `${user.name ?? ""} ${user.lastName ?? ""}`.trim()
-
-  return (
-    <AnimatedCard delay={0}>
-      <CardHeader>
-        <CardTitle className="flex items-center gap-2">
-          <TbUser className="text-primary size-4" />
-          Foto de perfil
-        </CardTitle>
-      </CardHeader>
-      <CardContent>
-        <div className="flex items-center gap-5">
-          <motion.div
-            whileHover={{ scale: 1.05 }}
-            className="group relative shrink-0"
-          >
-            <Avatar className="size-20 ring-2 ring-primary/20 ring-offset-2 ring-offset-background">
-              <AvatarImage src={user.image ?? undefined} alt={fullName} />
-              <AvatarFallback className="bg-primary/10 text-primary text-lg font-semibold">
-                {initials || "?"}
-              </AvatarFallback>
-            </Avatar>
-            <button
-              type="button"
-              className="absolute inset-0 flex cursor-pointer items-center justify-center rounded-full bg-black/40 opacity-0 transition-opacity group-hover:opacity-100"
-              onClick={() => {
-                toast.info("Función de subir foto próximamente disponible")
-              }}
-            >
-              <TbCamera className="size-6 text-white" />
-            </button>
-          </motion.div>
-          <div className="flex flex-col gap-0.5">
-            <p className="text-sm font-medium">{fullName}</p>
-            <p className="text-muted-foreground flex items-center gap-1.5 text-xs">
-              <TbMail className="size-3.5" />
-              {user.email}
-            </p>
-            <Badge variant="secondary" className="mt-1 w-fit text-[10px] uppercase tracking-wider">
-              <TbUsers className="mr-1 size-3" />
-              {displayRole(user.role ?? "")}
-            </Badge>
-          </div>
-        </div>
-      </CardContent>
-    </AnimatedCard>
   )
 }
 
@@ -172,7 +119,7 @@ function SessionCard({
         <Button
           variant="ghost"
           size="icon"
-          className="size-8 shrink-0 text-muted-foreground hover:text-destructive"
+          className="size-8 shrink-0 cursor-pointer text-muted-foreground hover:text-destructive"
           disabled={isRevoking}
           onClick={async () => {
             setIsRevoking(true)
@@ -215,13 +162,13 @@ function SessionsSection() {
   const sessions = sessionsQuery.data ?? []
 
   return (
-    <AnimatedCard delay={0.3}>
-      <CardHeader>
+    <AnimatedCard delay={0.15}>
+      <CardHeader className="pb-3">
         <CardTitle className="flex items-center gap-2">
           <TbShieldLock className="text-primary size-4" />
           Sesiones activas
         </CardTitle>
-        <CardDescription>Administra tus sesiones de inicio de sesión activas.</CardDescription>
+        <CardDescription>Dispositivos con sesión iniciada.</CardDescription>
       </CardHeader>
       <CardContent>
         {sessionsQuery.isLoading ? (
@@ -291,8 +238,10 @@ function PasswordStrength({ password }: { password: string }) {
 // Component
 export function ProfileSection() {
   const user = useUser()
+  const initials = `${user.name?.[0] ?? ""}${user.lastName?.[0] ?? ""}`
+  const fullName = `${user.name ?? ""} ${user.lastName ?? ""}`.trim()
 
-  // Password form (declared BEFORE watchedNewPassword uses it)
+  // Password form
   const passwordForm = useForm({
     resolver: zodResolver(PasswordSchema),
     defaultValues: {
@@ -350,169 +299,182 @@ export function ProfileSection() {
   })
 
   return (
-    <Section className="flex w-full min-w-0 flex-1 flex-col gap-4 p-4">
-      <motion.div
-        initial={{ opacity: 0, y: -10 }}
-        animate={{ opacity: 1, y: 0 }}
-      >
-        <H2 className="flex items-center gap-2">
-          Mi Perfil
-          <motion.span
-            animate={{ rotate: [0, 10, -10, 0] }}
-            transition={{ duration: 1.5, repeat: Infinity, repeatDelay: 5 }}
-            className="inline-block"
-          >
+    <Section className="flex w-full min-w-0 flex-1 flex-col items-center overflow-y-auto p-4 pb-10">
+      <div className="flex w-full max-w-5xl flex-col gap-4">
+        <motion.div
+          initial={{ opacity: 0, y: -8 }}
+          animate={{ opacity: 1, y: 0 }}
+        >
+          <H2 className="flex items-center gap-2">
+            Mi Perfil
             <TbUser className="text-primary size-6" />
-          </motion.span>
-        </H2>
-        <Muted>Gestiona tu información personal, seguridad y sesiones.</Muted>
-      </motion.div>
+          </H2>
+          <Muted>Información personal, seguridad y preferencias.</Muted>
+        </motion.div>
 
-      <div className="flex flex-col gap-4">
-        {/* Avatar + Info row */}
-        <div className="flex flex-col gap-4 lg:flex-row">
-          <div className="flex-1">
-            <AvatarSection />
-          </div>
-          <div className="flex-1">
-            {/* Edit Profile */}
-            <AnimatedCard delay={0.1}>
-              <CardHeader>
-                <CardTitle className="flex items-center gap-2">
-                  <TbUser className="text-primary size-4" />
-                  Editar Perfil
-                </CardTitle>
-                <CardDescription>Actualiza tu información personal.</CardDescription>
-              </CardHeader>
-              <CardContent>
-                <form onSubmit={onProfileSubmit}>
-                  <FieldGroup>
-                    <ControlledInput
-                      control={profileForm.control}
-                      name="name"
-                      label="Nombre"
-                      inputProps={{ placeholder: "Tu nombre" }}
-                    />
-                    <ControlledInput
-                      control={profileForm.control}
-                      name="lastName"
-                      label="Apellido"
-                      inputProps={{ placeholder: "Tu apellido" }}
-                    />
-                    <div className="flex items-center justify-end gap-2 pt-1">
-                      <Button
-                        type="button"
-                        variant="ghost"
-                        size="sm"
-                        onClick={() =>
-                          profileForm.reset({ name: user.name ?? "", lastName: user.lastName ?? "" })
-                        }
-                        disabled={!profileForm.formState.isDirty}
-                      >
-                        Cancelar
-                      </Button>
-                      <Button
-                        type="submit"
-                        size="sm"
-                        disabled={profileForm.formState.isSubmitting || !profileForm.formState.isDirty}
-                      >
-                        {profileForm.formState.isSubmitting ? (
-                          <>
-                            <TbLoader2 className="size-4 animate-spin" />
-                            Guardando...
-                          </>
-                        ) : (
-                          <>
-                            <TbCheck className="size-4" />
-                            Guardar cambios
-                          </>
-                        )}
-                      </Button>
-                    </div>
-                  </FieldGroup>
-                </form>
-              </CardContent>
-            </AnimatedCard>
-          </div>
+        {/* Settings tiles */}
+        <div className="grid grid-cols-1 items-stretch gap-4 lg:grid-cols-3">
+          <AnimatedCard delay={0}>
+            <CardHeader className="pb-3">
+              <CardTitle className="flex items-center gap-2">
+                <TbUser className="text-primary size-4" />
+                Perfil
+              </CardTitle>
+              <CardDescription>Tu identidad en la clínica.</CardDescription>
+            </CardHeader>
+            <CardContent className="flex flex-1 flex-col gap-4">
+              <div className="flex items-center gap-3">
+                <div className="group relative shrink-0">
+                  <Avatar className="size-14 ring-2 ring-primary/20 ring-offset-2 ring-offset-background">
+                    <AvatarImage src={user.image ?? undefined} alt={fullName} />
+                    <AvatarFallback className="bg-primary/10 text-primary text-sm font-semibold">
+                      {initials || "?"}
+                    </AvatarFallback>
+                  </Avatar>
+                  <button
+                    type="button"
+                    className="absolute inset-0 flex cursor-pointer items-center justify-center rounded-full bg-black/40 opacity-0 transition-opacity duration-200 group-hover:opacity-100"
+                    onClick={() => {
+                      toast.info("Función de subir foto próximamente disponible")
+                    }}
+                  >
+                    <TbCamera className="size-4 text-white" />
+                  </button>
+                </div>
+                <div className="min-w-0 flex-1">
+                  <p className="truncate text-sm font-semibold">{fullName}</p>
+                  <p className="text-muted-foreground flex items-center gap-1 truncate text-xs">
+                    <TbMail className="size-3 shrink-0" />
+                    {user.email}
+                  </p>
+                  <Badge variant="secondary" className="mt-1.5 w-fit text-[10px] uppercase tracking-wider">
+                    <TbUsers className="mr-1 size-3" />
+                    {displayRole(user.role ?? "")}
+                  </Badge>
+                </div>
+              </div>
+
+              <div className="border-border border-t" />
+
+              <form onSubmit={onProfileSubmit} className="flex flex-1 flex-col justify-between gap-4">
+                <FieldGroup>
+                  <ControlledInput
+                    control={profileForm.control}
+                    name="name"
+                    label="Nombre"
+                    inputProps={{ placeholder: "Tu nombre" }}
+                  />
+                  <ControlledInput
+                    control={profileForm.control}
+                    name="lastName"
+                    label="Apellido"
+                    inputProps={{ placeholder: "Tu apellido" }}
+                  />
+                </FieldGroup>
+                <div className="flex items-center justify-end gap-2">
+                  <Button
+                    type="button"
+                    variant="ghost"
+                    size="sm"
+                    className="cursor-pointer"
+                    onClick={() =>
+                      profileForm.reset({ name: user.name ?? "", lastName: user.lastName ?? "" })
+                    }
+                    disabled={!profileForm.formState.isDirty}
+                  >
+                    Cancelar
+                  </Button>
+                  <Button
+                    type="submit"
+                    size="sm"
+                    className="cursor-pointer"
+                    disabled={profileForm.formState.isSubmitting || !profileForm.formState.isDirty}
+                  >
+                    {profileForm.formState.isSubmitting ? (
+                      <>
+                        <TbLoader2 className="size-4 animate-spin" />
+                        Guardando...
+                      </>
+                    ) : (
+                      <>
+                        <TbCheck className="size-4" />
+                        Guardar
+                      </>
+                    )}
+                  </Button>
+                </div>
+              </form>
+            </CardContent>
+          </AnimatedCard>
+
+          <NotificationPreferencesCard className="h-full" />
+
+          <AnimatedCard delay={0.1}>
+            <CardHeader className="pb-3">
+              <CardTitle className="flex items-center gap-2">
+                <TbShieldLock className="text-primary size-4" />
+                Contraseña
+              </CardTitle>
+              <CardDescription>Actualiza tu acceso.</CardDescription>
+            </CardHeader>
+            <CardContent className="flex flex-1 flex-col">
+              <form onSubmit={onPasswordSubmit} className="flex flex-1 flex-col justify-between gap-4">
+                <FieldGroup>
+                  <ControlledPasswordInput
+                    control={passwordForm.control}
+                    name="currentPassword"
+                    label="Contraseña actual"
+                    inputProps={{
+                      placeholder: "Contraseña actual",
+                      autoComplete: "current-password",
+                    }}
+                  />
+                  <ControlledPasswordInput
+                    control={passwordForm.control}
+                    name="newPassword"
+                    label="Nueva contraseña"
+                    inputProps={{
+                      placeholder: "Nueva contraseña",
+                      autoComplete: "new-password",
+                    }}
+                  />
+                  <PasswordStrength password={watchedNewPassword} />
+                  <ControlledPasswordInput
+                    control={passwordForm.control}
+                    name="confirmNewPassword"
+                    label="Confirmar"
+                    inputProps={{
+                      placeholder: "Confirmar contraseña",
+                      autoComplete: "new-password",
+                    }}
+                  />
+                </FieldGroup>
+                <div className="flex justify-end">
+                  <Button
+                    type="submit"
+                    size="sm"
+                    className="cursor-pointer"
+                    disabled={passwordForm.formState.isSubmitting}
+                  >
+                    {passwordForm.formState.isSubmitting ? (
+                      <>
+                        <TbLoader2 className="size-4 animate-spin" />
+                        Cambiando...
+                      </>
+                    ) : (
+                      <>
+                        <TbShieldLock className="size-4" />
+                        Cambiar
+                      </>
+                    )}
+                  </Button>
+                </div>
+              </form>
+            </CardContent>
+          </AnimatedCard>
         </div>
 
-        <div className="flex flex-col gap-4 lg:flex-row">
-          {/* Notification Preferences */}
-          <div className="flex-1">
-            <NotificationPreferencesCard />
-          </div>
-
-          {/* Change Password */}
-          <div className="flex-1">
-            <AnimatedCard delay={0.2}>
-              <CardHeader>
-                <CardTitle className="flex items-center gap-2">
-                  <TbShieldLock className="text-primary size-4" />
-                  Cambiar Contraseña
-                </CardTitle>
-                <CardDescription>Actualiza tu contraseña de acceso.</CardDescription>
-              </CardHeader>
-              <CardContent>
-                <form onSubmit={onPasswordSubmit}>
-                  <FieldGroup>
-                    <ControlledPasswordInput
-                      control={passwordForm.control}
-                      name="currentPassword"
-                      label="Contraseña actual"
-                      inputProps={{
-                        placeholder: "Contraseña actual",
-                        autoComplete: "current-password",
-                      }}
-                    />
-                    <ControlledPasswordInput
-                      control={passwordForm.control}
-                      name="newPassword"
-                      label="Nueva contraseña"
-                      inputProps={{
-                        placeholder: "Nueva contraseña",
-                        autoComplete: "new-password",
-                      }}
-                    />
-                    <PasswordStrength password={watchedNewPassword} />
-                    <ControlledPasswordInput
-                      control={passwordForm.control}
-                      name="confirmNewPassword"
-                      label="Confirmar nueva contraseña"
-                      inputProps={{
-                        placeholder: "Confirmar contraseña",
-                        autoComplete: "new-password",
-                      }}
-                    />
-                    <div className="flex justify-end pt-1">
-                      <Button
-                        type="submit"
-                        size="sm"
-                        disabled={passwordForm.formState.isSubmitting}
-                      >
-                        {passwordForm.formState.isSubmitting ? (
-                          <>
-                            <TbLoader2 className="size-4 animate-spin" />
-                            Cambiando...
-                          </>
-                        ) : (
-                          <>
-                            <TbShieldLock className="size-4" />
-                            Cambiar contraseña
-                          </>
-                        )}
-                      </Button>
-                    </div>
-                  </FieldGroup>
-                </form>
-              </CardContent>
-            </AnimatedCard>
-          </div>
-
-          {/* Sessions */}
-          <div className="flex-1">
-            <SessionsSection />
-          </div>
-        </div>
+        <SessionsSection />
       </div>
     </Section>
   )

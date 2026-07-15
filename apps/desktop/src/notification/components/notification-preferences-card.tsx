@@ -11,15 +11,20 @@ import { toast } from "sonner"
 
 // Reminder window options in minutes
 const REMINDER_OPTIONS = [
-  { value: 5, label: "5 minutos antes" },
-  { value: 10, label: "10 minutos antes" },
-  { value: 15, label: "15 minutos antes" },
-  { value: 30, label: "30 minutos antes" },
-  { value: 60, label: "1 hora antes" },
+  { value: 5, label: "5 min" },
+  { value: 10, label: "10 min" },
+  { value: 15, label: "15 min" },
+  { value: 30, label: "30 min" },
+  { value: 60, label: "1 h" },
 ]
 
+// Types
+type NotificationPreferencesCardProps = {
+  className?: string
+}
+
 // Component
-export function NotificationPreferencesCard() {
+export function NotificationPreferencesCard({ className }: NotificationPreferencesCardProps) {
   const [preferences, setPreferences] = useNotificationPreferences()
 
   // Request notification permission when enabling
@@ -64,22 +69,23 @@ export function NotificationPreferencesCard() {
 
   return (
     <motion.div
-      initial={{ opacity: 0, y: 16 }}
+      initial={{ opacity: 0, y: 12 }}
       animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.4, delay: 0.15, ease: "easeOut" }}
+      transition={{ duration: 0.35, delay: 0.05, ease: "easeOut" }}
+      className={className}
     >
-      <Card>
-        <CardHeader>
+      <Card className="flex h-full flex-col">
+        <CardHeader className="pb-3">
           <CardTitle className="flex items-center gap-2">
             <TbBellRinging className="text-primary size-4" />
             Notificaciones
           </CardTitle>
           <CardDescription>
-            Configura las notificaciones de citas y recordatorios.
+            Citas y recordatorios.
           </CardDescription>
         </CardHeader>
-        <CardContent>
-          <div className="flex flex-col gap-5">
+        <CardContent className="flex flex-1 flex-col">
+          <div className="flex flex-1 flex-col gap-4">
             {/* Master toggle */}
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-2">
@@ -163,9 +169,6 @@ export function NotificationPreferencesCard() {
                   <TbClock className="text-primary mt-0.5 size-4 shrink-0" />
                   <div className="flex flex-col gap-1.5">
                     <Label className="text-sm font-medium">Ventana de recordatorio</Label>
-                    <span className="text-muted-foreground text-xs">
-                      ¿Con cuánto tiempo de anticipación deseas ser notificado?
-                    </span>
                     <div className="mt-1 flex flex-wrap gap-1.5">
                       {REMINDER_OPTIONS.map((opt) => (
                         <Button
@@ -190,7 +193,7 @@ export function NotificationPreferencesCard() {
             )}
 
             {/* Reset button */}
-            <div className="flex justify-end border-t pt-3">
+            <div className="mt-auto flex justify-end border-t pt-3">
               <Button
                 type="button"
                 variant="ghost"
