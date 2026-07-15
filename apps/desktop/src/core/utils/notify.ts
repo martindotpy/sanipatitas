@@ -1,7 +1,8 @@
 import {
-  isTauri,
   isSsr,
+  isTauri,
 } from "@sanipatitas/desktop/core/configuration/app-configuration"
+import { log } from "@sanipatitas/shared/log/client-logger"
 
 // Types
 interface NotifyOptions {
@@ -14,14 +15,15 @@ interface NotifyOptions {
 let permissionGranted = false
 
 export async function requestNotificationPermission(): Promise<boolean> {
+  log.debug("Requesting notification permission...")
+
   if (isSsr) return false
 
   // Tauri native notifications
   if (isTauri) {
     try {
-      const { isPermissionGranted, requestPermission } = await import(
-        "@tauri-apps/plugin-notification"
-      )
+      const { isPermissionGranted, requestPermission } =
+        await import("@tauri-apps/plugin-notification")
 
       if (await isPermissionGranted()) {
         permissionGranted = true
@@ -72,9 +74,8 @@ export async function notify({ title, body, icon }: NotifyOptions) {
     if (!permissionGranted) return
 
     try {
-      const { sendNotification } = await import(
-        "@tauri-apps/plugin-notification"
-      )
+      const { sendNotification } =
+        await import("@tauri-apps/plugin-notification")
 
       sendNotification({ title, body, icon })
     } catch {
