@@ -28,27 +28,31 @@ export function DeleteClientAlert({
   onSuccess,
 }: DeleteClientAlertProps) {
   const clientQuery = useClient()
+  const isSingle = clients.length === 1
+  const clientName = isSingle
+    ? `${clients[0]?.firstName} ${clients[0]?.lastName}`
+    : ""
 
   const deleteMutation = useMutation({
     mutationFn: async (ids: string[]) => {
       await Promise.all(
-        ids.map((id) => deleteApiClientById({ path: { id } }))
+        ids.map((id) => deleteApiClientById({ path: { id }, throwOnError: true }))
       )
     },
     onSuccess: () => {
       clientQuery.refetch()
       onOpenChange(false)
       onSuccess?.()
+      toast.success(isSingle ? "Cliente eliminado" : "Clientes eliminados")
     },
     onError: (error) => {
-      toast.error((error as { detail?: string })?.detail ?? "Error al eliminar cliente(s)")
+      const detail =
+        error && typeof error === "object" && "detail" in error && typeof error.detail === "string"
+          ? error.detail
+          : null
+      toast.error(detail ?? "Error al eliminar cliente(s)")
     },
   })
-
-  const isSingle = clients.length === 1
-  const clientName = isSingle
-    ? `${clients[0]?.firstName} ${clients[0]?.lastName}`
-    : ""
 
   return (
     <AlertDialog open={open} onOpenChange={onOpenChange}>
