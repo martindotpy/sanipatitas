@@ -12,6 +12,7 @@ import {
   AlertDialogTitle,
 } from "@sanipatitas/ui/components/ui/alert-dialog"
 import { useMutation } from "@tanstack/react-query"
+import { toast } from "sonner"
 
 // Props
 interface DeleteAppointmentAlertProps {
@@ -35,6 +36,9 @@ export function DeleteAppointmentAlert({
       onOpenChange(false)
       appointmentQuery.refetch()
       onSuccess?.()
+    },
+    onError: (error) => {
+      toast.error((error as { detail?: string })?.detail ?? "Error al eliminar la(s) cita(s)")
     },
   })
 

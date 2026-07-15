@@ -3,6 +3,7 @@ import { CreateCategory } from "@sanipatitas/desktop/inventory/components/organi
 import { UpdateCategory } from "@sanipatitas/desktop/inventory/components/organisms/update-category"
 import { CreateSupplier } from "@sanipatitas/desktop/inventory/components/organisms/create-supplier"
 import { UpdateSupplier } from "@sanipatitas/desktop/inventory/components/organisms/update-supplier"
+import { CreateStockDialog } from "@sanipatitas/desktop/inventory/components/organisms/create-stock-dialog"
 import {
   useCategories,
   useDeleteCategory,
@@ -11,9 +12,19 @@ import {
   useDeleteSupplier,
   useSuppliers,
 } from "@sanipatitas/desktop/inventory/hook/use-supplier"
+import {
+  useProducts,
+} from "@sanipatitas/desktop/inventory/hook/use-product"
+import {
+  useStockByProduct,
+  useStockMovements,
+} from "@sanipatitas/desktop/inventory/hook/use-stock"
 import type {
   ProductCategoryDto,
   SupplierDto,
+  ProductDto,
+  StockDto,
+  StockMovementDto,
 } from "@sanipatitas/desktop/inventory/api/inventory-api"
 import {
   AlertDialog,
@@ -25,6 +36,7 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
 } from "@sanipatitas/ui/components/ui/alert-dialog"
+import { Badge } from "@sanipatitas/ui/components/ui/badge"
 import { Button } from "@sanipatitas/ui/components/ui/button"
 import { Tabs, TabsList, TabsTab, TabsPanel } from "@sanipatitas/ui/components/ui/tabs"
 import {
@@ -40,7 +52,8 @@ import { Muted } from "@sanipatitas/ui/components/ui/typography/muted"
 import { Section } from "@sanipatitas/ui/components/organisms/section"
 import { Spinner } from "@sanipatitas/ui/components/ui/spinner"
 import { useState } from "react"
-import { TbPencil, TbTrash } from "react-icons/tb"
+import { toast } from "sonner"
+import { TbPencil, TbTrash, TbHistory } from "react-icons/tb"
 
 // Categories table
 function CategoriesTab() {
@@ -58,6 +71,12 @@ function CategoriesTab() {
       onSuccess: () => {
         setDeleteOpen(false)
         setDeleteTarget(null)
+      },
+      onError: (error) => {
+        toast.error(
+          (error as { detail?: string })?.detail ??
+            "Error al eliminar la categoría"
+        )
       },
     })
   }
@@ -145,6 +164,12 @@ function SuppliersTab() {
         setDeleteOpen(false)
         setDeleteTarget(null)
       },
+      onError: (error) => {
+        toast.error(
+          (error as { detail?: string })?.detail ??
+            "Error al eliminar el proveedor"
+        )
+      },
     })
   }
 
@@ -218,6 +243,131 @@ function SuppliersTab() {
   )
 }
 
+// Stock table per product
+function StockTab() {
+  const productsQuery = useProducts()
+  const products = productsQuery.data?.data ?? []
+  const [showMovementsFor, setShowMovementsFor] = useState<string | null>(null)
+
+  const stockQuery = useStockByProduct(showMovementsFor)
+  const stock: StockDto | null = (stockQuery.data as { data?: StockDto } | undefined)?.data ?? null
+  const movementsQuery = useStockMovements(stock?.id ?? null)
+  const movements: StockMovementDto[] = (movementsQuery.data as { data?: StockMovementDto[] } | undefined)?.data ?? []
+
+  if (productsQuery.isLoading) {
+    return <div className="flex items-center justify-center py-8"><Spinner /></div>
+  }
+
+  return (
+    <>
+      <Table>
+        <TableHeader>
+          <TableRow>
+            <TableHead>Producto</TableHead>
+            <TableHead>Stock actual</TableHead>
+            <TableHead>Stock mínimo</TableHead>
+            <TableHead>Ubicación</TableHead>
+            <TableHead>Estado</TableHead>
+            <TableHead className="w-36" />
+          </TableRow>
+        </TableHeader>
+        <TableBody>
+          {products.length === 0 ? (
+            <TableRow>
+              <TableCell colSpan={6} className="text-muted-foreground py-8 text-center">
+                No hay productos registrados.
+              </TableCell>
+            </TableRow>
+          ) : (
+            products.map((product) => (
+              <StockRow
+                key={product.id}
+                product={product}
+                onViewMovements={() =>
+                  setShowMovementsFor(
+                    showMovementsFor === product.id ? null : product.id
+                  )
+                }
+                showMovements={showMovementsFor === product.id}
+                stock={showMovementsFor === product.id ? stock : null}
+                movements={showMovementsFor === product.id ? movements : []}
+                movementsLoading={movementsQuery.isLoading}
+              />
+            ))
+          )}
+        </TableBody>
+      </Table>
+    </>
+  )
+}
+
+interface StockRowProps {
+  product: ProductDto
+  onViewMovements: () => void
+  showMovements: boolean
+  stock: StockDto | null
+  movements: StockMovementDto[]
+  movementsLoading: boolean
+}
+
+function StockRow({ product, onViewMovements, showMovements, stock, movements, movementsLoading }: StockRowProps) {
+  const quantity = stock?.quantity ?? 0
+  const minStock = stock?.minStock
+  const isLowStock = minStock != null && quantity <= minStock
+
+  return (
+    <>
+      <TableRow>
+        <TableCell className="font-medium">{product.name}</TableCell>
+        <TableCell>{quantity}</TableCell>
+        <TableCell>{minStock?.toString() ?? "—"}</TableCell>
+        <TableCell>{stock?.location ?? "—"}</TableCell>
+        <TableCell>
+          {stock ? (
+            isLowStock ? (
+              <Badge variant="destructive">Stock bajo</Badge>
+            ) : quantity > 0 ? (
+              <Badge variant="secondary" className="bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-300">Disponible</Badge>
+            ) : (
+              <Badge variant="outline">Sin stock</Badge>
+            )
+          ) : (
+            <Badge variant="outline">Sin registrar</Badge>
+          )}
+        </TableCell>
+        <TableCell>
+          <div className="flex items-center gap-1">
+            <Button variant="ghost" size="icon-sm" onClick={onViewMovements}>
+              <TbHistory className="size-4" />
+            </Button>
+            {!stock && <CreateStockDialog product={product} />}
+          </div>
+        </TableCell>
+      </TableRow>
+      {showMovements && (
+        <TableRow>
+          <TableCell colSpan={6} className="bg-muted/30 p-3">
+            {movementsLoading ? (
+              <div className="flex justify-center py-4"><Spinner /></div>
+            ) : movements.length === 0 ? (
+              <p className="text-muted-foreground text-center text-sm">Sin movimientos registrados.</p>
+            ) : (
+              <div className="space-y-1">
+                {movements.map((m) => (
+                  <div key={m.id} className="text-muted-foreground flex items-center justify-between text-sm">
+                    <span>{m.type === "PURCHASE_ENTRY" ? "Entrada" : m.type === "SALE_EXIT" ? "Salida" : m.type}</span>
+                    <span>{m.quantity != null ? `x${m.quantity}` : ""} {m.unitPrice != null ? `S/ ${m.unitPrice}` : ""}</span>
+                  </div>
+                ))}
+              </div>
+            )}
+          </TableCell>
+        </TableRow>
+      )}
+    </>
+  )
+}
+
 // Component
 export function InventorySection() {
   return (
@@ -225,14 +375,19 @@ export function InventorySection() {
       <div>
         <H2>Inventario</H2>
         <Muted>Gestión de productos, stock y movimientos de inventario.</Muted>
-      </div>        <Tabs defaultValue="products">
+      </div>
+      <Tabs defaultValue="products">
         <TabsList>
           <TabsTab value="products">Productos</TabsTab>
+          <TabsTab value="stock">Stock</TabsTab>
           <TabsTab value="categories">Categorías</TabsTab>
           <TabsTab value="suppliers">Proveedores</TabsTab>
         </TabsList>
         <TabsPanel value="products">
           <InventoryTable />
+        </TabsPanel>
+        <TabsPanel value="stock">
+          <StockTab />
         </TabsPanel>
         <TabsPanel value="categories">
           <CategoriesTab />

@@ -24,6 +24,7 @@ import { ControlledTextarea } from "@sanipatitas/ui/components/form/controlled/c
 import { useQuery } from "@tanstack/react-query"
 import { useMemo, useRef } from "react"
 import { useForm } from "react-hook-form"
+import { toast } from "sonner"
 import { TbPlus } from "react-icons/tb"
 
 // Options
@@ -109,6 +110,9 @@ export function CreateProcedure({ patientId }: CreateProcedureProps) {
         onSuccess: () => {
           dialogActionsRef.current?.close()
           reset()
+        },
+        onError: (error) => {
+          toast.error((error as { detail?: string })?.detail ?? "Error al crear el procedimiento")
         },
       }
     )

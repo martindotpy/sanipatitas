@@ -27,6 +27,7 @@ import {
 } from "@sanipatitas/ui/components/ui/table"
 import { Spinner } from "@sanipatitas/ui/components/ui/spinner"
 import { useState } from "react"
+import { toast } from "sonner"
 import { TbEye, TbPencil, TbTrash } from "react-icons/tb"
 
 // Payment status labels & colors
@@ -71,6 +72,12 @@ export function BillingTable() {
       onSuccess: () => {
         setDeleteOpen(false)
         setDeleteTarget(null)
+      },
+      onError: (error) => {
+        toast.error(
+          (error as { detail?: string })?.detail ??
+            "Error al eliminar la factura"
+        )
       },
     })
   }

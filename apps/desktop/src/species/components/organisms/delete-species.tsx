@@ -12,6 +12,7 @@ import {
   AlertDialogTitle,
 } from "@sanipatitas/ui/components/ui/alert-dialog"
 import { useMutation } from "@tanstack/react-query"
+import { toast } from "sonner"
 
 // Types
 interface DeleteSpeciesAlertProps {
@@ -40,6 +41,9 @@ export function DeleteSpeciesAlert({
       speciesQuery.refetch()
       onOpenChange(false)
       onSuccess?.()
+    },
+    onError: (error) => {
+      toast.error((error as { detail?: string })?.detail ?? "Error al eliminar especie(s)")
     },
   })
 

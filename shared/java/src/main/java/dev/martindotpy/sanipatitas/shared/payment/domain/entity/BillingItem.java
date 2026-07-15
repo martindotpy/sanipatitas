@@ -8,6 +8,8 @@ import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Enumerated;
 import jakarta.persistence.EnumType;
+
+import org.hibernate.envers.Audited;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 
@@ -24,6 +26,7 @@ import lombok.experimental.SuperBuilder;
 @Getter
 @Setter
 @Entity
+@Audited
 @SuperBuilder
 @NoArgsConstructor
 @AllArgsConstructor

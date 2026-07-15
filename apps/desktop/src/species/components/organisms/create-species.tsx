@@ -20,6 +20,7 @@ import { FieldGroup } from "@sanipatitas/ui/components/ui/field"
 import { useMutation } from "@tanstack/react-query"
 import { useRef } from "react"
 import { useForm } from "react-hook-form"
+import { toast } from "sonner"
 import { TbPlus } from "react-icons/tb"
 
 // Component
@@ -54,9 +55,11 @@ export function CreateSpecies() {
     onSuccess: () => {
       dialogActionsRef.current?.close()
       speciesQuery.refetch()
-
       setValue("name", "")
       setValue("description", "")
+    },
+    onError: (error) => {
+      toast.error((error as { detail?: string })?.detail ?? "Error al crear la especie")
     },
   })
 

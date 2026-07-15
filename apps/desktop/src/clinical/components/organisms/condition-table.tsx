@@ -28,6 +28,7 @@ import {
 import { Badge } from "@sanipatitas/ui/components/ui/badge"
 import { Spinner } from "@sanipatitas/ui/components/ui/spinner"
 import { useEffect, useState } from "react"
+import { toast } from "sonner"
 import { TbPencil, TbTrash } from "react-icons/tb"
 
 // Labels
@@ -77,6 +78,9 @@ export function ConditionTable({ patientId }: ConditionTableProps) {
         onSuccess: () => {
           setDeleteOpen(false)
           setDeleteTarget(null)
+        },
+        onError: (error) => {
+          toast.error((error as { detail?: string })?.detail ?? "Error al eliminar la condición")
         },
       }
     )

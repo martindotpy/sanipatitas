@@ -23,6 +23,7 @@ import { FieldGroup } from "@sanipatitas/ui/components/ui/field"
 import { useMutation, useQuery } from "@tanstack/react-query"
 import { useEffect, useMemo, useRef } from "react"
 import { useForm } from "react-hook-form"
+import { toast } from "sonner"
 
 // Constants
 const STATUS_OPTIONS = [
@@ -118,6 +119,9 @@ export function UpdateAppointment({
     onSuccess: () => {
       dialogActionsRef.current?.close()
       appointmentQuery.refetch()
+    },
+    onError: (error) => {
+      toast.error((error as { detail?: string })?.detail ?? "Error al actualizar la cita")
     },
   })
 

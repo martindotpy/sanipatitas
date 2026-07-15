@@ -19,6 +19,7 @@ import { FieldGroup } from "@sanipatitas/ui/components/ui/field"
 import { useMutation } from "@tanstack/react-query"
 import { useEffect, useRef } from "react"
 import { useForm } from "react-hook-form"
+import { toast } from "sonner"
 
 interface UpdateBreedProps {
   breed: OpenapiBreedDto | null
@@ -59,6 +60,9 @@ export function UpdateBreed({
     onSuccess: () => {
       dialogActionsRef.current?.close()
       breedQuery.refetch()
+    },
+    onError: (error) => {
+      toast.error((error as { detail?: string })?.detail ?? "Error al actualizar la raza")
     },
   })
 

@@ -155,8 +155,8 @@ export function UpdatePrescription({
           dialogActionsRef.current?.close()
           toast.success("Receta actualizada correctamente")
         },
-        onError: () => {
-          toast.error("Error al actualizar la receta")
+        onError: (error) => {
+          toast.error((error as { detail?: string })?.detail ?? "Error al actualizar la receta")
         },
       }
     )

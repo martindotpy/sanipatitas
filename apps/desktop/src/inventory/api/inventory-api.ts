@@ -8,4 +8,8 @@ export type {
   OpenapiSupplierDto as SupplierDto,
   OpenapiCreateSupplierRequest as CreateSupplierRequest,
   OpenapiUpdateSupplierRequest as UpdateSupplierRequest,
+  OpenapiStockDto as StockDto,
+  OpenapiCreateStockRequest as CreateStockRequest,
+  OpenapiStockMovementDto as StockMovementDto,
+  OpenapiMovementType as MovementType,
 } from "@sanipatitas/shared/api/client/types.gen"

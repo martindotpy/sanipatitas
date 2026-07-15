@@ -20,6 +20,7 @@ import { FieldGroup } from "@sanipatitas/ui/components/ui/field"
 import { useMutation } from "@tanstack/react-query"
 import { useEffect, useRef } from "react"
 import { useForm } from "react-hook-form"
+import { toast } from "sonner"
 
 const ID_TYPE_OPTIONS = [
   { value: "DNI", label: "DNI" },
@@ -78,6 +79,9 @@ export function UpdateClient({
     onSuccess: () => {
       dialogActionsRef.current?.close()
       clientQuery.refetch()
+    },
+    onError: (error) => {
+      toast.error((error as { detail?: string })?.detail ?? "Error al actualizar el cliente")
     },
   })
 

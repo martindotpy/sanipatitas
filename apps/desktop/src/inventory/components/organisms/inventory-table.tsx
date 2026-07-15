@@ -26,6 +26,7 @@ import {
 } from "@sanipatitas/ui/components/ui/table"
 import { Spinner } from "@sanipatitas/ui/components/ui/spinner"
 import { useState } from "react"
+import { toast } from "sonner"
 import { TbPencil, TbTrash } from "react-icons/tb"
 
 // Component
@@ -51,6 +52,12 @@ export function InventoryTable() {
       onSuccess: () => {
         setDeleteOpen(false)
         setDeleteTarget(null)
+      },
+      onError: (error) => {
+        toast.error(
+          (error as { detail?: string })?.detail ??
+            "Error al eliminar el producto"
+        )
       },
     })
   }

@@ -72,8 +72,8 @@ export function PrescriptionTable({ patientId }: PrescriptionTableProps) {
         setDeleteTarget(null)
         toast.success("Receta eliminada correctamente")
       },
-      onError: () => {
-        toast.error("Error al eliminar la receta")
+      onError: (error) => {
+        toast.error((error as { detail?: string })?.detail ?? "Error al eliminar la receta")
       },
     })
   }

@@ -15,6 +15,7 @@ import { FieldGroup } from "@sanipatitas/ui/components/ui/field"
 import { ControlledInput } from "@sanipatitas/ui/components/form/controlled/controlled-input"
 import { useEffect, useRef } from "react"
 import { useForm } from "react-hook-form"
+import { toast } from "sonner"
 import { z } from "zod"
 
 // Schema
@@ -84,6 +85,12 @@ export function UpdateSupplier({
       {
         onSuccess: () => {
           dialogActionsRef.current?.close()
+        },
+        onError: (error) => {
+          toast.error(
+            (error as { detail?: string })?.detail ??
+              "Error al actualizar el proveedor"
+          )
         },
       },
     )

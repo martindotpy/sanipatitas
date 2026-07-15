@@ -19,6 +19,7 @@ import { FieldGroup } from "@sanipatitas/ui/components/ui/field"
 import { useMutation } from "@tanstack/react-query"
 import { useEffect, useRef } from "react"
 import { useForm } from "react-hook-form"
+import { toast } from "sonner"
 
 // Types
 interface UpdateSpeciesProps {
@@ -63,6 +64,9 @@ export function UpdateSpecies({
     onSuccess: () => {
       dialogActionsRef.current?.close()
       speciesQuery.refetch()
+    },
+    onError: (error) => {
+      toast.error((error as { detail?: string })?.detail ?? "Error al actualizar la especie")
     },
   })
 

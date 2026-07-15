@@ -20,6 +20,7 @@ import { ControlledCombobox } from "@sanipatitas/ui/components/form/controlled/c
 import { ControlledTextarea } from "@sanipatitas/ui/components/form/controlled/controlled-textarea"
 import { useMemo, useRef } from "react"
 import { useForm } from "react-hook-form"
+import { toast } from "sonner"
 import { TbPlus } from "react-icons/tb"
 
 // Component
@@ -73,6 +74,12 @@ export function CreateProduct() {
         onSuccess: () => {
           dialogActionsRef.current?.close()
           reset()
+        },
+        onError: (error) => {
+          toast.error(
+            (error as { detail?: string })?.detail ??
+              "Error al crear el producto"
+          )
         },
       },
     )

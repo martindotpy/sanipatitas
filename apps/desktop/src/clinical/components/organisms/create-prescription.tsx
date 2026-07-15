@@ -106,8 +106,8 @@ export function CreatePrescription({ patientId }: CreatePrescriptionProps) {
           reset()
           toast.success("Receta creada correctamente")
         },
-        onError: () => {
-          toast.error("Error al crear la receta")
+        onError: (error) => {
+          toast.error((error as { detail?: string })?.detail ?? "Error al crear la receta")
         },
       }
     )

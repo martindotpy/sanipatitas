@@ -18,6 +18,7 @@ import { ControlledInput } from "@sanipatitas/ui/components/form/controlled/cont
 import { ControlledCombobox } from "@sanipatitas/ui/components/form/controlled/controlled-combobox"
 import { useQuery } from "@tanstack/react-query"
 import { useMemo, useRef } from "react"
+import { toast } from "sonner"
 import type {
   OpenapiImmunizationRoute,
   OpenapiImmunizationStatus,
@@ -116,6 +117,9 @@ export function CreateImmunization({ patientId }: CreateImmunizationProps) {
         onSuccess: () => {
           dialogActionsRef.current?.close()
           reset()
+        },
+        onError: (error) => {
+          toast.error((error as { detail?: string })?.detail ?? "Error al crear la inmunización")
         },
       }
     )

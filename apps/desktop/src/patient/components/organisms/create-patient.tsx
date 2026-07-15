@@ -26,6 +26,7 @@ import { FieldGroup } from "@sanipatitas/ui/components/ui/field"
 import { useMutation, useQuery } from "@tanstack/react-query"
 import { useMemo, useRef } from "react"
 import { useForm } from "react-hook-form"
+import { toast } from "sonner"
 import { TbPlus } from "react-icons/tb"
 
 const GENDER_OPTIONS = [
@@ -89,6 +90,9 @@ export function CreatePatient() {
       dialogActionsRef.current?.close()
       patientQuery.refetch()
       reset()
+    },
+    onError: (error) => {
+      toast.error((error as { detail?: string })?.detail ?? "Error al crear el paciente")
     },
   })
 

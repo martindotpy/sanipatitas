@@ -16,6 +16,7 @@ import { ControlledInput } from "@sanipatitas/ui/components/form/controlled/cont
 import { ControlledTextarea } from "@sanipatitas/ui/components/form/controlled/controlled-textarea"
 import { useEffect, useRef } from "react"
 import { useForm } from "react-hook-form"
+import { toast } from "sonner"
 import { z } from "zod"
 
 // Schema
@@ -69,6 +70,12 @@ export function UpdateCategory({
       {
         onSuccess: () => {
           dialogActionsRef.current?.close()
+        },
+        onError: (error) => {
+          toast.error(
+            (error as { detail?: string })?.detail ??
+              "Error al actualizar la categoría"
+          )
         },
       },
     )

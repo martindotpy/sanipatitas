@@ -11,6 +11,7 @@ import {
   DialogTitle,
 } from "@sanipatitas/ui/components/ui/dialog"
 import { Spinner } from "@sanipatitas/ui/components/ui/spinner"
+import { toast } from "sonner"
 import {
   TbCash,
   TbPackage,
@@ -67,6 +68,9 @@ export function BillingDetail({ billing, open, onOpenChange }: BillingDetailProp
   const createItemMutation = useCreateBillingItem(billing?.id ?? "")
   const createPaymentMutation = useCreatePayment(billing?.id ?? "")
 
+  const getErrorDetail = (error: unknown) =>
+    (error as { detail?: string })?.detail
+
   const items: BillingItemDto[] = (itemsQuery.data as { data?: BillingItemDto[] } | undefined)?.data ?? []
   const payments: PaymentDto[] = (paymentsQuery.data as { data?: PaymentDto[] } | undefined)?.data ?? []
 
@@ -79,6 +83,10 @@ export function BillingDetail({ billing, open, onOpenChange }: BillingDetailProp
       billingId: billing.id,
       amount: remaining,
       paymentMethod: "CASH",
+    }, {
+      onError: (error) => {
+        toast.error(getErrorDetail(error) ?? "Error al registrar el pago")
+      },
     })
   }
 
@@ -127,6 +135,10 @@ export function BillingDetail({ billing, open, onOpenChange }: BillingDetailProp
                   description: "Nuevo item",
                   unitPrice: 0,
                   itemType: "OTHER",
+                }, {
+                  onError: (error) => {
+                    toast.error(getErrorDetail(error) ?? "Error al agregar el item")
+                  },
                 })
               }}>
                 <TbPlus className="size-4" />
