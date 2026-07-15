@@ -1,6 +1,6 @@
 package dev.martindotpy.sanipatitas.shared.clinical.observation.domain.payload;
 
-import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
 import java.util.UUID;
 
 import org.jspecify.annotations.Nullable;
@@ -36,7 +36,7 @@ public interface UpdateMedicalObservationPayload {
     ObservationStatus getStatus();
 
     @Nullable
-    LocalDateTime getIssuedDate();
+    OffsetDateTime getIssuedDate();
 
     UUID getPatientId();
 

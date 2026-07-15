@@ -2,6 +2,7 @@ import { type DialogRoot } from "@base-ui/react"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useCreateImmunization } from "@sanipatitas/desktop/clinical/hook/use-immunization"
 import { authClient } from "@sanipatitas/desktop/auth/client/auth-client"
+import { zOpenapiCreateImmunizationRequest } from "@sanipatitas/shared/api/client/zod.gen"
 import { Button } from "@sanipatitas/ui/components/ui/button"
 import {
   Dialog,
@@ -20,28 +21,9 @@ import { useMemo, useRef } from "react"
 import type {
   OpenapiImmunizationRoute,
   OpenapiImmunizationStatus,
-} from "@sanipatitas/desktop/clinical/api/clinical-api"
+} from "@sanipatitas/shared/api/client/types.gen"
 import { useForm } from "react-hook-form"
 import { TbPlus } from "react-icons/tb"
-import { z } from "zod"
-
-// Schema
-const createImmunizationSchema = z.object({
-  vaccineCode: z.string().min(1, "Requerido"),
-  vaccineName: z.string().min(1, "Requerido"),
-  manufacturer: z.string().optional(),
-  lotNumber: z.string().optional(),
-  expirationDate: z.string().optional(),
-  administrationDate: z.string().min(1, "Requerido"),
-  doseNumber: z.string().optional(),
-  doseUnit: z.string().optional(),
-  route: z.string().optional(),
-  site: z.string().optional(),
-  reaction: z.string().optional(),
-  status: z.string().optional(),
-  patientId: z.string(),
-  veterinarianId: z.string(),
-})
 
 // Options
 const ROUTE_OPTIONS = [
@@ -89,7 +71,7 @@ export function CreateImmunization({ patientId }: CreateImmunizationProps) {
   )
 
   const { control, handleSubmit, reset } = useForm({
-    resolver: zodResolver(createImmunizationSchema),
+    resolver: zodResolver(zOpenapiCreateImmunizationRequest),
     defaultValues: {
       vaccineCode: "",
       vaccineName: "",
@@ -109,19 +91,26 @@ export function CreateImmunization({ patientId }: CreateImmunizationProps) {
   })
 
   const onSubmit = handleSubmit((data) => {
+    // Transform date values to ISO datetime format for Zod validation
+    const toIsoDatetime = (val: string | undefined) =>
+      val ? `${val}T00:00:00` : undefined
+
     createMutation.mutate(
       {
-        ...data,
-        patientId,
+        vaccineCode: data.vaccineCode || undefined,
+        vaccineName: data.vaccineName,
         manufacturer: data.manufacturer || undefined,
         lotNumber: data.lotNumber || undefined,
-        expirationDate: data.expirationDate || undefined,
+        expirationDate: toIsoDatetime(data.expirationDate),
+        administrationDate: data.administrationDate ? `${data.administrationDate}T00:00:00` : data.administrationDate,
         doseNumber: data.doseNumber || undefined,
         doseUnit: data.doseUnit || undefined,
         route: data.route as OpenapiImmunizationRoute | undefined,
         site: data.site || undefined,
         reaction: data.reaction || undefined,
         status: data.status as OpenapiImmunizationStatus | undefined,
+        patientId,
+        veterinarianId: data.veterinarianId,
       },
       {
         onSuccess: () => {

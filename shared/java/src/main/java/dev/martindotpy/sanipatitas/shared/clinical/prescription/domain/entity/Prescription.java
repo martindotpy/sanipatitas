@@ -2,7 +2,7 @@ package dev.martindotpy.sanipatitas.shared.clinical.prescription.domain.entity;
 
 import static jakarta.persistence.CascadeType.ALL;
 
-import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
 import java.util.List;
 
 import jakarta.persistence.Column;
@@ -38,10 +38,10 @@ import lombok.experimental.SuperBuilder;
 public class Prescription extends EntityWithUuidV7 {
     @NotNull
     @Column(nullable = false)
-    private LocalDateTime issueDate;
+    private OffsetDateTime issueDate;
 
     @Nullable
-    private LocalDateTime expirationDate;
+    private OffsetDateTime expirationDate;
 
     @Nullable
     @Column(length = 2000)
@@ -54,11 +54,11 @@ public class Prescription extends EntityWithUuidV7 {
 
     @CreationTimestamp
     @Column(nullable = false, updatable = false)
-    private LocalDateTime createdAt;
+    private OffsetDateTime createdAt;
 
     @UpdateTimestamp
     @Column(nullable = false)
-    private LocalDateTime updatedAt;
+    private OffsetDateTime updatedAt;
 
     @NotNull
     @ManyToOne

@@ -80,6 +80,9 @@ export function CreateCondition({ patientId }: CreateConditionProps) {
   })
 
   const onSubmit = handleSubmit((data) => {
+    // Transform datetime-local value to ISO format (add seconds)
+    const onsetDate = data.onsetDate ? `${data.onsetDate}:00` : undefined
+
     createMutation.mutate(
       {
         body: {
@@ -87,7 +90,7 @@ export function CreateCondition({ patientId }: CreateConditionProps) {
           patientId,
           code: data.code || undefined,
           description: data.description || undefined,
-          onsetDate: data.onsetDate || undefined,
+          onsetDate,
           status: data.status || undefined,
           severity: data.severity || undefined,
         },

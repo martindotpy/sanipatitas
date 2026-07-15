@@ -1,5 +1,10 @@
 import { db } from "@sanipatitas/database"
-import { seedDatabase } from "@sanipatitas/database/seeds"
+import {
+  seedAppointments,
+  seedBilling,
+  seedDatabase,
+  seedInventory,
+} from "@sanipatitas/database/seeds"
 import { serverLog } from "@sanipatitas/shared/log/server-logger"
 import { migrate } from "drizzle-orm/bun-sql/migrator"
 
@@ -24,4 +29,6 @@ export async function initializeDatabase(migrationsFolder: string) {
 
   // Seed test data
   await seedDatabase()
+  await seedInventory()
+  await seedBilling()
 }

@@ -1,6 +1,6 @@
 package dev.martindotpy.sanipatitas.ehr.adapter.request;
 
-import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
 import java.util.List;
 import java.util.UUID;
 
@@ -26,10 +26,10 @@ import lombok.Setter;
 @AllArgsConstructor
 public class UpdatePrescriptionRequest implements UpdatePrescriptionPayload {
     @NotNull
-    private LocalDateTime issueDate;
+    private OffsetDateTime issueDate;
 
     @Nullable
-    private LocalDateTime expirationDate;
+    private OffsetDateTime expirationDate;
 
     @Nullable
     private String notes;

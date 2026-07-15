@@ -76,9 +76,24 @@ function InnerScalar() {
               title: "Appointment",
               url: `${publicBaseUrl ?? ""}/api/appointment/openapi.json`,
             },
+            {
+              title: "EHR",
+              url: `${publicBaseUrl ?? ""}/api/clinical/openapi.json`,
+            },
+            {
+              title: "Inventory",
+              url: `${publicBaseUrl ?? ""}/api/inventory/openapi.json`,
+            },
+            {
+              title: "Billing",
+              url: `${publicBaseUrl ?? ""}/api/billing/openapi.json`,
+            },
           ],
           authentication: {
-            securitySchemes: { bearerAuth: { token: jwt ?? undefined } },
+            securitySchemes: {
+              bearerAuth: { token: jwt ?? undefined },
+              SecurityScheme: { token: jwt ?? undefined },
+            },
           },
           darkMode: isDark,
           mcp: {

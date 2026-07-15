@@ -1,6 +1,6 @@
 package dev.martindotpy.sanipatitas.shared.clinical.procedure.domain.payload;
 
-import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
 import java.util.UUID;
 
 import org.jspecify.annotations.Nullable;
@@ -27,7 +27,7 @@ public interface UpdateProcedurePayload {
     String getComplications();
 
     @Nullable
-    LocalDateTime getPerformedDate();
+    OffsetDateTime getPerformedDate();
 
     @Nullable
     ProcedureStatus getStatus();

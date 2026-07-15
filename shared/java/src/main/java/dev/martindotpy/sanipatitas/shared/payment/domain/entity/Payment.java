@@ -1,7 +1,7 @@
 package dev.martindotpy.sanipatitas.shared.payment.domain.entity;
 
 import java.math.BigDecimal;
-import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
 import java.util.UUID;
 
 import jakarta.persistence.Column;
@@ -42,7 +42,7 @@ public class Payment extends EntityWithUuidV7 {
     private String reference;
 
     @Column(nullable = false)
-    private LocalDateTime paidAt;
+    private OffsetDateTime paidAt;
 
     @Nullable
     @Size(max = 500)
@@ -50,5 +50,5 @@ public class Payment extends EntityWithUuidV7 {
 
     @CreationTimestamp
     @Column(nullable = false, updatable = false)
-    private LocalDateTime createdAt;
+    private OffsetDateTime createdAt;
 }

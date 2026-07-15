@@ -1,0 +1,83 @@
+%% ==========================================
+%% SANIPATITAS - Frontend Architecture Diagram
+%% ==========================================
+
+%% ==========================================
+%% SYSTEM ARCHITECTURE (C4 Container)
+%% ==========================================
+
+graph TB
+    subgraph Browser["🌐 Browser"]
+        UI["Frontend SPA
+        React + Astro
+        Port 1420"]
+    end
+
+    subgraph Backend["🐳 Docker Compose"]
+        HAProxy["HAProxy
+        Port 80
+        Reverse Proxy"]
+        
+        subgraph Services["Microservicios"]
+            Auth["Auth Service
+            Better Auth + JWT
+            Port 3000"]
+            
+            Patient["Patient Service
+            Quarkus
+            Port 8080"]
+            
+            Appointment["Appointment
+            Quarkus
+            Port 8081"]
+            
+            EHR["EHR Service
+            Quarkus
+            Port 8082"]
+            
+            Inventory["Inventory
+            Quarkus
+            Port 8083"]
+            
+            Payment["Payment
+            Quarkus
+            Port 8084"]
+        end
+        
+        subgraph Data["Data Stores"]
+            PG[("PostgreSQL
+            Port 5432")]
+            Redis[("Redis
+            Port 6379")]
+        end
+    end
+
+    %% Connections
+    UI -->|"http://localhost/*"| HAProxy
+    HAProxy -->|"/api/auth/*"| Auth
+    HAProxy -->|"/api/patient/* /api/species/* /api/breed/* /api/client/*"| Patient
+    HAProxy -->|"/api/appointment/*"| Appointment
+    HAProxy -->|"/api/clinical/*"| EHR
+    HAProxy -->|"/api/inventory/*"| Inventory
+    HAProxy -->|"/api/billing/*"| Payment
+    
+    Auth --> PG
+    Auth --> Redis
+    Patient --> PG
+    Appointment --> PG
+    EHR --> PG
+    Inventory --> PG
+    Payment --> PG
+
+%% Style
+    classDef spa fill:#E3F2FD,stroke:#1565C0,stroke-width:2px
+    classDef proxy fill:#FFF3E0,stroke:#E65100,stroke-width:2px
+    classDef service fill:#E8F5E9,stroke:#2E7D32,stroke-width:2px
+    classDef db fill:#F3E5F5,stroke:#7B1FA2,stroke-width:2px
+    classDef redis fill:#FCE4EC,stroke:#C62828,stroke-width:2px
+
+    class UI spa
+    class HAProxy proxy
+    class Auth,Patient,Appointment,EHR,Inventory,Payment service
+    class PG db
+    class Redis redis

@@ -1,7 +1,7 @@
 package dev.martindotpy.sanipatitas.payment.adapter.request;
 
 import java.math.BigDecimal;
-import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
 import java.util.UUID;
 
 import jakarta.validation.constraints.NotNull;
@@ -35,7 +35,7 @@ public class CreatePaymentRequest implements CreatePaymentPayload {
     @Size(max = 255)
     private String reference;
 
-    @Nullable private LocalDateTime paidAt;
+    @Nullable private OffsetDateTime paidAt;
 
     @Nullable
     @Size(max = 500)

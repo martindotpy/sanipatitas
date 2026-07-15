@@ -1,6 +1,6 @@
 package dev.martindotpy.sanipatitas.shared.clinical.observation.domain.entity;
 
-import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -74,15 +74,15 @@ public class MedicalObservation extends EntityWithUuidV7 {
     private ObservationStatus status;
 
     @Nullable
-    private LocalDateTime issuedDate;
+    private OffsetDateTime issuedDate;
 
     @CreationTimestamp
     @Column(nullable = false, updatable = false)
-    private LocalDateTime createdAt;
+    private OffsetDateTime createdAt;
 
     @UpdateTimestamp
     @Column(nullable = false)
-    private LocalDateTime updatedAt;
+    private OffsetDateTime updatedAt;
 
     @NotNull
     @ManyToOne

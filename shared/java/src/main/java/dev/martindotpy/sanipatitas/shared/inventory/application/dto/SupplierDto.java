@@ -1,6 +1,6 @@
 package dev.martindotpy.sanipatitas.shared.inventory.application.dto;
 
-import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
 import java.util.UUID;
 
 import jakarta.validation.constraints.NotBlank;
@@ -23,6 +23,6 @@ public class SupplierDto {
     @Nullable private final String contactPhone;
     @Nullable private final String email;
     @Nullable private final String address;
-    @NotNull private final LocalDateTime createdAt;
-    @NotNull private final LocalDateTime updatedAt;
+    @NotNull private final OffsetDateTime createdAt;
+    @NotNull private final OffsetDateTime updatedAt;
 }

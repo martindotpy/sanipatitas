@@ -1,6 +1,6 @@
 package dev.martindotpy.sanipatitas.shared.clinical.prescription.application.dto;
 
-import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
 import java.util.UUID;
 
 import jakarta.validation.constraints.NotBlank;
@@ -38,8 +38,8 @@ public class PrescriptionItemDto {
     private final String notes;
 
     @NotNull
-    private final LocalDateTime createdAt;
+    private final OffsetDateTime createdAt;
 
     @NotNull
-    private final LocalDateTime updatedAt;
+    private final OffsetDateTime updatedAt;
 }

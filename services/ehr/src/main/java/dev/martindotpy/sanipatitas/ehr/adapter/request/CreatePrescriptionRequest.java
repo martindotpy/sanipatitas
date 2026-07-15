@@ -1,6 +1,6 @@
 package dev.martindotpy.sanipatitas.ehr.adapter.request;
 
-import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
 import java.util.List;
 import java.util.UUID;
 
@@ -29,10 +29,10 @@ public class CreatePrescriptionRequest implements CreatePrescriptionPayload {
     private UUID id;
 
     @NotNull
-    private LocalDateTime issueDate;
+    private OffsetDateTime issueDate;
 
     @Nullable
-    private LocalDateTime expirationDate;
+    private OffsetDateTime expirationDate;
 
     @Nullable
     private String notes;

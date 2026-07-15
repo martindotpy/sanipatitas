@@ -8,7 +8,9 @@ import {
   TbLayoutDashboard,
   TbPaw,
   TbUserCircle,
-  TbUsers,
+  TbShoppingBag,
+  TbReportMoney,
+  TbLockAccess,
 } from "react-icons/tb"
 
 // Hook
@@ -31,11 +33,6 @@ export function useSidebarItems(): SidebarGroups {
         label: "Dashboard",
         icon: TbLayoutDashboard,
       },
-      {
-        to: "/profile",
-        label: "Mi Perfil",
-        icon: TbUserCircle,
-      },
     ],
     Pacientes: [
       {
@@ -51,7 +48,7 @@ export function useSidebarItems(): SidebarGroups {
       {
         to: "/client",
         label: "Clientes",
-        icon: TbUsers,
+        icon: TbUserCircle,
       },
       {
         to: "/breed",
@@ -60,13 +57,26 @@ export function useSidebarItems(): SidebarGroups {
       },
     ],
 
+    Ventas: [
+      {
+        to: "/inventory",
+        label: "Inventario",
+        icon: TbShoppingBag,
+      },
+      {
+        to: "/billing",
+        label: "Facturación",
+        icon: TbReportMoney,
+      },
+    ],
+
     Administración: [
       ...(isAdmin
         ? [
             {
-              to: "/admin/users" as const,
+              to: "/admin/users",
               label: "Usuarios",
-              icon: TbUsers,
+              icon: TbLockAccess,
             },
           ]
         : []),

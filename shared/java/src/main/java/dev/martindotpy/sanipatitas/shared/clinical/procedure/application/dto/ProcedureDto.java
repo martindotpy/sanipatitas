@@ -1,6 +1,6 @@
 package dev.martindotpy.sanipatitas.shared.clinical.procedure.application.dto;
 
-import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
 import java.util.UUID;
 
 import jakarta.validation.constraints.NotBlank;
@@ -47,16 +47,16 @@ public class ProcedureDto {
     private final String complications;
 
     @Nullable
-    private final LocalDateTime performedDate;
+    private final OffsetDateTime performedDate;
 
     @NotNull
     private final ProcedureStatus status;
 
     @NotNull
-    private final LocalDateTime createdAt;
+    private final OffsetDateTime createdAt;
 
     @NotNull
-    private final LocalDateTime updatedAt;
+    private final OffsetDateTime updatedAt;
 
     @NotNull
     private final PatientDto patient;

@@ -18,11 +18,11 @@ import { ControlledCombobox } from "@sanipatitas/ui/components/form/controlled/c
 import { ControlledTextarea } from "@sanipatitas/ui/components/form/controlled/controlled-textarea"
 import { useQuery } from "@tanstack/react-query"
 import { useMemo, useRef } from "react"
-import type { OpenapiPrescriptionStatus } from "@sanipatitas/desktop/clinical/api/clinical-api"
 import { useForm, useFieldArray } from "react-hook-form"
 import { TbPlus, TbTrashX } from "react-icons/tb"
 import { toast } from "sonner"
-import { z } from "zod"
+import { zOpenapiCreatePrescriptionRequest, zOpenapiCreatePrescriptionItemRequest } from "@sanipatitas/shared/api/client/zod.gen"
+import type { OpenapiPrescriptionStatus } from "@sanipatitas/shared/api/client/types.gen"
 
 // Options
 const STATUS_OPTIONS = [
@@ -30,25 +30,6 @@ const STATUS_OPTIONS = [
   { value: "COMPLETED", label: "Completada" },
   { value: "CANCELLED", label: "Cancelada" },
 ]
-
-// Schema
-const prescriptionItemSchema = z.object({
-  medicationName: z.string().min(1, "El nombre del medicamento es obligatorio"),
-  dosage: z.string().optional(),
-  frequency: z.string().optional(),
-  duration: z.string().optional(),
-  route: z.string().optional(),
-  notes: z.string().optional(),
-})
-
-const createPrescriptionSchema = z.object({
-  issueDate: z.string().min(1, "La fecha de emisión es obligatoria"),
-  expirationDate: z.string().optional(),
-  notes: z.string().optional(),
-  status: z.string().optional(),
-  veterinarianId: z.string().min(1, "El veterinario es obligatorio"),
-  items: z.array(prescriptionItemSchema).min(1, "Debe agregar al menos un medicamento"),
-})
 
 // Props
 interface CreatePrescriptionProps {
@@ -81,7 +62,7 @@ export function CreatePrescription({ patientId }: CreatePrescriptionProps) {
   )
 
   const { control, handleSubmit, reset } = useForm({
-    resolver: zodResolver(createPrescriptionSchema),
+    resolver: zodResolver(zOpenapiCreatePrescriptionRequest),
     defaultValues: {
       issueDate: "",
       expirationDate: "",
@@ -98,11 +79,15 @@ export function CreatePrescription({ patientId }: CreatePrescriptionProps) {
   })
 
   const onSubmit = handleSubmit((data) => {
+    // Transform date values to ISO datetime format for Zod validation
+    const toIsoDatetime = (val: string | undefined) =>
+      val ? `${val}T00:00:00` : undefined
+
     createMutation.mutate(
       {
-        issueDate: data.issueDate,
-        expirationDate: data.expirationDate ?? undefined,
-        notes: data.notes ?? undefined,
+        issueDate: toIsoDatetime(data.issueDate) as string,
+        expirationDate: toIsoDatetime(data.expirationDate),
+        notes: data.notes || undefined,
         status: (data.status || "ACTIVE") as OpenapiPrescriptionStatus,
         patientId,
         veterinarianId: data.veterinarianId,

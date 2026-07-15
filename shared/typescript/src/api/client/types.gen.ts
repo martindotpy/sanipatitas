@@ -337,8 +337,8 @@ export type OpenapiCreateImmunizationRequest = {
   vaccineName: string
   manufacturer?: string
   lotNumber?: string
-  expirationDate?: OpenapiLocalDateTime
-  administrationDate: OpenapiLocalDateTime
+  expirationDate?: OpenapiOffsetDateTime
+  administrationDate: OpenapiOffsetDateTime
   doseNumber?: string
   doseUnit?: string
   route?: OpenapiImmunizationRoute
@@ -372,7 +372,7 @@ export type OpenapiCreateMedicalObservationRequest = {
   referenceRange?: string
   category?: OpenapiObservationCategory
   status?: OpenapiObservationStatus
-  issuedDate?: OpenapiLocalDateTime
+  issuedDate?: OpenapiOffsetDateTime
   patientId: OpenapiUuid
   veterinarianId: OpenapiUuid
 }
@@ -389,8 +389,8 @@ export type OpenapiCreatePrescriptionItemRequest = {
 
 export type OpenapiCreatePrescriptionRequest = {
   id?: OpenapiUuid
-  issueDate: OpenapiLocalDateTime
-  expirationDate?: OpenapiLocalDateTime
+  issueDate: OpenapiOffsetDateTime
+  expirationDate?: OpenapiOffsetDateTime
   notes?: string
   status?: OpenapiPrescriptionStatus
   patientId: OpenapiUuid
@@ -406,7 +406,7 @@ export type OpenapiCreateProcedureRequest = {
   reason?: string
   outcome?: string
   complications?: string
-  performedDate?: OpenapiLocalDateTime
+  performedDate?: OpenapiOffsetDateTime
   status?: OpenapiProcedureStatus
   patientId: OpenapiUuid
   veterinarianId: OpenapiUuid
@@ -443,16 +443,16 @@ export type OpenapiImmunizationDto = {
   vaccineName: string
   manufacturer?: string
   lotNumber?: string
-  expirationDate?: OpenapiLocalDateTime
-  administrationDate: OpenapiLocalDateTime
+  expirationDate?: OpenapiOffsetDateTime
+  administrationDate: OpenapiOffsetDateTime
   doseNumber?: string
   doseUnit?: string
   route?: OpenapiImmunizationRoute
   site?: string
   reaction?: string
   status: OpenapiImmunizationStatus
-  createdAt: OpenapiLocalDateTime
-  updatedAt: OpenapiLocalDateTime
+  createdAt: OpenapiOffsetDateTime
+  updatedAt: OpenapiOffsetDateTime
   patient: OpenapiPatientDto
   veterinarian: OpenapiUserDto
 }
@@ -468,8 +468,6 @@ export type OpenapiImmunizationStatus =
   | "COMPLETED"
   | "ENTERED_IN_ERROR"
   | "NOT_DONE"
-
-export type OpenapiLocalDateTime = string
 
 export type OpenapiMedicalConditionDto = {
   id: OpenapiUuid
@@ -496,9 +494,9 @@ export type OpenapiMedicalObservationDto = {
   referenceRange?: string
   category?: OpenapiObservationCategory
   status: OpenapiObservationStatus
-  issuedDate?: OpenapiLocalDateTime
-  createdAt: OpenapiLocalDateTime
-  updatedAt: OpenapiLocalDateTime
+  issuedDate?: OpenapiOffsetDateTime
+  createdAt: OpenapiOffsetDateTime
+  updatedAt: OpenapiOffsetDateTime
   patient: OpenapiPatientDto
   veterinarian: OpenapiUserDto
 }
@@ -562,12 +560,12 @@ export type OpenapiPageResponseProcedureDto = {
 
 export type OpenapiPrescriptionDto = {
   id: OpenapiUuid
-  issueDate: OpenapiLocalDateTime
-  expirationDate?: OpenapiLocalDateTime
+  issueDate: OpenapiOffsetDateTime
+  expirationDate?: OpenapiOffsetDateTime
   notes?: string
   status: OpenapiPrescriptionStatus
-  createdAt: OpenapiLocalDateTime
-  updatedAt: OpenapiLocalDateTime
+  createdAt: OpenapiOffsetDateTime
+  updatedAt: OpenapiOffsetDateTime
   patient: OpenapiPatientDto
   veterinarian: OpenapiUserDto
   items: Array<OpenapiPrescriptionItemDto>
@@ -581,8 +579,8 @@ export type OpenapiPrescriptionItemDto = {
   duration?: string
   route?: string
   notes?: string
-  createdAt: OpenapiLocalDateTime
-  updatedAt: OpenapiLocalDateTime
+  createdAt: OpenapiOffsetDateTime
+  updatedAt: OpenapiOffsetDateTime
 }
 
 export type OpenapiPrescriptionStatus = "ACTIVE" | "COMPLETED" | "CANCELLED"
@@ -602,10 +600,10 @@ export type OpenapiProcedureDto = {
   reason?: string
   outcome?: string
   complications?: string
-  performedDate?: OpenapiLocalDateTime
+  performedDate?: OpenapiOffsetDateTime
   status: OpenapiProcedureStatus
-  createdAt: OpenapiLocalDateTime
-  updatedAt: OpenapiLocalDateTime
+  createdAt: OpenapiOffsetDateTime
+  updatedAt: OpenapiOffsetDateTime
   patient: OpenapiPatientDto
   veterinarian: OpenapiUserDto
 }
@@ -621,8 +619,8 @@ export type OpenapiUpdateImmunizationRequest = {
   vaccineName: string
   manufacturer?: string
   lotNumber?: string
-  expirationDate?: OpenapiLocalDateTime
-  administrationDate: OpenapiLocalDateTime
+  expirationDate?: OpenapiOffsetDateTime
+  administrationDate: OpenapiOffsetDateTime
   doseNumber?: string
   doseUnit?: string
   route?: OpenapiImmunizationRoute
@@ -654,7 +652,7 @@ export type OpenapiUpdateMedicalObservationRequest = {
   referenceRange?: string
   category?: OpenapiObservationCategory
   status?: OpenapiObservationStatus
-  issuedDate?: OpenapiLocalDateTime
+  issuedDate?: OpenapiOffsetDateTime
   patientId: OpenapiUuid
   veterinarianId: OpenapiUuid
 }
@@ -669,8 +667,8 @@ export type OpenapiUpdatePrescriptionItemRequest = {
 }
 
 export type OpenapiUpdatePrescriptionRequest = {
-  issueDate: OpenapiLocalDateTime
-  expirationDate?: OpenapiLocalDateTime
+  issueDate: OpenapiOffsetDateTime
+  expirationDate?: OpenapiOffsetDateTime
   notes?: string
   status?: OpenapiPrescriptionStatus
   patientId: OpenapiUuid
@@ -685,7 +683,7 @@ export type OpenapiUpdateProcedureRequest = {
   reason?: string
   outcome?: string
   complications?: string
-  performedDate?: OpenapiLocalDateTime
+  performedDate?: OpenapiOffsetDateTime
   status?: OpenapiProcedureStatus
   patientId: OpenapiUuid
   veterinarianId: OpenapiUuid
@@ -927,8 +925,8 @@ export type OpenapiProductCategoryDto = {
   id: OpenapiUuid
   name: string
   description?: string
-  createdAt: OpenapiLocalDateTime
-  updatedAt: OpenapiLocalDateTime
+  createdAt: OpenapiOffsetDateTime
+  updatedAt: OpenapiOffsetDateTime
 }
 
 export type OpenapiProductDto = {
@@ -939,8 +937,8 @@ export type OpenapiProductDto = {
   price?: number
   category?: OpenapiProductCategoryDto
   supplier?: OpenapiSupplierDto
-  createdAt: OpenapiLocalDateTime
-  updatedAt: OpenapiLocalDateTime
+  createdAt: OpenapiOffsetDateTime
+  updatedAt: OpenapiOffsetDateTime
 }
 
 export type OpenapiStockDto = {
@@ -949,8 +947,8 @@ export type OpenapiStockDto = {
   quantity?: number
   location?: string
   minStock?: number
-  createdAt: OpenapiLocalDateTime
-  updatedAt: OpenapiLocalDateTime
+  createdAt: OpenapiOffsetDateTime
+  updatedAt: OpenapiOffsetDateTime
 }
 
 export type OpenapiStockMovementDto = {
@@ -963,7 +961,7 @@ export type OpenapiStockMovementDto = {
   reference?: string
   notes?: string
   stock: OpenapiStockDto
-  createdAt: OpenapiLocalDateTime
+  createdAt: OpenapiOffsetDateTime
 }
 
 export type OpenapiSupplierDto = {
@@ -974,8 +972,8 @@ export type OpenapiSupplierDto = {
   contactPhone?: string
   email?: string
   address?: string
-  createdAt: OpenapiLocalDateTime
-  updatedAt: OpenapiLocalDateTime
+  createdAt: OpenapiOffsetDateTime
+  updatedAt: OpenapiOffsetDateTime
 }
 
 export type OpenapiUpdateProductCategoryRequest = {
@@ -1019,8 +1017,8 @@ export type OpenapiBillingDto = {
   paymentStatus: OpenapiPaymentStatus
   invoiceNumber?: string
   notes?: string
-  createdAt: OpenapiLocalDateTime
-  updatedAt: OpenapiLocalDateTime
+  createdAt: OpenapiOffsetDateTime
+  updatedAt: OpenapiOffsetDateTime
 }
 
 export type OpenapiBillingItemDto = {
@@ -1032,7 +1030,7 @@ export type OpenapiBillingItemDto = {
   total: number
   itemType: OpenapiBillingItemType
   referenceId?: OpenapiUuid
-  createdAt: OpenapiLocalDateTime
+  createdAt: OpenapiOffsetDateTime
 }
 
 export type OpenapiBillingItemType =
@@ -1078,7 +1076,7 @@ export type OpenapiCreatePaymentRequest = {
   amount: number
   paymentMethod: OpenapiPaymentMethod
   reference?: string
-  paidAt?: OpenapiLocalDateTime
+  paidAt?: OpenapiOffsetDateTime
   notes?: string
 }
 
@@ -1127,9 +1125,9 @@ export type OpenapiPaymentDto = {
   amount: number
   paymentMethod: OpenapiPaymentMethod
   reference?: string
-  paidAt: OpenapiLocalDateTime
+  paidAt: OpenapiOffsetDateTime
   notes?: string
-  createdAt: OpenapiLocalDateTime
+  createdAt: OpenapiOffsetDateTime
 }
 
 export type OpenapiPaymentMethod =

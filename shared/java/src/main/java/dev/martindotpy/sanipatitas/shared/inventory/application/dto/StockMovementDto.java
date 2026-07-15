@@ -1,7 +1,7 @@
 package dev.martindotpy.sanipatitas.shared.inventory.application.dto;
 
 import java.math.BigDecimal;
-import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
 import java.util.UUID;
 
 import jakarta.validation.constraints.NotNull;
@@ -26,5 +26,5 @@ public class StockMovementDto {
     @Nullable private final String reference;
     @Nullable private final String notes;
     @NotNull private final StockDto stock;
-    @NotNull private final LocalDateTime createdAt;
+    @NotNull private final OffsetDateTime createdAt;
 }

@@ -1,6 +1,6 @@
 package dev.martindotpy.sanipatitas.shared.clinical.immunization.domain.entity;
 
-import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -36,7 +36,7 @@ import lombok.experimental.SuperBuilder;
 @AllArgsConstructor
 public class Immunization extends EntityWithUuidV7 {
     @Nullable
-    @Size(max = 20)
+    @Size(max = 100)
     private String vaccineCode;
 
     @NotBlank
@@ -52,11 +52,11 @@ public class Immunization extends EntityWithUuidV7 {
     private String lotNumber;
 
     @Nullable
-    private LocalDateTime expirationDate;
+    private OffsetDateTime expirationDate;
 
     @NotNull
     @Column(nullable = false)
-    private LocalDateTime administrationDate;
+    private OffsetDateTime administrationDate;
 
     @Nullable
     @Size(max = 50)
@@ -86,11 +86,11 @@ public class Immunization extends EntityWithUuidV7 {
 
     @CreationTimestamp
     @Column(nullable = false, updatable = false)
-    private LocalDateTime createdAt;
+    private OffsetDateTime createdAt;
 
     @UpdateTimestamp
     @Column(nullable = false)
-    private LocalDateTime updatedAt;
+    private OffsetDateTime updatedAt;
 
     @NotNull
     @ManyToOne

@@ -2,7 +2,11 @@ import { type DialogRoot } from "@base-ui/react"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useCreateProcedure } from "@sanipatitas/desktop/clinical/hook/use-procedure"
 import { authClient } from "@sanipatitas/desktop/auth/client/auth-client"
-import type { CreateProcedureRequest } from "@sanipatitas/desktop/clinical/api/clinical-api"
+import { zOpenapiCreateProcedureRequest } from "@sanipatitas/shared/api/client/zod.gen"
+import type {
+  OpenapiProcedureCategory,
+  OpenapiProcedureStatus,
+} from "@sanipatitas/shared/api/client/types.gen"
 import { Button } from "@sanipatitas/ui/components/ui/button"
 import {
   Dialog,
@@ -21,7 +25,6 @@ import { useQuery } from "@tanstack/react-query"
 import { useMemo, useRef } from "react"
 import { useForm } from "react-hook-form"
 import { TbPlus } from "react-icons/tb"
-import { z } from "zod"
 
 // Options
 const CATEGORY_OPTIONS = [
@@ -38,19 +41,6 @@ const STATUS_OPTIONS = [
   { value: "COMPLETED", label: "Completado" },
   { value: "ABANDONED", label: "Abandonado" },
 ]
-
-// Schema
-const schema = z.object({
-  name: z.string().min(1, "El nombre es requerido"),
-  code: z.string().optional(),
-  category: z.string().optional(),
-  reason: z.string().optional(),
-  outcome: z.string().optional(),
-  complications: z.string().optional(),
-  performedDate: z.string().optional(),
-  status: z.string().optional(),
-  veterinarianId: z.string().min(1, "El veterinario es requerido"),
-})
 
 // Props
 interface CreateProcedureProps {
@@ -83,7 +73,7 @@ export function CreateProcedure({ patientId }: CreateProcedureProps) {
   )
 
   const { control, handleSubmit, reset } = useForm({
-    resolver: zodResolver(schema),
+    resolver: zodResolver(zOpenapiCreateProcedureRequest),
     defaultValues: {
       name: "",
       code: undefined,
@@ -93,23 +83,28 @@ export function CreateProcedure({ patientId }: CreateProcedureProps) {
       complications: undefined,
       performedDate: undefined,
       status: undefined,
+      patientId,
       veterinarianId: "",
     },
   })
 
   const onSubmit = handleSubmit((data) => {
+    // Transform datetime-local value to ISO format (add seconds)
+    const performedDate = data.performedDate ? `${data.performedDate}:00` : undefined
+
     createMutation.mutate(
       {
-        ...data,
-        patientId,
+        name: data.name,
         code: data.code || undefined,
-        category: data.category || undefined,
+        category: data.category as OpenapiProcedureCategory | undefined,
         reason: data.reason || undefined,
         outcome: data.outcome || undefined,
         complications: data.complications || undefined,
-        performedDate: data.performedDate || undefined,
-        status: data.status || undefined,
-      } as CreateProcedureRequest,
+        performedDate,
+        status: data.status as OpenapiProcedureStatus | undefined,
+        patientId,
+        veterinarianId: data.veterinarianId,
+      },
       {
         onSuccess: () => {
           dialogActionsRef.current?.close()

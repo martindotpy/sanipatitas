@@ -16,8 +16,10 @@ import { Route as PublicSignInRouteImport } from "./routes/_public/sign-in"
 import { Route as PrivateSpeciesRouteImport } from "./routes/_private/species"
 import { Route as PrivateProfileRouteImport } from "./routes/_private/profile"
 import { Route as PrivatePatientRouteImport } from "./routes/_private/patient"
+import { Route as PrivateInventoryRouteImport } from "./routes/_private/inventory"
 import { Route as PrivateClientRouteImport } from "./routes/_private/client"
 import { Route as PrivateBreedRouteImport } from "./routes/_private/breed"
+import { Route as PrivateBillingRouteImport } from "./routes/_private/billing"
 import { Route as PrivateAppointmentRouteImport } from "./routes/_private/appointment"
 import { Route as PrivatePatientUuidRouteImport } from "./routes/_private/patient.$uuid"
 import { Route as PrivateAdminUsersRouteImport } from "./routes/_private/admin.users"
@@ -55,6 +57,11 @@ const PrivatePatientRoute = PrivatePatientRouteImport.update({
   path: "/patient",
   getParentRoute: () => PrivateRouteRoute,
 } as any)
+const PrivateInventoryRoute = PrivateInventoryRouteImport.update({
+  id: "/inventory",
+  path: "/inventory",
+  getParentRoute: () => PrivateRouteRoute,
+} as any)
 const PrivateClientRoute = PrivateClientRouteImport.update({
   id: "/client",
   path: "/client",
@@ -63,6 +70,11 @@ const PrivateClientRoute = PrivateClientRouteImport.update({
 const PrivateBreedRoute = PrivateBreedRouteImport.update({
   id: "/breed",
   path: "/breed",
+  getParentRoute: () => PrivateRouteRoute,
+} as any)
+const PrivateBillingRoute = PrivateBillingRouteImport.update({
+  id: "/billing",
+  path: "/billing",
   getParentRoute: () => PrivateRouteRoute,
 } as any)
 const PrivateAppointmentRoute = PrivateAppointmentRouteImport.update({
@@ -84,8 +96,10 @@ const PrivateAdminUsersRoute = PrivateAdminUsersRouteImport.update({
 export interface FileRoutesByFullPath {
   "/": typeof PrivateIndexRoute
   "/appointment": typeof PrivateAppointmentRoute
+  "/billing": typeof PrivateBillingRoute
   "/breed": typeof PrivateBreedRoute
   "/client": typeof PrivateClientRoute
+  "/inventory": typeof PrivateInventoryRoute
   "/patient": typeof PrivatePatientRouteWithChildren
   "/profile": typeof PrivateProfileRoute
   "/species": typeof PrivateSpeciesRoute
@@ -96,8 +110,10 @@ export interface FileRoutesByFullPath {
 export interface FileRoutesByTo {
   "/": typeof PrivateIndexRoute
   "/appointment": typeof PrivateAppointmentRoute
+  "/billing": typeof PrivateBillingRoute
   "/breed": typeof PrivateBreedRoute
   "/client": typeof PrivateClientRoute
+  "/inventory": typeof PrivateInventoryRoute
   "/patient": typeof PrivatePatientRouteWithChildren
   "/profile": typeof PrivateProfileRoute
   "/species": typeof PrivateSpeciesRoute
@@ -110,8 +126,10 @@ export interface FileRoutesById {
   "/_private": typeof PrivateRouteRouteWithChildren
   "/_public": typeof PublicRouteRouteWithChildren
   "/_private/appointment": typeof PrivateAppointmentRoute
+  "/_private/billing": typeof PrivateBillingRoute
   "/_private/breed": typeof PrivateBreedRoute
   "/_private/client": typeof PrivateClientRoute
+  "/_private/inventory": typeof PrivateInventoryRoute
   "/_private/patient": typeof PrivatePatientRouteWithChildren
   "/_private/profile": typeof PrivateProfileRoute
   "/_private/species": typeof PrivateSpeciesRoute
@@ -125,8 +143,10 @@ export interface FileRouteTypes {
   fullPaths:
     | "/"
     | "/appointment"
+    | "/billing"
     | "/breed"
     | "/client"
+    | "/inventory"
     | "/patient"
     | "/profile"
     | "/species"
@@ -137,8 +157,10 @@ export interface FileRouteTypes {
   to:
     | "/"
     | "/appointment"
+    | "/billing"
     | "/breed"
     | "/client"
+    | "/inventory"
     | "/patient"
     | "/profile"
     | "/species"
@@ -150,8 +172,10 @@ export interface FileRouteTypes {
     | "/_private"
     | "/_public"
     | "/_private/appointment"
+    | "/_private/billing"
     | "/_private/breed"
     | "/_private/client"
+    | "/_private/inventory"
     | "/_private/patient"
     | "/_private/profile"
     | "/_private/species"
@@ -217,6 +241,13 @@ declare module "@tanstack/react-router" {
       preLoaderRoute: typeof PrivatePatientRouteImport
       parentRoute: typeof PrivateRouteRoute
     }
+    "/_private/inventory": {
+      id: "/_private/inventory"
+      path: "/inventory"
+      fullPath: "/inventory"
+      preLoaderRoute: typeof PrivateInventoryRouteImport
+      parentRoute: typeof PrivateRouteRoute
+    }
     "/_private/client": {
       id: "/_private/client"
       path: "/client"
@@ -229,6 +260,13 @@ declare module "@tanstack/react-router" {
       path: "/breed"
       fullPath: "/breed"
       preLoaderRoute: typeof PrivateBreedRouteImport
+      parentRoute: typeof PrivateRouteRoute
+    }
+    "/_private/billing": {
+      id: "/_private/billing"
+      path: "/billing"
+      fullPath: "/billing"
+      preLoaderRoute: typeof PrivateBillingRouteImport
       parentRoute: typeof PrivateRouteRoute
     }
     "/_private/appointment": {
@@ -269,8 +307,10 @@ const PrivatePatientRouteWithChildren = PrivatePatientRoute._addFileChildren(
 
 interface PrivateRouteRouteChildren {
   PrivateAppointmentRoute: typeof PrivateAppointmentRoute
+  PrivateBillingRoute: typeof PrivateBillingRoute
   PrivateBreedRoute: typeof PrivateBreedRoute
   PrivateClientRoute: typeof PrivateClientRoute
+  PrivateInventoryRoute: typeof PrivateInventoryRoute
   PrivatePatientRoute: typeof PrivatePatientRouteWithChildren
   PrivateProfileRoute: typeof PrivateProfileRoute
   PrivateSpeciesRoute: typeof PrivateSpeciesRoute
@@ -280,8 +320,10 @@ interface PrivateRouteRouteChildren {
 
 const PrivateRouteRouteChildren: PrivateRouteRouteChildren = {
   PrivateAppointmentRoute: PrivateAppointmentRoute,
+  PrivateBillingRoute: PrivateBillingRoute,
   PrivateBreedRoute: PrivateBreedRoute,
   PrivateClientRoute: PrivateClientRoute,
+  PrivateInventoryRoute: PrivateInventoryRoute,
   PrivatePatientRoute: PrivatePatientRouteWithChildren,
   PrivateProfileRoute: PrivateProfileRoute,
   PrivateSpeciesRoute: PrivateSpeciesRoute,

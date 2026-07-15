@@ -1,7 +1,7 @@
 package dev.martindotpy.sanipatitas.shared.payment.application.dto;
 
 import java.math.BigDecimal;
-import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
 import java.util.UUID;
 
 import jakarta.validation.constraints.NotNull;
@@ -25,5 +25,5 @@ public class BillingItemDto {
     @NotNull private final BigDecimal total;
     @NotNull private final BillingItemType itemType;
     @Nullable private final UUID referenceId;
-    @NotNull private final LocalDateTime createdAt;
+    @NotNull private final OffsetDateTime createdAt;
 }

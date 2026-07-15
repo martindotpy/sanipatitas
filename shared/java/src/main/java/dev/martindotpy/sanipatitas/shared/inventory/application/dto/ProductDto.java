@@ -1,7 +1,7 @@
 package dev.martindotpy.sanipatitas.shared.inventory.application.dto;
 
 import java.math.BigDecimal;
-import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
 import java.util.UUID;
 
 import jakarta.validation.constraints.NotBlank;
@@ -24,6 +24,6 @@ public class ProductDto {
     @Nullable private final BigDecimal price;
     @Nullable private final ProductCategoryDto category;
     @Nullable private final SupplierDto supplier;
-    @NotNull private final LocalDateTime createdAt;
-    @NotNull private final LocalDateTime updatedAt;
+    @NotNull private final OffsetDateTime createdAt;
+    @NotNull private final OffsetDateTime updatedAt;
 }

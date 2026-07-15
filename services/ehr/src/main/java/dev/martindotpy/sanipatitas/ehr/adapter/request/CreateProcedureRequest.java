@@ -1,6 +1,6 @@
 package dev.martindotpy.sanipatitas.ehr.adapter.request;
 
-import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
 import java.util.UUID;
 
 import jakarta.validation.constraints.NotBlank;
@@ -51,7 +51,7 @@ public class CreateProcedureRequest implements CreateProcedurePayload {
     private String complications;
 
     @Nullable
-    private LocalDateTime performedDate;
+    private OffsetDateTime performedDate;
 
     @Nullable
     private ProcedureStatus status;

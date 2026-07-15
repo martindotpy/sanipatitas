@@ -1,7 +1,7 @@
 package dev.martindotpy.sanipatitas.payment.application.usecase.payment;
 
 import java.math.BigDecimal;
-import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
 import java.util.UUID;
 
 import jakarta.enterprise.context.ApplicationScoped;
@@ -31,7 +31,7 @@ public class CreatePaymentUseCase implements CreatePaymentPort {
         return billingRepository.findById(billingId)
                 .onItem().ifNull().failWith(() -> new BillingNotFoundException(billingId))
                 .chain(billing -> {
-                    var paidAt = payload.getPaidAt() != null ? payload.getPaidAt() : LocalDateTime.now();
+                    var paidAt = payload.getPaidAt() != null ? payload.getPaidAt() : OffsetDateTime.now();
                     var payment = paymentMapper.from(payload)
                             .billingId(billingId)
                             .paidAt(paidAt)

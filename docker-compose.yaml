@@ -25,7 +25,7 @@ services:
     healthcheck:
       test:
         - CMD-SHELL
-        - "wget --spider --timeout=5 http://localhost:80/api/auth/ok || wget --spider --timeout=5 http://localhost:80/api/patient/_health"
+        - "wget --spider --timeout=5 http://127.0.0.1:80/api/auth/ok || wget --spider --timeout=5 http://127.0.0.1:80/api/patient/_health"
       interval: 15s
       timeout: 5s
       retries: 5
@@ -65,7 +65,7 @@ services:
       - QUARKUS_DATASOURCE_USERNAME=sanipatitas-user
       - QUARKUS_DATASOURCE_PASSWORD=sanipatitas-password
       - QUARKUS_REDIS_HOSTS=redis://database-redis:6379
-      - MP_JWT_VERIFY_PUBLICKEY_LOCATION=http://host.docker.internal/api/auth/jwks
+      - MP_JWT_VERIFY_PUBLICKEY_LOCATION=http://service-auth:3000/api/auth/jwks
       - MP_JWT_VERIFY_ISSUER=http://localhost
       - MP_JWT_VERIFY_AUDIENCES=http://localhost
       - LOKI_ENABLED=true
@@ -91,7 +91,7 @@ services:
       - QUARKUS_DATASOURCE_USERNAME=sanipatitas-user
       - QUARKUS_DATASOURCE_PASSWORD=sanipatitas-password
       - QUARKUS_REDIS_HOSTS=redis://database-redis:6379
-      - MP_JWT_VERIFY_PUBLICKEY_LOCATION=http://host.docker.internal/api/auth/jwks
+      - MP_JWT_VERIFY_PUBLICKEY_LOCATION=http://service-auth:3000/api/auth/jwks
       - MP_JWT_VERIFY_ISSUER=http://localhost
       - MP_JWT_VERIFY_AUDIENCES=http://localhost
       - LOKI_ENABLED=true
@@ -118,7 +118,7 @@ services:
       - QUARKUS_DATASOURCE_USERNAME=sanipatitas-user
       - QUARKUS_DATASOURCE_PASSWORD=sanipatitas-password
       - QUARKUS_REDIS_HOSTS=redis://database-redis:6379
-      - MP_JWT_VERIFY_PUBLICKEY_LOCATION=http://host.docker.internal/api/auth/jwks
+      - MP_JWT_VERIFY_PUBLICKEY_LOCATION=http://service-auth:3000/api/auth/jwks
       - MP_JWT_VERIFY_ISSUER=http://localhost
       - MP_JWT_VERIFY_AUDIENCES=http://localhost
       - LOKI_ENABLED=true
@@ -145,7 +145,7 @@ services:
       - QUARKUS_DATASOURCE_USERNAME=sanipatitas-user
       - QUARKUS_DATASOURCE_PASSWORD=sanipatitas-password
       - QUARKUS_REDIS_HOSTS=redis://database-redis:6379
-      - MP_JWT_VERIFY_PUBLICKEY_LOCATION=http://host.docker.internal/api/auth/jwks
+      - MP_JWT_VERIFY_PUBLICKEY_LOCATION=http://service-auth:3000/api/auth/jwks
       - MP_JWT_VERIFY_ISSUER=http://localhost
       - MP_JWT_VERIFY_AUDIENCES=http://localhost
       - LOKI_ENABLED=true
@@ -172,7 +172,7 @@ services:
       - QUARKUS_DATASOURCE_USERNAME=sanipatitas-user
       - QUARKUS_DATASOURCE_PASSWORD=sanipatitas-password
       - QUARKUS_REDIS_HOSTS=redis://database-redis:6379
-      - MP_JWT_VERIFY_PUBLICKEY_LOCATION=http://host.docker.internal/api/auth/jwks
+      - MP_JWT_VERIFY_PUBLICKEY_LOCATION=http://service-auth:3000/api/auth/jwks
       - MP_JWT_VERIFY_ISSUER=http://localhost
       - MP_JWT_VERIFY_AUDIENCES=http://localhost
       - LOKI_ENABLED=true

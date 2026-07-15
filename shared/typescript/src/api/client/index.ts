@@ -594,7 +594,6 @@ export type {
   OpenapiListUsersResponse,
   OpenapiListUsersResponses,
   OpenapiLocalDate,
-  OpenapiLocalDateTime,
   OpenapiLocalTime,
   OpenapiMedicalConditionDto,
   OpenapiMedicalObservationDto,

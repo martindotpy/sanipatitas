@@ -1,6 +1,6 @@
 package dev.martindotpy.sanipatitas.shared.clinical.prescription.application.dto;
 
-import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
 import java.util.List;
 import java.util.UUID;
 
@@ -23,10 +23,10 @@ public class PrescriptionDto {
     private final UUID id;
 
     @NotNull
-    private final LocalDateTime issueDate;
+    private final OffsetDateTime issueDate;
 
     @Nullable
-    private final LocalDateTime expirationDate;
+    private final OffsetDateTime expirationDate;
 
     @Nullable
     private final String notes;
@@ -35,10 +35,10 @@ public class PrescriptionDto {
     private final PrescriptionStatus status;
 
     @NotNull
-    private final LocalDateTime createdAt;
+    private final OffsetDateTime createdAt;
 
     @NotNull
-    private final LocalDateTime updatedAt;
+    private final OffsetDateTime updatedAt;
 
     @NotNull
     private final PatientDto patient;

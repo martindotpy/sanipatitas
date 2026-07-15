@@ -1,6 +1,6 @@
 package dev.martindotpy.sanipatitas.shared.clinical.prescription.domain.payload;
 
-import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
 import java.util.List;
 import java.util.UUID;
 
@@ -9,10 +9,10 @@ import org.jspecify.annotations.Nullable;
 import dev.martindotpy.sanipatitas.shared.core.domain.enums.PrescriptionStatus;
 
 public interface UpdatePrescriptionPayload {
-    LocalDateTime getIssueDate();
+    OffsetDateTime getIssueDate();
 
     @Nullable
-    LocalDateTime getExpirationDate();
+    OffsetDateTime getExpirationDate();
 
     @Nullable
     String getNotes();

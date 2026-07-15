@@ -1,0 +1,89 @@
+%% ==========================================
+%% SANIPATITAS - Frontend Routes & Components
+%% ==========================================
+
+%% ==========================================
+%% ROUTE TREE
+%% ==========================================
+
+graph TD
+    %% Root
+    Root["/ (Root)"] --> SignIn["/sign-in
+    SignInForm"]
+    Root --> Private["/_private (Layout)
+    Sidebar + Header"]
+
+    %% Private routes
+    Private --> Dashboard["/
+    DashboardSection
+    Stats Cards + Charts"]
+    
+    Private --> Profile["/profile
+    ProfileSection
+    Avatar + Info + Password + Notifications + Sessions"]
+    
+    Private --> Calendar["/appointment
+    AppointmentSection
+    Calendar View"]
+    
+    Private --> Patients["/patient
+    PatientSection"]
+    Private --> PatientDetail["/patient/$uuid
+    Patient Detail + Clinical History"]
+    
+    Private --> Clients["/client
+    ClientSection"]
+    
+    Private --> Breeds["/breed
+    BreedSection"]
+    
+    Private --> Inventory["/inventory
+    InventorySection
+    Products Table"]
+    
+    Private --> Billing["/billing
+    BillingSection
+    Billings Table"]
+    
+    Private --> Species["/species
+    SpeciesSection"]
+    
+    Private --> AdminUsers["/admin/users
+    AdminSection
+    User Management"]
+
+    %% Clinical sub-components (embedded in patient detail)
+    subgraph Clinical["Clinical FHIR Forms"]
+        Immunization["CreateImmunization"]
+        Procedure["CreateProcedure"]
+        Observation["CreateMedicalObservation"]
+        Prescription["CreatePrescription"]
+        Condition["CreateMedicalCondition"]
+    end
+
+    PatientDetail --> Clinical
+
+    %% Sidebar
+    subgraph Sidebar["Sidebar Navigation"]
+        Item1["Dashboard"]
+        Item2["Mi Perfil"]
+        Item3["Calendario"]
+        Item4["Pacientes"]
+        Item5["Clientes"]
+        Item6["Razas"]
+        Item7["Inventario"]
+        Item8["Facturación"]
+        Item9["Usuarios (Admin)"]
+    end
+
+%% Style
+    classDef route fill:#E3F2FD,stroke:#1565C0,stroke-width:1px
+    classDef layout fill:#FFF3E0,stroke:#E65100,stroke-width:2px
+    classDef form fill:#E8F5E9,stroke:#2E7D32,stroke-width:1px
+    classDef nav fill:#F3E5F5,stroke:#7B1FA2,stroke-width:1px
+
+    class SignIn route
+    class Private layout
+    class Dashboard,Profile,Calendar,Patients,PatientDetail,Clients,Breeds,Species,AdminUsers,Inventory,Billing route
+    class Immunization,Procedure,Observation,Prescription,Condition form
+    class Item1,Item2,Item3,Item4,Item5,Item6,Item7,Item8,Item9 nav

@@ -495,16 +495,14 @@ export const zOpenapiImmunizationStatus = z.enum([
   "NOT_DONE",
 ])
 
-export const zOpenapiLocalDateTime = z.iso.datetime()
-
 export const zOpenapiCreateImmunizationRequest = z.object({
   id: zOpenapiUuid.optional(),
-  vaccineCode: z.string().max(20).optional(),
+  vaccineCode: z.string().max(100).optional(),
   vaccineName: z.string().max(255).regex(/\S/),
   manufacturer: z.string().max(255).optional(),
   lotNumber: z.string().max(255).optional(),
-  expirationDate: zOpenapiLocalDateTime.optional(),
-  administrationDate: zOpenapiLocalDateTime,
+  expirationDate: zOpenapiOffsetDateTime.optional(),
+  administrationDate: zOpenapiOffsetDateTime,
   doseNumber: z.string().max(50).optional(),
   doseUnit: z.string().max(50).optional(),
   route: zOpenapiImmunizationRoute.optional(),
@@ -540,7 +538,7 @@ export const zOpenapiCreateMedicalObservationRequest = z.object({
   referenceRange: z.string().max(500).optional(),
   category: zOpenapiObservationCategory.optional(),
   status: zOpenapiObservationStatus.optional(),
-  issuedDate: zOpenapiLocalDateTime.optional(),
+  issuedDate: zOpenapiOffsetDateTime.optional(),
   patientId: zOpenapiUuid,
   veterinarianId: zOpenapiUuid,
 })
@@ -553,8 +551,8 @@ export const zOpenapiPrescriptionItemDto = z.object({
   duration: z.string().optional(),
   route: z.string().optional(),
   notes: z.string().optional(),
-  createdAt: zOpenapiLocalDateTime,
-  updatedAt: zOpenapiLocalDateTime,
+  createdAt: zOpenapiOffsetDateTime,
+  updatedAt: zOpenapiOffsetDateTime,
 })
 
 export const zOpenapiPrescriptionStatus = z.enum([
@@ -565,8 +563,8 @@ export const zOpenapiPrescriptionStatus = z.enum([
 
 export const zOpenapiCreatePrescriptionRequest = z.object({
   id: zOpenapiUuid.optional(),
-  issueDate: zOpenapiLocalDateTime,
-  expirationDate: zOpenapiLocalDateTime.optional(),
+  issueDate: zOpenapiOffsetDateTime,
+  expirationDate: zOpenapiOffsetDateTime.optional(),
   notes: z.string().optional(),
   status: zOpenapiPrescriptionStatus.optional(),
   patientId: zOpenapiUuid,
@@ -597,19 +595,19 @@ export const zOpenapiCreateProcedureRequest = z.object({
   reason: z.string().max(2000).optional(),
   outcome: z.string().max(2000).optional(),
   complications: z.string().max(2000).optional(),
-  performedDate: zOpenapiLocalDateTime.optional(),
+  performedDate: zOpenapiOffsetDateTime.optional(),
   status: zOpenapiProcedureStatus.optional(),
   patientId: zOpenapiUuid,
   veterinarianId: zOpenapiUuid,
 })
 
 export const zOpenapiUpdateImmunizationRequest = z.object({
-  vaccineCode: z.string().max(20).optional(),
+  vaccineCode: z.string().max(100).optional(),
   vaccineName: z.string().max(255).regex(/\S/),
   manufacturer: z.string().max(255).optional(),
   lotNumber: z.string().max(255).optional(),
-  expirationDate: zOpenapiLocalDateTime.optional(),
-  administrationDate: zOpenapiLocalDateTime,
+  expirationDate: zOpenapiOffsetDateTime.optional(),
+  administrationDate: zOpenapiOffsetDateTime,
   doseNumber: z.string().max(50).optional(),
   doseUnit: z.string().max(50).optional(),
   route: zOpenapiImmunizationRoute.optional(),
@@ -641,7 +639,7 @@ export const zOpenapiUpdateMedicalObservationRequest = z.object({
   referenceRange: z.string().max(500).optional(),
   category: zOpenapiObservationCategory.optional(),
   status: zOpenapiObservationStatus.optional(),
-  issuedDate: zOpenapiLocalDateTime.optional(),
+  issuedDate: zOpenapiOffsetDateTime.optional(),
   patientId: zOpenapiUuid,
   veterinarianId: zOpenapiUuid,
 })
@@ -656,8 +654,8 @@ export const zOpenapiUpdatePrescriptionItemRequest = z.object({
 })
 
 export const zOpenapiUpdatePrescriptionRequest = z.object({
-  issueDate: zOpenapiLocalDateTime,
-  expirationDate: zOpenapiLocalDateTime.optional(),
+  issueDate: zOpenapiOffsetDateTime,
+  expirationDate: zOpenapiOffsetDateTime.optional(),
   notes: z.string().optional(),
   status: zOpenapiPrescriptionStatus.optional(),
   patientId: zOpenapiUuid,
@@ -672,7 +670,7 @@ export const zOpenapiUpdateProcedureRequest = z.object({
   reason: z.string().max(2000).optional(),
   outcome: z.string().max(2000).optional(),
   complications: z.string().max(2000).optional(),
-  performedDate: zOpenapiLocalDateTime.optional(),
+  performedDate: zOpenapiOffsetDateTime.optional(),
   status: zOpenapiProcedureStatus.optional(),
   patientId: zOpenapiUuid,
   veterinarianId: zOpenapiUuid,
@@ -699,16 +697,16 @@ export const zOpenapiImmunizationDto = z.object({
   vaccineName: z.string().max(255).regex(/\S/),
   manufacturer: z.string().optional(),
   lotNumber: z.string().optional(),
-  expirationDate: zOpenapiLocalDateTime.optional(),
-  administrationDate: zOpenapiLocalDateTime,
+  expirationDate: zOpenapiOffsetDateTime.optional(),
+  administrationDate: zOpenapiOffsetDateTime,
   doseNumber: z.string().optional(),
   doseUnit: z.string().optional(),
   route: zOpenapiImmunizationRoute.optional(),
   site: z.string().optional(),
   reaction: z.string().optional(),
   status: zOpenapiImmunizationStatus,
-  createdAt: zOpenapiLocalDateTime,
-  updatedAt: zOpenapiLocalDateTime,
+  createdAt: zOpenapiOffsetDateTime,
+  updatedAt: zOpenapiOffsetDateTime,
   patient: zOpenapiPatientDto,
   veterinarian: zOpenapiUserDto,
 })
@@ -748,9 +746,9 @@ export const zOpenapiMedicalObservationDto = z.object({
   referenceRange: z.string().optional(),
   category: zOpenapiObservationCategory.optional(),
   status: zOpenapiObservationStatus,
-  issuedDate: zOpenapiLocalDateTime.optional(),
-  createdAt: zOpenapiLocalDateTime,
-  updatedAt: zOpenapiLocalDateTime,
+  issuedDate: zOpenapiOffsetDateTime.optional(),
+  createdAt: zOpenapiOffsetDateTime,
+  updatedAt: zOpenapiOffsetDateTime,
   patient: zOpenapiPatientDto,
   veterinarian: zOpenapiUserDto,
 })
@@ -885,12 +883,12 @@ export const zOpenapiPageResponseMedicalObservationDto = z.object({
 
 export const zOpenapiPrescriptionDto = z.object({
   id: zOpenapiUuid,
-  issueDate: zOpenapiLocalDateTime,
-  expirationDate: zOpenapiLocalDateTime.optional(),
+  issueDate: zOpenapiOffsetDateTime,
+  expirationDate: zOpenapiOffsetDateTime.optional(),
   notes: z.string().optional(),
   status: zOpenapiPrescriptionStatus,
-  createdAt: zOpenapiLocalDateTime,
-  updatedAt: zOpenapiLocalDateTime,
+  createdAt: zOpenapiOffsetDateTime,
+  updatedAt: zOpenapiOffsetDateTime,
   patient: zOpenapiPatientDto,
   veterinarian: zOpenapiUserDto,
   items: z.array(zOpenapiPrescriptionItemDto),
@@ -950,10 +948,10 @@ export const zOpenapiProcedureDto = z.object({
   reason: z.string().max(2000).optional(),
   outcome: z.string().max(2000).optional(),
   complications: z.string().max(2000).optional(),
-  performedDate: zOpenapiLocalDateTime.optional(),
+  performedDate: zOpenapiOffsetDateTime.optional(),
   status: zOpenapiProcedureStatus,
-  createdAt: zOpenapiLocalDateTime,
-  updatedAt: zOpenapiLocalDateTime,
+  createdAt: zOpenapiOffsetDateTime,
+  updatedAt: zOpenapiOffsetDateTime,
   patient: zOpenapiPatientDto,
   veterinarian: zOpenapiUserDto,
 })
@@ -1284,8 +1282,8 @@ export const zOpenapiProductCategoryDto = z.object({
   id: zOpenapiUuid,
   name: z.string().regex(/\S/),
   description: z.string().optional(),
-  createdAt: zOpenapiLocalDateTime,
-  updatedAt: zOpenapiLocalDateTime,
+  createdAt: zOpenapiOffsetDateTime,
+  updatedAt: zOpenapiOffsetDateTime,
 })
 
 export const zOpenapiDataResponseProductCategoryDto = z.object({
@@ -1342,8 +1340,8 @@ export const zOpenapiSupplierDto = z.object({
   contactPhone: z.string().optional(),
   email: z.string().optional(),
   address: z.string().optional(),
-  createdAt: zOpenapiLocalDateTime,
-  updatedAt: zOpenapiLocalDateTime,
+  createdAt: zOpenapiOffsetDateTime,
+  updatedAt: zOpenapiOffsetDateTime,
 })
 
 export const zOpenapiDataResponseSupplierDto = z.object({
@@ -1400,8 +1398,8 @@ export const zOpenapiProductDto = z.object({
   price: z.number().optional(),
   category: zOpenapiProductCategoryDto.optional(),
   supplier: zOpenapiSupplierDto.optional(),
-  createdAt: zOpenapiLocalDateTime,
-  updatedAt: zOpenapiLocalDateTime,
+  createdAt: zOpenapiOffsetDateTime,
+  updatedAt: zOpenapiOffsetDateTime,
 })
 
 export const zOpenapiDataResponseProductDto = z.object({
@@ -1472,8 +1470,8 @@ export const zOpenapiStockDto = z.object({
       error: "Invalid value: Expected int32 to be <= 2147483647",
     })
     .optional(),
-  createdAt: zOpenapiLocalDateTime,
-  updatedAt: zOpenapiLocalDateTime,
+  createdAt: zOpenapiOffsetDateTime,
+  updatedAt: zOpenapiOffsetDateTime,
 })
 
 export const zOpenapiDataResponseStockDto = z.object({
@@ -1499,7 +1497,7 @@ export const zOpenapiStockMovementDto = z.object({
   reference: z.string().optional(),
   notes: z.string().optional(),
   stock: zOpenapiStockDto,
-  createdAt: zOpenapiLocalDateTime,
+  createdAt: zOpenapiOffsetDateTime,
 })
 
 export const zOpenapiDataResponseStockMovementDto = z.object({
@@ -1615,7 +1613,7 @@ export const zOpenapiBillingItemDto = z.object({
   total: z.number(),
   itemType: zOpenapiBillingItemType,
   referenceId: zOpenapiUuid.optional(),
-  createdAt: zOpenapiLocalDateTime,
+  createdAt: zOpenapiOffsetDateTime,
 })
 
 export const zOpenapiBillingStatsDto = z.object({
@@ -1728,7 +1726,7 @@ export const zOpenapiCreatePaymentRequest = z.object({
   amount: z.number(),
   paymentMethod: zOpenapiPaymentMethod,
   reference: z.string().max(255).optional(),
-  paidAt: zOpenapiLocalDateTime.optional(),
+  paidAt: zOpenapiOffsetDateTime.optional(),
   notes: z.string().max(500).optional(),
 })
 
@@ -1738,9 +1736,9 @@ export const zOpenapiPaymentDto = z.object({
   amount: z.number(),
   paymentMethod: zOpenapiPaymentMethod,
   reference: z.string().optional(),
-  paidAt: zOpenapiLocalDateTime,
+  paidAt: zOpenapiOffsetDateTime,
   notes: z.string().optional(),
-  createdAt: zOpenapiLocalDateTime,
+  createdAt: zOpenapiOffsetDateTime,
 })
 
 export const zOpenapiDataResponseListPaymentDto = z.object({
@@ -1772,8 +1770,8 @@ export const zOpenapiBillingDto = z.object({
   paymentStatus: zOpenapiPaymentStatus,
   invoiceNumber: z.string().optional(),
   notes: z.string().optional(),
-  createdAt: zOpenapiLocalDateTime,
-  updatedAt: zOpenapiLocalDateTime,
+  createdAt: zOpenapiOffsetDateTime,
+  updatedAt: zOpenapiOffsetDateTime,
 })
 
 export const zOpenapiDataResponseBillingDto = z.object({

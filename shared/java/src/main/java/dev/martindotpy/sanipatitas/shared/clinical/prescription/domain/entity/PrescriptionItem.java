@@ -1,6 +1,6 @@
 package dev.martindotpy.sanipatitas.shared.clinical.prescription.domain.entity;
 
-import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
 import java.util.Objects;
 
 import jakarta.persistence.Column;
@@ -56,11 +56,11 @@ public class PrescriptionItem extends EntityWithUuidV7 {
 
     @CreationTimestamp
     @Column(nullable = false, updatable = false)
-    private LocalDateTime createdAt;
+    private OffsetDateTime createdAt;
 
     @UpdateTimestamp
     @Column(nullable = false)
-    private LocalDateTime updatedAt;
+    private OffsetDateTime updatedAt;
 
     @ManyToOne
     private Prescription prescription;

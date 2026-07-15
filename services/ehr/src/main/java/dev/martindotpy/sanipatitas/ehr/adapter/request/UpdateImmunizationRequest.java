@@ -1,6 +1,6 @@
 package dev.martindotpy.sanipatitas.ehr.adapter.request;
 
-import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
 import java.util.UUID;
 
 import jakarta.validation.constraints.NotBlank;
@@ -25,7 +25,7 @@ import lombok.Setter;
 @AllArgsConstructor
 public class UpdateImmunizationRequest implements UpdateImmunizationPayload {
     @Nullable
-    @Size(max = 20)
+    @Size(max = 100)
     private String vaccineCode;
 
     @NotBlank
@@ -41,10 +41,10 @@ public class UpdateImmunizationRequest implements UpdateImmunizationPayload {
     private String lotNumber;
 
     @Nullable
-    private LocalDateTime expirationDate;
+    private OffsetDateTime expirationDate;
 
     @NotNull
-    private LocalDateTime administrationDate;
+    private OffsetDateTime administrationDate;
 
     @Nullable
     @Size(max = 50)

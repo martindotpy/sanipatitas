@@ -13,23 +13,53 @@ interface NotifyOptions {
 // Permission
 let permissionGranted = false
 
-export async function requestNotificationPermission() {
-  if (isSsr || !isTauri) return
+export async function requestNotificationPermission(): Promise<boolean> {
+  if (isSsr) return false
 
-  try {
-    const { isPermissionGranted, requestPermission } = await import(
-      "@tauri-apps/plugin-notification"
-    )
+  // Tauri native notifications
+  if (isTauri) {
+    try {
+      const { isPermissionGranted, requestPermission } = await import(
+        "@tauri-apps/plugin-notification"
+      )
 
-    if (await isPermissionGranted()) {
-      permissionGranted = true
-      return
+      if (await isPermissionGranted()) {
+        permissionGranted = true
+        return true
+      }
+
+      const result = await requestPermission()
+      permissionGranted = result === "granted"
+
+      return permissionGranted
+    } catch {
+      permissionGranted = false
+      return false
     }
+  }
 
-    const result = await requestPermission()
+  // Browser Notification API
+  if (typeof Notification === "undefined") return false
+
+  if (Notification.permission === "granted") {
+    permissionGranted = true
+    return true
+  }
+
+  if (Notification.permission === "denied") {
+    permissionGranted = false
+    return false
+  }
+
+  // Permission is "default" — request it
+  try {
+    const result = await Notification.requestPermission()
     permissionGranted = result === "granted"
+
+    return permissionGranted
   } catch {
     permissionGranted = false
+    return false
   }
 }
 

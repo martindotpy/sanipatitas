@@ -1,6 +1,6 @@
 package dev.martindotpy.sanipatitas.shared.clinical.immunization.application.dto;
 
-import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
 import java.util.UUID;
 
 import jakarta.validation.constraints.NotBlank;
@@ -38,10 +38,10 @@ public class ImmunizationDto {
     private final String lotNumber;
 
     @Nullable
-    private final LocalDateTime expirationDate;
+    private final OffsetDateTime expirationDate;
 
     @NotNull
-    private final LocalDateTime administrationDate;
+    private final OffsetDateTime administrationDate;
 
     @Nullable
     private final String doseNumber;
@@ -62,10 +62,10 @@ public class ImmunizationDto {
     private final ImmunizationStatus status;
 
     @NotNull
-    private final LocalDateTime createdAt;
+    private final OffsetDateTime createdAt;
 
     @NotNull
-    private final LocalDateTime updatedAt;
+    private final OffsetDateTime updatedAt;
 
     @NotNull
     private final PatientDto patient;

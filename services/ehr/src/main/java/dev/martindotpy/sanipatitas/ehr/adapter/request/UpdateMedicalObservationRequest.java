@@ -1,6 +1,6 @@
 package dev.martindotpy.sanipatitas.ehr.adapter.request;
 
-import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
 import java.util.UUID;
 
 import jakarta.validation.constraints.NotBlank;
@@ -59,7 +59,7 @@ public class UpdateMedicalObservationRequest implements UpdateMedicalObservation
     private ObservationStatus status;
 
     @Nullable
-    private LocalDateTime issuedDate;
+    private OffsetDateTime issuedDate;
 
     @NotNull
     private UUID patientId;

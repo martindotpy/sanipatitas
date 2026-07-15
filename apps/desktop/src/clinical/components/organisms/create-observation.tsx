@@ -2,7 +2,11 @@ import { type DialogRoot } from "@base-ui/react"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useCreateObservation } from "@sanipatitas/desktop/clinical/hook/use-observation"
 import { authClient } from "@sanipatitas/desktop/auth/client/auth-client"
-import type { ObservationDto, CreateObservationRequest } from "@sanipatitas/desktop/clinical/api/clinical-api"
+import { zOpenapiCreateMedicalObservationRequest } from "@sanipatitas/shared/api/client/zod.gen"
+import type {
+  OpenapiObservationCategory,
+  OpenapiObservationStatus,
+} from "@sanipatitas/shared/api/client/types.gen"
 import { Button } from "@sanipatitas/ui/components/ui/button"
 import {
   Dialog,
@@ -20,22 +24,6 @@ import { useQuery } from "@tanstack/react-query"
 import { useMemo, useRef } from "react"
 import { useForm } from "react-hook-form"
 import { TbPlus } from "react-icons/tb"
-import { z } from "zod"
-
-// Schema
-const createObservationSchema = z.object({
-  code: z.string().min(1, "El código es obligatorio"),
-  value: z.string().min(1, "El valor es obligatorio"),
-  unit: z.string().optional(),
-  interpretation: z.string().optional(),
-  bodySite: z.string().optional(),
-  method: z.string().optional(),
-  referenceRange: z.string().optional(),
-  category: z.string().optional(),
-  status: z.string().optional(),
-  issuedDate: z.string().optional(),
-  veterinarianId: z.string().min(1, "El veterinario es obligatorio"),
-})
 
 // Options
 const CATEGORY_OPTIONS = [
@@ -83,7 +71,7 @@ export function CreateObservation({ patientId }: CreateObservationProps) {
   )
 
   const { control, handleSubmit, reset } = useForm({
-    resolver: zodResolver(createObservationSchema),
+    resolver: zodResolver(zOpenapiCreateMedicalObservationRequest),
     defaultValues: {
       code: "",
       value: "",
@@ -95,15 +83,17 @@ export function CreateObservation({ patientId }: CreateObservationProps) {
       category: undefined,
       status: undefined,
       issuedDate: undefined,
+      patientId,
       veterinarianId: "",
     },
   })
 
   const onSubmit = handleSubmit((data) => {
+    // Transform datetime-local value to ISO format (add seconds)
+    const issuedDate = data.issuedDate ? `${data.issuedDate}:00` : undefined
+
     createMutation.mutate(
       {
-        ...data,
-        patientId,
         code: data.code,
         value: data.value,
         unit: data.unit || undefined,
@@ -111,10 +101,12 @@ export function CreateObservation({ patientId }: CreateObservationProps) {
         bodySite: data.bodySite || undefined,
         method: data.method || undefined,
         referenceRange: data.referenceRange || undefined,
-        category: data.category || undefined,
-        status: data.status || undefined,
-        issuedDate: data.issuedDate || undefined,
-      } as CreateObservationRequest,
+        category: data.category as OpenapiObservationCategory | undefined,
+        status: data.status as OpenapiObservationStatus | undefined,
+        issuedDate,
+        patientId,
+        veterinarianId: data.veterinarianId,
+      },
       {
         onSuccess: () => {
           dialogActionsRef.current?.close()

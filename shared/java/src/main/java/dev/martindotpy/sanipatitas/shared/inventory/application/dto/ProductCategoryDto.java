@@ -1,6 +1,6 @@
 package dev.martindotpy.sanipatitas.shared.inventory.application.dto;
 
-import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
 import java.util.UUID;
 
 import jakarta.validation.constraints.NotBlank;
@@ -19,6 +19,6 @@ public class ProductCategoryDto {
     @NotNull private final UUID id;
     @NotBlank private final String name;
     @Nullable private final String description;
-    @NotNull private final LocalDateTime createdAt;
-    @NotNull private final LocalDateTime updatedAt;
+    @NotNull private final OffsetDateTime createdAt;
+    @NotNull private final OffsetDateTime updatedAt;
 }

@@ -1,0 +1,11 @@
+export type {
+  OpenapiProductDto as ProductDto,
+  OpenapiCreateProductRequest as CreateProductRequest,
+  OpenapiUpdateProductRequest as UpdateProductRequest,
+  OpenapiProductCategoryDto as ProductCategoryDto,
+  OpenapiCreateProductCategoryRequest as CreateProductCategoryRequest,
+  OpenapiUpdateProductCategoryRequest as UpdateProductCategoryRequest,
+  OpenapiSupplierDto as SupplierDto,
+  OpenapiCreateSupplierRequest as CreateSupplierRequest,
+  OpenapiUpdateSupplierRequest as UpdateSupplierRequest,
+} from "@sanipatitas/shared/api/client/types.gen"

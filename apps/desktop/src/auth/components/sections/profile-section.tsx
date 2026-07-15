@@ -12,6 +12,7 @@ import { Badge } from "@sanipatitas/ui/components/ui/badge"
 import { Button } from "@sanipatitas/ui/components/ui/button"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@sanipatitas/ui/components/ui/card"
 import { FieldGroup } from "@sanipatitas/ui/components/ui/field"
+import { NotificationPreferencesCard } from "@sanipatitas/desktop/notification/components/notification-preferences-card"
 import { H2, Muted } from "@sanipatitas/ui/components/ui/typography"
 import { useQuery } from "@tanstack/react-query"
 import { AnimatePresence, motion } from "motion/react"
@@ -20,8 +21,6 @@ import {
   TbCamera,
   TbCheck,
   TbDeviceDesktop,
-  TbEye,
-  TbEyeOff,
   TbLoader2,
   TbLogout,
   TbMail,
@@ -292,8 +291,6 @@ function PasswordStrength({ password }: { password: string }) {
 // Component
 export function ProfileSection() {
   const user = useUser()
-  const [showNewPassword, setShowNewPassword] = React.useState(false)
-  const [showCurrentPassword, setShowCurrentPassword] = React.useState(false)
 
   // Password form (declared BEFORE watchedNewPassword uses it)
   const passwordForm = useForm({
@@ -440,6 +437,11 @@ export function ProfileSection() {
         </div>
 
         <div className="flex flex-col gap-4 lg:flex-row">
+          {/* Notification Preferences */}
+          <div className="flex-1">
+            <NotificationPreferencesCard />
+          </div>
+
           {/* Change Password */}
           <div className="flex-1">
             <AnimatedCard delay={0.2}>
@@ -453,44 +455,24 @@ export function ProfileSection() {
               <CardContent>
                 <form onSubmit={onPasswordSubmit}>
                   <FieldGroup>
-                    <div className="relative">
-                      <ControlledPasswordInput
-                        control={passwordForm.control}
-                        name="currentPassword"
-                        label="Contraseña actual"
-                        inputProps={{
-                          placeholder: "Contraseña actual",
-                          autoComplete: "current-password",
-                          type: showCurrentPassword ? "text" : "password",
-                        }}
-                      />
-                      <button
-                        type="button"
-                        onClick={() => setShowCurrentPassword(!showCurrentPassword)}
-                        className="text-muted-foreground hover:text-foreground absolute right-3 top-1/2 -translate-y-1/2 cursor-pointer transition-colors"
-                      >
-                        {showCurrentPassword ? <TbEyeOff className="size-4" /> : <TbEye className="size-4" />}
-                      </button>
-                    </div>
-                    <div className="relative">
-                      <ControlledPasswordInput
-                        control={passwordForm.control}
-                        name="newPassword"
-                        label="Nueva contraseña"
-                        inputProps={{
-                          placeholder: "Nueva contraseña",
-                          autoComplete: "new-password",
-                          type: showNewPassword ? "text" : "password",
-                        }}
-                      />
-                      <button
-                        type="button"
-                        onClick={() => setShowNewPassword(!showNewPassword)}
-                        className="text-muted-foreground hover:text-foreground absolute right-3 top-1/2 -translate-y-1/2 cursor-pointer transition-colors"
-                      >
-                        {showNewPassword ? <TbEyeOff className="size-4" /> : <TbEye className="size-4" />}
-                      </button>
-                    </div>
+                    <ControlledPasswordInput
+                      control={passwordForm.control}
+                      name="currentPassword"
+                      label="Contraseña actual"
+                      inputProps={{
+                        placeholder: "Contraseña actual",
+                        autoComplete: "current-password",
+                      }}
+                    />
+                    <ControlledPasswordInput
+                      control={passwordForm.control}
+                      name="newPassword"
+                      label="Nueva contraseña"
+                      inputProps={{
+                        placeholder: "Nueva contraseña",
+                        autoComplete: "new-password",
+                      }}
+                    />
                     <PasswordStrength password={watchedNewPassword} />
                     <ControlledPasswordInput
                       control={passwordForm.control}

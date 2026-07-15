@@ -89,7 +89,7 @@ export const auth = betterAuth({
   trustedOrigins: [
     "tauri://localhost",
     "http://tauri.localhost",
-    ...(isDev ? ["http://localhost:1420"] : []),
+    "http://localhost:1420",
   ],
   experimental: { joins: true },
 })

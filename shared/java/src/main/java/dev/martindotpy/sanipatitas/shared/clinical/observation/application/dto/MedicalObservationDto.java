@@ -1,6 +1,6 @@
 package dev.martindotpy.sanipatitas.shared.clinical.observation.application.dto;
 
-import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
 import java.util.UUID;
 
 import jakarta.validation.constraints.NotBlank;
@@ -53,13 +53,13 @@ public class MedicalObservationDto {
     private final ObservationStatus status;
 
     @Nullable
-    private final LocalDateTime issuedDate;
+    private final OffsetDateTime issuedDate;
 
     @NotNull
-    private final LocalDateTime createdAt;
+    private final OffsetDateTime createdAt;
 
     @NotNull
-    private final LocalDateTime updatedAt;
+    private final OffsetDateTime updatedAt;
 
     @NotNull
     private final PatientDto patient;

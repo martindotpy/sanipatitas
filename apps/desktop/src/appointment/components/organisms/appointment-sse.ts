@@ -1,4 +1,5 @@
 import { useJwt } from "@sanipatitas/desktop/auth/store/jwt-store"
+import { useNotificationPreferences } from "@sanipatitas/desktop/notification/store/notification-preferences-store"
 import { getApiAppointmentEvents } from "@sanipatitas/shared/api/client/sdk.gen"
 import { useQueryClient } from "@tanstack/react-query"
 import { useEffect, useRef } from "react"
@@ -6,11 +7,13 @@ import { useEffect, useRef } from "react"
 // SSE hook
 export function useAppointmentSSE() {
   const token = useJwt()
+  const [preferences] = useNotificationPreferences()
   const queryClient = useQueryClient()
   const abortRef = useRef<AbortController | null>(null)
 
   useEffect(() => {
-    if (!token) return
+    // Skip if SSE updates are disabled in preferences
+    if (!token || !preferences.sseUpdates) return
 
     const controller = new AbortController()
     abortRef.current = controller

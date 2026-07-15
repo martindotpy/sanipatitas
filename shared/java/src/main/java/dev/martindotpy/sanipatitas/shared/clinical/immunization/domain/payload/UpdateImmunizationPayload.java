@@ -1,6 +1,6 @@
 package dev.martindotpy.sanipatitas.shared.clinical.immunization.domain.payload;
 
-import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
 import java.util.UUID;
 
 import org.jspecify.annotations.Nullable;
@@ -21,9 +21,9 @@ public interface UpdateImmunizationPayload {
     String getLotNumber();
 
     @Nullable
-    LocalDateTime getExpirationDate();
+    OffsetDateTime getExpirationDate();
 
-    LocalDateTime getAdministrationDate();
+    OffsetDateTime getAdministrationDate();
 
     @Nullable
     String getDoseNumber();
