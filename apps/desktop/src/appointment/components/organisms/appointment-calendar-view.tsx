@@ -123,7 +123,7 @@ export function AppointmentCalendarView() {
         <CalendarBody features={features}>
           {({ feature }) => (
             <button
-              className="w-full text-left"
+              className="hover:bg-accent w-full rounded px-1 py-0.5 text-left transition-colors"
               key={feature.id}
               onClick={() => handleFeatureClick(feature)}
               type="button"
