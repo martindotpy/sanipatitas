@@ -95,6 +95,7 @@ export function UpdateAppointment({
       notes: "",
       patientId: "",
       clientId: "",
+      veterinarianId: user?.id ?? "",
     },
   })
 
@@ -110,6 +111,7 @@ export function UpdateAppointment({
         notes: appointment.notes ?? "",
         patientId: appointment.patient.id,
         clientId: appointment.client.id,
+        veterinarianId: appointment.veterinarian.id,
       })
     }
   }, [appointment, reset])
@@ -125,25 +127,30 @@ export function UpdateAppointment({
     },
   })
 
-  const onSubmit = handleSubmit((data) => {
-    if (!appointment) return
+  const onSubmit = handleSubmit(
+    (data) => {
+      if (!appointment) return
 
-    updateMutation.mutate({
-      path: { id: appointment.id },
-      body: {
-        ...data,
-        veterinarianId: user?.id ?? appointment.veterinarian.id,
-        endTime: data.endTime || undefined,
-        reason: data.reason || undefined,
-        notes: data.notes || undefined,
-        appointmentClass: (data.appointmentClass as
-          | "AMBULATORY"
-          | "EMERGENCY"
-          | "HOME_VISIT"
-          | undefined) || undefined,
-      },
-    })
-  })
+      updateMutation.mutate({
+        path: { id: appointment.id },
+        body: {
+          ...data,
+          veterinarianId: user?.id ?? appointment.veterinarian.id,
+          endTime: data.endTime || undefined,
+          reason: data.reason || undefined,
+          notes: data.notes || undefined,
+          appointmentClass: (data.appointmentClass as
+            | "AMBULATORY"
+            | "EMERGENCY"
+            | "HOME_VISIT"
+            | undefined) || undefined,
+        },
+      })
+    },
+    () => {
+      toast.error("Revisa los campos del formulario")
+    }
+  )
 
   return (
     <Dialog
