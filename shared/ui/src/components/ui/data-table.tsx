@@ -75,6 +75,8 @@ export function DataTable<TData>({
   loading,
   ...props
 }: DataTableProps<TData>) {
+  const isServerPagination = onPaginationChange != null
+
   // Pagination
   const [pagination, setPagination] = usePersistentState<PaginationState>(
     `${id}:pagination`,
@@ -146,6 +148,9 @@ export function DataTable<TData>({
       rowSelection,
       pagination,
     },
+    // Server sync via onPaginationChange — keep pageIndex while the next page loads
+    manualPagination: isServerPagination,
+    autoResetPageIndex: !isServerPagination,
     enableRowSelection: true,
     onColumnFiltersChange: setColumnFilters,
     onColumnVisibilityChange: setColumnVisibility,
@@ -155,7 +160,9 @@ export function DataTable<TData>({
     getCoreRowModel: getCoreRowModel(),
     getFilteredRowModel: getFilteredRowModel(),
     getSortedRowModel: getSortedRowModel(),
-    getPaginationRowModel: getPaginationRowModel(),
+    getPaginationRowModel: isServerPagination
+      ? undefined
+      : getPaginationRowModel(),
     getFacetedRowModel: getFacetedRowModel(),
     getFacetedUniqueValues: getFacetedUniqueValues(),
   })
