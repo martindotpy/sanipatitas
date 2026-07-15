@@ -172,16 +172,17 @@ function AppointmentStatusChart({ data }: { data: Record<string, number> }) {
       initial={{ opacity: 0, scale: 0.95 }}
       animate={{ opacity: 1, scale: 1 }}
       transition={{ duration: 0.5, delay: 0.3 }}
+      className="h-full"
     >
-      <Card>
+      <Card className="flex h-full flex-col">
         <CardHeader>
           <CardTitle className="flex items-center gap-2">
             <TbCalendarStats className="text-primary size-4" />
             Citas hoy por estado
           </CardTitle>
         </CardHeader>
-        <CardContent>
-          <div className="flex flex-col items-center gap-4 sm:flex-row">
+        <CardContent className="flex flex-1 items-center justify-center">
+          <div className="flex flex-col items-center gap-6 sm:flex-row sm:gap-8">
             <ChartContainer
               config={appointmentChartConfig}
               initialDimension={{ width: 192, height: 192 }}
@@ -210,7 +211,7 @@ function AppointmentStatusChart({ data }: { data: Record<string, number> }) {
                 />
               </PieChart>
             </ChartContainer>
-            <div className="flex flex-1 flex-col gap-2">
+            <div className="flex w-full max-w-55 flex-col gap-2">
               {chartData.map((item) => (
                 <div key={item.name} className="flex items-center justify-between gap-2">
                   <div className="flex items-center gap-2">
@@ -262,7 +263,7 @@ function MonthlyComparisonChart({
           <ChartContainer
             config={monthlyChartConfig}
             initialDimension={{ width: 300, height: 192 }}
-            className="aspect-[3/2] w-full"
+            className="h-64 w-full"
           >
             <BarChart data={data} margin={{ top: 10, right: 10, left: -10, bottom: 5 }}>
               <XAxis
@@ -298,13 +299,14 @@ function UpcomingAppointments({
 }) {
   if (appointments.length === 0) {
     return (
-      <motion.p
+      <motion.div
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
-        className="text-muted-foreground py-8 text-center text-sm"
+        className="text-muted-foreground flex flex-col items-center justify-center gap-2 py-10 text-center"
       >
-        No hay próximas citas programadas
-      </motion.p>
+        <TbCalendar className="size-8 opacity-40" />
+        <p className="text-sm">No hay próximas citas programadas</p>
+      </motion.div>
     )
   }
 
@@ -677,7 +679,7 @@ export function DashboardSection() {
           <div className="flex flex-wrap gap-4">
             {appointmentStats &&
               Object.keys(appointmentStats.appointmentsTodayByStatus).length > 0 && (
-                <div className="flex-[2] min-w-[300px]">
+                <div className="flex-1 min-w-75">
                   <AppointmentStatusChart data={appointmentStats.appointmentsTodayByStatus} />
                 </div>
               )}
@@ -688,29 +690,30 @@ export function DashboardSection() {
                 revenueThisMonth={billingStats?.totalRevenueThisMonth ?? 0}
               />
             </div>
-          </div>
 
-          {/* Upcoming appointments */}
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.4, delay: 0.4 }}
-          >
-            <Card>
-              <CardHeader>
-                <CardTitle className="flex items-center gap-2">
-                  <TbCalendar className="text-primary size-4" />
-                  Próximas citas
-                  <Badge variant="secondary" className="ml-auto">
-                    {appointmentStats?.upcomingAppointments.length ?? 0} pendientes
-                  </Badge>
-                </CardTitle>
-              </CardHeader>
-              <CardContent className="p-0!">
-                <UpcomingAppointments appointments={appointmentStats?.upcomingAppointments ?? []} />
-              </CardContent>
-            </Card>
-          </motion.div>
+            {/* Upcoming appointments */}
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.4, delay: 0.4 }}
+              className="flex-1 min-w-70"
+            >
+              <Card>
+                <CardHeader>
+                  <CardTitle className="flex items-center gap-2">
+                    <TbCalendar className="text-primary size-4" />
+                    Próximas citas
+                    <Badge variant="secondary" className="ml-auto">
+                      {appointmentStats?.upcomingAppointments.length ?? 0} pendientes
+                    </Badge>
+                  </CardTitle>
+                </CardHeader>
+                <CardContent className="max-h-64 overflow-y-auto p-0!">
+                  <UpcomingAppointments appointments={appointmentStats?.upcomingAppointments ?? []} />
+                </CardContent>
+              </Card>
+            </motion.div>
+          </div>
 
           {/* Inventory + Billing */}
           <div className="flex flex-wrap gap-4">
