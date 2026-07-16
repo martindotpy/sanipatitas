@@ -1,5 +1,5 @@
 import { useNotificationPreferences } from "@sanipatitas/desktop/notification/store/notification-preferences-store"
-import { requestNotificationPermission } from "@sanipatitas/desktop/core/utils/notify"
+import { notify, requestNotificationPermission } from "@sanipatitas/desktop/core/utils/notify"
 import { isTauri } from "@sanipatitas/desktop/core/configuration/app-configuration"
 import { Button } from "@sanipatitas/ui/components/ui/button"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@sanipatitas/ui/components/ui/card"
@@ -53,6 +53,57 @@ export function NotificationPreferencesCard({ className }: NotificationPreferenc
     setPreferences((prev) => ({ ...prev, reminderWindowMinutes: minutes }))
 
     toast.success(`Recordatorio configurado a ${minutes} minutos antes`)
+  }
+
+  // Send a test notification to verify the popup works (independent of appointments).
+  // Reports each outcome via toast so the failing step is visible.
+  const handleTest = async () => {
+    // Tauri native path
+    if (isTauri) {
+      const granted = await requestNotificationPermission()
+
+      if (!granted) {
+        toast.error("Permiso de notificaciones no concedido en la app.")
+
+        return
+      }
+
+      await notify({
+        title: "Notificación de prueba 🐾",
+        body: "Si ves esto, las notificaciones funcionan.",
+      })
+
+      toast.success("Notificación enviada. Si no aparece, revisa el centro de notificaciones del sistema.")
+
+      return
+    }
+
+    // Browser path
+    if (typeof Notification === "undefined") {
+      toast.error("Este navegador no soporta notificaciones.")
+
+      return
+    }
+
+    await requestNotificationPermission()
+
+    if (Notification.permission !== "granted") {
+      toast.error(
+        `Permiso de notificaciones: "${Notification.permission}". Actívalo en el candado de la barra de direcciones.`,
+      )
+
+      return
+    }
+
+    try {
+      new Notification("Notificación de prueba 🐾", {
+        body: "Si ves esto, las notificaciones funcionan.",
+      })
+
+      toast.success("Notificación enviada. Si no aparece, revisa las notificaciones de Windows / del navegador.")
+    } catch (error) {
+      toast.error(`No se pudo mostrar la notificación: ${String(error)}`)
+    }
   }
 
   // Reset to defaults
@@ -192,8 +243,18 @@ export function NotificationPreferencesCard({ className }: NotificationPreferenc
               </motion.div>
             )}
 
-            {/* Reset button */}
-            <div className="mt-auto flex justify-end border-t pt-3">
+            {/* Actions */}
+            <div className="mt-auto flex justify-end gap-2 border-t pt-3">
+              <Button
+                type="button"
+                variant="outline"
+                size="sm"
+                className="cursor-pointer"
+                onClick={handleTest}
+              >
+                <TbBellRinging className="size-3.5" />
+                Probar
+              </Button>
               <Button
                 type="button"
                 variant="ghost"
