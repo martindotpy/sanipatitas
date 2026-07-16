@@ -23,9 +23,9 @@ import { TbPlus } from "react-icons/tb"
 // Schema
 const schema = z.object({
   productId: z.string().min(1, "El producto es requerido"),
-  quantity: z.number().min(0, "La cantidad no puede ser negativa").optional(),
+  quantity: z.coerce.number().min(0, "La cantidad no puede ser negativa").optional(),
   location: z.string().optional(),
-  minStock: z.number().min(0).optional(),
+  minStock: z.coerce.number().min(0).optional(),
 })
 
 // Props

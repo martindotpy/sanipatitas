@@ -7,22 +7,35 @@ import {
 import type {
   CreateStockRequest,
   StockDto,
+  StockMovementDto,
 } from "@sanipatitas/desktop/inventory/api/inventory-api"
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query"
 
 // Query keys
 const allProductsKey = ["inventory-products"] as const
+const stockKey = (productId: string) => ["stock", productId] as const
 
-// Hook to get stock by product ID
+// Hook to get stock by product ID (null when not registered)
 export function useStockByProduct(productId: string | null) {
   return useQuery({
-    queryKey: ["stock", productId],
-    queryFn: () =>
-      getApiInventoryStockByProduct({
+    queryKey: stockKey(productId ?? ""),
+    queryFn: async (): Promise<StockDto | null> => {
+      const result = await getApiInventoryStockByProduct({
         query: { productId: productId! },
-        throwOnError: true,
-      }),
+      })
+
+      if (result.response?.status === 404) {
+        return null
+      }
+
+      if (result.error) {
+        throw result.error
+      }
+
+      return result.data?.data ?? null
+    },
     enabled: !!productId,
+    retry: false,
   })
 }
 
@@ -30,11 +43,14 @@ export function useStockByProduct(productId: string | null) {
 export function useStockMovements(stockId: string | null) {
   return useQuery({
     queryKey: ["stock-movements", stockId],
-    queryFn: () =>
-      getApiInventoryStockMovementByStockByStockId({
+    queryFn: async (): Promise<StockMovementDto[]> => {
+      const result = await getApiInventoryStockMovementByStockByStockId({
         path: { stockId: stockId! },
         throwOnError: true,
-      }),
+      })
+
+      return result.data?.data ?? []
+    },
     enabled: !!stockId,
   })
 }
@@ -46,7 +62,8 @@ export function useCreateStock() {
   return useMutation({
     mutationFn: (body: CreateStockRequest) =>
       postApiInventoryStock({ body, throwOnError: true }),
-    onSuccess: () => {
+    onSuccess: (_data, variables) => {
+      queryClient.invalidateQueries({ queryKey: ["stock", variables.productId] })
       queryClient.invalidateQueries({ queryKey: ["stock"] })
       queryClient.invalidateQueries({ queryKey: allProductsKey })
     },
@@ -64,7 +81,8 @@ export function useUpdateStock() {
         body: { productId, ...body },
         throwOnError: true,
       }),
-    onSuccess: () => {
+    onSuccess: (_data, variables) => {
+      queryClient.invalidateQueries({ queryKey: ["stock", variables.productId] })
       queryClient.invalidateQueries({ queryKey: ["stock"] })
     },
   })

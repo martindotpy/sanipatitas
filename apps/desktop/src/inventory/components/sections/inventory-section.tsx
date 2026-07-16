@@ -23,8 +23,6 @@ import type {
   ProductCategoryDto,
   SupplierDto,
   ProductDto,
-  StockDto,
-  StockMovementDto,
 } from "@sanipatitas/desktop/inventory/api/inventory-api"
 import {
   AlertDialog,
@@ -249,11 +247,6 @@ function StockTab() {
   const products = productsQuery.data?.data ?? []
   const [showMovementsFor, setShowMovementsFor] = useState<string | null>(null)
 
-  const stockQuery = useStockByProduct(showMovementsFor)
-  const stock: StockDto | null = (stockQuery.data as { data?: StockDto } | undefined)?.data ?? null
-  const movementsQuery = useStockMovements(stock?.id ?? null)
-  const movements: StockMovementDto[] = (movementsQuery.data as { data?: StockMovementDto[] } | undefined)?.data ?? []
-
   if (productsQuery.isLoading) {
     return <div className="flex items-center justify-center py-8"><Spinner /></div>
   }
@@ -289,9 +282,6 @@ function StockTab() {
                   )
                 }
                 showMovements={showMovementsFor === product.id}
-                stock={showMovementsFor === product.id ? stock : null}
-                movements={showMovementsFor === product.id ? movements : []}
-                movementsLoading={movementsQuery.isLoading}
               />
             ))
           )}
@@ -305,12 +295,14 @@ interface StockRowProps {
   product: ProductDto
   onViewMovements: () => void
   showMovements: boolean
-  stock: StockDto | null
-  movements: StockMovementDto[]
-  movementsLoading: boolean
 }
 
-function StockRow({ product, onViewMovements, showMovements, stock, movements, movementsLoading }: StockRowProps) {
+function StockRow({ product, onViewMovements, showMovements }: StockRowProps) {
+  const stockQuery = useStockByProduct(product.id)
+  const stock = stockQuery.data ?? null
+  const movementsQuery = useStockMovements(showMovements ? (stock?.id ?? null) : null)
+  const movements = movementsQuery.data ?? []
+
   const quantity = stock?.quantity ?? 0
   const minStock = stock?.minStock
   const isLowStock = minStock != null && quantity <= minStock
@@ -319,11 +311,19 @@ function StockRow({ product, onViewMovements, showMovements, stock, movements, m
     <>
       <TableRow>
         <TableCell className="font-medium">{product.name}</TableCell>
-        <TableCell>{quantity}</TableCell>
-        <TableCell>{minStock?.toString() ?? "—"}</TableCell>
-        <TableCell>{stock?.location ?? "—"}</TableCell>
         <TableCell>
-          {stock ? (
+          {stockQuery.isLoading ? "…" : stock ? quantity : "—"}
+        </TableCell>
+        <TableCell>
+          {stockQuery.isLoading ? "…" : (minStock?.toString() ?? "—")}
+        </TableCell>
+        <TableCell>
+          {stockQuery.isLoading ? "…" : (stock?.location ?? "—")}
+        </TableCell>
+        <TableCell>
+          {stockQuery.isLoading ? (
+            <Badge variant="outline">Cargando</Badge>
+          ) : stock ? (
             isLowStock ? (
               <Badge variant="destructive">Stock bajo</Badge>
             ) : quantity > 0 ? (
@@ -337,17 +337,23 @@ function StockRow({ product, onViewMovements, showMovements, stock, movements, m
         </TableCell>
         <TableCell>
           <div className="flex items-center gap-1">
-            <Button variant="ghost" size="icon-sm" onClick={onViewMovements}>
+            <Button
+              variant="ghost"
+              size="icon-sm"
+              className="cursor-pointer"
+              onClick={onViewMovements}
+              disabled={!stock}
+            >
               <TbHistory className="size-4" />
             </Button>
-            {!stock && <CreateStockDialog product={product} />}
+            {!stock && !stockQuery.isLoading && <CreateStockDialog product={product} />}
           </div>
         </TableCell>
       </TableRow>
-      {showMovements && (
+      {showMovements && stock && (
         <TableRow>
           <TableCell colSpan={6} className="bg-muted/30 p-3">
-            {movementsLoading ? (
+            {movementsQuery.isLoading ? (
               <div className="flex justify-center py-4"><Spinner /></div>
             ) : movements.length === 0 ? (
               <p className="text-muted-foreground text-center text-sm">Sin movimientos registrados.</p>
