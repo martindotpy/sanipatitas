@@ -1,8 +1,8 @@
 import { DataTableViewOptions } from "@sanipatitas/ui/components/ui/data-table-view-options"
 import { cn } from "@sanipatitas/ui/lib/tailwind"
-import type { Table, useReactTable } from "@tanstack/react-table"
+import type { Table, VisibilityState, useReactTable } from "@tanstack/react-table"
 
-// Component
+// Types
 export interface DataTableToolbarProps<TData> {
   table: Table<TData>
   searchRender?:
@@ -16,15 +16,17 @@ export interface DataTableToolbarProps<TData> {
         table: ReturnType<typeof useReactTable<TData>>
       }) => React.ReactNode)
   hasOneColumnVisible?: boolean
+  columnVisibility?: VisibilityState
 }
 
+// Component
 export function DataTableToolbar<TData>({
   table,
   searchRender,
   tableOptionsRender,
   hasOneColumnVisible,
+  columnVisibility,
 }: DataTableToolbarProps<TData>) {
-  // Resolved
   const resolvedSearchRender =
     typeof searchRender === "function" ? searchRender({ table }) : searchRender
   const resolvedTableOptionsRender =
@@ -48,6 +50,7 @@ export function DataTableToolbar<TData>({
         <DataTableViewOptions
           table={table}
           hasOneColumnVisible={hasOneColumnVisible}
+          columnVisibility={columnVisibility}
         />
       </div>
     </div>

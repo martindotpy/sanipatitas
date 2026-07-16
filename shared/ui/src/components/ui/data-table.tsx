@@ -184,6 +184,7 @@ export function DataTable<TData>({
         searchRender={searchRender}
         tableOptionsRender={tableOptionsRender}
         hasOneColumnVisible={hasOneColumnVisible}
+        columnVisibility={columnVisibility}
       />
 
       {selectionActionsRender?.(table)}
