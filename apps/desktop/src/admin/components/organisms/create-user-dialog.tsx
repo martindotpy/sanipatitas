@@ -72,7 +72,7 @@ authClient.admin.createUser(
             dialogActionsRef.current?.close()
             reset()
             queryClient.invalidateQueries({ queryKey: ["admin-users"] })
-            return "Usuario creado correctamente"
+            return "Usuario creado. Se envió un correo de verificación."
           },
           error: "Error al crear el usuario",
         }

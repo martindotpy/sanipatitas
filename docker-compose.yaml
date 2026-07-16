@@ -49,6 +49,8 @@ services:
       ADMIN_EMAIL: dev@martindotpy.dev
       ADMIN_PASSWORD: martindotpy
       REDIS_URL: redis://database-redis:6379
+      RESEND_API_KEY: ${RESEND_API_KEY:-re_dnB6BH1q_KPYyVSfL2kCVaQfhisSoqTGa}
+      EMAIL_FROM: "Sanipatitas <onboarding@resend.dev>"
     container_name: sanipatitas-auth
     expose:
       - "3000"
