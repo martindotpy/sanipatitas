@@ -14,6 +14,7 @@ import {
 } from "@sanipatitas/ui/components/ui/dialog"
 import { FieldGroup } from "@sanipatitas/ui/components/ui/field"
 import { ControlledInput } from "@sanipatitas/ui/components/form/controlled/controlled-input"
+import { ControlledDatetimeInput } from "@sanipatitas/ui/components/form/controlled/controlled-datetime-input"
 import { ControlledCombobox } from "@sanipatitas/ui/components/form/controlled/controlled-combobox"
 import { ControlledTextarea } from "@sanipatitas/ui/components/form/controlled/controlled-textarea"
 import { useQuery } from "@tanstack/react-query"
@@ -79,14 +80,10 @@ export function CreatePrescription({ patientId }: CreatePrescriptionProps) {
   })
 
   const onSubmit = handleSubmit((data) => {
-    // Transform date values to ISO datetime format for Zod validation
-    const toIsoDatetime = (val: string | undefined) =>
-      val ? `${val}T00:00:00` : undefined
-
     createMutation.mutate(
       {
-        issueDate: toIsoDatetime(data.issueDate) as string,
-        expirationDate: toIsoDatetime(data.expirationDate),
+        issueDate: data.issueDate,
+        expirationDate: data.expirationDate,
         notes: data.notes || undefined,
         status: (data.status || "ACTIVE") as OpenapiPrescriptionStatus,
         patientId,
@@ -130,17 +127,17 @@ export function CreatePrescription({ patientId }: CreatePrescriptionProps) {
         </DialogHeader>
 
         <FieldGroup>
-          <ControlledInput
+          <ControlledDatetimeInput
             control={control}
             name="issueDate"
-            inputProps={{ type: "date" }}
+            mode="date"
             label="Fecha de emisión"
           />
 
-          <ControlledInput
+          <ControlledDatetimeInput
             control={control}
             name="expirationDate"
-            inputProps={{ type: "date" }}
+            mode="date"
             label="Fecha de vencimiento"
           />
 

@@ -19,6 +19,7 @@ import {
 } from "@sanipatitas/ui/components/ui/dialog"
 import { FieldGroup } from "@sanipatitas/ui/components/ui/field"
 import { ControlledInput } from "@sanipatitas/ui/components/form/controlled/controlled-input"
+import { ControlledDatetimeInput } from "@sanipatitas/ui/components/form/controlled/controlled-datetime-input"
 import { ControlledCombobox } from "@sanipatitas/ui/components/form/controlled/controlled-combobox"
 import { useQuery } from "@tanstack/react-query"
 import { useMemo, useRef } from "react"
@@ -90,9 +91,6 @@ export function CreateObservation({ patientId }: CreateObservationProps) {
   })
 
   const onSubmit = handleSubmit((data) => {
-    // Transform datetime-local value to ISO format (add seconds)
-    const issuedDate = data.issuedDate ? `${data.issuedDate}:00` : undefined
-
     createMutation.mutate(
       {
         code: data.code,
@@ -104,7 +102,7 @@ export function CreateObservation({ patientId }: CreateObservationProps) {
         referenceRange: data.referenceRange || undefined,
         category: data.category as OpenapiObservationCategory | undefined,
         status: data.status as OpenapiObservationStatus | undefined,
-        issuedDate,
+        issuedDate: data.issuedDate,
         patientId,
         veterinarianId: data.veterinarianId,
       },
@@ -176,10 +174,10 @@ export function CreateObservation({ patientId }: CreateObservationProps) {
             searchPlaceholder="Buscar veterinario..."
           />
 
-          <ControlledInput
+          <ControlledDatetimeInput
             control={control}
             name="issuedDate"
-            inputProps={{ type: "datetime-local" }}
+            mode="datetime-local"
             label="Fecha de emisión"
           />
         </FieldGroup>

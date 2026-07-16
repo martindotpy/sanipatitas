@@ -15,6 +15,7 @@ import {
 } from "@sanipatitas/ui/components/ui/dialog"
 import { FieldGroup } from "@sanipatitas/ui/components/ui/field"
 import { ControlledInput } from "@sanipatitas/ui/components/form/controlled/controlled-input"
+import { ControlledDatetimeInput } from "@sanipatitas/ui/components/form/controlled/controlled-datetime-input"
 import { ControlledCombobox } from "@sanipatitas/ui/components/form/controlled/controlled-combobox"
 import { useQuery } from "@tanstack/react-query"
 import { useMemo, useRef } from "react"
@@ -92,18 +93,14 @@ export function CreateImmunization({ patientId }: CreateImmunizationProps) {
   })
 
   const onSubmit = handleSubmit((data) => {
-    // Transform date values to ISO datetime format for Zod validation
-    const toIsoDatetime = (val: string | undefined) =>
-      val ? `${val}T00:00:00` : undefined
-
     createMutation.mutate(
       {
         vaccineCode: data.vaccineCode || undefined,
         vaccineName: data.vaccineName,
         manufacturer: data.manufacturer || undefined,
         lotNumber: data.lotNumber || undefined,
-        expirationDate: toIsoDatetime(data.expirationDate),
-        administrationDate: data.administrationDate ? `${data.administrationDate}T00:00:00` : data.administrationDate,
+        expirationDate: data.expirationDate,
+        administrationDate: data.administrationDate,
         doseNumber: data.doseNumber || undefined,
         doseUnit: data.doseUnit || undefined,
         route: data.route as OpenapiImmunizationRoute | undefined,
@@ -150,17 +147,17 @@ export function CreateImmunization({ patientId }: CreateImmunizationProps) {
 
           <ControlledInput control={control} name="lotNumber" label="Número de lote" />
 
-          <ControlledInput
+          <ControlledDatetimeInput
             control={control}
             name="expirationDate"
-            inputProps={{ type: "date" }}
+            mode="date"
             label="Fecha de vencimiento"
           />
 
-          <ControlledInput
+          <ControlledDatetimeInput
             control={control}
             name="administrationDate"
-            inputProps={{ type: "date" }}
+            mode="date"
             label="Fecha de administración"
           />
 

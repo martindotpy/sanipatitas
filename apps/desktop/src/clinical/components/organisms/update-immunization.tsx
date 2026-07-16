@@ -18,6 +18,7 @@ import {
 } from "@sanipatitas/ui/components/ui/dialog"
 import { FieldGroup } from "@sanipatitas/ui/components/ui/field"
 import { ControlledInput } from "@sanipatitas/ui/components/form/controlled/controlled-input"
+import { ControlledDatetimeInput } from "@sanipatitas/ui/components/form/controlled/controlled-datetime-input"
 import { ControlledCombobox } from "@sanipatitas/ui/components/form/controlled/controlled-combobox"
 import { useQuery } from "@tanstack/react-query"
 import { useEffect, useMemo, useRef } from "react"
@@ -145,7 +146,7 @@ export function UpdateImmunization({
         vaccineName: data.vaccineName!,
         manufacturer: data.manufacturer || undefined,
         lotNumber: data.lotNumber || undefined,
-        expirationDate: data.expirationDate || undefined,
+        expirationDate: data.expirationDate,
         administrationDate: data.administrationDate!,
         doseNumber: data.doseNumber || undefined,
         doseUnit: data.doseUnit || undefined,
@@ -183,17 +184,17 @@ export function UpdateImmunization({
 
           <ControlledInput control={control} name="lotNumber" label="Número de lote" />
 
-          <ControlledInput
+          <ControlledDatetimeInput
             control={control}
             name="expirationDate"
-            inputProps={{ type: "date" }}
+            mode="date"
             label="Fecha de vencimiento"
           />
 
-          <ControlledInput
+          <ControlledDatetimeInput
             control={control}
             name="administrationDate"
-            inputProps={{ type: "date" }}
+            mode="date"
             label="Fecha de administración"
           />
 
