@@ -28,24 +28,28 @@ export function DeletePatientAlert({
   onSuccess,
 }: DeletePatientAlertProps) {
   const patientQuery = usePatient()
+  const isSingle = patients.length === 1
 
   const deleteMutation = useMutation({
     mutationFn: async (ids: string[]) => {
       await Promise.all(
-        ids.map((id) => deleteApiPatientById({ path: { id } }))
+        ids.map((id) => deleteApiPatientById({ path: { id }, throwOnError: true }))
       )
     },
     onSuccess: () => {
       patientQuery.refetch()
       onOpenChange(false)
       onSuccess?.()
+      toast.success(isSingle ? "Paciente eliminado" : "Pacientes eliminados")
     },
     onError: (error) => {
-      toast.error((error as { detail?: string })?.detail ?? "Error al eliminar paciente(s)")
+      const detail =
+        error && typeof error === "object" && "detail" in error && typeof error.detail === "string"
+          ? error.detail
+          : null
+      toast.error(detail ?? "Error al eliminar paciente(s)")
     },
   })
-
-  const isSingle = patients.length === 1
 
   return (
     <AlertDialog open={open} onOpenChange={onOpenChange}>
