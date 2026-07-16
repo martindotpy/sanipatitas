@@ -54,7 +54,7 @@ export function PatientDetailsSheet({
 
         {patient && (
           <Tabs defaultValue="info">
-            <TabsList className="mx-4 flex-wrap">
+            <TabsList className="mx-4 h-auto flex-wrap">
               <TabsTab value="info">Info</TabsTab>
               <TabsTab value="conditions">Condiciones</TabsTab>
               <TabsTab value="observations">Observaciones</TabsTab>

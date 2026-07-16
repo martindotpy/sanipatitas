@@ -15,6 +15,7 @@ import {
 } from "@sanipatitas/ui/components/ui/dialog"
 import { FieldGroup } from "@sanipatitas/ui/components/ui/field"
 import { ControlledInput } from "@sanipatitas/ui/components/form/controlled/controlled-input"
+import { ControlledDatetimeInput } from "@sanipatitas/ui/components/form/controlled/controlled-datetime-input"
 import { ControlledCombobox } from "@sanipatitas/ui/components/form/controlled/controlled-combobox"
 import { ControlledTextarea } from "@sanipatitas/ui/components/form/controlled/controlled-textarea"
 import { useQuery } from "@tanstack/react-query"
@@ -81,9 +82,6 @@ export function CreateCondition({ patientId }: CreateConditionProps) {
   })
 
   const onSubmit = handleSubmit((data) => {
-    // Transform datetime-local value to ISO format (add seconds)
-    const onsetDate = data.onsetDate ? `${data.onsetDate}:00` : undefined
-
     createMutation.mutate(
       {
         body: {
@@ -91,7 +89,6 @@ export function CreateCondition({ patientId }: CreateConditionProps) {
           patientId,
           code: data.code || undefined,
           description: data.description || undefined,
-          onsetDate,
           status: data.status || undefined,
           severity: data.severity || undefined,
         },
@@ -154,10 +151,10 @@ export function CreateCondition({ patientId }: CreateConditionProps) {
             searchPlaceholder="Buscar veterinario..."
           />
 
-          <ControlledInput
+          <ControlledDatetimeInput
             control={control}
             name="onsetDate"
-            inputProps={{ type: "datetime-local" }}
+            mode="datetime-local"
             label="Fecha de inicio"
           />
 

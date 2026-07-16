@@ -18,6 +18,7 @@ import {
 } from "@sanipatitas/ui/components/ui/dialog"
 import { FieldGroup } from "@sanipatitas/ui/components/ui/field"
 import { ControlledInput } from "@sanipatitas/ui/components/form/controlled/controlled-input"
+import { ControlledDatetimeInput } from "@sanipatitas/ui/components/form/controlled/controlled-datetime-input"
 import { ControlledCombobox } from "@sanipatitas/ui/components/form/controlled/controlled-combobox"
 import { useQuery } from "@tanstack/react-query"
 import { useEffect, useMemo, useRef } from "react"
@@ -144,7 +145,7 @@ export function UpdateObservation({
         referenceRange: data.referenceRange || undefined,
         category: data.category as OpenapiObservationCategory | undefined,
         status: data.status as OpenapiObservationStatus | undefined,
-        issuedDate: data.issuedDate || undefined,
+        issuedDate: data.issuedDate,
         veterinarianId: data.veterinarianId!,
         patientId,
       },
@@ -206,10 +207,10 @@ export function UpdateObservation({
             searchPlaceholder="Buscar veterinario..."
           />
 
-          <ControlledInput
+          <ControlledDatetimeInput
             control={control}
             name="issuedDate"
-            inputProps={{ type: "datetime-local" }}
+            mode="datetime-local"
             label="Fecha de emisión"
           />
         </FieldGroup>
