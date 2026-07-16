@@ -15,6 +15,8 @@ export const {
   BETTER_AUTH_URL: betterAuthUrl,
   ADMIN_EMAIL: adminEmail,
   ADMIN_PASSWORD: adminPassword,
+  RESEND_API_KEY: resendApiKey,
+  EMAIL_FROM: emailFrom,
 } = (
   z.object({
     // App
@@ -35,6 +37,10 @@ export const {
     // Admin user
     ADMIN_EMAIL: z.email(),
     ADMIN_PASSWORD: z.string().min(8),
+
+    // Email
+    RESEND_API_KEY: z.string().min(1),
+    EMAIL_FROM: z.string().min(1),
   }) satisfies z.ZodType<KeyEnv>
 ).parse(process.env)
 

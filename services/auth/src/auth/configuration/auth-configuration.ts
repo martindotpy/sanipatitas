@@ -4,7 +4,9 @@ import {
   veterinarian,
   worker,
 } from "@sanipatitas/auth/auth/configuration/permissions"
+import { buildVerificationEmailHtml } from "@sanipatitas/auth/auth/mail/verification-email"
 import { isDev } from "@sanipatitas/auth/core/configuration/app-configuration"
+import { sendMail } from "@sanipatitas/auth/core/mailer/mailer"
 import { db, schema } from "@sanipatitas/database"
 import { serverLog } from "@sanipatitas/shared/log/server-logger"
 import { betterAuth } from "better-auth"
@@ -30,12 +32,41 @@ export const auth = betterAuth({
   emailAndPassword: {
     enabled: true,
     maxPasswordLength: 60,
+    requireEmailVerification: true,
+  },
+  emailVerification: {
+    sendVerificationEmail: async ({ user, url }) => {
+      await sendMail({
+        to: user.email,
+        subject: "Verifica tu correo - Sanipatitas",
+        html: buildVerificationEmailHtml({ name: user.name, url }),
+      })
+    },
+    // Sending centralized in databaseHooks below, avoids double-send on sign-up
+    sendOnSignUp: false,
+    autoSignInAfterVerification: true,
+    expiresIn: 3600,
   },
   user: {
     additionalFields: {
       lastName: {
         type: "string",
         required: true,
+      },
+    },
+  },
+  databaseHooks: {
+    user: {
+      create: {
+        after: async (user) => {
+          if (user.emailVerified) {
+            return
+          }
+
+          await auth.api.sendVerificationEmail({
+            body: { email: user.email, callbackURL: "/sign-in?verified=true" },
+          })
+        },
       },
     },
   },

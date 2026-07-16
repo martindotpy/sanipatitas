@@ -1,5 +1,8 @@
 import { zodResolver } from "@hookform/resolvers/zod"
-import { authClient } from "@sanipatitas/desktop/auth/client/auth-client"
+import {
+  authClient,
+  isAuthError,
+} from "@sanipatitas/desktop/auth/client/auth-client"
 import { invalidateSessionQuery } from "@sanipatitas/desktop/auth/query/session-query"
 import { Favicon } from "@sanipatitas/desktop/core/components/atoms/favicon"
 import { useClearHistory } from "@sanipatitas/desktop/core/hook/use-clear-history"
@@ -45,27 +48,55 @@ export function SignInForm() {
   })
 
   const onSubmit = handleSubmit(async (data) => {
-    await toast
-      .promise(
-        invalidateSessionQuery().then(() =>
-          authClient.signIn.email(
-            { email: data.email, password: data.password },
-            { throw: true }
-          )
-        ),
-        {
-          loading: "Ingresando...",
-          success: async ({ user }) => {
-            await navigate({ to: "/", replace: true })
-            clearHistory()
+    try {
+      await toast
+        .promise(
+          invalidateSessionQuery().then(() =>
+            authClient.signIn.email(
+              { email: data.email, password: data.password },
+              { throw: true }
+            )
+          ),
+          {
+            loading: "Ingresando...",
+            success: async ({ user }) => {
+              await navigate({ to: "/", replace: true })
+              clearHistory()
 
-            return `¡Bienvenido de nuevo, ${user.name}!`
+              return `¡Bienvenido de nuevo, ${user.name}!`
+            },
+            error: (error) =>
+              isAuthError(error) && error.code === "EMAIL_NOT_VERIFIED"
+                ? "Tu correo aún no está verificado."
+                : "Error al ingresar, verifica tus credenciales e intenta nuevamente.",
+          }
+        )
+        .unwrap()
+    } catch (error) {
+      if (!isAuthError(error) || error.code !== "EMAIL_NOT_VERIFIED") {
+        return
+      }
+
+      toast("¿No recibiste el correo?", {
+        description: "Podemos reenviarte el enlace de verificación.",
+        action: {
+          label: "Reenviar correo",
+          onClick: () => {
+            toast.promise(
+              authClient.sendVerificationEmail({
+                email: data.email,
+                callbackURL: "/sign-in?verified=true",
+              }),
+              {
+                loading: "Enviando correo...",
+                success: "Correo de verificación enviado.",
+                error: "No se pudo enviar el correo, intenta más tarde.",
+              }
+            )
           },
-          error:
-            "Error al ingresar, verifica tus credenciales e intenta nuevamente.",
-        }
-      )
-      .unwrap()
+        },
+      })
+    }
   })
 
   return (
