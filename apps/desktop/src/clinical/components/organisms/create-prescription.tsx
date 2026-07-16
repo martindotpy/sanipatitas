@@ -69,6 +69,7 @@ export function CreatePrescription({ patientId }: CreatePrescriptionProps) {
       expirationDate: "",
       notes: "",
       status: "ACTIVE",
+      patientId,
       veterinarianId: "",
       items: [{ medicationName: "", dosage: "", frequency: "", duration: "", route: "", notes: "" }],
     },
@@ -108,6 +109,8 @@ export function CreatePrescription({ patientId }: CreatePrescriptionProps) {
         },
       }
     )
+  }, () => {
+    toast.error("Revisa los campos del formulario")
   })
 
   return (
