@@ -4,10 +4,6 @@ import {
   FieldLabel,
 } from "@sanipatitas/ui/components/ui/field"
 import {
-  InputGroup,
-  InputGroupAddon,
-} from "@sanipatitas/ui/components/ui/input-group"
-import {
   NumberInput,
   type NumberInputProps,
 } from "@sanipatitas/ui/components/ui/number-input"
@@ -21,7 +17,7 @@ import {
 } from "react-hook-form"
 import type z from "zod"
 
-// Component
+// Types
 interface ControlledNumberInputProps<
   TIconProps extends ClassNameProp = ClassNameProp,
   TFieldValues extends FieldValues = FieldValues,
@@ -36,6 +32,7 @@ interface ControlledNumberInputProps<
   iconProps?: TIconProps
 }
 
+// Component
 export function ControlledNumberInput<
   TIconProps extends ClassNameProp = ClassNameProp,
   TFieldValues extends FieldValues = FieldValues,
@@ -62,7 +59,7 @@ export function ControlledNumberInput<
             {label}
           </FieldLabel>
 
-          <InputGroup>
+          <div className="relative w-full">
             <NumberInput
               id={name}
               className={numberInputClassName}
@@ -78,13 +75,16 @@ export function ControlledNumberInput<
               defaultValue={field.value}
               onValueChange={(value) => field.onChange(value)}
             />
-
             {Icon && (
-              <InputGroupAddon align="inline-end">
-                <Icon {...iconProps} className={cn(iconProps.className)} />
-              </InputGroupAddon>
+              <Icon
+                {...iconProps}
+                className={cn(
+                  "text-muted-foreground pointer-events-none absolute top-1/2 right-10 size-4 -translate-y-1/2",
+                  iconProps.className,
+                )}
+              />
             )}
-          </InputGroup>
+          </div>
 
           {fieldState.invalid && (
             <FieldError
