@@ -1,0 +1,147 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<bpmn:definitions
+  xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL"
+  xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI"
+  xmlns:dc="http://www.omg.org/spec/DD/20100524/DC"
+  xmlns:di="http://www.omg.org/spec/DD/20100524/DI"
+  targetNamespace="http://sanipatitas.clinic/bpmn"
+  id="definitions-autenticacion">
+
+  <bpmn:collaboration id="Collaboration_Autenticacion">
+    <bpmn:participant id="Participant_Frontend" name="Frontend Aplicación Web" processRef="Process_Frontend" />
+    <bpmn:participant id="Participant_AuthService" name="Auth Service (Bun + Elysia + Better Auth)" processRef="Process_AuthService" />
+    <bpmn:messageFlow id="MF_LoginRequest" sourceRef="Task_EnviarCredenciales" targetRef="Task_ValidarCredenciales" />
+    <bpmn:messageFlow id="MF_LoginExitoso" sourceRef="Task_GenerarJWT" targetRef="CatchEvent_Exitoso" />
+    <bpmn:messageFlow id="MF_LoginFallido" sourceRef="EndEvent_Denegado" targetRef="CatchEvent_Fallido" />
+  </bpmn:collaboration>
+
+  <!-- Frontend Process -->
+  <bpmn:process id="Process_Frontend" name="Frontend - Inicio de Sesión" isExecutable="false">
+    <bpmn:laneSet id="LaneSet_Frontend">
+      <bpmn:lane id="Lane_Usuario" name="Usuario">
+        <bpmn:flowNodeRef>StartEvent_Inicio</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>Task_IngresarCredenciales</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>Task_EnviarCredenciales</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>CatchEvent_Exitoso</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>CatchEvent_Fallido</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>Gateway_Respuesta</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>Task_RedirigirDashboard</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>Task_MostrarError</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>EndEvent_Exitoso</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>EndEvent_Error</bpmn:flowNodeRef>
+      </bpmn:lane>
+    </bpmn:laneSet>
+
+    <bpmn:startEvent id="StartEvent_Inicio" name="Inicia sesión">
+      <bpmn:outgoing>Flow_FE_1</bpmn:outgoing>
+    </bpmn:startEvent>
+
+    <bpmn:sequenceFlow id="Flow_FE_1" sourceRef="StartEvent_Inicio" targetRef="Task_IngresarCredenciales" />
+
+    <bpmn:userTask id="Task_IngresarCredenciales" name="Ingresar email y contraseña">
+      <bpmn:documentation>Usuario ingresa sus credenciales en el formulario de inicio de sesión</bpmn:documentation>
+      <bpmn:incoming>Flow_FE_1</bpmn:incoming>
+      <bpmn:outgoing>Flow_FE_2</bpmn:outgoing>
+    </bpmn:userTask>
+
+    <bpmn:sequenceFlow id="Flow_FE_2" sourceRef="Task_IngresarCredenciales" targetRef="Task_EnviarCredenciales" />
+
+    <bpmn:serviceTask id="Task_EnviarCredenciales" name="Enviar POST /api/auth/sign-in/email">
+      <bpmn:documentation>Frontend envía credenciales al Auth Service. Espera respuesta (token o error).</bpmn:documentation>
+      <bpmn:incoming>Flow_FE_2</bpmn:incoming>
+      <bpmn:outgoing>Flow_FE_3</bpmn:outgoing>
+    </bpmn:serviceTask>
+
+    <bpmn:sequenceFlow id="Flow_FE_3" sourceRef="Task_EnviarCredenciales" targetRef="Gateway_EventBased" />
+
+    <bpmn:eventBasedGateway id="Gateway_EventBased" name="Esperar respuesta">
+      <bpmn:incoming>Flow_FE_3</bpmn:incoming>
+      <bpmn:outgoing>Flow_FE_OK</bpmn:outgoing>
+      <bpmn:outgoing>Flow_FE_Error</bpmn:outgoing>
+    </bpmn:eventBasedGateway>
+
+    <bpmn:intermediateCatchEvent id="CatchEvent_Exitoso" name="Token JWT recibido">
+      <bpmn:messageEventDefinition />
+      <bpmn:incoming>Flow_FE_OK</bpmn:incoming>
+      <bpmn:outgoing>Flow_FE_Dashboard</bpmn:outgoing>
+    </bpmn:intermediateCatchEvent>
+
+    <bpmn:sequenceFlow id="Flow_FE_OK" sourceRef="Gateway_EventBased" targetRef="CatchEvent_Exitoso" />
+
+    <bpmn:sequenceFlow id="Flow_FE_Dashboard" sourceRef="CatchEvent_Exitoso" targetRef="Task_RedirigirDashboard" />
+
+    <bpmn:intermediateCatchEvent id="CatchEvent_Fallido" name="Error 401 recibido">
+      <bpmn:messageEventDefinition />
+      <bpmn:incoming>Flow_FE_Error</bpmn:incoming>
+      <bpmn:outgoing>Flow_FE_Err</bpmn:outgoing>
+    </bpmn:intermediateCatchEvent>
+
+    <bpmn:sequenceFlow id="Flow_FE_Error" sourceRef="Gateway_EventBased" targetRef="CatchEvent_Fallido" />
+
+    <bpmn:sequenceFlow id="Flow_FE_Err" sourceRef="CatchEvent_Fallido" targetRef="Task_MostrarError" />
+
+    <bpmn:userTask id="Task_RedirigirDashboard" name="Redirigir al dashboard según rol">
+      <bpmn:documentation>Frontend redirige al dashboard correspondiente (admin/veterinarian/worker)</bpmn:documentation>
+      <bpmn:incoming>Flow_FE_Dashboard</bpmn:incoming>
+      <bpmn:outgoing>Flow_FE_Fin_OK</bpmn:outgoing>
+    </bpmn:userTask>
+
+    <bpmn:sequenceFlow id="Flow_FE_Fin_OK" sourceRef="Task_RedirigirDashboard" targetRef="EndEvent_Exitoso" />
+
+    <bpmn:endEvent id="EndEvent_Exitoso" name="Autenticación exitosa">
+      <bpmn:incoming>Flow_FE_Fin_OK</bpmn:incoming>
+    </bpmn:endEvent>
+
+    <bpmn:userTask id="Task_MostrarError" name="Mostrar error de autenticación">
+      <bpmn:documentation>Mostrar mensaje de credenciales inválidas. Opción de reintentar.</bpmn:documentation>
+      <bpmn:incoming>Flow_FE_Err</bpmn:incoming>
+      <bpmn:outgoing>Flow_FE_Fin_Err</bpmn:outgoing>
+    </bpmn:userTask>
+
+    <bpmn:sequenceFlow id="Flow_FE_Fin_Err" sourceRef="Task_MostrarError" targetRef="EndEvent_Error" />
+
+    <bpmn:endEvent id="EndEvent_Error" name="Acceso denegado">
+      <bpmn:incoming>Flow_FE_Fin_Err</bpmn:incoming>
+    </bpmn:endEvent>
+  </bpmn:process>
+
+  <!-- Auth Service Process -->
+  <bpmn:process id="Process_AuthService" name="Auth Service - Validación de Credenciales" isExecutable="false">
+    <bpmn:laneSet id="LaneSet_Backend">
+      <bpmn:lane id="Lane_Sistema" name="Sistema">
+        <bpmn:flowNodeRef>Task_ValidarCredenciales</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>Gateway_Validas</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>Task_GenerarJWT</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>EndEvent_Denegado</bpmn:flowNodeRef>
+      </bpmn:lane>
+    </bpmn:laneSet>
+
+    <bpmn:serviceTask id="Task_ValidarCredenciales" name="Better Auth: validar con bcrypt">
+      <bpmn:documentation>Better Auth busca el email en tabla user de PostgreSQL y verifica el hash bcrypt</bpmn:documentation>
+      <bpmn:incoming>MF_LoginRequest</bpmn:incoming>
+      <bpmn:outgoing>Flow_AS_1</bpmn:outgoing>
+    </bpmn:serviceTask>
+
+    <bpmn:sequenceFlow id="Flow_AS_1" sourceRef="Task_ValidarCredenciales" targetRef="Gateway_Validas" />
+
+    <bpmn:exclusiveGateway id="Gateway_Validas" name="¿Credenciales válidas?" default="Flow_Denegado">
+      <bpmn:incoming>Flow_AS_1</bpmn:incoming>
+      <bpmn:outgoing>Flow_JWT</bpmn:outgoing>
+      <bpmn:outgoing>Flow_Denegado</bpmn:outgoing>
+    </bpmn:exclusiveGateway>
+
+    <bpmn:sequenceFlow id="Flow_JWT" sourceRef="Gateway_Validas" targetRef="Task_GenerarJWT" />
+
+    <bpmn:sequenceFlow id="Flow_Denegado" sourceRef="Gateway_Validas" targetRef="EndEvent_Denegado" />
+
+    <bpmn:serviceTask id="Task_GenerarJWT" name="Firmar JWT ES256 y crear sesión en Redis">
+      <bpmn:documentation>Genera JWT firmado con ES256. Crea sesión en Redis. Retorna cookie httpOnly + token Bearer.</bpmn:documentation>
+      <bpmn:incoming>Flow_JWT</bpmn:incoming>
+    </bpmn:serviceTask>
+
+    <bpmn:endEvent id="EndEvent_Denegado" name="401 Unauthorized">
+      <bpmn:incoming>Flow_Denegado</bpmn:incoming>
+    </bpmn:endEvent>
+  </bpmn:process>
+
+</bpmn:definitions>

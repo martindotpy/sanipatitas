@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<bpmn:definitions
+  xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL"
+  xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI"
+  xmlns:dc="http://www.omg.org/spec/DD/20100524/DC"
+  xmlns:di="http://www.omg.org/spec/DD/20100524/DI"
+  xmlns:camunda="http://camunda.org/schema/1.0/bpmn"
+  targetNamespace="http://sanipatitas.clinic/bpmn"
+  id="definitions-auditoria">
+
+  <bpmn:collaboration id="Collaboration_Auditoria">
+    <bpmn:participant id="Participant_Servicio" name="Servicio Backend (Quarkus/Elysia)" processRef="Process_Servicio" />
+    <bpmn:participant id="Participant_Audit" name="Sistema de Auditoría" processRef="Process_Audit" />
+    <bpmn:messageFlow id="MF_Evento" sourceRef="Task_ExtraerDatos" targetRef="Gateway_Medio" />
+  </bpmn:collaboration>
+
+  <!-- Service Process -->
+  <bpmn:process id="Process_Servicio" name="Auditoría - Servicio Backend" isExecutable="false">
+    <bpmn:laneSet id="LaneSet_Servicio">
+      <bpmn:lane id="Lane_Backend" name="Backend">
+        <bpmn:flowNodeRef>StartEvent_OpCritica</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>Task_Interceptar</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>Task_ExtraerDatos</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>Task_Continuar</bpmn:flowNodeRef>
+        <bpmn:endEvent id="EndEvent_Fin" />
+      </bpmn:lane>
+    </bpmn:laneSet>
+
+    <bpmn:startEvent id="StartEvent_OpCritica" name="Operación crítica (POST / PUT / DELETE)">
+      <bpmn:outgoing>Flow_Svc_1</bpmn:outgoing>
+    </bpmn:startEvent>
+
+    <bpmn:sequenceFlow id="Flow_Svc_1" sourceRef="StartEvent_OpCritica" targetRef="Task_Interceptar" />
+
+    <bpmn:serviceTask id="Task_Interceptar" name="AuditLogFilter / auditMiddleware intercepta">
+      <bpmn:documentation>Filtro en Quarkus (AuditLogFilter) o middleware en Elysia intercepta la petición HTTP</bpmn:documentation>
+      <bpmn:incoming>Flow_Svc_1</bpmn:incoming>
+      <bpmn:outgoing>Flow_Svc_2</bpmn:outgoing>
+    </bpmn:serviceTask>
+
+    <bpmn:sequenceFlow id="Flow_Svc_2" sourceRef="Task_Interceptar" targetRef="Task_ExtraerDatos" />
+
+    <bpmn:serviceTask id="Task_ExtraerDatos" name="Extraer: who, when, action, resource, correlationId">
+      <bpmn:documentation>Extrae usuario (sub del JWT), rol, timestamp, acción, recurso afectado, correlationId</bpmn:documentation>
+      <bpmn:incoming>Flow_Svc_2</bpmn:incoming>
+      <bpmn:outgoing>Flow_Svc_3</bpmn:outgoing>
+    </bpmn:serviceTask>
+
+    <bpmn:sequenceFlow id="Flow_Svc_3" sourceRef="Task_ExtraerDatos" targetRef="Task_Continuar" />
+
+    <bpmn:serviceTask id="Task_Continuar" name="Ejecutar operación original">
+      <bpmn:documentation>Continúa con el flujo normal de la petición (no bloqueante)</bpmn:documentation>
+      <bpmn:incoming>Flow_Svc_3</bpmn:incoming>
+      <bpmn:outgoing>Flow_Svc_Fin</bpmn:outgoing>
+    </bpmn:serviceTask>
+
+    <bpmn:sequenceFlow id="Flow_Svc_Fin" sourceRef="Task_Continuar" targetRef="EndEvent_Fin" />
+
+    <bpmn:endEvent id="EndEvent_Fin" name="Respuesta al cliente">
+      <bpmn:incoming>Flow_Svc_Fin</bpmn:incoming>
+    </bpmn:endEvent>
+  </bpmn:process>
+
+  <!-- Audit System Process -->
+  <bpmn:process id="Process_Audit" name="Auditoría - Sistema" isExecutable="false">
+    <bpmn:laneSet id="LaneSet_Audit">
+      <bpmn:lane id="Lane_Log" name="Logs en tiempo real">
+        <bpmn:flowNodeRef>Task_LogJSON</bpmn:flowNodeRef>
+      </bpmn:lane>
+      <bpmn:lane id="Lane_Envers" name="Snapshot histórico (Hibernate Envers)">
+        <bpmn:flowNodeRef>Task_Envers</bpmn:flowNodeRef>
+      </bpmn:lane>
+      <bpmn:lane id="Lane_Fin" name="Fin">
+        <bpmn:flowNodeRef>Gateway_Medio</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>EndEvent_Auditado</bpmn:flowNodeRef>
+      </bpmn:lane>
+    </bpmn:laneSet>
+
+    <bpmn:parallelGateway id="Gateway_Medio" name="Ambos registros">
+      <bpmn:outgoing>Flow_Audit_Log</bpmn:outgoing>
+      <bpmn:outgoing>Flow_Audit_Envers</bpmn:outgoing>
+    </bpmn:exclusiveGateway>
+
+    <bpmn:sequenceFlow id="Flow_Audit_Log" sourceRef="Gateway_Medio" targetRef="Task_LogJSON" />
+
+    <bpmn:sequenceFlow id="Flow_Audit_Envers" sourceRef="Gateway_Medio" targetRef="Task_Envers" />
+
+    <bpmn:serviceTask id="Task_LogJSON" name="Emitir log JSON estructurado a Loki">
+      <bpmn:documentation>serverLog.info / LokiLogHandler envía log con formato: type=audit, who, when, action, resource</bpmn:documentation>
+      <bpmn:incoming>Flow_Audit_Log</bpmn:incoming>
+      <bpmn:outgoing>Flow_Audit_Merge</bpmn:outgoing>
+    </bpmn:serviceTask>
+
+    <bpmn:sequenceFlow id="Flow_Audit_Merge" sourceRef="Task_LogJSON" targetRef="EndEvent_Auditado" />
+
+    <bpmn:serviceTask id="Task_Envers" name="Guardar snapshot en tabla _AUD">
+      <bpmn:documentation>Hibernate Envers guarda en patient_aud, client_aud, appointment_aud, breed_aud, species_aud</bpmn:documentation>
+      <bpmn:incoming>Flow_Audit_Envers</bpmn:incoming>
+      <bpmn:outgoing>Flow_Audit_Merge2</bpmn:outgoing>
+    </bpmn:serviceTask>
+
+    <bpmn:sequenceFlow id="Flow_Audit_Merge2" sourceRef="Task_Envers" targetRef="EndEvent_Auditado" />
+
+    <bpmn:endEvent id="EndEvent_Auditado" name="Transacción auditada">
+      <bpmn:incoming>Flow_Audit_Merge</bpmn:incoming>
+      <bpmn:incoming>Flow_Audit_Merge2</bpmn:incoming>
+    </bpmn:endEvent>
+  </bpmn:process>
+
+</bpmn:definitions>

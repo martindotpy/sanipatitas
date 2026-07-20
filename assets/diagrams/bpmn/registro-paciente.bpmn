@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<bpmn:definitions
+  xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL"
+  xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI"
+  xmlns:dc="http://www.omg.org/spec/DD/20100524/DC"
+  xmlns:di="http://www.omg.org/spec/DD/20100524/DI"
+  xmlns:camunda="http://camunda.org/schema/1.0/bpmn"
+  targetNamespace="http://sanipatitas.clinic/bpmn"
+  id="definitions-registro-paciente">
+
+  <!-- COLLABORATION: defines pools -->
+  <bpmn:collaboration id="Collaboration_RegistroPaciente">
+    <bpmn:participant id="Participant_Frontend" name="Frontend (Trabajador)" processRef="Process_Frontend" />
+    <bpmn:participant id="Participant_PatientService" name="Patient Service" processRef="Process_PatientService" />
+    <bpmn:messageFlow id="Flow_Msg_RegistrarCliente" sourceRef="Task_IngresarDatosCliente" targetRef="Task_GuardarCliente" />
+    <bpmn:messageFlow id="Flow_Msg_RegistrarPaciente" sourceRef="Task_IngresarDatosPaciente" targetRef="Task_GuardarPaciente" />
+    <bpmn:messageFlow id="Flow_Msg_GenerarQR" sourceRef="Task_SolicitarQR" targetRef="Task_GenerarQR" />
+  </bpmn:collaboration>
+
+  <!-- PROCESS: Frontend -->
+  <bpmn:process id="Process_Frontend" name="Registro de Paciente - Frontend" isExecutable="false">
+    <bpmn:laneSet id="LaneSet_Frontend">
+      <bpmn:lane id="Lane_Trabajador" name="Trabajador">
+        <bpmn:flowNodeRef>StartEvent_Inicio</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>Task_IngresarDatosCliente</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>Task_IngresarDatosPaciente</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>Task_SolicitarQR</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>Task_EntregarQR</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>EndEvent_Fin</bpmn:flowNodeRef>
+      </bpmn:lane>
+    </bpmn:laneSet>
+
+    <bpmn:startEvent id="StartEvent_Inicio" name="Inicio">
+      <bpmn:outgoing>Flow_FE_1</bpmn:outgoing>
+    </bpmn:startEvent>
+
+    <bpmn:sequenceFlow id="Flow_FE_1" sourceRef="StartEvent_Inicio" targetRef="Task_IngresarDatosCliente" />
+
+    <bpmn:userTask id="Task_IngresarDatosCliente" name="Ingresar datos del cliente">
+      <bpmn:documentation>Registrar nombre, DNI, teléfono y email del cliente</bpmn:documentation>
+      <bpmn:incoming>Flow_FE_1</bpmn:incoming>
+      <bpmn:outgoing>Flow_FE_2</bpmn:outgoing>
+    </bpmn:userTask>
+
+    <bpmn:sequenceFlow id="Flow_FE_2" sourceRef="Task_IngresarDatosCliente" targetRef="Task_IngresarDatosPaciente" />
+
+    <bpmn:userTask id="Task_IngresarDatosPaciente" name="Ingresar datos del paciente">
+      <bpmn:documentation>Registrar nombre, especie, raza, edad, peso, descripción</bpmn:documentation>
+      <bpmn:incoming>Flow_FE_2</bpmn:incoming>
+      <bpmn:outgoing>Flow_FE_3</bpmn:outgoing>
+    </bpmn:userTask>
+
+    <bpmn:sequenceFlow id="Flow_FE_3" sourceRef="Task_IngresarDatosPaciente" targetRef="Task_SolicitarQR" />
+
+    <bpmn:userTask id="Task_SolicitarQR" name="Obtener código QR del paciente">
+      <bpmn:documentation>Frontend genera QR con protocolo sanipatitas://patient/{uuid}</bpmn:documentation>
+      <bpmn:incoming>Flow_FE_3</bpmn:incoming>
+      <bpmn:outgoing>Flow_FE_4</bpmn:outgoing>
+    </bpmn:userTask>
+
+    <bpmn:sequenceFlow id="Flow_FE_4" sourceRef="Task_SolicitarQR" targetRef="Task_EntregarQR" />
+
+    <bpmn:userTask id="Task_EntregarQR" name="Entregar etiqueta QR al propietario">
+      <bpmn:documentation>Imprimir etiqueta para colocar en la correa o collar de la mascota</bpmn:documentation>
+      <bpmn:incoming>Flow_FE_4</bpmn:incoming>
+      <bpmn:outgoing>Flow_FE_5</bpmn:outgoing>
+    </bpmn:userTask>
+
+    <bpmn:sequenceFlow id="Flow_FE_5" sourceRef="Task_EntregarQR" targetRef="EndEvent_Fin" />
+
+    <bpmn:endEvent id="EndEvent_Fin" name="Paciente registrado">
+      <bpmn:incoming>Flow_FE_5</bpmn:incoming>
+    </bpmn:endEvent>
+  </bpmn:process>
+
+  <!-- PROCESS: Patient Service -->
+  <bpmn:process id="Process_PatientService" name="Registro de Paciente - Backend" isExecutable="false">
+    <bpmn:laneSet id="LaneSet_Backend">
+      <bpmn:lane id="Lane_Sistema" name="Sistema">
+        <bpmn:flowNodeRef>Task_GuardarCliente</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>Task_GuardarPaciente</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>Task_GenerarQR</bpmn:flowNodeRef>
+      </bpmn:lane>
+    </bpmn:laneSet>
+
+    <bpmn:serviceTask id="Task_GuardarCliente" name="POST /api/client">
+      <bpmn:documentation>Patient Service almacena el cliente en PostgreSQL</bpmn:documentation>
+      <bpmn:incoming>Flow_Msg_RegistrarCliente</bpmn:incoming>
+      <bpmn:outgoing>Flow_PS_1</bpmn:outgoing>
+    </bpmn:serviceTask>
+
+    <bpmn:sequenceFlow id="Flow_PS_1" sourceRef="Task_GuardarCliente" targetRef="Task_GuardarPaciente" />
+
+    <bpmn:serviceTask id="Task_GuardarPaciente" name="POST /api/patient">
+      <bpmn:documentation>Patient Service almacena el paciente asociado al cliente</bpmn:documentation>
+      <bpmn:incoming>Flow_PS_1</bpmn:incoming>
+      <bpmn:incoming>Flow_Msg_RegistrarPaciente</bpmn:incoming>
+      <bpmn:outgoing>Flow_PS_2</bpmn:outgoing>
+    </bpmn:serviceTask>
+
+    <bpmn:sequenceFlow id="Flow_PS_2" sourceRef="Task_GuardarPaciente" targetRef="Task_GenerarQR" />
+
+    <bpmn:serviceTask id="Task_GenerarQR" name="Generar QR sanipatitas://patient/{uuid}">
+      <bpmn:documentation>Se genera el QR desde el frontend usando el UUID retornado por Patient Service</bpmn:documentation>
+      <bpmn:incoming>Flow_PS_2</bpmn:incoming>
+      <bpmn:incoming>Flow_Msg_SolicitarQR</bpmn:incoming>
+    </bpmn:serviceTask>
+  </bpmn:process>
+
+</bpmn:definitions>

@@ -1,0 +1,179 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<bpmn:definitions
+  xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL"
+  xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI"
+  xmlns:dc="http://www.omg.org/spec/DD/20100524/DC"
+  xmlns:di="http://www.omg.org/spec/DD/20100524/DI"
+  targetNamespace="http://sanipatitas.clinic/bpmn"
+  id="definitions-cita">
+
+  <bpmn:collaboration id="Collaboration_Cita">
+    <bpmn:participant id="Participant_Frontend" name="Frontend (Trabajador)" processRef="Process_Frontend" />
+    <bpmn:participant id="Participant_PatientSvc" name="Patient Service (Quarkus)" processRef="Process_PatientSvc" />
+    <bpmn:participant id="Participant_ApptSvc" name="Appointment Service (Quarkus)" processRef="Process_ApptSvc" />
+    <bpmn:messageFlow id="MF_ValidarPaciente" sourceRef="Task_SeleccionarPaciente" targetRef="Task_BuscarPaciente" />
+    <bpmn:messageFlow id="MF_PacienteValido" sourceRef="Task_BuscarPaciente" targetRef="CatchEvent_PacienteOK" />
+    <bpmn:messageFlow id="MF_VerificarDispo" sourceRef="Task_ConsultarDisponibilidad" targetRef="Task_VerificarHorario" />
+    <bpmn:messageFlow id="MF_DisponibleOK" sourceRef="Gateway_HorarioOK" targetRef="CatchEvent_Disponible" />
+    <bpmn:messageFlow id="MF_Ocupado" sourceRef="EndEvent_Ocupado" targetRef="CatchEvent_Ocupado" />
+    <bpmn:messageFlow id="MF_GuardarCita" sourceRef="Task_ConfirmarCita" targetRef="Task_RegistrarCita" />
+  </bpmn:collaboration>
+
+  <!-- Frontend Process -->
+  <bpmn:process id="Process_Frontend" name="Frontend - Gestión de Citas" isExecutable="false">
+    <bpmn:laneSet id="LaneSet_Frontend">
+      <bpmn:lane id="Lane_Trabajador" name="Trabajador">
+        <bpmn:flowNodeRef>StartEvent_Inicio</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>Task_SeleccionarPaciente</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>CatchEvent_PacienteOK</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>Task_ConsultarDisponibilidad</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>CatchEvent_Disponible</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>CatchEvent_Ocupado</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>Gateway_Disponible</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>Task_ConfirmarCita</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>Task_SugerirAlternativas</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>EndEvent_CitaExitosa</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>EndEvent_SinCita</bpmn:flowNodeRef>
+      </bpmn:lane>
+    </bpmn:laneSet>
+
+    <bpmn:startEvent id="StartEvent_Inicio" name="Agendar cita">
+      <bpmn:outgoing>Flow_FE_1</bpmn:outgoing>
+    </bpmn:startEvent>
+
+    <bpmn:sequenceFlow id="Flow_FE_1" sourceRef="StartEvent_Inicio" targetRef="Task_SeleccionarPaciente" />
+
+    <bpmn:userTask id="Task_SeleccionarPaciente" name="Seleccionar paciente (o escanear QR)">
+      <bpmn:documentation>Seleccionar paciente del registro o escanear código QR sanipatitas://patient/{uuid}</bpmn:documentation>
+      <bpmn:incoming>Flow_FE_1</bpmn:incoming>
+      <bpmn:outgoing>Flow_FE_2</bpmn:outgoing>
+    </bpmn:userTask>
+
+    <bpmn:sequenceFlow id="Flow_FE_2" sourceRef="Task_SeleccionarPaciente" targetRef="CatchEvent_PacienteOK" />
+
+    <bpmn:intermediateCatchEvent id="CatchEvent_PacienteOK" name="Paciente validado">
+      <bpmn:messageEventDefinition />
+      <bpmn:incoming>Flow_FE_2</bpmn:incoming>
+      <bpmn:outgoing>Flow_FE_3</bpmn:outgoing>
+    </bpmn:intermediateCatchEvent>
+
+    <bpmn:sequenceFlow id="Flow_FE_3" sourceRef="CatchEvent_PacienteOK" targetRef="Task_ConsultarDisponibilidad" />
+
+    <bpmn:userTask id="Task_ConsultarDisponibilidad" name="Elegir fecha y hora">
+      <bpmn:documentation>Seleccionar fecha y hora deseada para la cita</bpmn:documentation>
+      <bpmn:incoming>Flow_FE_3</bpmn:incoming>
+      <bpmn:outgoing>Flow_FE_4</bpmn:outgoing>
+    </bpmn:userTask>
+
+    <bpmn:sequenceFlow id="Flow_FE_4" sourceRef="Task_ConsultarDisponibilidad" targetRef="Gateway_EventBased" />
+
+    <bpmn:eventBasedGateway id="Gateway_EventBased" name="Esperar respuesta">
+      <bpmn:incoming>Flow_FE_4</bpmn:incoming>
+      <bpmn:outgoing>Flow_FE_OK</bpmn:outgoing>
+      <bpmn:outgoing>Flow_FE_No</bpmn:outgoing>
+    </bpmn:eventBasedGateway>
+
+    <bpmn:intermediateCatchEvent id="CatchEvent_Disponible" name="Horario disponible">
+      <bpmn:messageEventDefinition />
+      <bpmn:incoming>Flow_FE_OK</bpmn:incoming>
+      <bpmn:outgoing>Flow_Agendar</bpmn:outgoing>
+    </bpmn:intermediateCatchEvent>
+
+    <bpmn:sequenceFlow id="Flow_FE_OK" sourceRef="Gateway_EventBased" targetRef="CatchEvent_Disponible" />
+
+    <bpmn:sequenceFlow id="Flow_Agendar" sourceRef="CatchEvent_Disponible" targetRef="Task_ConfirmarCita" />
+
+    <bpmn:intermediateCatchEvent id="CatchEvent_Ocupado" name="Horario ocupado">
+      <bpmn:messageEventDefinition />
+      <bpmn:incoming>Flow_FE_No</bpmn:incoming>
+      <bpmn:outgoing>Flow_Alternativas</bpmn:outgoing>
+    </bpmn:intermediateCatchEvent>
+
+    <bpmn:sequenceFlow id="Flow_FE_No" sourceRef="Gateway_EventBased" targetRef="CatchEvent_Ocupado" />
+
+    <bpmn:sequenceFlow id="Flow_Alternativas" sourceRef="CatchEvent_Ocupado" targetRef="Task_SugerirAlternativas" />
+
+    <bpmn:sequenceFlow id="Flow_Agendar" sourceRef="Gateway_Disponible" targetRef="Task_ConfirmarCita" />
+
+    <bpmn:sequenceFlow id="Flow_Alternativas" sourceRef="Gateway_Disponible" targetRef="Task_SugerirAlternativas" />
+
+    <bpmn:userTask id="Task_ConfirmarCita" name="Ingresar detalles y confirmar cita">
+      <bpmn:documentation>Ingresar veterinario, motivo de consulta, notas adicionales. Confirmar cita.</bpmn:documentation>
+      <bpmn:incoming>Flow_Agendar</bpmn:incoming>
+      <bpmn:outgoing>Flow_FE_Exito</bpmn:outgoing>
+    </bpmn:userTask>
+
+    <bpmn:sequenceFlow id="Flow_FE_Exito" sourceRef="Task_ConfirmarCita" targetRef="EndEvent_CitaExitosa" />
+
+    <bpmn:endEvent id="EndEvent_CitaExitosa" name="Cita registrada exitosamente">
+      <bpmn:incoming>Flow_FE_Exito</bpmn:incoming>
+    </bpmn:endEvent>
+
+    <bpmn:userTask id="Task_SugerirAlternativas" name="Sugerir horarios alternativos">
+      <bpmn:documentation>Mostrar horarios disponibles cercanos al solicitado</bpmn:documentation>
+      <bpmn:incoming>Flow_Alternativas</bpmn:incoming>
+      <bpmn:outgoing>Flow_FE_Error</bpmn:outgoing>
+    </bpmn:userTask>
+
+    <bpmn:sequenceFlow id="Flow_FE_Error" sourceRef="Task_SugerirAlternativas" targetRef="EndEvent_SinCita" />
+
+    <bpmn:endEvent id="EndEvent_SinCita" name="Cita no disponible">
+      <bpmn:incoming>Flow_FE_Error</bpmn:incoming>
+    </bpmn:endEvent>
+  </bpmn:process>
+
+  <!-- Patient Service Process -->
+  <bpmn:process id="Process_PatientSvc" name="Patient Service - Validación" isExecutable="false">
+    <bpmn:laneSet id="LaneSet_Backend">
+      <bpmn:lane id="Lane_Patient" name="Sistema">
+        <bpmn:flowNodeRef>Task_BuscarPaciente</bpmn:flowNodeRef>
+      </bpmn:lane>
+    </bpmn:laneSet>
+
+    <bpmn:serviceTask id="Task_BuscarPaciente" name="GET /api/patient/{id}">
+      <bpmn:documentation>Patient Service busca y valida que el paciente y su cliente existan en BD</bpmn:documentation>
+      <bpmn:incoming>MF_ValidarPaciente</bpmn:incoming>
+    </bpmn:serviceTask>
+  </bpmn:process>
+
+  <!-- Appointment Service Process -->
+  <bpmn:process id="Process_ApptSvc" name="Appointment Service - Agenda" isExecutable="false">
+    <bpmn:laneSet id="LaneSet_Appt">
+      <bpmn:lane id="Lane_Appt" name="Sistema">
+        <bpmn:flowNodeRef>Task_VerificarHorario</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>Gateway_HorarioOK</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>Task_RegistrarCita</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>EndEvent_Ocupado</bpmn:flowNodeRef>
+      </bpmn:lane>
+    </bpmn:laneSet>
+
+    <bpmn:serviceTask id="Task_VerificarHorario" name="Consultar BD: ¿horario libre?">
+      <bpmn:documentation>Appointment Service consulta disponibilidad en tabla de citas. Evita superposición de horarios.</bpmn:documentation>
+      <bpmn:incoming>MF_VerificarDispo</bpmn:incoming>
+      <bpmn:outgoing>Flow_Appt_1</bpmn:outgoing>
+    </bpmn:serviceTask>
+
+    <bpmn:sequenceFlow id="Flow_Appt_1" sourceRef="Task_VerificarHorario" targetRef="Gateway_HorarioOK" />
+
+    <bpmn:exclusiveGateway id="Gateway_HorarioOK" name="¿Libre?" default="Flow_Ocupado">
+      <bpmn:incoming>Flow_Appt_1</bpmn:incoming>
+      <bpmn:outgoing>Flow_Reservar</bpmn:outgoing>
+      <bpmn:outgoing>Flow_Ocupado</bpmn:outgoing>
+    </bpmn:exclusiveGateway>
+
+    <bpmn:sequenceFlow id="Flow_Reservar" sourceRef="Gateway_HorarioOK" targetRef="Task_RegistrarCita" />
+
+    <bpmn:sequenceFlow id="Flow_Ocupado" sourceRef="Gateway_HorarioOK" targetRef="EndEvent_Ocupado" />
+
+    <bpmn:serviceTask id="Task_RegistrarCita" name="Registrar en DB + publicar evento SSE">
+      <bpmn:documentation>Guarda la cita en PostgreSQL. Publica evento SSE para actualización en tiempo real.</bpmn:documentation>
+      <bpmn:incoming>Flow_Reservar</bpmn:incoming>
+      <bpmn:incoming>MF_GuardarCita</bpmn:incoming>
+    </bpmn:serviceTask>
+
+    <bpmn:endEvent id="EndEvent_Ocupado" name="Horario ocupado">
+      <bpmn:incoming>Flow_Ocupado</bpmn:incoming>
+    </bpmn:endEvent>
+  </bpmn:process>
+
+</bpmn:definitions>

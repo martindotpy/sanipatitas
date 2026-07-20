@@ -275,7 +275,7 @@ visualizar las consultas médicas, optimizando la planificación de la atención
 reduciendo los tiempos de espera de los clientes.
 
 Diseñar un módulo de gestión de inventario y ventas que permita controlar el
-stock de productos, registrar transacciones, generar alertas de reposición y
+stock de productos, registrar transacciones, gestionar movimientos de inventario y
 gestionar fechas de vencimiento, asegurando la disponibilidad de insumos y un
 adecuado control comercial.
 
@@ -343,13 +343,13 @@ tecnológica cuyo backend se divide en servicios independientes que se comunican
 mediante JWT. El Auth Service está implementado en TypeScript sobre Bun 1.x con
 el framework Elysia 1.4 y la librería Better Auth 1.6.10 para gestión de
 autenticación y sesiones en Redis. Los servicios de negocio están implementados
-en Java 25 con Quarkus 3.35.2: Patient Service gestiona pacientes, clientes y
+en Java 25 con Quarkus 3.37.0: Patient Service gestiona pacientes, clientes y
 catálogos de especies y razas, Appointment Service gestiona citas, agenda y
-disponibilidad de horarios, MedicalRecord Service gestiona el historial clínico
-siguiendo los recursos del estándar HL7 FHIR, Inventory Service gestiona
-productos, stock, alertas de reposición y movimientos de inventario, Sales
-Service gestiona ventas, ítems de venta y comprobantes, Prescription Service
-gestiona recetas médicas y sus ítems.
+disponibilidad de horarios, EHR Service gestiona el historial clínico completo
+(condiciones, observaciones, inmunizaciones, procedimientos y recetas médicas),
+Inventory Service gestiona productos, categorías, proveedores, stock,
+movimientos de inventario y alertas de reposición, Payment Service gestiona
+facturación, ítems de factura y pagos.
 
 El frontend se desarrolla con Astro y React, utilizando TypeScript y generando
 el cliente API automáticamente desde las especificaciones OpenAPI mediante
@@ -468,8 +468,8 @@ esquema OpenAPI para documentación y generación automática de clientes.
     [
       Este requisito es crucial para la eficiencia operativa de la veterinaria y
       la satisfacción del cliente al asegurar que los productos estén
-      disponibles cuando se necesiten. El sistema generará alertas automáticas
-      cuando el stock alcance el nivel mínimo.
+      disponibles cuando se necesiten. El sistema controlará el stock mínimo
+      configurado para cada producto.
     ],
     table.hline(),
     columns: (1fr, 4fr),
@@ -486,7 +486,7 @@ esquema OpenAPI para documentación y generación automática de clientes.
     [1.0 (Fecha: 2026-04-18)],
     [Dependencias],
     [
-      Appointment Service para la gestión de citas, MedicalRecord Service para
+      Appointment Service para la gestión de citas, EHR Service para
       el historial clínico y Patient Service para el registro de pacientes.
     ],
     [Descripción],
@@ -566,7 +566,7 @@ esquema OpenAPI para documentación y generación automática de clientes.
     [1.0 (Fecha: 2026-04-18)],
     [Dependencias],
     [
-      Sales Service para el registro de ventas, Inventory Service para la
+      Payment Service para la facturación, Inventory Service para la
       información de productos y Patient Service para el registro de clientes.
     ],
     [Descripción],
@@ -713,7 +713,7 @@ esquema OpenAPI para documentación y generación automática de clientes.
       La interfaz de usuario del sistema debe ser intuitiva y fácil de usar para
       que la veterinaria pueda navegar sin problema alguno. Las vistas deben ser
       intuitivas y accesibles, facilitando la consulta rápida de información
-      crítica como historiales clínicos, citas programadas y alertas de
+      crítica como historiales clínicos, citas programadas y control de
       inventario.
     ],
     [Importancia],
@@ -783,8 +783,8 @@ esquema OpenAPI para documentación y generación automática de clientes.
       El código del sistema debe estar organizado en servicios independientes y
       cohesivos, facilitando la comprensión, modificación y mantenimiento del
       mismo. La arquitectura de servicios (Auth Service, Patient Service,
-      Appointment Service, MedicalRecord Service, Inventory Service, Sales
-      Service, Prescription Service) refleja este principio, permitiendo que
+      Appointment Service, EHR Service, Inventory Service,
+      Payment Service) refleja este principio, permitiendo que
       cada servicio evolucione de forma independiente.
     ],
     [Importancia],
@@ -892,8 +892,8 @@ esquema OpenAPI para documentación y generación automática de clientes.
       frontend se utilizarán tecnologías web como Astro, React y TypeScript,
       mientras que en el backend se empleará una arquitectura de servicios
       desacoplados con Auth Service en Bun, Elysia y Better Auth, y los
-      servicios de negocio en Java 25 con Quarkus 3.35.2, incluyendo Patient,
-      Appointment, MedicalRecord, Inventory, Sales, Prescription. La base de
+      servicios de negocio en Java 25 con Quarkus 3.37.0, incluyendo Patient,
+      Appointment, EHR, Inventory, Payment. La base de
       datos será PostgreSQL 17 con Redis 7 para caché y sesiones.
     ],
     [Importancia],
@@ -1093,7 +1093,7 @@ condiciones, observaciones, vacunas y procedimientos. El registro y gestión de
 clientes almacena los datos de los propietarios de las mascotas. La gestión de
 citas permite programar, modificar y consultar citas médicas, evitando
 superposiciones de horarios. La gestión de productos e inventario controla el
-stock, registro y disponibilidad de productos, con alertas de reposición y
+stock, registro y disponibilidad de productos, con movimientos y
 vencimiento. El registro de ventas gestiona las transacciones realizadas y
 actualiza automáticamente el inventario. La gestión de recetas emite recetas
 médicas con productos, dosis e indicaciones de tratamiento. La búsqueda por QR
@@ -1107,10 +1107,10 @@ En este contexto se identifican los siguientes servicios compartidos que son
 consumidos por múltiples servicios de negocio. El Auth Service proporciona
 autenticación y validación de JWT a todos los demás servicios mediante endpoint
 JWKS. El servicio de validación de datos de cliente y paciente es utilizado por
-Patient Service, Appointment Service y Sales Service. El servicio de consulta de
-información de pacientes es reutilizado por MedicalRecord Service, Appointment
+Patient Service, Appointment Service y Payment Service. El servicio de consulta de
+información de pacientes es reutilizado por EHR Service, Appointment
 Service. El servicio de consulta de productos es usado tanto por Inventory
-Service como por Sales Service. El servicio de disponibilidad de citas verifica
+Service como por Payment Service. El servicio de disponibilidad de citas verifica
 horarios antes de que Appointment Service registre una nueva cita. El código QR
 de cada mascota se genera como funcionalidad del frontend utilizando el
 protocolo `sanipatitas://patient/{uuid}`, y la URI se almacena en Patient
@@ -1146,20 +1146,29 @@ definió el siguiente inventario de servicios para la Clínica Veterinaria HC.
 #figure(
   table(
     table.header([Servicio], [Interfaz REST], [Implementación]),
-    [Auth Service], [`POST /login` + `GET /.well-known/jwks.json`],
+    [Auth Service],
+    [`POST /api/auth/sign-in/email` + `GET /api/auth/jwks` + admin CRUD],
     [Bun + Elysia + Better Auth],
-    [Patient Service], [CRUD `/patients` + CRUD `/customers`],
-    [Java 25 + Quarkus 3.35.2],
-    [Appointment Service], [CRUD `/appointments`],
-    [Java 25 + Quarkus 3.35.2],
-    [MedicalRecord Service], [CRUD `/medical-records` por paciente],
-    [Java 25 + Quarkus 3.35.2],
-    [Inventory Service], [CRUD `/products` + alertas `/alerts`],
-    [Java 25 + Quarkus 3.35.2],
-    [Sales Service], [`POST /sales` + `GET /sales/{id}`],
-    [Java 25 + Quarkus 3.35.2],
-    [Prescription Service], [`POST /prescriptions` + `GET /prescriptions/{id}`],
-    [Java 25 + Quarkus 3.35.2],
+    [Patient Service],
+    [CRUD `/api/patient` + `/api/client` + `/api/species` + `/api/breed`],
+    [Java 25 + Quarkus 3.37.0 + Hibernate Reactive],
+    [Appointment Service],
+    [CRUD `/api/appointment` + `GET /api/appointment/events` (SSE)],
+    [Java 25 + Quarkus 3.37.0 + Hibernate Reactive],
+    [EHR Service],
+    [CRUD `/api/clinical/condition` + `/api/clinical/observation` +
+    `/api/clinical/immunization` + `/api/clinical/procedure` +
+    `/api/clinical/prescription`],
+    [Java 25 + Quarkus 3.37.0 + Hibernate Reactive],
+    [Inventory Service],
+    [CRUD `/api/inventory/product` + `/api/inventory/product-category` +
+    `/api/inventory/supplier` + `/api/inventory/stock` +
+    `/api/inventory/stock-movement`],
+    [Java 25 + Quarkus 3.37.0 + Hibernate Reactive],
+    [Payment Service],
+    [CRUD `/api/billing` + `/api/billing/{id}/item` +
+    `/api/billing/{id}/payment`],
+    [Java 25 + Quarkus 3.37.0 + Hibernate Reactive],
     table.hline(),
     columns: (1.5fr, 3fr, 2fr),
   ),
@@ -1207,12 +1216,12 @@ condiciones, pertenece a esta capa.
 == Capa de aplicación
 
 La capa de aplicación contiene los servicios SOA que ejecutan la lógica del
-negocio. Está compuesta por siete servicios backend (Auth, Patient, Appointment,
-MedicalRecord, Inventory, Sales y Prescription) y el frontend desarrollado en
-Astro y React. Cada servicio encapsula un dominio específico y se comunica con
-los demás mediante HTTP REST con autenticación JWT. El frontend orquesta las
-llamadas a los servicios según el flujo de atención, actuando como el punto de
-coordinación visible para el usuario.
+negocio. Está compuesta por seis servicios backend (Auth, Patient, Appointment,
+EHR, Inventory y Payment) y el frontend desarrollado en Astro y React. Cada
+servicio encapsula un dominio específico y se comunica con los demás mediante
+HTTP REST con autenticación JWT. El frontend orquesta las llamadas a los
+servicios según el flujo de atención, actuando como el punto de coordinación
+visible para el usuario.
 
 La generación automática del cliente API a partir de los esquemas OpenAPI de
 cada servicio, mediante `@hey-api/openapi-ts`, garantiza que los tipos
@@ -1263,13 +1272,13 @@ de contenedores fallidos.
 
 La composición de servicios es la capacidad de ensamblar servicios atómicos para
 construir funcionalidades de nivel superior. En el sistema propuesto, los
-servicios atómicos son Auth Service, Patient Service, Inventory Service y
-Prescription Service: cada uno tiene una responsabilidad única y no divisible.
+servicios atómicos son Auth Service, Patient Service, EHR Service e Inventory
+Service: cada uno tiene una responsabilidad única y no divisible.
 Los servicios compuestos incluyen Appointment Service, que depende de Patient
-Service para validar pacientes y clientes, MedicalRecord Service, que consulta
-Patient Service para asociar el historial a un paciente, y Sales Service, que
+Service para validar pacientes y clientes, EHR Service, que consulta Patient
+Service para asociar el historial clínico a un paciente, y Payment Service, que
 consume Inventory Service para verificar y descontar stock al registrar una
-venta.
+facturación.
 
 La composición puede adoptar dos enfoques de coordinación. La coreografía
 distribuye la lógica entre todos los participantes: cada servicio conoce su rol
@@ -1280,11 +1289,9 @@ actuando como orquestador principal. La decisión responde a la naturaleza
 secuencial y transaccional de los procesos clínicos: una consulta veterinaria
 requiere que los pasos se ejecuten en orden estricto: verificar cita, actualizar
 historial, prescribir y vender. Ante un fallo en cualquier paso se debe poder
-notificar al usuario sin dejar el sistema en un estado inconsistente.
-
-No se implementa un Enterprise Service Bus (ESB) como middleware central. Los
+notificar al usuario sin dejar el sistema en un estado inconsistente.No se implementa un Enterprise Service Bus (ESB) como middleware central. Los
 servicios se comunican mediante HTTP REST con esquemas OpenAPI bien definidos y
-el número de servicios es manejable (siete servicios backend), un ESB agregaría
+el número de servicios es manejable (seis servicios backend), un ESB agregaría
 complejidad innecesaria sin un beneficio proporcional. k3s cumple funciones
 equivalentes a las de un ESB en el plano de infraestructura, como enrutamiento,
 descubrimiento de servicios y balanceo de carga, sin acoplar la lógica de
@@ -1316,15 +1323,15 @@ definida.
 
 3. *Actualización del historial clínico.* Durante la consulta, el veterinario
   registra diagnósticos, tratamientos y observaciones. El frontend envía los
-  datos a MedicalRecord Service, que los almacena siguiendo los recursos del
-  estándar HL7 FHIR.
+  datos a EHR Service, que los almacena bajo los recursos del estándar HL7 FHIR
+  (condiciones, observaciones, inmunizaciones, procedimientos).
 
-4. *Prescripción.* Si el veterinario receta medicamentos, el frontend llama a
-  Prescription Service para generar la receta asociada al paciente.
+4. *Prescripción.* Si el veterinario receta medicamentos, el frontend llama al
+  recurso de recetas del EHR Service para generar la receta asociada al paciente.
 
-5. *Venta de productos.* Si el cliente adquiere productos, el frontend invoca
-  Sales Service para registrar la venta, que a su vez consume Inventory Service
-  para descontar el stock.
+5. *Facturación.* Si el cliente adquiere productos o servicios, el frontend invoca
+  Payment Service para registrar la facturación, que a su vez consume Inventory
+  Service para descontar el stock.
 
 6. *Confirmación.* El frontend muestra un resumen de la atención realizada y
   ofrece la opción de imprimir o enviar el código QR actualizado del paciente.
@@ -1332,12 +1339,13 @@ definida.
 == Flujo secundario: control de inventario
 
 El módulo de inventario opera con un flujo independiente pero conectado al
-principal. Cuando Sales Service registra una venta, Inventory Service evalúa si
-el stock de cada producto vendido ha alcanzado el nivel mínimo configurado. De
-ser así, el servicio activa una alerta de reposición que el frontend muestra al
-personal en el panel de control. Este flujo es asíncrono: no bloquea la
-transacción de venta, pero garantiza que el personal reciba la notificación en
-la siguiente interacción con el sistema.
+principal. Cuando Payment Service registra una facturación, Inventory Service
+evalúa si el stock de cada producto vendido ha alcanzado el nivel mínimo
+configurado. Cuando el stock alcanza el nivel mínimo configurado, el servicio
+marca el producto para reposición y el frontend lo muestra al personal en el
+panel de control. Este flujo es asíncrono: no bloquea la transacción de
+facturación, pero permite al personal planificar la reposición en la siguiente
+interacción con el sistema.
 
 == Manejo de errores
 
@@ -1380,13 +1388,24 @@ máquina que ejecute k3s, incluyendo el servidor local de la clínica.
     columns: (auto, auto, auto),
     table.header([Servicio], [Interfaz REST], [Implementación]),
     [Auth Service],
-    [`POST /sign-in/email` + `GET /jwks` + admin CRUD],
+    [`POST /api/auth/sign-in/email` + `GET /api/auth/jwks` + admin CRUD],
     [Bun + Elysia + Better Auth],
     [Patient Service],
-    [CRUD `/patient` + `/client` + `/species` + `/breed`],
+    [CRUD `/api/patient` + `/api/client` + `/api/species` + `/api/breed`],
     [Java 25 + Quarkus 3.37.0 + Hibernate Reactive],
     [Appointment Service],
-    [CRUD `/appointment` + `GET /appointment/events` (SSE)],
+    [CRUD `/api/appointment` + `GET /api/appointment/events` (SSE)],
+    [Java 25 + Quarkus 3.37.0 + Hibernate Reactive],
+    [EHR Service],
+    [CRUD `/api/clinical/*` (condition, observation,
+    immunization, procedure, prescription)],
+    [Java 25 + Quarkus 3.37.0 + Hibernate Reactive],
+    [Inventory Service],
+    [CRUD `/api/inventory/*` (product, product-category,
+    supplier, stock, stock-movement)],
+    [Java 25 + Quarkus 3.37.0 + Hibernate Reactive],
+    [Payment Service],
+    [CRUD `/api/billing/*` (billing, item, payment)],
     [Java 25 + Quarkus 3.37.0 + Hibernate Reactive],
     table.hline(),
   ),
@@ -1423,6 +1442,34 @@ Better Auth en Elysia.
     [Appointment],
     [`GET /api/appointment/events`],
     [admin, veterinarian, worker],
+    [EHR], [`GET /api/clinical/condition`], [admin, veterinarian],
+    [EHR], [`POST /api/clinical/condition`], [admin, veterinarian],
+    [EHR], [`PUT /api/clinical/condition/{id}`], [admin, veterinarian],
+    [EHR], [`DELETE /api/clinical/condition/{id}`], [admin],
+    [EHR], [`GET /api/clinical/observation`], [admin, veterinarian],
+    [EHR], [`POST /api/clinical/observation`], [admin, veterinarian],
+    [EHR], [`GET /api/clinical/immunization`], [admin, veterinarian],
+    [EHR], [`POST /api/clinical/immunization`], [admin, veterinarian],
+    [EHR], [`GET /api/clinical/procedure`], [admin, veterinarian],
+    [EHR], [`POST /api/clinical/procedure`], [admin, veterinarian],
+    [EHR], [`GET /api/clinical/prescription`], [admin, veterinarian],
+    [EHR], [`POST /api/clinical/prescription`], [admin, veterinarian],
+    [Inventory], [`GET /api/inventory/product`], [admin, veterinarian, worker],
+    [Inventory], [`POST /api/inventory/product`], [admin, worker],
+    [Inventory], [`GET /api/inventory/product-category`],
+    [admin, veterinarian, worker],
+    [Inventory], [`POST /api/inventory/product-category`], [admin, worker],
+    [Inventory], [`GET /api/inventory/supplier`],
+    [admin, veterinarian, worker],
+    [Inventory], [`POST /api/inventory/supplier`], [admin, worker],
+    [Inventory], [`GET /api/inventory/stock`], [admin, veterinarian, worker],
+    [Inventory], [`POST /api/inventory/stock`], [admin, worker],
+    [Inventory], [`POST /api/inventory/stock-movement`], [admin, worker],
+    [Payment], [`GET /api/billing`], [admin, veterinarian, worker],
+    [Payment], [`POST /api/billing`], [admin, worker],
+    [Payment], [`PUT /api/billing/{id}`], [admin, worker],
+    [Payment], [`DELETE /api/billing/{id}`], [admin],
+    [Payment], [`POST /api/billing/{id}/payment`], [admin, worker],
     table.hline(),
   ),
   caption: [Endpoints principales por servicio],
@@ -1441,6 +1488,9 @@ prefijo de la ruta:
 /api/auth        -> auth:3000
 /api/patient     -> patient:8080
 /api/appointment -> appointment:8081
+/api/clinical    -> ehr:8082
+/api/inventory   -> inventory:8083
+/api/billing     -> payment:8084
 /*               -> frontend:1420
 ```
 
@@ -1653,7 +1703,7 @@ Se utilizó *Camunda 8* con *BPMN 2.0* para modelar los flujos de negocio del
 sistema.
 
 Se modelaron cinco procesos: auditoría de transacción crítica, aprobación de
-cita veterinaria, alerta de inventario por venta, registro de paciente y flujo
+cita veterinaria, gestión de productos y control de stock, registro de paciente y flujo
 de autenticación y autorización.
 
 
@@ -1668,8 +1718,8 @@ de autenticación y autorización.
 ))
 
 #block(figure(
-  image("/assets/diagrams/alerta-inventario-venta.png", width: 100%),
-  caption: [Diagrama BPMN del flujo de alerta de inventario por venta],
+  image("/assets/diagrams/gestion-productos-stock.png", width: 100%),
+  caption: [Diagrama BPMN del flujo de gestión de productos y control de stock],
 ))
 
 #block(figure(

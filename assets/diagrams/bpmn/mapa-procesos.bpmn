@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<bpmn:definitions
+  xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL"
+  xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI"
+  xmlns:dc="http://www.omg.org/spec/DD/20100524/DC"
+  xmlns:di="http://www.omg.org/spec/DD/20100524/DI"
+  xmlns:camunda="http://camunda.org/schema/1.0/bpmn"
+  targetNamespace="http://sanipatitas.clinic/bpmn"
+  id="definitions-mapa-procesos">
+
+  <bpmn:collaboration id="Collaboration_Mapa">
+    <bpmn:participant id="Participant_Clinica" name="Clínica Veterinaria HC" processRef="Process_Clinica" />
+    <bpmn:participant id="Participant_Cliente" name="Cliente / Propietario" processRef="Process_Cliente" />
+    <bpmn:messageFlow id="MF_Llegada" sourceRef="StartEvent_Llegada" targetRef="Task_RecibirCliente" />
+    <bpmn:messageFlow id="MF_Salida" sourceRef="EndEvent_Fin" targetRef="EndEvent_ClienteFin" />
+  </bpmn:collaboration>
+
+  <!-- Cliente Process -->
+  <bpmn:process id="Process_Cliente" name="Cliente" isExecutable="false">
+    <bpmn:laneSet id="LaneSet_Cliente">
+      <bpmn:lane id="Lane_Propietario" name="Propietario de mascota">
+        <bpmn:flowNodeRef>StartEvent_Llegada</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>EndEvent_ClienteFin</bpmn:flowNodeRef>
+      </bpmn:lane>
+    </bpmn:laneSet>
+
+    <bpmn:startEvent id="StartEvent_Llegada" name="Llega a la clínica">
+      <bpmn:outgoing>Flow_C_Fin</bpmn:outgoing>
+    </bpmn:startEvent>
+
+    <bpmn:sequenceFlow id="Flow_C_Fin" sourceRef="StartEvent_Llegada" targetRef="EndEvent_ClienteFin" />
+
+    <bpmn:endEvent id="EndEvent_ClienteFin" name="Recibe atención y se retira">
+      <bpmn:incoming>Flow_C_Fin</bpmn:incoming>
+    </bpmn:endEvent>
+  </bpmn:process>
+
+  <!-- Clínica Process -->
+  <bpmn:process id="Process_Clinica" name="Mapa de Procesos - Sanipatitas HC" isExecutable="false">
+    <bpmn:laneSet id="LaneSet_Clinica">
+      <bpmn:lane id="Lane_Recepcion" name="01. Recepción">
+        <bpmn:flowNodeRef>Task_RecibirCliente</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>SubProcess_Registro</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>SubProcess_Cita</bpmn:flowNodeRef>
+      </bpmn:lane>
+      <bpmn:lane id="Lane_Veterinaria" name="02. Atención Veterinaria">
+        <bpmn:flowNodeRef>SubProcess_Atencion</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>SubProcess_Historial</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>SubProcess_Receta</bpmn:flowNodeRef>
+      </bpmn:lane>
+      <bpmn:lane id="Lane_Admin" name="03. Administración">
+        <bpmn:flowNodeRef>SubProcess_Facturacion</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>SubProcess_Auditoria</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>EndEvent_Fin</bpmn:flowNodeRef>
+      </bpmn:lane>
+    </bpmn:laneSet>
+
+    <bpmn:userTask id="Task_RecibirCliente" name="Recibir y atender al cliente">
+      <bpmn:documentation>Recibir al cliente, verificar si tiene cita, escanear QR de la mascota si aplica</bpmn:documentation>
+      <bpmn:incoming>MF_Llegada</bpmn:incoming>
+      <bpmn:outgoing>Flow_1</bpmn:outgoing>
+    </bpmn:userTask>
+
+    <bpmn:sequenceFlow id="Flow_1" sourceRef="Task_RecibirCliente" targetRef="SubProcess_Registro" />
+
+    <bpmn:subProcess id="SubProcess_Registro" name="Registrar paciente" triggeredByEvent="false">
+      <bpmn:documentation>Si es nuevo: registrar cliente + paciente + generar QR. Si es recurrente: buscar por QR.</bpmn:documentation>
+      <bpmn:incoming>Flow_1</bpmn:incoming>
+      <bpmn:outgoing>Flow_2</bpmn:outgoing>
+    </bpmn:subProcess>
+
+    <bpmn:sequenceFlow id="Flow_2" sourceRef="SubProcess_Registro" targetRef="SubProcess_Cita" />
+
+    <bpmn:subProcess id="SubProcess_Cita" name="Gestionar cita" triggeredByEvent="false">
+      <bpmn:documentation>Verificar cita existente o agendar nueva. Verificar disponibilidad de horario.</bpmn:documentation>
+      <bpmn:incoming>Flow_2</bpmn:incoming>
+      <bpmn:outgoing>Flow_3</bpmn:outgoing>
+    </bpmn:subProcess>
+
+    <bpmn:sequenceFlow id="Flow_3" sourceRef="SubProcess_Cita" targetRef="SubProcess_Atencion" />
+
+    <bpmn:subProcess id="SubProcess_Atencion" name="Atención clínica" triggeredByEvent="false">
+      <bpmn:documentation>El veterinario realiza el diagnóstico, tratamiento y registra observaciones en EHR Service.</bpmn:documentation>
+      <bpmn:incoming>Flow_3</bpmn:incoming>
+      <bpmn:outgoing>Flow_4</bpmn:outgoing>
+    </bpmn:subProcess>
+
+    <bpmn:sequenceFlow id="Flow_4" sourceRef="SubProcess_Atencion" targetRef="SubProcess_Historial" />
+
+    <bpmn:subProcess id="SubProcess_Historial" name="Registrar historial clínico" triggeredByEvent="false">
+      <bpmn:documentation>Guardar condición, observación, inmunización o procedimiento siguiendo HL7 FHIR.</bpmn:documentation>
+      <bpmn:incoming>Flow_4</bpmn:incoming>
+      <bpmn:outgoing>Flow_5</bpmn:outgoing>
+    </bpmn:subProcess>
+
+    <bpmn:sequenceFlow id="Flow_5" sourceRef="SubProcess_Historial" targetRef="SubProcess_Receta" />
+
+    <bpmn:subProcess id="SubProcess_Receta" name="Prescribir y recetar" triggeredByEvent="false">
+      <bpmn:documentation>Si aplica, registrar receta médica con medicamentos, dosis e indicaciones.</bpmn:documentation>
+      <bpmn:incoming>Flow_5</bpmn:incoming>
+      <bpmn:outgoing>Flow_6</bpmn:outgoing>
+    </bpmn:subProcess>
+
+    <bpmn:sequenceFlow id="Flow_6" sourceRef="SubProcess_Receta" targetRef="SubProcess_Facturacion" />
+
+    <bpmn:subProcess id="SubProcess_Facturacion" name="Facturar y cobrar" triggeredByEvent="false">
+      <bpmn:documentation>Payment Service registra factura. Inventory Service descuenta stock si hay productos.</bpmn:documentation>
+      <bpmn:incoming>Flow_6</bpmn:incoming>
+      <bpmn:outgoing>Flow_7</bpmn:outgoing>
+    </bpmn:subProcess>
+
+    <bpmn:sequenceFlow id="Flow_7" sourceRef="SubProcess_Facturacion" targetRef="SubProcess_Auditoria" />
+
+    <bpmn:subProcess id="SubProcess_Auditoria" name="Auditar transacción" triggeredByEvent="false">
+      <bpmn:documentation>Registrar en log JSON (Loki) y snapshot histórico (Hibernate Envers).</bpmn:documentation>
+      <bpmn:incoming>Flow_7</bpmn:incoming>
+      <bpmn:outgoing>Flow_8</bpmn:outgoing>
+    </bpmn:subProcess>
+
+    <bpmn:sequenceFlow id="Flow_8" sourceRef="SubProcess_Auditoria" targetRef="EndEvent_Fin" />
+
+    <bpmn:endEvent id="EndEvent_Fin" name="Atención completada">
+      <bpmn:incoming>Flow_8</bpmn:incoming>
+    </bpmn:endEvent>
+  </bpmn:process>
+
+</bpmn:definitions>

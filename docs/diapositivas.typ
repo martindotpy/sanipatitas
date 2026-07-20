@@ -251,8 +251,8 @@ sistema. Se modelaron cinco procesos:
 )
 
 #figure(
-  image("/assets/diagrams/alerta-inventario-venta.png", width: 100%),
-  caption: [Alerta de inventario por venta],
+  image("/assets/diagrams/gestion-productos-stock.png", width: 100%),
+  caption: [Gestión de productos y control de stock],
 )
 
 #figure(

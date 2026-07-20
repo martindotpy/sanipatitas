@@ -1,0 +1,211 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<bpmn:definitions
+  xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL"
+  xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI"
+  xmlns:dc="http://www.omg.org/spec/DD/20100524/DC"
+  xmlns:di="http://www.omg.org/spec/DD/20100524/DI"
+  xmlns:camunda="http://camunda.org/schema/1.0/bpmn"
+  id="Definitions_GestionProductosStock"
+  targetNamespace="http://sanipatitas.dev/bpmn/inventory"
+  exporter="Sanipatitas Modeler"
+  exporterVersion="1.0.0">
+
+  <bpmn:collaboration id="Collaboration_GestionProductos">
+    <bpmn:participant id="Participant_Frontend" name="Frontend" processRef="Process_Frontend" />
+    <bpmn:participant id="Participant_InventoryService" name="Inventory Service" processRef="Process_InventoryService" />
+
+    <bpmn:messageFlow id="MF_CrearProducto" sourceRef="Task_RegistrarProducto" targetRef="Task_ValidarProducto" />
+    <bpmn:messageFlow id="MF_ProductoCreado" sourceRef="Task_PersistirProducto" targetRef="CatchEvent_ProductoCreado" />
+    <bpmn:messageFlow id="MF_RegistrarStock" sourceRef="Task_IngresarStock" targetRef="Task_ValidarStock" />
+    <bpmn:messageFlow id="MF_StockRegistrado" sourceRef="Task_PersistirStock" targetRef="CatchEvent_StockRegistrado" />
+    <bpmn:messageFlow id="MF_ProductoFallido" sourceRef="EndEvent_ProductoInvalido" targetRef="CatchEvent_ProductoError" />
+    <bpmn:messageFlow id="MF_StockFallido" sourceRef="EndEvent_StockInvalido" targetRef="CatchEvent_StockError" />
+  </bpmn:collaboration>
+
+  <!-- ==================== FRONTEND PROCESS ==================== -->
+  <bpmn:process id="Process_Frontend" name="Frontend" isExecutable="false">
+    <bpmn:laneSet id="LaneSet_Frontend">
+      <bpmn:lane id="Lane_Trabajador" name="Trabajador">
+        <bpmn:flowNodeRef>StartEvent_Inicio</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>Task_RegistrarProducto</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>Gateway_EventBased_Producto</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>CatchEvent_ProductoCreado</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>CatchEvent_ProductoError</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>Task_IngresarStock</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>Gateway_EventBased_Stock</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>CatchEvent_StockRegistrado</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>CatchEvent_StockError</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>EndEvent_Exitoso</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>EndEvent_Error</bpmn:flowNodeRef>
+      </bpmn:lane>
+    </bpmn:laneSet>
+
+    <bpmn:startEvent id="StartEvent_Inicio" name="Inicio">
+      <bpmn:outgoing>Flow_Inicio_Registrar</bpmn:outgoing>
+    </bpmn:startEvent>
+
+    <bpmn:sequenceFlow id="Flow_Inicio_Registrar" sourceRef="StartEvent_Inicio" targetRef="Task_RegistrarProducto" />
+
+    <bpmn:userTask id="Task_RegistrarProducto" name="Registrar producto">
+      <bpmn:documentation>El trabajador completa el formulario con nombre, categoría, proveedor y precio del producto</bpmn:documentation>
+      <bpmn:incoming>Flow_Inicio_Registrar</bpmn:incoming>
+      <bpmn:outgoing>Flow_Registrar_Gateway</bpmn:outgoing>
+    </bpmn:userTask>
+
+    <bpmn:sequenceFlow id="Flow_Registrar_Gateway" sourceRef="Task_RegistrarProducto" targetRef="Gateway_EventBased_Producto" />
+
+    <bpmn:eventBasedGateway id="Gateway_EventBased_Producto" name="Esperar respuesta">
+      <bpmn:incoming>Flow_Registrar_Gateway</bpmn:incoming>
+      <bpmn:outgoing>Flow_Esperar_ProductoCreado</bpmn:outgoing>
+      <bpmn:outgoing>Flow_Esperar_ProductoError</bpmn:outgoing>
+    </bpmn:eventBasedGateway>
+
+    <bpmn:sequenceFlow id="Flow_Esperar_ProductoCreado" sourceRef="Gateway_EventBased_Producto" targetRef="CatchEvent_ProductoCreado" />
+    <bpmn:sequenceFlow id="Flow_Esperar_ProductoError" sourceRef="Gateway_EventBased_Producto" targetRef="CatchEvent_ProductoError" />
+
+    <bpmn:intermediateCatchEvent id="CatchEvent_ProductoCreado" name="Producto registrado">
+      <bpmn:incoming>Flow_Esperar_ProductoCreado</bpmn:incoming>
+      <bpmn:outgoing>Flow_ProductoCreado_Stock</bpmn:outgoing>
+      <bpmn:messageEventDefinition id="MessageEvent_ProductoCreado" messageRef="Message_ProductoCreado" />
+    </bpmn:intermediateCatchEvent>
+
+    <bpmn:sequenceFlow id="Flow_ProductoCreado_Stock" sourceRef="CatchEvent_ProductoCreado" targetRef="Task_IngresarStock" />
+
+    <bpmn:intermediateCatchEvent id="CatchEvent_ProductoError" name="Error de registro">
+      <bpmn:incoming>Flow_Esperar_ProductoError</bpmn:incoming>
+      <bpmn:outgoing>Flow_ProdError_End</bpmn:outgoing>
+      <bpmn:messageEventDefinition id="MessageEvent_ProductoError" messageRef="Message_ProductoError" />
+    </bpmn:intermediateCatchEvent>
+
+    <bpmn:sequenceFlow id="Flow_ProdError_End" sourceRef="CatchEvent_ProductoError" targetRef="EndEvent_Error" />
+
+    <bpmn:userTask id="Task_IngresarStock" name="Registrar stock inicial">
+      <bpmn:documentation>El trabajador ingresa la cantidad inicial, ubicación y fecha de vencimiento si aplica</bpmn:documentation>
+      <bpmn:incoming>Flow_ProductoCreado_Stock</bpmn:incoming>
+      <bpmn:outgoing>Flow_Stock_Gateway</bpmn:outgoing>
+    </bpmn:userTask>
+
+    <bpmn:sequenceFlow id="Flow_Stock_Gateway" sourceRef="Task_IngresarStock" targetRef="Gateway_EventBased_Stock" />
+
+    <bpmn:eventBasedGateway id="Gateway_EventBased_Stock" name="Esperar confirmación">
+      <bpmn:incoming>Flow_Stock_Gateway</bpmn:incoming>
+      <bpmn:outgoing>Flow_Esperar_StockOK</bpmn:outgoing>
+      <bpmn:outgoing>Flow_Esperar_StockError</bpmn:outgoing>
+    </bpmn:eventBasedGateway>
+
+    <bpmn:sequenceFlow id="Flow_Esperar_StockOK" sourceRef="Gateway_EventBased_Stock" targetRef="CatchEvent_StockRegistrado" />
+    <bpmn:sequenceFlow id="Flow_Esperar_StockError" sourceRef="Gateway_EventBased_Stock" targetRef="CatchEvent_StockError" />
+
+    <bpmn:intermediateCatchEvent id="CatchEvent_StockRegistrado" name="Stock registrado">
+      <bpmn:incoming>Flow_Esperar_StockOK</bpmn:incoming>
+      <bpmn:outgoing>Flow_StockOK_End</bpmn:outgoing>
+      <bpmn:messageEventDefinition id="MessageEvent_StockRegistrado" messageRef="Message_StockRegistrado" />
+    </bpmn:intermediateCatchEvent>
+
+    <bpmn:sequenceFlow id="Flow_StockOK_End" sourceRef="CatchEvent_StockRegistrado" targetRef="EndEvent_Exitoso" />
+
+    <bpmn:intermediateCatchEvent id="CatchEvent_StockError" name="Error de stock">
+      <bpmn:incoming>Flow_Esperar_StockError</bpmn:incoming>
+      <bpmn:outgoing>Flow_StockError_End</bpmn:outgoing>
+      <bpmn:messageEventDefinition id="MessageEvent_StockError" messageRef="Message_StockError" />
+    </bpmn:intermediateCatchEvent>
+
+    <bpmn:sequenceFlow id="Flow_StockError_End" sourceRef="CatchEvent_StockError" targetRef="EndEvent_Error" />
+
+    <bpmn:endEvent id="EndEvent_Exitoso" name="Producto y stock creados">
+      <bpmn:incoming>Flow_StockOK_End</bpmn:incoming>
+    </bpmn:endEvent>
+
+    <bpmn:endEvent id="EndEvent_Error" name="Error">
+      <bpmn:incoming>Flow_ProdError_End</bpmn:incoming>
+      <bpmn:incoming>Flow_StockError_End</bpmn:incoming>
+    </bpmn:endEvent>
+  </bpmn:process>
+
+  <!-- ==================== INVENTORY SERVICE PROCESS ==================== -->
+  <bpmn:process id="Process_InventoryService" name="Inventory Service" isExecutable="false">
+    <bpmn:laneSet id="LaneSet_Inventory">
+      <bpmn:lane id="Lane_Backend" name="Backend">
+        <bpmn:flowNodeRef>Task_ValidarProducto</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>Gateway_Valido</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>Task_PersistirProducto</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>EndEvent_ProductoInvalido</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>Task_ValidarStock</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>Gateway_StockValido</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>Task_PersistirStock</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>EndEvent_StockInvalido</bpmn:flowNodeRef>
+      </bpmn:lane>
+    </bpmn:laneSet>
+
+    <bpmn:serviceTask id="Task_ValidarProducto" name="Validar datos del producto">
+      <bpmn:documentation>Valida que los campos obligatorios (nombre, categoría, proveedor, precio) sean correctos</bpmn:documentation>
+      <bpmn:incoming>MF_CrearProducto</bpmn:incoming>
+      <bpmn:outgoing>Flow_Validar_ProductoGateway</bpmn:outgoing>
+    </bpmn:serviceTask>
+
+    <bpmn:sequenceFlow id="Flow_Validar_ProductoGateway" sourceRef="Task_ValidarProducto" targetRef="Gateway_Valido" />
+
+    <bpmn:exclusiveGateway id="Gateway_Valido" name="¿Válido?" default="Flow_ProductoNoValido">
+      <bpmn:incoming>Flow_Validar_ProductoGateway</bpmn:incoming>
+      <bpmn:outgoing>Flow_ProductoValido</bpmn:outgoing>
+      <bpmn:outgoing>Flow_ProductoNoValido</bpmn:outgoing>
+    </bpmn:exclusiveGateway>
+
+    <bpmn:sequenceFlow id="Flow_ProductoValido" sourceRef="Gateway_Valido" targetRef="Task_PersistirProducto">
+      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">${valid}</bpmn:conditionExpression>
+    </bpmn:sequenceFlow>
+
+    <bpmn:sequenceFlow id="Flow_ProductoNoValido" sourceRef="Gateway_Valido" targetRef="EndEvent_ProductoInvalido" />
+
+    <bpmn:serviceTask id="Task_PersistirProducto" name="Persistir producto en BD">
+      <bpmn:documentation>Guarda el producto en la base de datos y responde con el UUID generado</bpmn:documentation>
+      <bpmn:incoming>Flow_ProductoValido</bpmn:incoming>
+      <bpmn:outgoing>MF_ProductoCreado</bpmn:outgoing>
+    </bpmn:serviceTask>
+
+    <bpmn:endEvent id="EndEvent_ProductoInvalido" name="Datos inválidos">
+      <bpmn:incoming>Flow_ProductoNoValido</bpmn:incoming>
+      <bpmn:outgoing>MF_ProductoFallido</bpmn:outgoing>
+    </bpmn:endEvent>
+
+    <bpmn:serviceTask id="Task_ValidarStock" name="Validar datos de stock">
+      <bpmn:documentation>Valida cantidad positiva, ubicación y fecha de vencimiento si aplica</bpmn:documentation>
+      <bpmn:incoming>MF_RegistrarStock</bpmn:incoming>
+      <bpmn:outgoing>Flow_Validar_StockGateway</bpmn:outgoing>
+    </bpmn:serviceTask>
+
+    <bpmn:sequenceFlow id="Flow_Validar_StockGateway" sourceRef="Task_ValidarStock" targetRef="Gateway_StockValido" />
+
+    <bpmn:exclusiveGateway id="Gateway_StockValido" name="¿Válido?" default="Flow_StockNoValido">
+      <bpmn:incoming>Flow_Validar_StockGateway</bpmn:incoming>
+      <bpmn:outgoing>Flow_StockValido</bpmn:outgoing>
+      <bpmn:outgoing>Flow_StockNoValido</bpmn:outgoing>
+    </bpmn:exclusiveGateway>
+
+    <bpmn:sequenceFlow id="Flow_StockValido" sourceRef="Gateway_StockValido" targetRef="Task_PersistirStock">
+      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">${valid}</bpmn:conditionExpression>
+    </bpmn:sequenceFlow>
+
+    <bpmn:sequenceFlow id="Flow_StockNoValido" sourceRef="Gateway_StockValido" targetRef="EndEvent_StockInvalido" />
+
+    <bpmn:serviceTask id="Task_PersistirStock" name="Persistir stock en BD">
+      <bpmn:documentation>Registra el movimiento de stock inicial con tipo ENTRY y actualiza el stock del producto</bpmn:documentation>
+      <bpmn:incoming>Flow_StockValido</bpmn:incoming>
+      <bpmn:outgoing>MF_StockRegistrado</bpmn:outgoing>
+    </bpmn:serviceTask>
+
+    <bpmn:endEvent id="EndEvent_StockInvalido" name="Datos inválidos">
+      <bpmn:incoming>Flow_StockNoValido</bpmn:incoming>
+      <bpmn:outgoing>MF_StockFallido</bpmn:outgoing>
+    </bpmn:endEvent>
+  </bpmn:process>
+
+  <!-- ==================== MESSAGES ==================== -->
+  <bpmn:message id="Message_CrearProducto" name="CrearProducto" />
+  <bpmn:message id="Message_ProductoCreado" name="ProductoCreado" />
+  <bpmn:message id="Message_ProductoError" name="ProductoError" />
+  <bpmn:message id="Message_RegistrarStock" name="RegistrarStock" />
+  <bpmn:message id="Message_StockRegistrado" name="StockRegistrado" />
+  <bpmn:message id="Message_StockError" name="StockError" />
+
+</bpmn:definitions>
