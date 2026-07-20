@@ -1,6 +1,6 @@
-# Patient Service
+# EHR Service
 
-Variables de entorno requeridas para ejecutar el microservicio de pacientes.
+Variables de entorno requeridas para ejecutar el microservicio de historia clínica electrónica.
 
 ## Variables de Entorno
 
@@ -16,7 +16,7 @@ Variables de entorno requeridas para ejecutar el microservicio de pacientes.
 | `MP_JWT_VERIFY_AUDIENCES`            | **Sí**    | Audiencia del token JWT                            | —                 | `http://localhost`                                              |
 | `LOKI_ENABLED`                        | No        | Habilitar envío de logs a Loki                     | `false`           | `true`                                                         |
 | `LOKI_URL`                            | No        | URL del servidor Loki                              | —                 | `http://observability-loki:3100`                                |
-| `SERVICE_NAME`                        | No        | Nombre del servicio para logs                      | —                 | `patient`                                                      |
+| `SERVICE_NAME`                        | No        | Nombre del servicio para logs                      | —                 | `ehr`                                                          |
 
 ### Ejemplo `.env`
 
@@ -31,5 +31,5 @@ MP_JWT_VERIFY_ISSUER=http://localhost
 MP_JWT_VERIFY_AUDIENCES=http://localhost
 LOKI_ENABLED=false
 LOKI_URL=http://localhost:3100
-SERVICE_NAME=patient
+SERVICE_NAME=ehr
 ```
