@@ -67,20 +67,17 @@ export function ControlledNumberInput<
               min={schema?.minValue ?? undefined}
               max={schema?.maxValue ?? undefined}
               {...inputProps}
-              {...field}
-              // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-              // @ts-expect-error
-              onChange={undefined}
               value={field.value}
-              defaultValue={field.value}
               onValueChange={(value) => field.onChange(value)}
+              onBlur={field.onBlur}
+              ref={field.ref}
             />
             {Icon && (
               <Icon
                 {...iconProps}
                 className={cn(
                   "text-muted-foreground pointer-events-none absolute top-1/2 right-10 size-4 -translate-y-1/2",
-                  iconProps.className,
+                  iconProps.className
                 )}
               />
             )}

@@ -81,7 +81,10 @@ export function UpdateClient({
       clientQuery.refetch()
     },
     onError: (error) => {
-      toast.error((error as { detail?: string })?.detail ?? "Error al actualizar el cliente")
+      toast.error(
+        (error as { detail?: string })?.detail ??
+          "Error al actualizar el cliente"
+      )
     },
   })
 
@@ -92,10 +95,10 @@ export function UpdateClient({
       path: { id: client.id },
       body: {
         ...data,
-        phoneAlt: data.phoneAlt || undefined,
-        email: data.email || undefined,
-        address: data.address || undefined,
-        notes: data.notes || undefined,
+        phoneAlt: data.phoneAlt,
+        email: data.email,
+        address: data.address,
+        notes: data.notes,
       },
     })
   })
@@ -113,7 +116,11 @@ export function UpdateClient({
 
         <FieldGroup>
           <ControlledInput control={control} name="firstName" label="Nombres" />
-          <ControlledInput control={control} name="lastName" label="Apellidos" />
+          <ControlledInput
+            control={control}
+            name="lastName"
+            label="Apellidos"
+          />
 
           <ControlledCombobox
             control={control}

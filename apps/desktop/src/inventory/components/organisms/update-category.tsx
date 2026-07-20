@@ -1,7 +1,10 @@
 import { type DialogRoot } from "@base-ui/react"
 import { zodResolver } from "@hookform/resolvers/zod"
-import { useUpdateCategory } from "@sanipatitas/desktop/inventory/hook/use-category"
 import type { ProductCategoryDto } from "@sanipatitas/desktop/inventory/api/inventory-api"
+import { useUpdateCategory } from "@sanipatitas/desktop/inventory/hook/use-category"
+import { zOpenapiUpdateProductCategoryRequest } from "@sanipatitas/shared/api/client/zod.gen"
+import { ControlledInput } from "@sanipatitas/ui/components/form/controlled/controlled-input"
+import { ControlledTextarea } from "@sanipatitas/ui/components/form/controlled/controlled-textarea"
 import { Button } from "@sanipatitas/ui/components/ui/button"
 import {
   Dialog,
@@ -12,18 +15,9 @@ import {
   DialogTitle,
 } from "@sanipatitas/ui/components/ui/dialog"
 import { FieldGroup } from "@sanipatitas/ui/components/ui/field"
-import { ControlledInput } from "@sanipatitas/ui/components/form/controlled/controlled-input"
-import { ControlledTextarea } from "@sanipatitas/ui/components/form/controlled/controlled-textarea"
 import { useEffect, useRef } from "react"
 import { useForm } from "react-hook-form"
 import { toast } from "sonner"
-import { z } from "zod"
-
-// Schema
-const schema = z.object({
-  name: z.string().min(1, "El nombre es requerido").optional(),
-  description: z.string().optional(),
-})
 
 // Props
 interface UpdateCategoryProps {
@@ -42,10 +36,10 @@ export function UpdateCategory({
   const updateMutation = useUpdateCategory()
 
   const { control, handleSubmit, reset } = useForm({
-    resolver: zodResolver(schema),
+    resolver: zodResolver(zOpenapiUpdateProductCategoryRequest),
     defaultValues: {
-      name: undefined,
-      description: undefined,
+      name: "",
+      description: "",
     },
   })
 
@@ -53,7 +47,7 @@ export function UpdateCategory({
     if (category) {
       reset({
         name: category.name,
-        description: category.description ?? undefined,
+        description: category.description ?? "",
       })
     }
   }, [category, reset])
@@ -64,8 +58,8 @@ export function UpdateCategory({
     updateMutation.mutate(
       {
         id: category.id,
-        name: data.name!,
-        description: data.description || undefined,
+        name: data.name,
+        description: data.description,
       },
       {
         onSuccess: () => {
@@ -77,12 +71,16 @@ export function UpdateCategory({
               "Error al actualizar la categoría"
           )
         },
-      },
+      }
     )
   })
 
   return (
-    <Dialog open={open} onOpenChange={onOpenChange} actionsRef={dialogActionsRef}>
+    <Dialog
+      open={open}
+      onOpenChange={onOpenChange}
+      actionsRef={dialogActionsRef}
+    >
       <DialogContent render={<form onSubmit={onSubmit} />}>
         <DialogHeader>
           <DialogTitle>Editar categoría</DialogTitle>

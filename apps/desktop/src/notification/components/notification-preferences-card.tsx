@@ -1,12 +1,27 @@
-import { useNotificationPreferences } from "@sanipatitas/desktop/notification/store/notification-preferences-store"
-import { notify, requestNotificationPermission } from "@sanipatitas/desktop/core/utils/notify"
 import { isTauri } from "@sanipatitas/desktop/core/configuration/app-configuration"
+import {
+  notify,
+  requestNotificationPermission,
+} from "@sanipatitas/desktop/core/utils/notify"
+import { useNotificationPreferences } from "@sanipatitas/desktop/notification/store/notification-preferences-store"
 import { Button } from "@sanipatitas/ui/components/ui/button"
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@sanipatitas/ui/components/ui/card"
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@sanipatitas/ui/components/ui/card"
 import { Label } from "@sanipatitas/ui/components/ui/label"
 import { Switch } from "@sanipatitas/ui/components/ui/switch"
 import { motion } from "motion/react"
-import { TbBellRinging, TbBell, TbBellOff, TbClock, TbRefresh } from "react-icons/tb"
+import {
+  TbBell,
+  TbBellOff,
+  TbBellRinging,
+  TbClock,
+  TbRefresh,
+} from "react-icons/tb"
 import { toast } from "sonner"
 
 // Reminder window options in minutes
@@ -24,7 +39,9 @@ type NotificationPreferencesCardProps = {
 }
 
 // Component
-export function NotificationPreferencesCard({ className }: NotificationPreferencesCardProps) {
+export function NotificationPreferencesCard({
+  className,
+}: NotificationPreferencesCardProps) {
   const [preferences, setPreferences] = useNotificationPreferences()
 
   // Request notification permission when enabling
@@ -33,7 +50,11 @@ export function NotificationPreferencesCard({ className }: NotificationPreferenc
       await requestNotificationPermission()
 
       // In browser, check if permission was actually granted
-      if (!isTauri && typeof Notification !== "undefined" && Notification.permission !== "granted") {
+      if (
+        !isTauri &&
+        typeof Notification !== "undefined" &&
+        Notification.permission !== "granted"
+      ) {
         const message =
           Notification.permission === "denied"
             ? "Permiso de notificaciones denegado. Actívalo desde la configuración del navegador."
@@ -73,7 +94,9 @@ export function NotificationPreferencesCard({ className }: NotificationPreferenc
         body: "Si ves esto, las notificaciones funcionan.",
       })
 
-      toast.success("Notificación enviada. Si no aparece, revisa el centro de notificaciones del sistema.")
+      toast.success(
+        "Notificación enviada. Si no aparece, revisa el centro de notificaciones del sistema."
+      )
 
       return
     }
@@ -89,7 +112,7 @@ export function NotificationPreferencesCard({ className }: NotificationPreferenc
 
     if (Notification.permission !== "granted") {
       toast.error(
-        `Permiso de notificaciones: "${Notification.permission}". Actívalo en el candado de la barra de direcciones.`,
+        `Permiso de notificaciones: "${Notification.permission}". Actívalo en el candado de la barra de direcciones.`
       )
 
       return
@@ -100,7 +123,9 @@ export function NotificationPreferencesCard({ className }: NotificationPreferenc
         body: "Si ves esto, las notificaciones funcionan.",
       })
 
-      toast.success("Notificación enviada. Si no aparece, revisa las notificaciones de Windows / del navegador.")
+      toast.success(
+        "Notificación enviada. Si no aparece, revisa las notificaciones de Windows / del navegador."
+      )
     } catch (error) {
       toast.error(`No se pudo mostrar la notificación: ${String(error)}`)
     }
@@ -131,9 +156,7 @@ export function NotificationPreferencesCard({ className }: NotificationPreferenc
             <TbBellRinging className="text-primary size-4" />
             Notificaciones
           </CardTitle>
-          <CardDescription>
-            Citas y recordatorios.
-          </CardDescription>
+          <CardDescription>Citas y recordatorios.</CardDescription>
         </CardHeader>
         <CardContent className="flex flex-1 flex-col">
           <div className="flex flex-1 flex-col gap-4">
@@ -146,7 +169,10 @@ export function NotificationPreferencesCard({ className }: NotificationPreferenc
                   <TbBellOff className="text-muted-foreground size-4" />
                 )}
                 <div className="flex flex-col">
-                  <Label htmlFor="notifications-enabled" className="text-sm font-medium">
+                  <Label
+                    htmlFor="notifications-enabled"
+                    className="text-sm font-medium"
+                  >
                     Notificaciones
                   </Label>
                   <span className="text-muted-foreground text-xs">
@@ -159,7 +185,9 @@ export function NotificationPreferencesCard({ className }: NotificationPreferenc
               <Switch
                 id="notifications-enabled"
                 checked={preferences.enabled}
-                onCheckedChange={(checked: boolean) => handleToggleEnabled(checked)}
+                onCheckedChange={(checked: boolean) =>
+                  handleToggleEnabled(checked)
+                }
               />
             </div>
 
@@ -176,7 +204,10 @@ export function NotificationPreferencesCard({ className }: NotificationPreferenc
                   <div className="flex items-center gap-2">
                     <TbBell className="text-primary size-4" />
                     <div className="flex flex-col">
-                      <Label htmlFor="upcoming-notifications" className="text-sm font-medium">
+                      <Label
+                        htmlFor="upcoming-notifications"
+                        className="text-sm font-medium"
+                      >
                         Citas próximas
                       </Label>
                       <span className="text-muted-foreground text-xs">
@@ -188,7 +219,10 @@ export function NotificationPreferencesCard({ className }: NotificationPreferenc
                     id="upcoming-notifications"
                     checked={preferences.upcomingNotifications}
                     onCheckedChange={(checked: boolean) =>
-                      setPreferences((prev) => ({ ...prev, upcomingNotifications: checked }))
+                      setPreferences((prev) => ({
+                        ...prev,
+                        upcomingNotifications: checked,
+                      }))
                     }
                   />
                 </div>
@@ -198,7 +232,10 @@ export function NotificationPreferencesCard({ className }: NotificationPreferenc
                   <div className="flex items-center gap-2">
                     <TbRefresh className="text-primary size-4" />
                     <div className="flex flex-col">
-                      <Label htmlFor="sse-updates" className="text-sm font-medium">
+                      <Label
+                        htmlFor="sse-updates"
+                        className="text-sm font-medium"
+                      >
                         Actualizaciones en tiempo real
                       </Label>
                       <span className="text-muted-foreground text-xs">
@@ -210,7 +247,10 @@ export function NotificationPreferencesCard({ className }: NotificationPreferenc
                     id="sse-updates"
                     checked={preferences.sseUpdates}
                     onCheckedChange={(checked: boolean) =>
-                      setPreferences((prev) => ({ ...prev, sseUpdates: checked }))
+                      setPreferences((prev) => ({
+                        ...prev,
+                        sseUpdates: checked,
+                      }))
                     }
                   />
                 </div>
@@ -219,7 +259,9 @@ export function NotificationPreferencesCard({ className }: NotificationPreferenc
                 <div className="flex items-start gap-2">
                   <TbClock className="text-primary mt-0.5 size-4 shrink-0" />
                   <div className="flex flex-col gap-1.5">
-                    <Label className="text-sm font-medium">Ventana de recordatorio</Label>
+                    <Label className="text-sm font-medium">
+                      Ventana de recordatorio
+                    </Label>
                     <div className="mt-1 flex flex-wrap gap-1.5">
                       {REMINDER_OPTIONS.map((opt) => (
                         <Button

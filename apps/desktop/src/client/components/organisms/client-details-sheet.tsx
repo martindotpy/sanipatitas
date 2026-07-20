@@ -36,7 +36,9 @@ export function ClientDetailsSheet({
         {client && (
           <div className="flex flex-col gap-4 px-4">
             <div className="flex flex-col gap-1">
-              <p className="text-muted-foreground text-xs font-medium">Identificador</p>
+              <p className="text-muted-foreground text-xs font-medium">
+                Identificador
+              </p>
               <p className="text-sm break-all">{client.id}</p>
             </div>
 

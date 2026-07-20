@@ -6,11 +6,11 @@ import {
   TbCalendar,
   TbCategory2,
   TbLayoutDashboard,
-  TbPaw,
-  TbUserCircle,
-  TbShoppingBag,
-  TbReportMoney,
   TbLockAccess,
+  TbPaw,
+  TbReportMoney,
+  TbShoppingBag,
+  TbUserCircle,
 } from "react-icons/tb"
 
 // Hook

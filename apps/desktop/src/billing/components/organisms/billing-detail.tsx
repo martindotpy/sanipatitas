@@ -1,5 +1,14 @@
-import { useBillingItems, useBillingPayments, useCreateBillingItem, useCreatePayment } from "@sanipatitas/desktop/billing/hook/use-billing"
-import type { BillingDto, BillingItemDto, PaymentDto } from "@sanipatitas/desktop/billing/api/billing-api"
+import type {
+  BillingDto,
+  BillingItemDto,
+  PaymentDto,
+} from "@sanipatitas/desktop/billing/api/billing-api"
+import {
+  useBillingItems,
+  useBillingPayments,
+  useCreateBillingItem,
+  useCreatePayment,
+} from "@sanipatitas/desktop/billing/hook/use-billing"
 import { Badge } from "@sanipatitas/ui/components/ui/badge"
 import { Button } from "@sanipatitas/ui/components/ui/button"
 import {
@@ -11,12 +20,8 @@ import {
   DialogTitle,
 } from "@sanipatitas/ui/components/ui/dialog"
 import { Spinner } from "@sanipatitas/ui/components/ui/spinner"
+import { TbCash, TbPackage, TbPlus } from "react-icons/tb"
 import { toast } from "sonner"
-import {
-  TbCash,
-  TbPackage,
-  TbPlus,
-} from "react-icons/tb"
 
 // Payment status labels & colors
 const paymentStatusLabels: Record<string, string> = {
@@ -28,7 +33,8 @@ const paymentStatusLabels: Record<string, string> = {
 }
 
 const paymentStatusColors: Record<string, string> = {
-  PENDING: "bg-yellow-100 text-yellow-800 dark:bg-yellow-900/30 dark:text-yellow-300",
+  PENDING:
+    "bg-yellow-100 text-yellow-800 dark:bg-yellow-900/30 dark:text-yellow-300",
   PARTIAL: "bg-blue-100 text-blue-800 dark:bg-blue-900/30 dark:text-blue-300",
   PAID: "bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-300",
   REFUNDED: "bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-300",
@@ -52,7 +58,9 @@ const itemTypeLabels: Record<string, string> = {
 }
 
 const formatCurrency = (value: number) =>
-  new Intl.NumberFormat("es-PE", { style: "currency", currency: "PEN" }).format(value)
+  new Intl.NumberFormat("es-PE", { style: "currency", currency: "PEN" }).format(
+    value
+  )
 
 // Props
 interface BillingDetailProps {
@@ -62,7 +70,11 @@ interface BillingDetailProps {
 }
 
 // Component
-export function BillingDetail({ billing, open, onOpenChange }: BillingDetailProps) {
+export function BillingDetail({
+  billing,
+  open,
+  onOpenChange,
+}: BillingDetailProps) {
   const itemsQuery = useBillingItems(billing?.id ?? null)
   const paymentsQuery = useBillingPayments(billing?.id ?? null)
   const createItemMutation = useCreateBillingItem(billing?.id ?? "")
@@ -71,23 +83,28 @@ export function BillingDetail({ billing, open, onOpenChange }: BillingDetailProp
   const getErrorDetail = (error: unknown) =>
     (error as { detail?: string })?.detail
 
-  const items: BillingItemDto[] = (itemsQuery.data as { data?: BillingItemDto[] } | undefined)?.data ?? []
-  const payments: PaymentDto[] = (paymentsQuery.data as { data?: PaymentDto[] } | undefined)?.data ?? []
+  const items: BillingItemDto[] =
+    (itemsQuery.data as { data?: BillingItemDto[] } | undefined)?.data ?? []
+  const payments: PaymentDto[] =
+    (paymentsQuery.data as { data?: PaymentDto[] } | undefined)?.data ?? []
 
   const totalPaid = payments.reduce((sum, p) => sum + p.amount, 0)
   const remaining = billing ? Math.max(0, billing.totalAmount - totalPaid) : 0
 
   const handleAddPayment = () => {
     if (!billing) return
-    createPaymentMutation.mutate({
-      billingId: billing.id,
-      amount: remaining,
-      paymentMethod: "CASH",
-    }, {
-      onError: (error) => {
-        toast.error(getErrorDetail(error) ?? "Error al registrar el pago")
+    createPaymentMutation.mutate(
+      {
+        billingId: billing.id,
+        amount: remaining,
+        paymentMethod: "CASH",
       },
-    })
+      {
+        onError: (error) => {
+          toast.error(getErrorDetail(error) ?? "Error al registrar el pago")
+        },
+      }
+    )
   }
 
   if (!billing) return null
@@ -99,7 +116,8 @@ export function BillingDetail({ billing, open, onOpenChange }: BillingDetailProp
           <div className="flex items-center justify-between">
             <DialogTitle>Factura #{billing.id.slice(0, 8)}</DialogTitle>
             <Badge className={paymentStatusColors[billing.paymentStatus] ?? ""}>
-              {paymentStatusLabels[billing.paymentStatus] ?? billing.paymentStatus}
+              {paymentStatusLabels[billing.paymentStatus] ??
+                billing.paymentStatus}
             </Badge>
           </div>
         </DialogHeader>
@@ -109,15 +127,21 @@ export function BillingDetail({ billing, open, onOpenChange }: BillingDetailProp
           <div className="grid grid-cols-3 gap-4">
             <div className="rounded-lg border p-3">
               <p className="text-muted-foreground text-xs">Subtotal</p>
-              <p className="text-lg font-semibold">{formatCurrency(billing.subtotal)}</p>
+              <p className="text-lg font-semibold">
+                {formatCurrency(billing.subtotal)}
+              </p>
             </div>
             <div className="rounded-lg border p-3">
               <p className="text-muted-foreground text-xs">Descuento</p>
-              <p className="text-lg font-semibold">{formatCurrency(billing.discount)}</p>
+              <p className="text-lg font-semibold">
+                {formatCurrency(billing.discount)}
+              </p>
             </div>
             <div className="rounded-lg border p-3">
               <p className="text-muted-foreground text-xs">Total</p>
-              <p className="text-lg font-semibold">{formatCurrency(billing.totalAmount)}</p>
+              <p className="text-lg font-semibold">
+                {formatCurrency(billing.totalAmount)}
+              </p>
             </div>
           </div>
 
@@ -128,19 +152,28 @@ export function BillingDetail({ billing, open, onOpenChange }: BillingDetailProp
                 <TbPackage className="size-4" />
                 Items
               </h4>
-              <Button variant="ghost" size="icon-sm" onClick={() => {
-                if (!billing) return
-                createItemMutation.mutate({
-                  billingId: billing.id,
-                  description: "Nuevo item",
-                  unitPrice: 0,
-                  itemType: "OTHER",
-                }, {
-                  onError: (error) => {
-                    toast.error(getErrorDetail(error) ?? "Error al agregar el item")
-                  },
-                })
-              }}>
+              <Button
+                variant="ghost"
+                size="icon-sm"
+                onClick={() => {
+                  if (!billing) return
+                  createItemMutation.mutate(
+                    {
+                      billingId: billing.id,
+                      description: "Nuevo item",
+                      unitPrice: 0,
+                      itemType: "OTHER",
+                    },
+                    {
+                      onError: (error) => {
+                        toast.error(
+                          getErrorDetail(error) ?? "Error al agregar el item"
+                        )
+                      },
+                    }
+                  )
+                }}
+              >
                 <TbPlus className="size-4" />
               </Button>
             </div>
@@ -148,11 +181,16 @@ export function BillingDetail({ billing, open, onOpenChange }: BillingDetailProp
             {itemsQuery.isLoading ? (
               <Spinner />
             ) : items.length === 0 ? (
-              <p className="text-muted-foreground text-sm">Sin items registrados.</p>
+              <p className="text-muted-foreground text-sm">
+                Sin items registrados.
+              </p>
             ) : (
               <div className="space-y-1">
                 {items.map((item) => (
-                  <div key={item.id} className="flex items-center justify-between rounded-md border px-3 py-2 text-sm">
+                  <div
+                    key={item.id}
+                    className="flex items-center justify-between rounded-md border px-3 py-2 text-sm"
+                  >
                     <div className="flex items-center gap-2">
                       <span>{item.description}</span>
                       <Badge variant="outline" className="text-xs">
@@ -160,8 +198,12 @@ export function BillingDetail({ billing, open, onOpenChange }: BillingDetailProp
                       </Badge>
                     </div>
                     <div className="flex items-center gap-3">
-                      <span className="text-muted-foreground">x{item.quantity ?? 1}</span>
-                      <span className="font-medium">{formatCurrency(item.unitPrice)}</span>
+                      <span className="text-muted-foreground">
+                        x{item.quantity ?? 1}
+                      </span>
+                      <span className="font-medium">
+                        {formatCurrency(item.unitPrice)}
+                      </span>
                     </div>
                   </div>
                 ))}
@@ -177,7 +219,11 @@ export function BillingDetail({ billing, open, onOpenChange }: BillingDetailProp
                 Pagos
               </h4>
               {remaining > 0 && (
-                <Button variant="secondary" size="sm" onClick={handleAddPayment}>
+                <Button
+                  variant="secondary"
+                  size="sm"
+                  onClick={handleAddPayment}
+                >
                   <TbPlus className="size-4" />
                   Pagar {formatCurrency(remaining)}
                 </Button>
@@ -187,15 +233,23 @@ export function BillingDetail({ billing, open, onOpenChange }: BillingDetailProp
             {paymentsQuery.isLoading ? (
               <Spinner />
             ) : payments.length === 0 ? (
-              <p className="text-muted-foreground text-sm">Sin pagos registrados.</p>
+              <p className="text-muted-foreground text-sm">
+                Sin pagos registrados.
+              </p>
             ) : (
               <div className="space-y-1">
                 {payments.map((payment) => (
-                  <div key={payment.id} className="flex items-center justify-between rounded-md border px-3 py-2 text-sm">
+                  <div
+                    key={payment.id}
+                    className="flex items-center justify-between rounded-md border px-3 py-2 text-sm"
+                  >
                     <div className="flex items-center gap-2">
-                      <span className="font-medium">{formatCurrency(payment.amount)}</span>
+                      <span className="font-medium">
+                        {formatCurrency(payment.amount)}
+                      </span>
                       <Badge variant="secondary" className="text-xs">
-                        {paymentMethodLabels[payment.paymentMethod] ?? payment.paymentMethod}
+                        {paymentMethodLabels[payment.paymentMethod] ??
+                          payment.paymentMethod}
                       </Badge>
                     </div>
                     <span className="text-muted-foreground text-xs">

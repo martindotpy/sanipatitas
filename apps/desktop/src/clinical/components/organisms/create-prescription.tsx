@@ -1,7 +1,13 @@
 import { type DialogRoot } from "@base-ui/react"
 import { zodResolver } from "@hookform/resolvers/zod"
-import { useCreatePrescription } from "@sanipatitas/desktop/clinical/hook/use-prescription"
 import { authClient } from "@sanipatitas/desktop/auth/client/auth-client"
+import { useCreatePrescription } from "@sanipatitas/desktop/clinical/hook/use-prescription"
+import type { OpenapiPrescriptionStatus } from "@sanipatitas/shared/api/client/types.gen"
+import { zOpenapiCreatePrescriptionRequest } from "@sanipatitas/shared/api/client/zod.gen"
+import { ControlledCombobox } from "@sanipatitas/ui/components/form/controlled/controlled-combobox"
+import { ControlledDatetimeInput } from "@sanipatitas/ui/components/form/controlled/controlled-datetime-input"
+import { ControlledInput } from "@sanipatitas/ui/components/form/controlled/controlled-input"
+import { ControlledTextarea } from "@sanipatitas/ui/components/form/controlled/controlled-textarea"
 import { Button } from "@sanipatitas/ui/components/ui/button"
 import {
   Dialog,
@@ -13,17 +19,11 @@ import {
   DialogTrigger,
 } from "@sanipatitas/ui/components/ui/dialog"
 import { FieldGroup } from "@sanipatitas/ui/components/ui/field"
-import { ControlledInput } from "@sanipatitas/ui/components/form/controlled/controlled-input"
-import { ControlledDatetimeInput } from "@sanipatitas/ui/components/form/controlled/controlled-datetime-input"
-import { ControlledCombobox } from "@sanipatitas/ui/components/form/controlled/controlled-combobox"
-import { ControlledTextarea } from "@sanipatitas/ui/components/form/controlled/controlled-textarea"
 import { useQuery } from "@tanstack/react-query"
 import { useMemo, useRef } from "react"
-import { useForm, useFieldArray } from "react-hook-form"
+import { useFieldArray, useForm } from "react-hook-form"
 import { TbPlus, TbTrashX } from "react-icons/tb"
 import { toast } from "sonner"
-import { zOpenapiCreatePrescriptionRequest, zOpenapiCreatePrescriptionItemRequest } from "@sanipatitas/shared/api/client/zod.gen"
-import type { OpenapiPrescriptionStatus } from "@sanipatitas/shared/api/client/types.gen"
 
 // Options
 const STATUS_OPTIONS = [
@@ -55,10 +55,12 @@ export function CreatePrescription({ patientId }: CreatePrescriptionProps) {
 
   const userOptions = useMemo(
     () =>
-      (usersQuery.data?.users ?? []).map((u: { id: string; name: string; lastName?: string }) => ({
-        value: u.id,
-        label: `${u.name} ${u.lastName ?? ""}`,
-      })),
+      (usersQuery.data?.users ?? []).map(
+        (u: { id: string; name: string; lastName?: string }) => ({
+          value: u.id,
+          label: `${u.name} ${u.lastName ?? ""}`,
+        })
+      ),
     [usersQuery.data]
   )
 
@@ -71,7 +73,16 @@ export function CreatePrescription({ patientId }: CreatePrescriptionProps) {
       status: "ACTIVE",
       patientId,
       veterinarianId: "",
-      items: [{ medicationName: "", dosage: "", frequency: "", duration: "", route: "", notes: "" }],
+      items: [
+        {
+          medicationName: "",
+          dosage: "",
+          frequency: "",
+          duration: "",
+          route: "",
+          notes: "",
+        },
+      ],
     },
   })
 
@@ -80,38 +91,44 @@ export function CreatePrescription({ patientId }: CreatePrescriptionProps) {
     name: "items",
   })
 
-  const onSubmit = handleSubmit((data) => {
-    createMutation.mutate(
-      {
-        issueDate: data.issueDate,
-        expirationDate: data.expirationDate,
-        notes: data.notes || undefined,
-        status: (data.status || "ACTIVE") as OpenapiPrescriptionStatus,
-        patientId,
-        veterinarianId: data.veterinarianId,
-        items: data.items.map((item) => ({
-          medicationName: item.medicationName,
-          dosage: item.dosage ?? undefined,
-          frequency: item.frequency ?? undefined,
-          duration: item.duration ?? undefined,
-          route: item.route ?? undefined,
-          notes: item.notes ?? undefined,
-        })),
-      },
-      {
-        onSuccess: () => {
-          dialogActionsRef.current?.close()
-          reset()
-          toast.success("Receta creada correctamente")
+  const onSubmit = handleSubmit(
+    (data) => {
+      createMutation.mutate(
+        {
+          issueDate: data.issueDate,
+          expirationDate: data.expirationDate,
+          notes: data.notes,
+          status: (data.status || "ACTIVE") as OpenapiPrescriptionStatus,
+          patientId,
+          veterinarianId: data.veterinarianId,
+          items: data.items.map((item) => ({
+            medicationName: item.medicationName,
+            dosage: item.dosage,
+            frequency: item.frequency,
+            duration: item.duration,
+            route: item.route,
+            notes: item.notes,
+          })),
         },
-        onError: (error) => {
-          toast.error((error as { detail?: string })?.detail ?? "Error al crear la receta")
-        },
-      }
-    )
-  }, () => {
-    toast.error("Revisa los campos del formulario")
-  })
+        {
+          onSuccess: () => {
+            dialogActionsRef.current?.close()
+            reset()
+            toast.success("Receta creada correctamente")
+          },
+          onError: (error) => {
+            toast.error(
+              (error as { detail?: string })?.detail ??
+                "Error al crear la receta"
+            )
+          },
+        }
+      )
+    },
+    () => {
+      toast.error("Revisa los campos del formulario")
+    }
+  )
 
   return (
     <Dialog actionsRef={dialogActionsRef}>
@@ -187,9 +204,11 @@ export function CreatePrescription({ patientId }: CreatePrescriptionProps) {
             </div>
 
             {fields.map((field, index) => (
-              <div key={field.id} className="rounded-lg border p-3 space-y-2">
+              <div key={field.id} className="space-y-2 rounded-lg border p-3">
                 <div className="flex items-center justify-between">
-                  <p className="text-xs text-muted-foreground">Medicamento {index + 1}</p>
+                  <p className="text-muted-foreground text-xs">
+                    Medicamento {index + 1}
+                  </p>
                   {fields.length > 1 && (
                     <Button
                       type="button"

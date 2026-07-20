@@ -1,8 +1,4 @@
-import {
-  Field,
-  FieldError,
-  FieldLabel,
-} from "@sanipatitas/ui/components/ui/field"
+import { Button } from "@sanipatitas/ui/components/ui/button"
 import {
   Command,
   CommandEmpty,
@@ -12,19 +8,23 @@ import {
   CommandList,
 } from "@sanipatitas/ui/components/ui/command"
 import {
+  Field,
+  FieldError,
+  FieldLabel,
+} from "@sanipatitas/ui/components/ui/field"
+import {
   Popover,
   PopoverContent,
   PopoverTrigger,
 } from "@sanipatitas/ui/components/ui/popover"
 import { cn } from "@sanipatitas/ui/lib/tailwind"
-import { Button } from "@sanipatitas/ui/components/ui/button"
+import { useState } from "react"
 import type {
   FieldPath,
   FieldValues,
   UseControllerProps,
 } from "react-hook-form"
 import { Controller } from "react-hook-form"
-import { useMemo, useState } from "react"
 import { TbCheck, TbSelector } from "react-icons/tb"
 
 // Types
@@ -63,8 +63,9 @@ export function ControlledCombobox<
       control={control}
       name={name}
       render={({ field, fieldState }) => {
-        const selectedLabel = options.find((o) => o.value === field.value)
-          ?.label
+        const selectedLabel = options.find(
+          (o) => o.value === field.value
+        )?.label
 
         return (
           <Field data-invalid={fieldState.invalid}>
@@ -82,9 +83,7 @@ export function ControlledCombobox<
                   />
                 }
               >
-                <span className="truncate">
-                  {selectedLabel || placeholder}
-                </span>
+                <span className="truncate">{selectedLabel || placeholder}</span>
                 <TbSelector className="ml-2 h-4 w-4 shrink-0 opacity-50" />
               </PopoverTrigger>
               <PopoverContent className="w-(--anchor-width) p-0" align="start">
@@ -127,9 +126,7 @@ export function ControlledCombobox<
               </PopoverContent>
             </Popover>
 
-            {fieldState.invalid && (
-              <FieldError errors={[fieldState.error]} />
-            )}
+            {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
           </Field>
         )
       }}

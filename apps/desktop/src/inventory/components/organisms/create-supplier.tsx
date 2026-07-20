@@ -2,6 +2,7 @@ import { type DialogRoot } from "@base-ui/react"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useCreateSupplier } from "@sanipatitas/desktop/inventory/hook/use-supplier"
 import { zOpenapiCreateSupplierRequest } from "@sanipatitas/shared/api/client/zod.gen"
+import { ControlledInput } from "@sanipatitas/ui/components/form/controlled/controlled-input"
 import { Button } from "@sanipatitas/ui/components/ui/button"
 import {
   Dialog,
@@ -13,11 +14,10 @@ import {
   DialogTrigger,
 } from "@sanipatitas/ui/components/ui/dialog"
 import { FieldGroup } from "@sanipatitas/ui/components/ui/field"
-import { ControlledInput } from "@sanipatitas/ui/components/form/controlled/controlled-input"
 import { useRef } from "react"
 import { useForm } from "react-hook-form"
-import { toast } from "sonner"
 import { TbPlus } from "react-icons/tb"
+import { toast } from "sonner"
 
 // Component
 export function CreateSupplier() {
@@ -28,11 +28,11 @@ export function CreateSupplier() {
     resolver: zodResolver(zOpenapiCreateSupplierRequest),
     defaultValues: {
       name: "",
-      ruc: undefined,
-      contactName: undefined,
-      contactPhone: undefined,
-      email: undefined,
-      address: undefined,
+      ruc: "",
+      contactName: "",
+      contactPhone: "",
+      email: "",
+      address: "",
     },
   })
 
@@ -40,11 +40,11 @@ export function CreateSupplier() {
     createMutation.mutate(
       {
         name: data.name,
-        ruc: data.ruc || undefined,
-        contactName: data.contactName || undefined,
-        contactPhone: data.contactPhone || undefined,
-        email: data.email || undefined,
-        address: data.address || undefined,
+        ruc: data.ruc,
+        contactName: data.contactName,
+        contactPhone: data.contactPhone,
+        email: data.email,
+        address: data.address,
       },
       {
         onSuccess: () => {
@@ -57,7 +57,7 @@ export function CreateSupplier() {
               "Error al crear el proveedor"
           )
         },
-      },
+      }
     )
   })
 
@@ -72,7 +72,10 @@ export function CreateSupplier() {
         }
       />
 
-      <DialogContent render={<form onSubmit={onSubmit} />} className="sm:max-w-lg">
+      <DialogContent
+        render={<form onSubmit={onSubmit} />}
+        className="sm:max-w-lg"
+      >
         <DialogHeader>
           <DialogTitle>Crear proveedor</DialogTitle>
         </DialogHeader>
@@ -82,9 +85,17 @@ export function CreateSupplier() {
 
           <ControlledInput control={control} name="ruc" label="RUC" />
 
-          <ControlledInput control={control} name="contactName" label="Contacto" />
+          <ControlledInput
+            control={control}
+            name="contactName"
+            label="Contacto"
+          />
 
-          <ControlledInput control={control} name="contactPhone" label="Teléfono" />
+          <ControlledInput
+            control={control}
+            name="contactPhone"
+            label="Teléfono"
+          />
 
           <ControlledInput
             control={control}

@@ -1,5 +1,5 @@
-import { integer, pgTable, timestamp, uuid, varchar } from "drizzle-orm/pg-core"
 import { productTable } from "@sanipatitas/database/inventory/schema/product-schema"
+import { integer, pgTable, timestamp, uuid, varchar } from "drizzle-orm/pg-core"
 
 // Table
 export const stockTable = pgTable("stock", {

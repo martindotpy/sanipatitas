@@ -1,12 +1,16 @@
 import { type DialogRoot } from "@base-ui/react"
 import { zodResolver } from "@hookform/resolvers/zod"
-import { useUpdateObservation } from "@sanipatitas/desktop/clinical/hook/use-observation"
 import { authClient } from "@sanipatitas/desktop/auth/client/auth-client"
 import type {
   ObservationDto,
   OpenapiObservationCategory,
   OpenapiObservationStatus,
 } from "@sanipatitas/desktop/clinical/api/clinical-api"
+import { useUpdateObservation } from "@sanipatitas/desktop/clinical/hook/use-observation"
+import { zOpenapiUpdateMedicalObservationRequest } from "@sanipatitas/shared/api/client/zod.gen"
+import { ControlledCombobox } from "@sanipatitas/ui/components/form/controlled/controlled-combobox"
+import { ControlledDatetimeInput } from "@sanipatitas/ui/components/form/controlled/controlled-datetime-input"
+import { ControlledInput } from "@sanipatitas/ui/components/form/controlled/controlled-input"
 import { Button } from "@sanipatitas/ui/components/ui/button"
 import {
   Dialog,
@@ -17,29 +21,10 @@ import {
   DialogTitle,
 } from "@sanipatitas/ui/components/ui/dialog"
 import { FieldGroup } from "@sanipatitas/ui/components/ui/field"
-import { ControlledInput } from "@sanipatitas/ui/components/form/controlled/controlled-input"
-import { ControlledDatetimeInput } from "@sanipatitas/ui/components/form/controlled/controlled-datetime-input"
-import { ControlledCombobox } from "@sanipatitas/ui/components/form/controlled/controlled-combobox"
 import { useQuery } from "@tanstack/react-query"
 import { useEffect, useMemo, useRef } from "react"
 import { useForm } from "react-hook-form"
 import { toast } from "sonner"
-import { z } from "zod"
-
-// Schema
-const updateObservationSchema = z.object({
-  code: z.string().optional(),
-  value: z.string().optional(),
-  unit: z.string().optional(),
-  interpretation: z.string().optional(),
-  bodySite: z.string().optional(),
-  method: z.string().optional(),
-  referenceRange: z.string().optional(),
-  category: z.string().optional(),
-  status: z.string().optional(),
-  issuedDate: z.string().optional(),
-  veterinarianId: z.string().optional(),
-})
 
 // Options
 const CATEGORY_OPTIONS = [
@@ -87,26 +72,29 @@ export function UpdateObservation({
 
   const userOptions = useMemo(
     () =>
-      (usersQuery.data?.users ?? []).map((u: { id: string; name: string; lastName?: string }) => ({
-        value: u.id,
-        label: `${u.name} ${u.lastName ?? ""}`,
-      })),
+      (usersQuery.data?.users ?? []).map(
+        (u: { id: string; name: string; lastName?: string }) => ({
+          value: u.id,
+          label: `${u.name} ${u.lastName ?? ""}`,
+        })
+      ),
     [usersQuery.data]
   )
 
   const { control, handleSubmit, reset } = useForm({
-    resolver: zodResolver(updateObservationSchema),
+    resolver: zodResolver(zOpenapiUpdateMedicalObservationRequest),
     defaultValues: {
       code: "",
       value: "",
-      unit: undefined,
-      interpretation: undefined,
-      bodySite: undefined,
-      method: undefined,
-      referenceRange: undefined,
-      category: undefined,
-      status: undefined,
-      issuedDate: undefined,
+      unit: "",
+      interpretation: "",
+      bodySite: "",
+      method: "",
+      referenceRange: "",
+      category: "",
+      status: "",
+      issuedDate: "",
+      patientId: "",
       veterinarianId: "",
     },
   })
@@ -116,14 +104,14 @@ export function UpdateObservation({
       reset({
         code: observation.code ?? "",
         value: observation.value ?? "",
-        unit: observation.unit ?? undefined,
-        interpretation: observation.interpretation ?? undefined,
-        bodySite: observation.bodySite ?? undefined,
-        method: observation.method ?? undefined,
-        referenceRange: observation.referenceRange ?? undefined,
-        category: observation.category ?? undefined,
-        status: observation.status ?? undefined,
-        issuedDate: observation.issuedDate ?? undefined,
+        unit: observation.unit ?? "",
+        interpretation: observation.interpretation ?? "",
+        bodySite: observation.bodySite ?? "",
+        method: observation.method ?? "",
+        referenceRange: observation.referenceRange ?? "",
+        category: observation.category ?? "",
+        status: observation.status ?? "",
+        issuedDate: observation.issuedDate ?? "",
         veterinarianId: observation.veterinarian?.id ?? "",
       })
     }
@@ -136,15 +124,15 @@ export function UpdateObservation({
       {
         id: observation.id,
         ...data,
-        code: data.code || undefined,
+        code: data.code,
         value: data.value!,
-        unit: data.unit || undefined,
-        interpretation: data.interpretation || undefined,
-        bodySite: data.bodySite || undefined,
-        method: data.method || undefined,
-        referenceRange: data.referenceRange || undefined,
-        category: data.category as OpenapiObservationCategory | undefined,
-        status: data.status as OpenapiObservationStatus | undefined,
+        unit: data.unit,
+        interpretation: data.interpretation,
+        bodySite: data.bodySite,
+        method: data.method,
+        referenceRange: data.referenceRange,
+        category: data.category as OpenapiObservationCategory,
+        status: data.status as OpenapiObservationStatus,
         issuedDate: data.issuedDate,
         veterinarianId: data.veterinarianId!,
         patientId,
@@ -154,14 +142,21 @@ export function UpdateObservation({
           dialogActionsRef.current?.close()
         },
         onError: (error) => {
-          toast.error((error as { detail?: string })?.detail ?? "Error al actualizar la observación")
+          toast.error(
+            (error as { detail?: string })?.detail ??
+              "Error al actualizar la observación"
+          )
         },
       }
     )
   })
 
   return (
-    <Dialog open={open} onOpenChange={onOpenChange} actionsRef={dialogActionsRef}>
+    <Dialog
+      open={open}
+      onOpenChange={onOpenChange}
+      actionsRef={dialogActionsRef}
+    >
       <DialogContent render={<form onSubmit={onSubmit} />}>
         <DialogHeader>
           <DialogTitle>Editar observación</DialogTitle>
@@ -174,13 +169,25 @@ export function UpdateObservation({
 
           <ControlledInput control={control} name="unit" label="Unidad" />
 
-          <ControlledInput control={control} name="interpretation" label="Interpretación" />
+          <ControlledInput
+            control={control}
+            name="interpretation"
+            label="Interpretación"
+          />
 
-          <ControlledInput control={control} name="bodySite" label="Sitio corporal" />
+          <ControlledInput
+            control={control}
+            name="bodySite"
+            label="Sitio corporal"
+          />
 
           <ControlledInput control={control} name="method" label="Método" />
 
-          <ControlledInput control={control} name="referenceRange" label="Rango de referencia" />
+          <ControlledInput
+            control={control}
+            name="referenceRange"
+            label="Rango de referencia"
+          />
 
           <ControlledCombobox
             control={control}

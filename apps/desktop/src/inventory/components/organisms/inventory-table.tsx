@@ -16,6 +16,7 @@ import {
   AlertDialogTitle,
 } from "@sanipatitas/ui/components/ui/alert-dialog"
 import { Button } from "@sanipatitas/ui/components/ui/button"
+import { Spinner } from "@sanipatitas/ui/components/ui/spinner"
 import {
   Table,
   TableBody,
@@ -24,10 +25,9 @@ import {
   TableHeader,
   TableRow,
 } from "@sanipatitas/ui/components/ui/table"
-import { Spinner } from "@sanipatitas/ui/components/ui/spinner"
 import { useState } from "react"
-import { toast } from "sonner"
 import { TbPencil, TbTrash } from "react-icons/tb"
+import { toast } from "sonner"
 
 // Component
 export function InventoryTable() {
@@ -101,9 +101,7 @@ export function InventoryTable() {
                 <TableCell className="font-medium">{product.name}</TableCell>
                 <TableCell>{product.code ?? "—"}</TableCell>
                 <TableCell>
-                  {product.price != null
-                    ? formatCurrency(product.price)
-                    : "—"}
+                  {product.price != null ? formatCurrency(product.price) : "—"}
                 </TableCell>
                 <TableCell>
                   {product.category?.name ?? (
@@ -159,8 +157,8 @@ export function InventoryTable() {
           <AlertDialogHeader>
             <AlertDialogTitle>Eliminar producto</AlertDialogTitle>
             <AlertDialogDescription>
-              ¿Estás seguro de que deseas eliminar &quot;{deleteTarget?.name}&quot;?
-              Esta acción no se puede deshacer.
+              ¿Estás seguro de que deseas eliminar &quot;{deleteTarget?.name}
+              &quot;? Esta acción no se puede deshacer.
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>

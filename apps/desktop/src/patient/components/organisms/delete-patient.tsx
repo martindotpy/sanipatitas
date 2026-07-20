@@ -33,7 +33,9 @@ export function DeletePatientAlert({
   const deleteMutation = useMutation({
     mutationFn: async (ids: string[]) => {
       await Promise.all(
-        ids.map((id) => deleteApiPatientById({ path: { id }, throwOnError: true }))
+        ids.map((id) =>
+          deleteApiPatientById({ path: { id }, throwOnError: true })
+        )
       )
     },
     onSuccess: () => {
@@ -44,7 +46,10 @@ export function DeletePatientAlert({
     },
     onError: (error) => {
       const detail =
-        error && typeof error === "object" && "detail" in error && typeof error.detail === "string"
+        error &&
+        typeof error === "object" &&
+        "detail" in error &&
+        typeof error.detail === "string"
           ? error.detail
           : null
       toast.error(detail ?? "Error al eliminar paciente(s)")
@@ -69,9 +74,7 @@ export function DeletePatientAlert({
           <AlertDialogCancel>Cancelar</AlertDialogCancel>
           <AlertDialogAction
             variant="destructive"
-            onClick={() =>
-              deleteMutation.mutate(patients.map((p) => p.id))
-            }
+            onClick={() => deleteMutation.mutate(patients.map((p) => p.id))}
           >
             {deleteMutation.isPending ? "Eliminando..." : "Eliminar"}
           </AlertDialogAction>

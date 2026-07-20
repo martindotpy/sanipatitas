@@ -1,5 +1,6 @@
 "use client"
 
+import type { BaseUIEvent } from "@base-ui/react/types"
 import { Button } from "@sanipatitas/ui/components/ui/button"
 import { useAsRef } from "@sanipatitas/ui/hooks/use-as-ref"
 import { useIsomorphicLayoutEffect } from "@sanipatitas/ui/hooks/use-isomorphic-layout-effect"
@@ -11,7 +12,6 @@ import {
 } from "radix-ui"
 import * as React from "react"
 import * as ReactDOM from "react-dom"
-import type { BaseUIEvent } from "@base-ui/react/types"
 
 const ROOT_NAME = "ActionBar"
 const GROUP_NAME = "ActionBarGroup"

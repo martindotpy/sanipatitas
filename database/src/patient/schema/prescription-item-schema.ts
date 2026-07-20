@@ -1,10 +1,5 @@
 import { prescriptionTable } from "@sanipatitas/database/patient/schema/prescription-schema"
-import {
-  pgTable,
-  timestamp,
-  uuid,
-  varchar,
-} from "drizzle-orm/pg-core"
+import { pgTable, timestamp, uuid, varchar } from "drizzle-orm/pg-core"
 
 // Table
 export const prescriptionItemTable = pgTable("prescription_item", {

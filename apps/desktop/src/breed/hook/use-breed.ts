@@ -16,9 +16,10 @@ export const useBreed = () => {
         page: breedQuery.page,
         size: breedQuery.size,
         search: breedQuery.search,
-        speciesId: breedQuery.speciesIds && breedQuery.speciesIds.length > 0
-          ? breedQuery.speciesIds
-          : undefined,
+        speciesId:
+          breedQuery.speciesIds && breedQuery.speciesIds.length > 0
+            ? breedQuery.speciesIds
+            : undefined,
       },
     }),
     placeholderData: keepPreviousData,

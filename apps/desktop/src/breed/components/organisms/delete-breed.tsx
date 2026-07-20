@@ -39,7 +39,9 @@ export function DeleteBreedAlert({
       onSuccess?.()
     },
     onError: (error) => {
-      toast.error((error as { detail?: string })?.detail ?? "Error al eliminar raza(s)")
+      toast.error(
+        (error as { detail?: string })?.detail ?? "Error al eliminar raza(s)"
+      )
     },
   })
 
@@ -63,9 +65,7 @@ export function DeleteBreedAlert({
           <AlertDialogCancel>Cancelar</AlertDialogCancel>
           <AlertDialogAction
             variant="destructive"
-            onClick={() =>
-              deleteMutation.mutate(breeds.map((s) => s.id))
-            }
+            onClick={() => deleteMutation.mutate(breeds.map((s) => s.id))}
           >
             {deleteMutation.isPending ? "Eliminando..." : "Eliminar"}
           </AlertDialogAction>

@@ -36,7 +36,7 @@ export function NumberInput({
           "border-input dark:bg-input/30 relative flex h-9 w-full min-w-0 items-center rounded-md border shadow-xs transition-[color,box-shadow]",
           "has-[[data-slot=number-input-control]:focus-visible]:border-ring has-[[data-slot=number-input-control]:focus-visible]:ring-ring/50 has-[[data-slot=number-input-control]:focus-visible]:ring-3",
           "has-[[data-slot=number-input-control][aria-invalid=true]]:border-destructive has-[[data-slot=number-input-control][aria-invalid=true]]:ring-destructive/20 dark:has-[[data-slot=number-input-control][aria-invalid=true]]:ring-destructive/40 has-[[data-slot=number-input-control][aria-invalid=true]]:ring-3",
-          groupProps?.className,
+          groupProps?.className
         )}
       >
         <NumberField.Decrement
@@ -50,7 +50,7 @@ export function NumberInput({
               className={cn(
                 "ml-1 shrink-0 cursor-pointer transition-colors duration-200",
                 decrementProps?.className,
-                buttonProps.className,
+                buttonProps.className
               )}
             >
               <TbMinus />
@@ -64,9 +64,9 @@ export function NumberInput({
               {...fieldProps}
               data-slot="number-input-control"
               className={cn(
-                "h-full min-w-0 flex-1 rounded-none border-0 bg-transparent px-2 text-center shadow-none tabular-nums focus-visible:ring-0 dark:bg-transparent",
+                "h-full min-w-0 flex-1 rounded-none border-0 bg-transparent px-2 text-center tabular-nums shadow-none focus-visible:ring-0 dark:bg-transparent",
                 inputProps?.className,
-                fieldProps.className,
+                fieldProps.className
               )}
             />
           )}
@@ -82,7 +82,7 @@ export function NumberInput({
               className={cn(
                 "mr-1 shrink-0 cursor-pointer transition-colors duration-200",
                 incrementProps?.className,
-                buttonProps.className,
+                buttonProps.className
               )}
             >
               <TbPlus />

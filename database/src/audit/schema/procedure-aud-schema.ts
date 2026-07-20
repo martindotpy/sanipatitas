@@ -1,5 +1,12 @@
 import { revinfoTable } from "@sanipatitas/database/audit/schema/revinfo-schema"
-import { bigint, pgTable, smallint, timestamp, uuid, varchar } from "drizzle-orm/pg-core"
+import {
+  bigint,
+  pgTable,
+  smallint,
+  timestamp,
+  uuid,
+  varchar,
+} from "drizzle-orm/pg-core"
 
 export const procedureAudTable = pgTable(
   "procedure_aud",
@@ -16,7 +23,11 @@ export const procedureAudTable = pgTable(
     outcome: varchar({ length: 1000 }),
     complications: varchar({ length: 1000 }),
     status: varchar({ length: 20 }),
-    performedDate: timestamp({ withTimezone: true, mode: "date", precision: 6 }),
+    performedDate: timestamp({
+      withTimezone: true,
+      mode: "date",
+      precision: 6,
+    }),
     createdAt: timestamp({ withTimezone: true, mode: "date", precision: 6 }),
     updatedAt: timestamp({ withTimezone: true, mode: "date", precision: 6 }),
     patientId: uuid(),

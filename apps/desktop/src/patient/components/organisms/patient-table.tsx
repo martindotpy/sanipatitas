@@ -1,14 +1,12 @@
-import { PatientDetailsSheet } from "@sanipatitas/desktop/patient/components/organisms/patient-details-sheet"
 import { CreatePatient } from "@sanipatitas/desktop/patient/components/organisms/create-patient"
 import { DeletePatientAlert } from "@sanipatitas/desktop/patient/components/organisms/delete-patient"
+import { PatientDetailsSheet } from "@sanipatitas/desktop/patient/components/organisms/patient-details-sheet"
 import { SearchPatientForm } from "@sanipatitas/desktop/patient/components/organisms/search-patient-form"
 import { UpdatePatient } from "@sanipatitas/desktop/patient/components/organisms/update-patient"
 import { usePatient } from "@sanipatitas/desktop/patient/hook/use-patient"
 import { $patientQuery } from "@sanipatitas/desktop/patient/store/patient-query-store"
-import type { OpenapiPatientDto } from "@sanipatitas/shared/api/client/types.gen"
 import { getApiPatientByIdOptions } from "@sanipatitas/shared/api/client/@tanstack/react-query.gen"
-import { useQuery } from "@tanstack/react-query"
-import { useRouter } from "@tanstack/react-router"
+import type { OpenapiPatientDto } from "@sanipatitas/shared/api/client/types.gen"
 import {
   ActionBar,
   ActionBarGroup,
@@ -19,6 +17,8 @@ import { withSelectionColumns } from "@sanipatitas/ui/components/ui/data-column"
 import { DataTable } from "@sanipatitas/ui/components/ui/data-table"
 import type { RowAction } from "@sanipatitas/ui/components/ui/data-table-row-actions"
 import { DataTableRowActions } from "@sanipatitas/ui/components/ui/data-table-row-actions"
+import { useQuery } from "@tanstack/react-query"
+import { useRouter } from "@tanstack/react-router"
 import { useCallback, useEffect, useRef, useState } from "react"
 import { TbEye, TbPencil, TbTrash } from "react-icons/tb"
 
@@ -39,7 +39,7 @@ const baseColumns = withSelectionColumns<OpenapiPatientDto>([
     meta: { label: "Sexo" },
     cell: ({ getValue }) => {
       const gender = getValue<string | undefined>()
-      return gender ? GENDER_LABELS[gender] ?? gender : "—"
+      return gender ? (GENDER_LABELS[gender] ?? gender) : "—"
     },
   },
   {
@@ -47,8 +47,7 @@ const baseColumns = withSelectionColumns<OpenapiPatientDto>([
     meta: { label: "Raza" },
   },
   {
-    accessorFn: (row) =>
-      `${row.client.firstName} ${row.client.lastName}`,
+    accessorFn: (row) => `${row.client.firstName} ${row.client.lastName}`,
     id: "clientName",
     meta: { label: "Dueño" },
   },
@@ -72,8 +71,9 @@ export function PatientTable() {
   const [tableKey, setTableKey] = useState(0)
 
   // Selection state
-  const [selectedRowIds, setSelectedRowIds] =
-    useState<Record<string, boolean>>({})
+  const [selectedRowIds, setSelectedRowIds] = useState<Record<string, boolean>>(
+    {}
+  )
 
   // Action bar state
   const [actionBarOpen, setActionBarOpen] = useState(false)
@@ -155,9 +155,7 @@ export function PatientTable() {
 
   // Bulk delete
   const handleBulkDelete = useCallback(() => {
-    const selected = patients.filter(
-      (_, i) => selectedRowIds[i.toString()]
-    )
+    const selected = patients.filter((_, i) => selectedRowIds[i.toString()])
 
     if (selected.length > 0) {
       setDeleteTarget(selected)
@@ -214,20 +212,14 @@ export function PatientTable() {
           </>
         )}
         selectionActionsRender={() => (
-          <ActionBar
-            open={actionBarOpen}
-            onOpenChange={setActionBarOpen}
-          >
+          <ActionBar open={actionBarOpen} onOpenChange={setActionBarOpen}>
             <ActionBarSelection>
               {selectedCount} seleccionado
               {selectedCount !== 1 ? "s" : ""}
             </ActionBarSelection>
 
             <ActionBarGroup>
-              <ActionBarItem
-                variant="destructive"
-                onSelect={handleBulkDelete}
-              >
+              <ActionBarItem variant="destructive" onSelect={handleBulkDelete}>
                 <TbTrash />
                 Eliminar
               </ActionBarItem>

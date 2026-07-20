@@ -35,7 +35,11 @@ export function DataTableViewOptions<TData>({
     <DropdownMenu>
       <DropdownMenuTrigger
         render={
-          <Button variant="outline" size="sm" className="ml-auto flex h-8 cursor-pointer" />
+          <Button
+            variant="outline"
+            size="sm"
+            className="ml-auto flex h-8 cursor-pointer"
+          />
         }
       >
         <TbAdjustments />

@@ -1,7 +1,6 @@
 import { persistentJSON } from "@nanostores/persistent"
 import { useStore } from "@nanostores/react"
-import { type WritableAtom } from "nanostores"
-import { useCallback, useMemo } from "react"
+import { useCallback } from "react"
 
 // Types
 export interface NotificationPreferences {
@@ -23,9 +22,9 @@ export const DEFAULT_NOTIFICATION_PREFERENCES: NotificationPreferences = {
 const STORAGE_KEY = "sanipatitas:notification-preferences"
 
 // Store
-let $notificationPreferences = persistentJSON<NotificationPreferences>(
+const $notificationPreferences = persistentJSON<NotificationPreferences>(
   STORAGE_KEY,
-  DEFAULT_NOTIFICATION_PREFERENCES,
+  DEFAULT_NOTIFICATION_PREFERENCES
 )
 
 // Hook
@@ -33,15 +32,21 @@ export function useNotificationPreferences() {
   const preferences = useStore($notificationPreferences)
 
   const setPreferences = useCallback(
-    (next: NotificationPreferences | ((prev: NotificationPreferences) => NotificationPreferences)) => {
+    (
+      next:
+        | NotificationPreferences
+        | ((prev: NotificationPreferences) => NotificationPreferences)
+    ) => {
       const resolved =
         typeof next === "function"
-          ? (next as (prev: NotificationPreferences) => NotificationPreferences)($notificationPreferences.get())
+          ? (
+              next as (prev: NotificationPreferences) => NotificationPreferences
+            )($notificationPreferences.get())
           : next
 
       $notificationPreferences.set(resolved)
     },
-    [],
+    []
   )
 
   return [preferences, setPreferences] as const

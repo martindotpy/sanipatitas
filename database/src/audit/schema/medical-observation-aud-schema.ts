@@ -1,5 +1,12 @@
 import { revinfoTable } from "@sanipatitas/database/audit/schema/revinfo-schema"
-import { bigint, pgTable, smallint, timestamp, uuid, varchar } from "drizzle-orm/pg-core"
+import {
+  bigint,
+  pgTable,
+  smallint,
+  timestamp,
+  uuid,
+  varchar,
+} from "drizzle-orm/pg-core"
 
 export const medicalObservationAudTable = pgTable(
   "medical_observation_aud",

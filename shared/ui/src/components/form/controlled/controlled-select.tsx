@@ -50,10 +50,7 @@ export function ControlledSelect<
         <Field data-invalid={fieldState.invalid}>
           {label && <FieldLabel htmlFor={name}>{label}</FieldLabel>}
 
-          <Select
-            value={field.value}
-            onValueChange={field.onChange}
-          >
+          <Select value={field.value} onValueChange={field.onChange}>
             <SelectTrigger
               id={name}
               className="w-full"
@@ -70,9 +67,7 @@ export function ControlledSelect<
             </SelectContent>
           </Select>
 
-          {fieldState.invalid && (
-            <FieldError errors={[fieldState.error]} />
-          )}
+          {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
         </Field>
       )}
     />

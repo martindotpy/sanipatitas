@@ -16,7 +16,7 @@ function toLocalDate(date: Date): string {
 // Check if appointment starts within the configured window
 function isUpcoming(
   appointment: OpenapiAppointmentDto,
-  windowMs: number,
+  windowMs: number
 ): boolean {
   if (appointment.status !== "SCHEDULED") return false
 

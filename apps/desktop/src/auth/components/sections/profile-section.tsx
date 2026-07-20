@@ -1,21 +1,31 @@
-import * as React from "react"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { authClient } from "@sanipatitas/desktop/auth/client/auth-client"
 import { displayRole } from "@sanipatitas/desktop/auth/display/display-role"
 import { useUser } from "@sanipatitas/desktop/auth/hook/use-user"
 import { invalidateSessionQuery } from "@sanipatitas/desktop/auth/query/session-query"
+import { NotificationPreferencesCard } from "@sanipatitas/desktop/notification/components/notification-preferences-card"
 import { ControlledInput } from "@sanipatitas/ui/components/form/controlled/controlled-input"
 import { ControlledPasswordInput } from "@sanipatitas/ui/components/form/controlled/controlled-password-input"
 import { Section } from "@sanipatitas/ui/components/organisms/section"
-import { Avatar, AvatarFallback, AvatarImage } from "@sanipatitas/ui/components/ui/avatar"
+import {
+  Avatar,
+  AvatarFallback,
+  AvatarImage,
+} from "@sanipatitas/ui/components/ui/avatar"
 import { Badge } from "@sanipatitas/ui/components/ui/badge"
 import { Button } from "@sanipatitas/ui/components/ui/button"
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@sanipatitas/ui/components/ui/card"
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@sanipatitas/ui/components/ui/card"
 import { FieldGroup } from "@sanipatitas/ui/components/ui/field"
-import { NotificationPreferencesCard } from "@sanipatitas/desktop/notification/components/notification-preferences-card"
 import { H2, Muted } from "@sanipatitas/ui/components/ui/typography"
 import { useQuery } from "@tanstack/react-query"
 import { AnimatePresence, motion } from "motion/react"
+import * as React from "react"
 import { useForm } from "react-hook-form"
 import {
   TbCamera,
@@ -40,8 +50,12 @@ const ProfileSchema = z.object({
 
 const PasswordSchema = z
   .object({
-    currentPassword: z.string().min(6, "La contraseña debe tener al menos 6 caracteres"),
-    newPassword: z.string().min(6, "La contraseña debe tener al menos 6 caracteres"),
+    currentPassword: z
+      .string()
+      .min(6, "La contraseña debe tener al menos 6 caracteres"),
+    newPassword: z
+      .string()
+      .min(6, "La contraseña debe tener al menos 6 caracteres"),
     confirmNewPassword: z.string(),
   })
   .refine((data) => data.newPassword === data.confirmNewPassword, {
@@ -77,7 +91,12 @@ function SessionCard({
   isCurrent,
   onRevoke,
 }: {
-  session: { id: string; createdAt: Date; userAgent?: string; ipAddress?: string }
+  session: {
+    id: string
+    createdAt: Date
+    userAgent?: string
+    ipAddress?: string
+  }
   isCurrent: boolean
   onRevoke: (id: string) => void
 }) {
@@ -89,20 +108,31 @@ function SessionCard({
       initial={{ opacity: 0, x: -10 }}
       animate={{ opacity: 1, x: 0 }}
       exit={{ opacity: 0, x: 10, height: 0 }}
-      className="flex items-center justify-between gap-3 rounded-lg border p-3 transition-colors hover:bg-accent/50"
+      className="hover:bg-accent/50 flex items-center justify-between gap-3 rounded-lg border p-3 transition-colors"
     >
       <div className="flex min-w-0 items-center gap-3">
-        <div className={`flex size-9 shrink-0 items-center justify-center rounded-full ${isCurrent ? "bg-primary/10 text-primary" : "bg-muted text-muted-foreground"}`}>
-          {isCurrent ? <TbSmartHome className="size-4" /> : <TbDeviceDesktop className="size-4" />}
+        <div
+          className={`flex size-9 shrink-0 items-center justify-center rounded-full ${isCurrent ? "bg-primary/10 text-primary" : "bg-muted text-muted-foreground"}`}
+        >
+          {isCurrent ? (
+            <TbSmartHome className="size-4" />
+          ) : (
+            <TbDeviceDesktop className="size-4" />
+          )}
         </div>
         <div className="flex min-w-0 flex-col">
           <div className="flex items-center gap-2">
             <span className="text-sm font-medium">
-              {isCurrent ? "Esta sesión" : session.userAgent?.slice(0, 40) ?? "Sesión desconocida"}
+              {isCurrent
+                ? "Esta sesión"
+                : (session.userAgent?.slice(0, 40) ?? "Sesión desconocida")}
             </span>
             {isCurrent && (
-              <Badge variant="outline" className="text-[10px] text-emerald-600 dark:text-emerald-400">
-                <span className="bg-emerald-500 mr-1 inline-block size-1.5 animate-pulse rounded-full" />
+              <Badge
+                variant="outline"
+                className="text-[10px] text-emerald-600 dark:text-emerald-400"
+              >
+                <span className="mr-1 inline-block size-1.5 animate-pulse rounded-full bg-emerald-500" />
                 Activa
               </Badge>
             )}
@@ -119,7 +149,7 @@ function SessionCard({
         <Button
           variant="ghost"
           size="icon"
-          className="size-8 shrink-0 cursor-pointer text-muted-foreground hover:text-destructive"
+          className="text-muted-foreground hover:text-destructive size-8 shrink-0 cursor-pointer"
           disabled={isRevoking}
           onClick={async () => {
             setIsRevoking(true)
@@ -144,18 +174,29 @@ function SessionsSection() {
     queryKey: ["sessions"],
     queryFn: async () => {
       const result = await authClient.listSessions()
-      return (result.data ?? []) as Array<{ id: string; token: string; createdAt: Date; userAgent?: string; ipAddress?: string }>
+      return (result.data ?? []) as Array<{
+        id: string
+        token: string
+        createdAt: Date
+        userAgent?: string
+        ipAddress?: string
+      }>
     },
     refetchInterval: 30_000,
   })
 
   const handleRevoke = async (sessionToken: string) => {
     await toast
-      .promise(authClient.revokeSession({ token: sessionToken } as never).then(() => sessionsQuery.refetch()), {
-        loading: "Revocando sesión...",
-        success: "Sesión revocada correctamente",
-        error: "Error al revocar la sesión",
-      })
+      .promise(
+        authClient
+          .revokeSession({ token: sessionToken } as never)
+          .then(() => sessionsQuery.refetch()),
+        {
+          loading: "Revocando sesión...",
+          success: "Sesión revocada correctamente",
+          error: "Error al revocar la sesión",
+        }
+      )
       .unwrap()
   }
 
@@ -173,10 +214,12 @@ function SessionsSection() {
       <CardContent>
         {sessionsQuery.isLoading ? (
           <div className="flex items-center justify-center py-6">
-            <TbLoader2 className="size-5 animate-spin text-muted-foreground" />
+            <TbLoader2 className="text-muted-foreground size-5 animate-spin" />
           </div>
         ) : sessions.length === 0 ? (
-          <p className="text-muted-foreground py-6 text-center text-sm">No hay sesiones activas</p>
+          <p className="text-muted-foreground py-6 text-center text-sm">
+            No hay sesiones activas
+          </p>
         ) : (
           <AnimatePresence>
             <div className="flex flex-col gap-2">
@@ -214,12 +257,23 @@ function PasswordStrength({ password }: { password: string }) {
   }, [password])
 
   const labels = ["", "Débil", "Regular", "Buena", "Fuerte", "Muy fuerte"]
-  const colors = ["", "bg-red-500", "bg-orange-500", "bg-yellow-500", "bg-lime-500", "bg-emerald-500"]
+  const colors = [
+    "",
+    "bg-red-500",
+    "bg-orange-500",
+    "bg-yellow-500",
+    "bg-lime-500",
+    "bg-emerald-500",
+  ]
 
   if (!password) return null
 
   return (
-    <motion.div initial={{ opacity: 0, height: 0 }} animate={{ opacity: 1, height: "auto" }} className="mt-1.5">
+    <motion.div
+      initial={{ opacity: 0, height: 0 }}
+      animate={{ opacity: 1, height: "auto" }}
+      className="mt-1.5"
+    >
       <div className="flex gap-1">
         {Array.from({ length: 5 }).map((_, i) => (
           <div
@@ -230,7 +284,9 @@ function PasswordStrength({ password }: { password: string }) {
           />
         ))}
       </div>
-      <p className="text-muted-foreground mt-1 text-[10px]">{labels[strength]}</p>
+      <p className="text-muted-foreground mt-1 text-[10px]">
+        {labels[strength]}
+      </p>
     </motion.div>
   )
 }
@@ -268,7 +324,10 @@ export function ProfileSection() {
     await toast
       .promise(
         authClient
-          .updateUser({ name: data.name, lastName: data.lastName }, { throw: true })
+          .updateUser(
+            { name: data.name, lastName: data.lastName },
+            { throw: true }
+          )
           .then(() => invalidateSessionQuery()),
         {
           loading: "Guardando...",
@@ -284,8 +343,11 @@ export function ProfileSection() {
     await toast
       .promise(
         authClient.changePassword(
-          { currentPassword: data.currentPassword, newPassword: data.newPassword },
-          { throw: true },
+          {
+            currentPassword: data.currentPassword,
+            newPassword: data.newPassword,
+          },
+          { throw: true }
         ),
         {
           loading: "Cambiando contraseña...",
@@ -325,7 +387,7 @@ export function ProfileSection() {
             <CardContent className="flex flex-1 flex-col gap-4">
               <div className="flex items-center gap-3">
                 <div className="group relative shrink-0">
-                  <Avatar className="size-14 ring-2 ring-primary/20 ring-offset-2 ring-offset-background">
+                  <Avatar className="ring-primary/20 ring-offset-background size-14 ring-2 ring-offset-2">
                     <AvatarImage src={user.image ?? undefined} alt={fullName} />
                     <AvatarFallback className="bg-primary/10 text-primary text-sm font-semibold">
                       {initials || "?"}
@@ -335,7 +397,9 @@ export function ProfileSection() {
                     type="button"
                     className="absolute inset-0 flex cursor-pointer items-center justify-center rounded-full bg-black/40 opacity-0 transition-opacity duration-200 group-hover:opacity-100"
                     onClick={() => {
-                      toast.info("Función de subir foto próximamente disponible")
+                      toast.info(
+                        "Función de subir foto próximamente disponible"
+                      )
                     }}
                   >
                     <TbCamera className="size-4 text-white" />
@@ -347,7 +411,10 @@ export function ProfileSection() {
                     <TbMail className="size-3 shrink-0" />
                     {user.email}
                   </p>
-                  <Badge variant="secondary" className="mt-1.5 w-fit text-[10px] uppercase tracking-wider">
+                  <Badge
+                    variant="secondary"
+                    className="mt-1.5 w-fit text-[10px] tracking-wider uppercase"
+                  >
                     <TbUsers className="mr-1 size-3" />
                     {displayRole(user.role ?? "")}
                   </Badge>
@@ -356,7 +423,10 @@ export function ProfileSection() {
 
               <div className="border-border border-t" />
 
-              <form onSubmit={onProfileSubmit} className="flex flex-1 flex-col justify-between gap-4">
+              <form
+                onSubmit={onProfileSubmit}
+                className="flex flex-1 flex-col justify-between gap-4"
+              >
                 <FieldGroup>
                   <ControlledInput
                     control={profileForm.control}
@@ -378,7 +448,10 @@ export function ProfileSection() {
                     size="sm"
                     className="cursor-pointer"
                     onClick={() =>
-                      profileForm.reset({ name: user.name ?? "", lastName: user.lastName ?? "" })
+                      profileForm.reset({
+                        name: user.name ?? "",
+                        lastName: user.lastName ?? "",
+                      })
                     }
                     disabled={!profileForm.formState.isDirty}
                   >
@@ -388,7 +461,10 @@ export function ProfileSection() {
                     type="submit"
                     size="sm"
                     className="cursor-pointer"
-                    disabled={profileForm.formState.isSubmitting || !profileForm.formState.isDirty}
+                    disabled={
+                      profileForm.formState.isSubmitting ||
+                      !profileForm.formState.isDirty
+                    }
                   >
                     {profileForm.formState.isSubmitting ? (
                       <>
@@ -418,7 +494,10 @@ export function ProfileSection() {
               <CardDescription>Actualiza tu acceso.</CardDescription>
             </CardHeader>
             <CardContent className="flex flex-1 flex-col">
-              <form onSubmit={onPasswordSubmit} className="flex flex-1 flex-col justify-between gap-4">
+              <form
+                onSubmit={onPasswordSubmit}
+                className="flex flex-1 flex-col justify-between gap-4"
+              >
                 <FieldGroup>
                   <ControlledPasswordInput
                     control={passwordForm.control}

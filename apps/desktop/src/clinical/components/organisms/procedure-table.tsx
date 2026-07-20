@@ -1,12 +1,11 @@
-import {
-  useProcedures,
-  useDeleteProcedure,
-} from "@sanipatitas/desktop/clinical/hook/use-procedure"
-import { $procedureQuery } from "@sanipatitas/desktop/clinical/store/procedure-query-store"
+import type { ProcedureDto } from "@sanipatitas/desktop/clinical/api/clinical-api"
 import { CreateProcedure } from "@sanipatitas/desktop/clinical/components/organisms/create-procedure"
 import { UpdateProcedure } from "@sanipatitas/desktop/clinical/components/organisms/update-procedure"
-import type { ProcedureDto } from "@sanipatitas/desktop/clinical/api/clinical-api"
-import { Button } from "@sanipatitas/ui/components/ui/button"
+import {
+  useDeleteProcedure,
+  useProcedures,
+} from "@sanipatitas/desktop/clinical/hook/use-procedure"
+import { $procedureQuery } from "@sanipatitas/desktop/clinical/store/procedure-query-store"
 import {
   AlertDialog,
   AlertDialogAction,
@@ -17,6 +16,9 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
 } from "@sanipatitas/ui/components/ui/alert-dialog"
+import { Badge } from "@sanipatitas/ui/components/ui/badge"
+import { Button } from "@sanipatitas/ui/components/ui/button"
+import { Spinner } from "@sanipatitas/ui/components/ui/spinner"
 import {
   Table,
   TableBody,
@@ -25,11 +27,9 @@ import {
   TableHeader,
   TableRow,
 } from "@sanipatitas/ui/components/ui/table"
-import { Badge } from "@sanipatitas/ui/components/ui/badge"
-import { Spinner } from "@sanipatitas/ui/components/ui/spinner"
 import { useEffect, useState } from "react"
-import { toast } from "sonner"
 import { TbPencil, TbTrash } from "react-icons/tb"
+import { toast } from "sonner"
 
 // Labels
 const CATEGORY_LABELS: Record<string, string> = {
@@ -40,7 +40,10 @@ const CATEGORY_LABELS: Record<string, string> = {
   OTHER: "Otro",
 }
 
-const CATEGORY_VARIANTS: Record<string, "default" | "secondary" | "destructive" | "outline"> = {
+const CATEGORY_VARIANTS: Record<
+  string,
+  "default" | "secondary" | "destructive" | "outline"
+> = {
   SURGICAL: "destructive",
   DIAGNOSTIC: "default",
   THERAPEUTIC: "secondary",
@@ -55,7 +58,10 @@ const STATUS_LABELS: Record<string, string> = {
   ABANDONED: "Abandonado",
 }
 
-const STATUS_VARIANTS: Record<string, "default" | "secondary" | "destructive" | "outline"> = {
+const STATUS_VARIANTS: Record<
+  string,
+  "default" | "secondary" | "destructive" | "outline"
+> = {
   PREPARATION: "outline",
   IN_PROGRESS: "default",
   COMPLETED: "secondary",
@@ -73,7 +79,9 @@ export function ProcedureTable({ patientId }: ProcedureTableProps) {
   const deleteMutation = useDeleteProcedure()
 
   const procedures = proceduresQuery.data?.data ?? []
-  const [editingProcedure, setEditingProcedure] = useState<ProcedureDto | null>(null)
+  const [editingProcedure, setEditingProcedure] = useState<ProcedureDto | null>(
+    null
+  )
   const [editOpen, setEditOpen] = useState(false)
   const [deleteTarget, setDeleteTarget] = useState<ProcedureDto | null>(null)
   const [deleteOpen, setDeleteOpen] = useState(false)
@@ -84,18 +92,18 @@ export function ProcedureTable({ patientId }: ProcedureTableProps) {
 
   const handleDelete = () => {
     if (!deleteTarget) return
-    deleteMutation.mutate(
-      deleteTarget.id,
-      {
-        onSuccess: () => {
-          setDeleteOpen(false)
-          setDeleteTarget(null)
-        },
-        onError: (error) => {
-          toast.error((error as { detail?: string })?.detail ?? "Error al eliminar el procedimiento")
-        },
-      }
-    )
+    deleteMutation.mutate(deleteTarget.id, {
+      onSuccess: () => {
+        setDeleteOpen(false)
+        setDeleteTarget(null)
+      },
+      onError: (error) => {
+        toast.error(
+          (error as { detail?: string })?.detail ??
+            "Error al eliminar el procedimiento"
+        )
+      },
+    })
   }
 
   if (proceduresQuery.isLoading) {
@@ -138,8 +146,13 @@ export function ProcedureTable({ patientId }: ProcedureTableProps) {
                 <TableCell>{procedure.code ?? "—"}</TableCell>
                 <TableCell>
                   {procedure.category ? (
-                    <Badge variant={CATEGORY_VARIANTS[procedure.category] ?? "default"}>
-                      {CATEGORY_LABELS[procedure.category] ?? procedure.category}
+                    <Badge
+                      variant={
+                        CATEGORY_VARIANTS[procedure.category] ?? "default"
+                      }
+                    >
+                      {CATEGORY_LABELS[procedure.category] ??
+                        procedure.category}
                     </Badge>
                   ) : (
                     "—"
@@ -147,7 +160,9 @@ export function ProcedureTable({ patientId }: ProcedureTableProps) {
                 </TableCell>
                 <TableCell>
                   {procedure.status ? (
-                    <Badge variant={STATUS_VARIANTS[procedure.status] ?? "default"}>
+                    <Badge
+                      variant={STATUS_VARIANTS[procedure.status] ?? "default"}
+                    >
                       {STATUS_LABELS[procedure.status] ?? procedure.status}
                     </Badge>
                   ) : (
@@ -199,7 +214,8 @@ export function ProcedureTable({ patientId }: ProcedureTableProps) {
           <AlertDialogHeader>
             <AlertDialogTitle>Eliminar procedimiento</AlertDialogTitle>
             <AlertDialogDescription>
-              ¿Estás seguro de que deseas eliminar &quot;{deleteTarget?.name}&quot;? Esta acción no se puede deshacer.
+              ¿Estás seguro de que deseas eliminar &quot;{deleteTarget?.name}
+              &quot;? Esta acción no se puede deshacer.
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>

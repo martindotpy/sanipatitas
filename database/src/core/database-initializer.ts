@@ -1,6 +1,5 @@
 import { db } from "@sanipatitas/database"
 import {
-  seedAppointments,
   seedBilling,
   seedDatabase,
   seedInventory,

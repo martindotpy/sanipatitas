@@ -1,6 +1,9 @@
 import { type DialogRoot } from "@base-ui/react"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { authClient } from "@sanipatitas/desktop/auth/client/auth-client"
+import { ControlledCombobox } from "@sanipatitas/ui/components/form/controlled/controlled-combobox"
+import { ControlledInput } from "@sanipatitas/ui/components/form/controlled/controlled-input"
+import { ControlledPasswordInput } from "@sanipatitas/ui/components/form/controlled/controlled-password-input"
 import { Button } from "@sanipatitas/ui/components/ui/button"
 import {
   Dialog,
@@ -12,9 +15,6 @@ import {
   DialogTrigger,
 } from "@sanipatitas/ui/components/ui/dialog"
 import { FieldGroup } from "@sanipatitas/ui/components/ui/field"
-import { ControlledCombobox } from "@sanipatitas/ui/components/form/controlled/controlled-combobox"
-import { ControlledInput } from "@sanipatitas/ui/components/form/controlled/controlled-input"
-import { ControlledPasswordInput } from "@sanipatitas/ui/components/form/controlled/controlled-password-input"
 import { useQueryClient } from "@tanstack/react-query"
 import { useRef } from "react"
 import { useForm } from "react-hook-form"
@@ -56,7 +56,7 @@ export function CreateUserDialog() {
   const onSubmit = handleSubmit(async (data) => {
     await toast
       .promise(
-authClient.admin.createUser(
+        authClient.admin.createUser(
           {
             name: data.name,
             email: data.email,
@@ -111,13 +111,19 @@ authClient.admin.createUser(
             control={control}
             name="email"
             label="Correo electrónico"
-            inputProps={{ placeholder: "usuario@email.com", autoComplete: "email" }}
+            inputProps={{
+              placeholder: "usuario@email.com",
+              autoComplete: "email",
+            }}
           />
           <ControlledPasswordInput
             control={control}
             name="password"
             label="Contraseña"
-            inputProps={{ placeholder: "Contraseña", autoComplete: "new-password" }}
+            inputProps={{
+              placeholder: "Contraseña",
+              autoComplete: "new-password",
+            }}
           />
           <ControlledCombobox
             control={control}

@@ -1,15 +1,15 @@
+import type {
+  CreateStockRequest,
+  StockDto,
+  StockMovementDto,
+} from "@sanipatitas/desktop/inventory/api/inventory-api"
 import {
   getApiInventoryStockByProduct,
   getApiInventoryStockMovementByStockByStockId,
   postApiInventoryStock,
   putApiInventoryStockById,
 } from "@sanipatitas/shared/api/client"
-import type {
-  CreateStockRequest,
-  StockDto,
-  StockMovementDto,
-} from "@sanipatitas/desktop/inventory/api/inventory-api"
-import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query"
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query"
 
 // Query keys
 const allProductsKey = ["inventory-products"] as const
@@ -63,7 +63,9 @@ export function useCreateStock() {
     mutationFn: (body: CreateStockRequest) =>
       postApiInventoryStock({ body, throwOnError: true }),
     onSuccess: (_data, variables) => {
-      queryClient.invalidateQueries({ queryKey: ["stock", variables.productId] })
+      queryClient.invalidateQueries({
+        queryKey: ["stock", variables.productId],
+      })
       queryClient.invalidateQueries({ queryKey: ["stock"] })
       queryClient.invalidateQueries({ queryKey: allProductsKey })
     },
@@ -75,14 +77,20 @@ export function useUpdateStock() {
   const queryClient = useQueryClient()
 
   return useMutation({
-    mutationFn: ({ id, productId, ...body }: { id: string; productId: string } & Partial<CreateStockRequest>) =>
+    mutationFn: ({
+      id,
+      productId,
+      ...body
+    }: { id: string; productId: string } & Partial<CreateStockRequest>) =>
       putApiInventoryStockById({
         path: { id },
         body: { productId, ...body },
         throwOnError: true,
       }),
     onSuccess: (_data, variables) => {
-      queryClient.invalidateQueries({ queryKey: ["stock", variables.productId] })
+      queryClient.invalidateQueries({
+        queryKey: ["stock", variables.productId],
+      })
       queryClient.invalidateQueries({ queryKey: ["stock"] })
     },
   })

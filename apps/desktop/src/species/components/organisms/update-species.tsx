@@ -66,7 +66,10 @@ export function UpdateSpecies({
       speciesQuery.refetch()
     },
     onError: (error) => {
-      toast.error((error as { detail?: string })?.detail ?? "Error al actualizar la especie")
+      toast.error(
+        (error as { detail?: string })?.detail ??
+          "Error al actualizar la especie"
+      )
     },
   })
 

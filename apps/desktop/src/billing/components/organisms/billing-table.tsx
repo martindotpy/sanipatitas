@@ -17,6 +17,7 @@ import {
 } from "@sanipatitas/ui/components/ui/alert-dialog"
 import { Badge } from "@sanipatitas/ui/components/ui/badge"
 import { Button } from "@sanipatitas/ui/components/ui/button"
+import { Spinner } from "@sanipatitas/ui/components/ui/spinner"
 import {
   Table,
   TableBody,
@@ -25,10 +26,9 @@ import {
   TableHeader,
   TableRow,
 } from "@sanipatitas/ui/components/ui/table"
-import { Spinner } from "@sanipatitas/ui/components/ui/spinner"
 import { useState } from "react"
-import { toast } from "sonner"
 import { TbEye, TbPencil, TbTrash } from "react-icons/tb"
+import { toast } from "sonner"
 
 // Payment status labels & colors
 const paymentStatusLabels: Record<string, string> = {
@@ -40,7 +40,8 @@ const paymentStatusLabels: Record<string, string> = {
 }
 
 const paymentStatusColors: Record<string, string> = {
-  PENDING: "bg-yellow-100 text-yellow-800 dark:bg-yellow-900/30 dark:text-yellow-300",
+  PENDING:
+    "bg-yellow-100 text-yellow-800 dark:bg-yellow-900/30 dark:text-yellow-300",
   PARTIAL: "bg-blue-100 text-blue-800 dark:bg-blue-900/30 dark:text-blue-300",
   PAID: "bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-300",
   REFUNDED: "bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-300",
@@ -53,7 +54,9 @@ export function BillingTable() {
   const deleteMutation = useDeleteBilling()
 
   const billings = billingsQuery.data?.data ?? []
-  const [selectedBilling, setSelectedBilling] = useState<BillingDto | null>(null)
+  const [selectedBilling, setSelectedBilling] = useState<BillingDto | null>(
+    null
+  )
   const [detailOpen, setDetailOpen] = useState(false)
   const [editingBilling, setEditingBilling] = useState<BillingDto | null>(null)
   const [editOpen, setEditOpen] = useState(false)

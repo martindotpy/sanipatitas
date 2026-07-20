@@ -5,28 +5,28 @@ on:
     branches:
       - main
     paths:
-      - 'services/auth/**'
-      - 'shared/typescript/**'
-      - 'database/**'
-      - 'patches/**'
-      - 'package.json'
-      - 'bun.lock'
-      - 'bunfig.toml'
-      - 'tsconfig.base.json'
-      - '.github/workflows/docker-auth.yml'
+      - "services/auth/**"
+      - "shared/typescript/**"
+      - "database/**"
+      - "patches/**"
+      - "package.json"
+      - "bun.lock"
+      - "bunfig.toml"
+      - "tsconfig.base.json"
+      - ".github/workflows/docker-auth.yml"
   pull_request:
     branches:
       - main
     paths:
-      - 'services/auth/**'
-      - 'shared/typescript/**'
-      - 'database/**'
-      - 'patches/**'
-      - 'package.json'
-      - 'bun.lock'
-      - 'bunfig.toml'
-      - 'tsconfig.base.json'
-      - '.github/workflows/docker-auth.yml'
+      - "services/auth/**"
+      - "shared/typescript/**"
+      - "database/**"
+      - "patches/**"
+      - "package.json"
+      - "bun.lock"
+      - "bunfig.toml"
+      - "tsconfig.base.json"
+      - ".github/workflows/docker-auth.yml"
 
 env:
   REGISTRY: ghcr.io

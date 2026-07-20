@@ -68,11 +68,13 @@ export function ClientTable() {
   }, [selectedRowIds])
 
   // Action state
-  const [viewingClient, setViewingClient] =
-    useState<OpenapiClientDto | null>(null)
+  const [viewingClient, setViewingClient] = useState<OpenapiClientDto | null>(
+    null
+  )
   const [detailsOpen, setDetailsOpen] = useState(false)
-  const [editingClient, setEditingClient] =
-    useState<OpenapiClientDto | null>(null)
+  const [editingClient, setEditingClient] = useState<OpenapiClientDto | null>(
+    null
+  )
   const [editOpen, setEditOpen] = useState(false)
   const [deleteTarget, setDeleteTarget] = useState<OpenapiClientDto[]>([])
   const [deleteOpen, setDeleteOpen] = useState(false)
@@ -110,9 +112,7 @@ export function ClientTable() {
 
   // Bulk delete
   const handleBulkDelete = useCallback(() => {
-    const selected = clients.filter(
-      (_, i) => selectedRowIds[i.toString()]
-    )
+    const selected = clients.filter((_, i) => selectedRowIds[i.toString()])
 
     if (selected.length > 0) {
       setDeleteTarget(selected)

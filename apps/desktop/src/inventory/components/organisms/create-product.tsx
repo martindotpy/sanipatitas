@@ -1,9 +1,13 @@
 import { type DialogRoot } from "@base-ui/react"
 import { zodResolver } from "@hookform/resolvers/zod"
-import { useCreateProduct } from "@sanipatitas/desktop/inventory/hook/use-product"
 import { useCategories } from "@sanipatitas/desktop/inventory/hook/use-category"
+import { useCreateProduct } from "@sanipatitas/desktop/inventory/hook/use-product"
 import { useSuppliers } from "@sanipatitas/desktop/inventory/hook/use-supplier"
 import { zOpenapiCreateProductRequest } from "@sanipatitas/shared/api/client/zod.gen"
+import { ControlledCombobox } from "@sanipatitas/ui/components/form/controlled/controlled-combobox"
+import { ControlledInput } from "@sanipatitas/ui/components/form/controlled/controlled-input"
+import { ControlledNumberInput } from "@sanipatitas/ui/components/form/controlled/controlled-number-input"
+import { ControlledTextarea } from "@sanipatitas/ui/components/form/controlled/controlled-textarea"
 import { Button } from "@sanipatitas/ui/components/ui/button"
 import {
   Dialog,
@@ -15,13 +19,10 @@ import {
   DialogTrigger,
 } from "@sanipatitas/ui/components/ui/dialog"
 import { FieldGroup } from "@sanipatitas/ui/components/ui/field"
-import { ControlledInput } from "@sanipatitas/ui/components/form/controlled/controlled-input"
-import { ControlledCombobox } from "@sanipatitas/ui/components/form/controlled/controlled-combobox"
-import { ControlledTextarea } from "@sanipatitas/ui/components/form/controlled/controlled-textarea"
 import { useMemo, useRef } from "react"
 import { useForm } from "react-hook-form"
-import { toast } from "sonner"
 import { TbPlus } from "react-icons/tb"
+import { toast } from "sonner"
 
 // Component
 export function CreateProduct() {
@@ -36,7 +37,7 @@ export function CreateProduct() {
         value: c.id,
         label: c.name,
       })),
-    [categoriesQuery.data],
+    [categoriesQuery.data]
   )
 
   const supplierOptions = useMemo(
@@ -45,18 +46,18 @@ export function CreateProduct() {
         value: s.id,
         label: s.name,
       })),
-    [suppliersQuery.data],
+    [suppliersQuery.data]
   )
 
   const { control, handleSubmit, reset } = useForm({
     resolver: zodResolver(zOpenapiCreateProductRequest),
     defaultValues: {
       name: "",
-      code: undefined,
-      description: undefined,
-      price: undefined,
-      categoryId: undefined,
-      supplierId: undefined,
+      code: "",
+      description: "",
+      price: 0,
+      categoryId: "",
+      supplierId: "",
     },
   })
 
@@ -64,11 +65,11 @@ export function CreateProduct() {
     createMutation.mutate(
       {
         name: data.name,
-        code: data.code || undefined,
-        description: data.description || undefined,
-        price: data.price ?? undefined,
-        categoryId: data.categoryId ?? undefined,
-        supplierId: data.supplierId ?? undefined,
+        code: data.code,
+        description: data.description,
+        price: data.price,
+        categoryId: data.categoryId,
+        supplierId: data.supplierId,
       },
       {
         onSuccess: () => {
@@ -81,7 +82,7 @@ export function CreateProduct() {
               "Error al crear el producto"
           )
         },
-      },
+      }
     )
   })
 
@@ -96,7 +97,10 @@ export function CreateProduct() {
         }
       />
 
-      <DialogContent render={<form onSubmit={onSubmit} />} className="sm:max-w-lg">
+      <DialogContent
+        render={<form onSubmit={onSubmit} />}
+        className="sm:max-w-lg"
+      >
         <DialogHeader>
           <DialogTitle>Crear producto</DialogTitle>
         </DialogHeader>
@@ -106,10 +110,10 @@ export function CreateProduct() {
 
           <ControlledInput control={control} name="code" label="Código" />
 
-          <ControlledInput
+          <ControlledNumberInput
             control={control}
             name="price"
-            inputProps={{ type: "number", step: "0.01" }}
+            numberInputProps={{ step: 0.01 }}
             label="Precio"
           />
 

@@ -8,5 +8,11 @@ interface SmallProps {
 
 // Component
 export function Small({ children, className }: SmallProps) {
-  return <small className={`text-sm leading-none font-medium${className ? ` ${className}` : ""}`}>{children}</small>
+  return (
+    <small
+      className={`text-sm leading-none font-medium${className ? ` ${className}` : ""}`}
+    >
+      {children}
+    </small>
+  )
 }

@@ -1,5 +1,13 @@
 import { revinfoTable } from "@sanipatitas/database/audit/schema/revinfo-schema"
-import { bigint, pgTable, smallint, text, timestamp, uuid, varchar } from "drizzle-orm/pg-core"
+import {
+  bigint,
+  pgTable,
+  smallint,
+  text,
+  timestamp,
+  uuid,
+  varchar,
+} from "drizzle-orm/pg-core"
 
 export const prescriptionAudTable = pgTable(
   "prescription_aud",
@@ -10,7 +18,11 @@ export const prescriptionAudTable = pgTable(
       .references(() => revinfoTable.id),
     revtype: smallint(),
     issueDate: timestamp({ withTimezone: true, mode: "date", precision: 6 }),
-    expirationDate: timestamp({ withTimezone: true, mode: "date", precision: 6 }),
+    expirationDate: timestamp({
+      withTimezone: true,
+      mode: "date",
+      precision: 6,
+    }),
     notes: text(),
     status: varchar({ length: 20 }),
     createdAt: timestamp({ withTimezone: true, mode: "date", precision: 6 }),

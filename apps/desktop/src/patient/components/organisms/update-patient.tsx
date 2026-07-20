@@ -1,10 +1,15 @@
 import { type DialogRoot } from "@base-ui/react"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { usePatient } from "@sanipatitas/desktop/patient/hook/use-patient"
-import { getApiBreedOptions } from "@sanipatitas/shared/api/client/@tanstack/react-query.gen"
-import { getApiClientOptions } from "@sanipatitas/shared/api/client/@tanstack/react-query.gen"
-import { putApiPatientByIdMutation } from "@sanipatitas/shared/api/client/@tanstack/react-query.gen"
-import type { OpenapiBreedDto, OpenapiPatientDto } from "@sanipatitas/shared/api/client/types.gen"
+import {
+  getApiBreedOptions,
+  getApiClientOptions,
+  putApiPatientByIdMutation,
+} from "@sanipatitas/shared/api/client/@tanstack/react-query.gen"
+import type {
+  OpenapiBreedDto,
+  OpenapiPatientDto,
+} from "@sanipatitas/shared/api/client/types.gen"
 import { zOpenapiUpdatePatientRequest } from "@sanipatitas/shared/api/client/zod.gen"
 import { ControlledCheckbox } from "@sanipatitas/ui/components/form/controlled/controlled-checkbox"
 import { ControlledCombobox } from "@sanipatitas/ui/components/form/controlled/controlled-combobox"
@@ -68,9 +73,7 @@ export function UpdatePatient({
     () =>
       (breedsQuery.data?.data ?? []).map((b: OpenapiBreedDto) => ({
         value: b.id,
-        label: b.species
-          ? `${b.name} (${b.species.name})`
-          : b.name,
+        label: b.species ? `${b.name} (${b.species.name})` : b.name,
       })),
     [breedsQuery.data]
   )
@@ -79,14 +82,14 @@ export function UpdatePatient({
     resolver: zodResolver(zOpenapiUpdatePatientRequest),
     defaultValues: {
       name: "",
-      gender: undefined,
-      birthDate: undefined,
+      gender: "",
+      birthDate: "",
       approximateAge: "",
-      weightKg: undefined,
+      weightKg: 0,
       description: "",
       isSterilized: false,
       isDeceased: false,
-      breedId: undefined,
+      breedId: "",
       clientId: "",
     },
   })
@@ -95,14 +98,14 @@ export function UpdatePatient({
     if (patient) {
       reset({
         name: patient.name,
-        gender: patient.gender ?? undefined,
-        birthDate: patient.birthDate ?? undefined,
+        gender: patient.gender ?? "",
+        birthDate: patient.birthDate ?? "",
         approximateAge: patient.approximateAge ?? "",
-        weightKg: patient.weightKg ?? undefined,
+        weightKg: patient.weightKg ?? 0,
         description: patient.description ?? "",
         isSterilized: patient.isSterilized ?? false,
         isDeceased: patient.isDeceased ?? false,
-        breedId: patient.breed?.id ?? undefined,
+        breedId: patient.breed?.id ?? "",
         clientId: patient.client.id,
       })
     }
@@ -115,7 +118,10 @@ export function UpdatePatient({
       patientQuery.refetch()
     },
     onError: (error) => {
-      toast.error((error as { detail?: string })?.detail ?? "Error al actualizar el paciente")
+      toast.error(
+        (error as { detail?: string })?.detail ??
+          "Error al actualizar el paciente"
+      )
     },
   })
 
@@ -126,14 +132,14 @@ export function UpdatePatient({
       path: { id: patient.id },
       body: {
         ...data,
-        gender: data.gender || undefined,
-        birthDate: data.birthDate || undefined,
-        approximateAge: data.approximateAge || undefined,
-        weightKg: data.weightKg || undefined,
-        description: data.description || undefined,
-        breedId: data.breedId || undefined,
-        isSterilized: data.isSterilized || undefined,
-        isDeceased: data.isDeceased || undefined,
+        gender: data.gender,
+        birthDate: data.birthDate,
+        approximateAge: data.approximateAge,
+        weightKg: data.weightKg,
+        description: data.description,
+        breedId: data.breedId,
+        isSterilized: data.isSterilized,
+        isDeceased: data.isDeceased,
       },
     })
   })

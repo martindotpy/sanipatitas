@@ -1,15 +1,15 @@
 import { useImmunizationQuery } from "@sanipatitas/desktop/clinical/store/immunization-query-store"
-import { getApiClinicalImmunizationOptions } from "@sanipatitas/shared/api/client/@tanstack/react-query.gen"
 import {
+  deleteApiClinicalImmunizationById,
   postApiClinicalImmunization,
   putApiClinicalImmunizationById,
-  deleteApiClinicalImmunizationById,
 } from "@sanipatitas/shared/api/client"
+import { getApiClinicalImmunizationOptions } from "@sanipatitas/shared/api/client/@tanstack/react-query.gen"
 import type {
   OpenapiCreateImmunizationRequest,
   OpenapiUpdateImmunizationRequest,
 } from "@sanipatitas/shared/api/client/types.gen"
-import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query"
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query"
 
 // Query key
 const immunizationKey = ["immunizations"] as const
@@ -45,7 +45,9 @@ export function useCreateImmunization() {
     mutationFn: (body: OpenapiCreateImmunizationRequest) =>
       postApiClinicalImmunization({ body, throwOnError: true }),
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: [...immunizationKey, query.patientId] })
+      queryClient.invalidateQueries({
+        queryKey: [...immunizationKey, query.patientId],
+      })
     },
   })
 }
@@ -55,10 +57,19 @@ export function useUpdateImmunization() {
   const query = useImmunizationQuery()
 
   return useMutation({
-    mutationFn: ({ id, ...body }: { id: string } & OpenapiUpdateImmunizationRequest) =>
-      putApiClinicalImmunizationById({ path: { id }, body, throwOnError: true }),
+    mutationFn: ({
+      id,
+      ...body
+    }: { id: string } & OpenapiUpdateImmunizationRequest) =>
+      putApiClinicalImmunizationById({
+        path: { id },
+        body,
+        throwOnError: true,
+      }),
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: [...immunizationKey, query.patientId] })
+      queryClient.invalidateQueries({
+        queryKey: [...immunizationKey, query.patientId],
+      })
     },
   })
 }
@@ -71,7 +82,9 @@ export function useDeleteImmunization() {
     mutationFn: (id: string) =>
       deleteApiClinicalImmunizationById({ path: { id }, throwOnError: true }),
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: [...immunizationKey, query.patientId] })
+      queryClient.invalidateQueries({
+        queryKey: [...immunizationKey, query.patientId],
+      })
     },
   })
 }

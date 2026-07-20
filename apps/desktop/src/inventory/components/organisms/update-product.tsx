@@ -1,9 +1,14 @@
 import { type DialogRoot } from "@base-ui/react"
 import { zodResolver } from "@hookform/resolvers/zod"
-import { useUpdateProduct } from "@sanipatitas/desktop/inventory/hook/use-product"
-import { useCategories } from "@sanipatitas/desktop/inventory/hook/use-category"
-import { useSuppliers } from "@sanipatitas/desktop/inventory/hook/use-supplier"
 import type { ProductDto } from "@sanipatitas/desktop/inventory/api/inventory-api"
+import { useCategories } from "@sanipatitas/desktop/inventory/hook/use-category"
+import { useUpdateProduct } from "@sanipatitas/desktop/inventory/hook/use-product"
+import { useSuppliers } from "@sanipatitas/desktop/inventory/hook/use-supplier"
+import { zOpenapiUpdateProductRequest } from "@sanipatitas/shared/api/client/zod.gen"
+import { ControlledCombobox } from "@sanipatitas/ui/components/form/controlled/controlled-combobox"
+import { ControlledInput } from "@sanipatitas/ui/components/form/controlled/controlled-input"
+import { ControlledNumberInput } from "@sanipatitas/ui/components/form/controlled/controlled-number-input"
+import { ControlledTextarea } from "@sanipatitas/ui/components/form/controlled/controlled-textarea"
 import { Button } from "@sanipatitas/ui/components/ui/button"
 import {
   Dialog,
@@ -14,23 +19,9 @@ import {
   DialogTitle,
 } from "@sanipatitas/ui/components/ui/dialog"
 import { FieldGroup } from "@sanipatitas/ui/components/ui/field"
-import { ControlledInput } from "@sanipatitas/ui/components/form/controlled/controlled-input"
-import { ControlledCombobox } from "@sanipatitas/ui/components/form/controlled/controlled-combobox"
-import { ControlledTextarea } from "@sanipatitas/ui/components/form/controlled/controlled-textarea"
 import { useEffect, useMemo, useRef } from "react"
 import { useForm } from "react-hook-form"
 import { toast } from "sonner"
-import { z } from "zod"
-
-// Schema
-const schema = z.object({
-  name: z.string().min(1, "El nombre es requerido").optional(),
-  code: z.string().optional(),
-  description: z.string().optional(),
-  price: z.number().optional(),
-  categoryId: z.string().optional(),
-  supplierId: z.string().optional(),
-})
 
 // Props
 interface UpdateProductProps {
@@ -56,7 +47,7 @@ export function UpdateProduct({
         value: c.id,
         label: c.name,
       })),
-    [categoriesQuery.data],
+    [categoriesQuery.data]
   )
 
   const supplierOptions = useMemo(
@@ -65,18 +56,18 @@ export function UpdateProduct({
         value: s.id,
         label: s.name,
       })),
-    [suppliersQuery.data],
+    [suppliersQuery.data]
   )
 
   const { control, handleSubmit, reset } = useForm({
-    resolver: zodResolver(schema),
+    resolver: zodResolver(zOpenapiUpdateProductRequest),
     defaultValues: {
-      name: undefined,
-      code: undefined,
-      description: undefined,
-      price: undefined,
-      categoryId: undefined,
-      supplierId: undefined,
+      name: "",
+      code: "",
+      description: "",
+      price: 0,
+      categoryId: "",
+      supplierId: "",
     },
   })
 
@@ -84,11 +75,11 @@ export function UpdateProduct({
     if (product) {
       reset({
         name: product.name,
-        code: product.code ?? undefined,
-        description: product.description ?? undefined,
-        price: product.price ?? undefined,
-        categoryId: product.category?.id ?? undefined,
-        supplierId: product.supplier?.id ?? undefined,
+        code: product.code ?? "",
+        description: product.description ?? "",
+        price: product.price ?? 0,
+        categoryId: product.category?.id ?? "",
+        supplierId: product.supplier?.id ?? "",
       })
     }
   }, [product, reset])
@@ -100,11 +91,11 @@ export function UpdateProduct({
       {
         id: product.id,
         name: data.name!,
-        code: data.code || undefined,
-        description: data.description || undefined,
-        price: data.price ?? undefined,
-        categoryId: data.categoryId ?? undefined,
-        supplierId: data.supplierId ?? undefined,
+        code: data.code,
+        description: data.description,
+        price: data.price,
+        categoryId: data.categoryId,
+        supplierId: data.supplierId,
       },
       {
         onSuccess: () => {
@@ -116,13 +107,20 @@ export function UpdateProduct({
               "Error al actualizar el producto"
           )
         },
-      },
+      }
     )
   })
 
   return (
-    <Dialog open={open} onOpenChange={onOpenChange} actionsRef={dialogActionsRef}>
-      <DialogContent render={<form onSubmit={onSubmit} />} className="sm:max-w-lg">
+    <Dialog
+      open={open}
+      onOpenChange={onOpenChange}
+      actionsRef={dialogActionsRef}
+    >
+      <DialogContent
+        render={<form onSubmit={onSubmit} />}
+        className="sm:max-w-lg"
+      >
         <DialogHeader>
           <DialogTitle>Editar producto</DialogTitle>
         </DialogHeader>
@@ -132,10 +130,10 @@ export function UpdateProduct({
 
           <ControlledInput control={control} name="code" label="Código" />
 
-          <ControlledInput
+          <ControlledNumberInput
             control={control}
             name="price"
-            inputProps={{ type: "number", step: "0.01" }}
+            numberInputProps={{ step: 0.01 }}
             label="Precio"
           />
 

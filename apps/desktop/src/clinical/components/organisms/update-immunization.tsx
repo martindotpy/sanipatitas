@@ -1,12 +1,16 @@
 import { type DialogRoot } from "@base-ui/react"
 import { zodResolver } from "@hookform/resolvers/zod"
-import { useUpdateImmunization } from "@sanipatitas/desktop/clinical/hook/use-immunization"
 import { authClient } from "@sanipatitas/desktop/auth/client/auth-client"
 import type {
   ImmunizationDto,
   OpenapiImmunizationRoute,
   OpenapiImmunizationStatus,
 } from "@sanipatitas/desktop/clinical/api/clinical-api"
+import { useUpdateImmunization } from "@sanipatitas/desktop/clinical/hook/use-immunization"
+import { zOpenapiUpdateImmunizationRequest } from "@sanipatitas/shared/api/client/zod.gen"
+import { ControlledCombobox } from "@sanipatitas/ui/components/form/controlled/controlled-combobox"
+import { ControlledDatetimeInput } from "@sanipatitas/ui/components/form/controlled/controlled-datetime-input"
+import { ControlledInput } from "@sanipatitas/ui/components/form/controlled/controlled-input"
 import { Button } from "@sanipatitas/ui/components/ui/button"
 import {
   Dialog,
@@ -17,31 +21,10 @@ import {
   DialogTitle,
 } from "@sanipatitas/ui/components/ui/dialog"
 import { FieldGroup } from "@sanipatitas/ui/components/ui/field"
-import { ControlledInput } from "@sanipatitas/ui/components/form/controlled/controlled-input"
-import { ControlledDatetimeInput } from "@sanipatitas/ui/components/form/controlled/controlled-datetime-input"
-import { ControlledCombobox } from "@sanipatitas/ui/components/form/controlled/controlled-combobox"
 import { useQuery } from "@tanstack/react-query"
 import { useEffect, useMemo, useRef } from "react"
 import { useForm } from "react-hook-form"
 import { toast } from "sonner"
-import { z } from "zod"
-
-// Schema
-const updateImmunizationSchema = z.object({
-  vaccineCode: z.string().optional(),
-  vaccineName: z.string().optional(),
-  manufacturer: z.string().optional(),
-  lotNumber: z.string().optional(),
-  expirationDate: z.string().optional(),
-  administrationDate: z.string().optional(),
-  doseNumber: z.string().optional(),
-  doseUnit: z.string().optional(),
-  route: z.string().optional(),
-  site: z.string().optional(),
-  reaction: z.string().optional(),
-  status: z.string().optional(),
-  veterinarianId: z.string().optional(),
-})
 
 // Options
 const ROUTE_OPTIONS = [
@@ -89,28 +72,31 @@ export function UpdateImmunization({
 
   const userOptions = useMemo(
     () =>
-      (usersQuery.data?.users ?? []).map((u: { id: string; name: string; lastName?: string }) => ({
-        value: u.id,
-        label: `${u.name} ${u.lastName ?? ""}`,
-      })),
+      (usersQuery.data?.users ?? []).map(
+        (u: { id: string; name: string; lastName?: string }) => ({
+          value: u.id,
+          label: `${u.name} ${u.lastName ?? ""}`,
+        })
+      ),
     [usersQuery.data]
   )
 
   const { control, handleSubmit, reset } = useForm({
-    resolver: zodResolver(updateImmunizationSchema),
+    resolver: zodResolver(zOpenapiUpdateImmunizationRequest),
     defaultValues: {
       vaccineCode: "",
       vaccineName: "",
-      manufacturer: undefined,
-      lotNumber: undefined,
-      expirationDate: undefined,
+      manufacturer: "",
+      lotNumber: "",
+      expirationDate: "",
       administrationDate: "",
-      doseNumber: undefined,
-      doseUnit: undefined,
-      route: undefined,
-      site: undefined,
-      reaction: undefined,
-      status: undefined,
+      doseNumber: "",
+      doseUnit: "",
+      route: "",
+      site: "",
+      reaction: "",
+      status: "",
+      patientId: "",
       veterinarianId: "",
     },
   })
@@ -121,15 +107,15 @@ export function UpdateImmunization({
         vaccineCode: immunization.vaccineCode,
         vaccineName: immunization.vaccineName,
         manufacturer: immunization.manufacturer ?? "",
-        lotNumber: immunization.lotNumber ?? undefined,
-        expirationDate: immunization.expirationDate ?? undefined,
+        lotNumber: immunization.lotNumber ?? "",
+        expirationDate: immunization.expirationDate ?? "",
         administrationDate: immunization.administrationDate,
-        doseNumber: immunization.doseNumber ?? undefined,
-        doseUnit: immunization.doseUnit ?? undefined,
-        route: immunization.route ?? undefined,
-        site: immunization.site ?? undefined,
-        reaction: immunization.reaction ?? undefined,
-        status: immunization.status ?? undefined,
+        doseNumber: immunization.doseNumber ?? "",
+        doseUnit: immunization.doseUnit ?? "",
+        route: immunization.route ?? "",
+        site: immunization.site ?? "",
+        reaction: immunization.reaction ?? "",
+        status: immunization.status ?? "",
         veterinarianId: immunization.veterinarian?.id ?? "",
       })
     }
@@ -142,18 +128,18 @@ export function UpdateImmunization({
       {
         id: immunization.id,
         ...data,
-        vaccineCode: data.vaccineCode || undefined,
+        vaccineCode: data.vaccineCode,
         vaccineName: data.vaccineName!,
-        manufacturer: data.manufacturer || undefined,
-        lotNumber: data.lotNumber || undefined,
+        manufacturer: data.manufacturer,
+        lotNumber: data.lotNumber,
         expirationDate: data.expirationDate,
         administrationDate: data.administrationDate!,
-        doseNumber: data.doseNumber || undefined,
-        doseUnit: data.doseUnit || undefined,
-        route: data.route as OpenapiImmunizationRoute | undefined,
-        site: data.site || undefined,
-        reaction: data.reaction || undefined,
-        status: data.status as OpenapiImmunizationStatus | undefined,
+        doseNumber: data.doseNumber,
+        doseUnit: data.doseUnit,
+        route: data.route as OpenapiImmunizationRoute,
+        site: data.site,
+        reaction: data.reaction,
+        status: data.status as OpenapiImmunizationStatus,
         veterinarianId: data.veterinarianId!,
         patientId,
       },
@@ -162,27 +148,50 @@ export function UpdateImmunization({
           dialogActionsRef.current?.close()
         },
         onError: (error) => {
-          toast.error((error as { detail?: string })?.detail ?? "Error al actualizar la inmunización")
+          toast.error(
+            (error as { detail?: string })?.detail ??
+              "Error al actualizar la inmunización"
+          )
         },
       }
     )
   })
 
   return (
-    <Dialog open={open} onOpenChange={onOpenChange} actionsRef={dialogActionsRef}>
+    <Dialog
+      open={open}
+      onOpenChange={onOpenChange}
+      actionsRef={dialogActionsRef}
+    >
       <DialogContent render={<form onSubmit={onSubmit} />}>
         <DialogHeader>
           <DialogTitle>Editar inmunización</DialogTitle>
         </DialogHeader>
 
         <FieldGroup>
-          <ControlledInput control={control} name="vaccineCode" label="Código de vacuna" />
+          <ControlledInput
+            control={control}
+            name="vaccineCode"
+            label="Código de vacuna"
+          />
 
-          <ControlledInput control={control} name="vaccineName" label="Nombre de vacuna" />
+          <ControlledInput
+            control={control}
+            name="vaccineName"
+            label="Nombre de vacuna"
+          />
 
-          <ControlledInput control={control} name="manufacturer" label="Fabricante" />
+          <ControlledInput
+            control={control}
+            name="manufacturer"
+            label="Fabricante"
+          />
 
-          <ControlledInput control={control} name="lotNumber" label="Número de lote" />
+          <ControlledInput
+            control={control}
+            name="lotNumber"
+            label="Número de lote"
+          />
 
           <ControlledDatetimeInput
             control={control}
@@ -198,9 +207,17 @@ export function UpdateImmunization({
             label="Fecha de administración"
           />
 
-          <ControlledInput control={control} name="doseNumber" label="Número de dosis" />
+          <ControlledInput
+            control={control}
+            name="doseNumber"
+            label="Número de dosis"
+          />
 
-          <ControlledInput control={control} name="doseUnit" label="Unidad de dosis" />
+          <ControlledInput
+            control={control}
+            name="doseUnit"
+            label="Unidad de dosis"
+          />
 
           <ControlledCombobox
             control={control}
@@ -210,7 +227,11 @@ export function UpdateImmunization({
             placeholder="Seleccionar vía..."
           />
 
-          <ControlledInput control={control} name="site" label="Sitio de aplicación" />
+          <ControlledInput
+            control={control}
+            name="site"
+            label="Sitio de aplicación"
+          />
 
           <ControlledInput control={control} name="reaction" label="Reacción" />
 

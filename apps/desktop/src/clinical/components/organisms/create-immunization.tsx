@@ -1,8 +1,15 @@
 import { type DialogRoot } from "@base-ui/react"
 import { zodResolver } from "@hookform/resolvers/zod"
-import { useCreateImmunization } from "@sanipatitas/desktop/clinical/hook/use-immunization"
 import { authClient } from "@sanipatitas/desktop/auth/client/auth-client"
+import { useCreateImmunization } from "@sanipatitas/desktop/clinical/hook/use-immunization"
+import type {
+  OpenapiImmunizationRoute,
+  OpenapiImmunizationStatus,
+} from "@sanipatitas/shared/api/client/types.gen"
 import { zOpenapiCreateImmunizationRequest } from "@sanipatitas/shared/api/client/zod.gen"
+import { ControlledCombobox } from "@sanipatitas/ui/components/form/controlled/controlled-combobox"
+import { ControlledDatetimeInput } from "@sanipatitas/ui/components/form/controlled/controlled-datetime-input"
+import { ControlledInput } from "@sanipatitas/ui/components/form/controlled/controlled-input"
 import { Button } from "@sanipatitas/ui/components/ui/button"
 import {
   Dialog,
@@ -14,18 +21,11 @@ import {
   DialogTrigger,
 } from "@sanipatitas/ui/components/ui/dialog"
 import { FieldGroup } from "@sanipatitas/ui/components/ui/field"
-import { ControlledInput } from "@sanipatitas/ui/components/form/controlled/controlled-input"
-import { ControlledDatetimeInput } from "@sanipatitas/ui/components/form/controlled/controlled-datetime-input"
-import { ControlledCombobox } from "@sanipatitas/ui/components/form/controlled/controlled-combobox"
 import { useQuery } from "@tanstack/react-query"
 import { useMemo, useRef } from "react"
-import { toast } from "sonner"
-import type {
-  OpenapiImmunizationRoute,
-  OpenapiImmunizationStatus,
-} from "@sanipatitas/shared/api/client/types.gen"
 import { useForm } from "react-hook-form"
 import { TbPlus } from "react-icons/tb"
+import { toast } from "sonner"
 
 // Options
 const ROUTE_OPTIONS = [
@@ -65,10 +65,12 @@ export function CreateImmunization({ patientId }: CreateImmunizationProps) {
 
   const userOptions = useMemo(
     () =>
-      (usersQuery.data?.users ?? []).map((u: { id: string; name: string; lastName?: string }) => ({
-        value: u.id,
-        label: `${u.name} ${u.lastName ?? ""}`,
-      })),
+      (usersQuery.data?.users ?? []).map(
+        (u: { id: string; name: string; lastName?: string }) => ({
+          value: u.id,
+          label: `${u.name} ${u.lastName ?? ""}`,
+        })
+      ),
     [usersQuery.data]
   )
 
@@ -77,16 +79,16 @@ export function CreateImmunization({ patientId }: CreateImmunizationProps) {
     defaultValues: {
       vaccineCode: "",
       vaccineName: "",
-      manufacturer: undefined,
-      lotNumber: undefined,
-      expirationDate: undefined,
+      manufacturer: "",
+      lotNumber: "",
+      expirationDate: "",
       administrationDate: "",
-      doseNumber: undefined,
-      doseUnit: undefined,
-      route: undefined,
-      site: undefined,
-      reaction: undefined,
-      status: undefined,
+      doseNumber: "",
+      doseUnit: "",
+      route: "",
+      site: "",
+      reaction: "",
+      status: "",
       patientId,
       veterinarianId: "",
     },
@@ -95,18 +97,18 @@ export function CreateImmunization({ patientId }: CreateImmunizationProps) {
   const onSubmit = handleSubmit((data) => {
     createMutation.mutate(
       {
-        vaccineCode: data.vaccineCode || undefined,
+        vaccineCode: data.vaccineCode,
         vaccineName: data.vaccineName,
-        manufacturer: data.manufacturer || undefined,
-        lotNumber: data.lotNumber || undefined,
+        manufacturer: data.manufacturer,
+        lotNumber: data.lotNumber,
         expirationDate: data.expirationDate,
         administrationDate: data.administrationDate,
-        doseNumber: data.doseNumber || undefined,
-        doseUnit: data.doseUnit || undefined,
-        route: data.route as OpenapiImmunizationRoute | undefined,
-        site: data.site || undefined,
-        reaction: data.reaction || undefined,
-        status: data.status as OpenapiImmunizationStatus | undefined,
+        doseNumber: data.doseNumber,
+        doseUnit: data.doseUnit,
+        route: data.route as OpenapiImmunizationRoute,
+        site: data.site,
+        reaction: data.reaction,
+        status: data.status as OpenapiImmunizationStatus,
         patientId,
         veterinarianId: data.veterinarianId,
       },
@@ -116,7 +118,10 @@ export function CreateImmunization({ patientId }: CreateImmunizationProps) {
           reset()
         },
         onError: (error) => {
-          toast.error((error as { detail?: string })?.detail ?? "Error al crear la inmunización")
+          toast.error(
+            (error as { detail?: string })?.detail ??
+              "Error al crear la inmunización"
+          )
         },
       }
     )
@@ -139,13 +144,29 @@ export function CreateImmunization({ patientId }: CreateImmunizationProps) {
         </DialogHeader>
 
         <FieldGroup>
-          <ControlledInput control={control} name="vaccineCode" label="Código de vacuna" />
+          <ControlledInput
+            control={control}
+            name="vaccineCode"
+            label="Código de vacuna"
+          />
 
-          <ControlledInput control={control} name="vaccineName" label="Nombre de vacuna" />
+          <ControlledInput
+            control={control}
+            name="vaccineName"
+            label="Nombre de vacuna"
+          />
 
-          <ControlledInput control={control} name="manufacturer" label="Fabricante" />
+          <ControlledInput
+            control={control}
+            name="manufacturer"
+            label="Fabricante"
+          />
 
-          <ControlledInput control={control} name="lotNumber" label="Número de lote" />
+          <ControlledInput
+            control={control}
+            name="lotNumber"
+            label="Número de lote"
+          />
 
           <ControlledDatetimeInput
             control={control}
@@ -161,9 +182,17 @@ export function CreateImmunization({ patientId }: CreateImmunizationProps) {
             label="Fecha de administración"
           />
 
-          <ControlledInput control={control} name="doseNumber" label="Número de dosis" />
+          <ControlledInput
+            control={control}
+            name="doseNumber"
+            label="Número de dosis"
+          />
 
-          <ControlledInput control={control} name="doseUnit" label="Unidad de dosis" />
+          <ControlledInput
+            control={control}
+            name="doseUnit"
+            label="Unidad de dosis"
+          />
 
           <ControlledCombobox
             control={control}
@@ -173,7 +202,11 @@ export function CreateImmunization({ patientId }: CreateImmunizationProps) {
             placeholder="Seleccionar vía..."
           />
 
-          <ControlledInput control={control} name="site" label="Sitio de aplicación" />
+          <ControlledInput
+            control={control}
+            name="site"
+            label="Sitio de aplicación"
+          />
 
           <ControlledInput control={control} name="reaction" label="Reacción" />
 

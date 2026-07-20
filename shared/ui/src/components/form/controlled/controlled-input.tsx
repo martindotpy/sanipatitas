@@ -68,8 +68,8 @@ export function ControlledInput<
               type="text"
               className={inputClassName}
               aria-invalid={fieldState.invalid}
-              {...field}
               {...inputProps}
+              {...field}
             />
 
             {Icon && (

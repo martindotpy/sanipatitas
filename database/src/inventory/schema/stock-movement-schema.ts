@@ -1,6 +1,14 @@
-import { sql } from "drizzle-orm"
-import { check, decimal, integer, pgTable, timestamp, uuid, varchar } from "drizzle-orm/pg-core"
 import { stockTable } from "@sanipatitas/database/inventory/schema/stock-schema"
+import { sql } from "drizzle-orm"
+import {
+  check,
+  decimal,
+  integer,
+  pgTable,
+  timestamp,
+  uuid,
+  varchar,
+} from "drizzle-orm/pg-core"
 
 // Enums
 export const movementTypes = [

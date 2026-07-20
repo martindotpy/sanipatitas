@@ -1,12 +1,11 @@
+import { CreateCondition } from "@sanipatitas/desktop/clinical/components/organisms/create-condition"
+import { UpdateCondition } from "@sanipatitas/desktop/clinical/components/organisms/update-condition"
 import {
   useConditions,
   useDeleteCondition,
 } from "@sanipatitas/desktop/clinical/hook/use-condition"
 import { $conditionQuery } from "@sanipatitas/desktop/clinical/store/condition-query-store"
-import { CreateCondition } from "@sanipatitas/desktop/clinical/components/organisms/create-condition"
-import { UpdateCondition } from "@sanipatitas/desktop/clinical/components/organisms/update-condition"
 import type { OpenapiMedicalConditionDto } from "@sanipatitas/shared/api/client/types.gen"
-import { Button } from "@sanipatitas/ui/components/ui/button"
 import {
   AlertDialog,
   AlertDialogAction,
@@ -17,6 +16,9 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
 } from "@sanipatitas/ui/components/ui/alert-dialog"
+import { Badge } from "@sanipatitas/ui/components/ui/badge"
+import { Button } from "@sanipatitas/ui/components/ui/button"
+import { Spinner } from "@sanipatitas/ui/components/ui/spinner"
 import {
   Table,
   TableBody,
@@ -25,11 +27,9 @@ import {
   TableHeader,
   TableRow,
 } from "@sanipatitas/ui/components/ui/table"
-import { Badge } from "@sanipatitas/ui/components/ui/badge"
-import { Spinner } from "@sanipatitas/ui/components/ui/spinner"
 import { useEffect, useState } from "react"
-import { toast } from "sonner"
 import { TbPencil, TbTrash } from "react-icons/tb"
+import { toast } from "sonner"
 
 // Labels
 const STATUS_LABELS: Record<string, string> = {
@@ -38,11 +38,12 @@ const STATUS_LABELS: Record<string, string> = {
   RELAPSE: "Recaída",
 }
 
-const STATUS_VARIANTS: Record<string, "default" | "secondary" | "destructive"> = {
-  ACTIVE: "default",
-  RESOLVED: "secondary",
-  RELAPSE: "destructive",
-}
+const STATUS_VARIANTS: Record<string, "default" | "secondary" | "destructive"> =
+  {
+    ACTIVE: "default",
+    RESOLVED: "secondary",
+    RELAPSE: "destructive",
+  }
 
 const SEVERITY_LABELS: Record<string, string> = {
   MILD: "Leve",
@@ -61,9 +62,11 @@ export function ConditionTable({ patientId }: ConditionTableProps) {
   const deleteMutation = useDeleteCondition()
 
   const conditions = conditionsQuery.data?.data ?? []
-  const [editingCondition, setEditingCondition] = useState<OpenapiMedicalConditionDto | null>(null)
+  const [editingCondition, setEditingCondition] =
+    useState<OpenapiMedicalConditionDto | null>(null)
   const [editOpen, setEditOpen] = useState(false)
-  const [deleteTarget, setDeleteTarget] = useState<OpenapiMedicalConditionDto | null>(null)
+  const [deleteTarget, setDeleteTarget] =
+    useState<OpenapiMedicalConditionDto | null>(null)
   const [deleteOpen, setDeleteOpen] = useState(false)
 
   useEffect(() => {
@@ -80,7 +83,10 @@ export function ConditionTable({ patientId }: ConditionTableProps) {
           setDeleteTarget(null)
         },
         onError: (error) => {
-          toast.error((error as { detail?: string })?.detail ?? "Error al eliminar la condición")
+          toast.error(
+            (error as { detail?: string })?.detail ??
+              "Error al eliminar la condición"
+          )
         },
       }
     )
@@ -126,17 +132,21 @@ export function ConditionTable({ patientId }: ConditionTableProps) {
                 <TableCell className="font-medium">{condition.name}</TableCell>
                 <TableCell>{condition.code ?? "—"}</TableCell>
                 <TableCell>
-                  <Badge variant={STATUS_VARIANTS[condition.status] ?? "default"}>
+                  <Badge
+                    variant={STATUS_VARIANTS[condition.status] ?? "default"}
+                  >
                     {STATUS_LABELS[condition.status] ?? condition.status}
                   </Badge>
                 </TableCell>
                 <TableCell>
                   {condition.severity
-                    ? (SEVERITY_LABELS[condition.severity] ?? condition.severity)
+                    ? (SEVERITY_LABELS[condition.severity] ??
+                      condition.severity)
                     : "—"}
                 </TableCell>
                 <TableCell>
-                  {condition.veterinarian.name} {condition.veterinarian.lastName}
+                  {condition.veterinarian.name}{" "}
+                  {condition.veterinarian.lastName}
                 </TableCell>
                 <TableCell>
                   <div className="flex items-center gap-1">
@@ -183,7 +193,8 @@ export function ConditionTable({ patientId }: ConditionTableProps) {
           <AlertDialogHeader>
             <AlertDialogTitle>Eliminar condición</AlertDialogTitle>
             <AlertDialogDescription>
-              ¿Estás seguro de que deseas eliminar &quot;{deleteTarget?.name}&quot;? Esta acción no se puede deshacer.
+              ¿Estás seguro de que deseas eliminar &quot;{deleteTarget?.name}
+              &quot;? Esta acción no se puede deshacer.
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>

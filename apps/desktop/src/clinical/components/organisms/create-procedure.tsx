@@ -1,12 +1,16 @@
 import { type DialogRoot } from "@base-ui/react"
 import { zodResolver } from "@hookform/resolvers/zod"
-import { useCreateProcedure } from "@sanipatitas/desktop/clinical/hook/use-procedure"
 import { authClient } from "@sanipatitas/desktop/auth/client/auth-client"
-import { zOpenapiCreateProcedureRequest } from "@sanipatitas/shared/api/client/zod.gen"
+import { useCreateProcedure } from "@sanipatitas/desktop/clinical/hook/use-procedure"
 import type {
   OpenapiProcedureCategory,
   OpenapiProcedureStatus,
 } from "@sanipatitas/shared/api/client/types.gen"
+import { zOpenapiCreateProcedureRequest } from "@sanipatitas/shared/api/client/zod.gen"
+import { ControlledCombobox } from "@sanipatitas/ui/components/form/controlled/controlled-combobox"
+import { ControlledDatetimeInput } from "@sanipatitas/ui/components/form/controlled/controlled-datetime-input"
+import { ControlledInput } from "@sanipatitas/ui/components/form/controlled/controlled-input"
+import { ControlledTextarea } from "@sanipatitas/ui/components/form/controlled/controlled-textarea"
 import { Button } from "@sanipatitas/ui/components/ui/button"
 import {
   Dialog,
@@ -18,15 +22,11 @@ import {
   DialogTrigger,
 } from "@sanipatitas/ui/components/ui/dialog"
 import { FieldGroup } from "@sanipatitas/ui/components/ui/field"
-import { ControlledInput } from "@sanipatitas/ui/components/form/controlled/controlled-input"
-import { ControlledDatetimeInput } from "@sanipatitas/ui/components/form/controlled/controlled-datetime-input"
-import { ControlledCombobox } from "@sanipatitas/ui/components/form/controlled/controlled-combobox"
-import { ControlledTextarea } from "@sanipatitas/ui/components/form/controlled/controlled-textarea"
 import { useQuery } from "@tanstack/react-query"
 import { useMemo, useRef } from "react"
 import { useForm } from "react-hook-form"
-import { toast } from "sonner"
 import { TbPlus } from "react-icons/tb"
+import { toast } from "sonner"
 
 // Options
 const CATEGORY_OPTIONS = [
@@ -67,10 +67,12 @@ export function CreateProcedure({ patientId }: CreateProcedureProps) {
 
   const userOptions = useMemo(
     () =>
-      (usersQuery.data?.users ?? []).map((u: { id: string; name: string; lastName?: string }) => ({
-        value: u.id,
-        label: `${u.name} ${u.lastName ?? ""}`,
-      })),
+      (usersQuery.data?.users ?? []).map(
+        (u: { id: string; name: string; lastName?: string }) => ({
+          value: u.id,
+          label: `${u.name} ${u.lastName ?? ""}`,
+        })
+      ),
     [usersQuery.data]
   )
 
@@ -78,14 +80,13 @@ export function CreateProcedure({ patientId }: CreateProcedureProps) {
     resolver: zodResolver(zOpenapiCreateProcedureRequest),
     defaultValues: {
       name: "",
-      code: undefined,
-      category: undefined,
-      reason: undefined,
-      outcome: undefined,
-      complications: undefined,
-      performedDate: undefined,
-      status: undefined,
-      patientId,
+      code: "",
+      category: "",
+      reason: "",
+      outcome: "",
+      complications: "",
+      performedDate: "",
+      status: "",
       veterinarianId: "",
     },
   })
@@ -94,13 +95,13 @@ export function CreateProcedure({ patientId }: CreateProcedureProps) {
     createMutation.mutate(
       {
         name: data.name,
-        code: data.code || undefined,
-        category: data.category as OpenapiProcedureCategory | undefined,
-        reason: data.reason || undefined,
-        outcome: data.outcome || undefined,
-        complications: data.complications || undefined,
+        code: data.code,
+        category: data.category as OpenapiProcedureCategory,
+        reason: data.reason,
+        outcome: data.outcome,
+        complications: data.complications,
         performedDate: data.performedDate,
-        status: data.status as OpenapiProcedureStatus | undefined,
+        status: data.status as OpenapiProcedureStatus,
         patientId,
         veterinarianId: data.veterinarianId,
       },
@@ -110,7 +111,10 @@ export function CreateProcedure({ patientId }: CreateProcedureProps) {
           reset()
         },
         onError: (error) => {
-          toast.error((error as { detail?: string })?.detail ?? "Error al crear el procedimiento")
+          toast.error(
+            (error as { detail?: string })?.detail ??
+              "Error al crear el procedimiento"
+          )
         },
       }
     )
@@ -169,11 +173,7 @@ export function CreateProcedure({ patientId }: CreateProcedureProps) {
             label="Fecha de realización"
           />
 
-          <ControlledTextarea
-            control={control}
-            name="reason"
-            label="Motivo"
-          />
+          <ControlledTextarea control={control} name="reason" label="Motivo" />
 
           <ControlledTextarea
             control={control}

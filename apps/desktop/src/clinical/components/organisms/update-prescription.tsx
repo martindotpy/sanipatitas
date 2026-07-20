@@ -1,11 +1,16 @@
 import { type DialogRoot } from "@base-ui/react"
 import { zodResolver } from "@hookform/resolvers/zod"
-import { useUpdatePrescription } from "@sanipatitas/desktop/clinical/hook/use-prescription"
 import { authClient } from "@sanipatitas/desktop/auth/client/auth-client"
 import type {
-  PrescriptionDto,
   OpenapiPrescriptionStatus,
+  PrescriptionDto,
 } from "@sanipatitas/desktop/clinical/api/clinical-api"
+import { useUpdatePrescription } from "@sanipatitas/desktop/clinical/hook/use-prescription"
+import { zOpenapiUpdatePrescriptionRequest } from "@sanipatitas/shared/api/client/zod.gen"
+import { ControlledCombobox } from "@sanipatitas/ui/components/form/controlled/controlled-combobox"
+import { ControlledDatetimeInput } from "@sanipatitas/ui/components/form/controlled/controlled-datetime-input"
+import { ControlledInput } from "@sanipatitas/ui/components/form/controlled/controlled-input"
+import { ControlledTextarea } from "@sanipatitas/ui/components/form/controlled/controlled-textarea"
 import { Button } from "@sanipatitas/ui/components/ui/button"
 import {
   Dialog,
@@ -16,16 +21,11 @@ import {
   DialogTitle,
 } from "@sanipatitas/ui/components/ui/dialog"
 import { FieldGroup } from "@sanipatitas/ui/components/ui/field"
-import { ControlledInput } from "@sanipatitas/ui/components/form/controlled/controlled-input"
-import { ControlledDatetimeInput } from "@sanipatitas/ui/components/form/controlled/controlled-datetime-input"
-import { ControlledCombobox } from "@sanipatitas/ui/components/form/controlled/controlled-combobox"
-import { ControlledTextarea } from "@sanipatitas/ui/components/form/controlled/controlled-textarea"
 import { useQuery } from "@tanstack/react-query"
 import { useEffect, useMemo, useRef } from "react"
-import { useForm, useFieldArray } from "react-hook-form"
+import { useFieldArray, useForm } from "react-hook-form"
 import { TbPlus, TbTrashX } from "react-icons/tb"
 import { toast } from "sonner"
-import { z } from "zod"
 
 // Options
 const STATUS_OPTIONS = [
@@ -33,25 +33,6 @@ const STATUS_OPTIONS = [
   { value: "COMPLETED", label: "Completada" },
   { value: "CANCELLED", label: "Cancelada" },
 ]
-
-// Schema
-const updatePrescriptionItemSchema = z.object({
-  medicationName: z.string().min(1, "El nombre del medicamento es obligatorio"),
-  dosage: z.string().optional(),
-  frequency: z.string().optional(),
-  duration: z.string().optional(),
-  route: z.string().optional(),
-  notes: z.string().optional(),
-})
-
-const updatePrescriptionSchema = z.object({
-  issueDate: z.string().optional(),
-  expirationDate: z.string().optional(),
-  notes: z.string().optional(),
-  status: z.string().optional(),
-  veterinarianId: z.string().optional(),
-  items: z.array(updatePrescriptionItemSchema).optional(),
-})
 
 // Props
 interface UpdatePrescriptionProps {
@@ -84,20 +65,23 @@ export function UpdatePrescription({
 
   const userOptions = useMemo(
     () =>
-      (usersQuery.data?.users ?? []).map((u: { id: string; name: string; lastName?: string }) => ({
-        value: u.id,
-        label: `${u.name} ${u.lastName ?? ""}`,
-      })),
+      (usersQuery.data?.users ?? []).map(
+        (u: { id: string; name: string; lastName?: string }) => ({
+          value: u.id,
+          label: `${u.name} ${u.lastName ?? ""}`,
+        })
+      ),
     [usersQuery.data]
   )
 
   const { control, handleSubmit, reset } = useForm({
-    resolver: zodResolver(updatePrescriptionSchema),
+    resolver: zodResolver(zOpenapiUpdatePrescriptionRequest),
     defaultValues: {
       issueDate: "",
       expirationDate: "",
       notes: "",
-      status: undefined,
+      status: "",
+      patientId: "",
       veterinarianId: "",
       items: [],
     },
@@ -111,18 +95,18 @@ export function UpdatePrescription({
   useEffect(() => {
     if (prescription) {
       reset({
-        issueDate: prescription.issueDate ?? undefined,
-        expirationDate: prescription.expirationDate ?? undefined,
-        notes: prescription.notes ?? undefined,
-        status: prescription.status ?? undefined,
+        issueDate: prescription.issueDate ?? "",
+        expirationDate: prescription.expirationDate ?? "",
+        notes: prescription.notes ?? "",
+        status: prescription.status ?? "",
         veterinarianId: prescription.veterinarian?.id ?? "",
         items: prescription.items.map((item) => ({
           medicationName: item.medicationName,
-          dosage: item.dosage ?? undefined,
-          frequency: item.frequency ?? undefined,
-          duration: item.duration ?? undefined,
-          route: item.route ?? undefined,
-          notes: item.notes ?? undefined,
+          dosage: item.dosage ?? "",
+          frequency: item.frequency ?? "",
+          duration: item.duration ?? "",
+          route: item.route ?? "",
+          notes: item.notes ?? "",
         })),
       })
     }
@@ -136,18 +120,18 @@ export function UpdatePrescription({
         id: prescription.id,
         body: {
           issueDate: data.issueDate!,
-          expirationDate: data.expirationDate ?? undefined,
-          notes: data.notes ?? undefined,
-          status: (data.status ?? undefined) as OpenapiPrescriptionStatus | undefined,
+          expirationDate: data.expirationDate,
+          notes: data.notes,
+          status: data.status as OpenapiPrescriptionStatus,
           patientId,
           veterinarianId: data.veterinarianId!,
           items: (data.items ?? []).map((item) => ({
             medicationName: item.medicationName,
-            dosage: item.dosage ?? undefined,
-            frequency: item.frequency ?? undefined,
-            duration: item.duration ?? undefined,
-            route: item.route ?? undefined,
-            notes: item.notes ?? undefined,
+            dosage: item.dosage,
+            frequency: item.frequency,
+            duration: item.duration,
+            route: item.route,
+            notes: item.notes,
           })),
         },
       },
@@ -157,14 +141,21 @@ export function UpdatePrescription({
           toast.success("Receta actualizada correctamente")
         },
         onError: (error) => {
-          toast.error((error as { detail?: string })?.detail ?? "Error al actualizar la receta")
+          toast.error(
+            (error as { detail?: string })?.detail ??
+              "Error al actualizar la receta"
+          )
         },
       }
     )
   })
 
   return (
-    <Dialog open={open} onOpenChange={onOpenChange} actionsRef={dialogActionsRef}>
+    <Dialog
+      open={open}
+      onOpenChange={onOpenChange}
+      actionsRef={dialogActionsRef}
+    >
       <DialogContent render={<form onSubmit={onSubmit} />}>
         <DialogHeader>
           <DialogTitle>Editar receta</DialogTitle>
@@ -228,9 +219,11 @@ export function UpdatePrescription({
             </div>
 
             {fields.map((field, index) => (
-              <div key={field.id} className="rounded-lg border p-3 space-y-2">
+              <div key={field.id} className="space-y-2 rounded-lg border p-3">
                 <div className="flex items-center justify-between">
-                  <p className="text-xs text-muted-foreground">Medicamento {index + 1}</p>
+                  <p className="text-muted-foreground text-xs">
+                    Medicamento {index + 1}
+                  </p>
                   <Button
                     type="button"
                     variant="ghost"

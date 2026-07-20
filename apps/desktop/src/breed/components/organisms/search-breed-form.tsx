@@ -16,9 +16,7 @@ interface SearchBreedFormProps<TData> {
   table?: Table<TData>
 }
 
-export function SearchBreedForm<TData>({
-  table,
-}: SearchBreedFormProps<TData>) {
+export function SearchBreedForm<TData>({ table }: SearchBreedFormProps<TData>) {
   const breedQueryState = useBreed()
 
   const { control, handleSubmit, watch } = useForm({

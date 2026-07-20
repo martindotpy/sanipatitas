@@ -1,7 +1,7 @@
-import { authClient } from "@sanipatitas/desktop/auth/client/auth-client"
-import { displayRole } from "@sanipatitas/desktop/auth/display/display-role"
 import { CreateUserDialog } from "@sanipatitas/desktop/admin/components/organisms/create-user-dialog"
 import { UpdateUserDialog } from "@sanipatitas/desktop/admin/components/organisms/update-user-dialog"
+import { authClient } from "@sanipatitas/desktop/auth/client/auth-client"
+import { displayRole } from "@sanipatitas/desktop/auth/display/display-role"
 import { Badge } from "@sanipatitas/ui/components/ui/badge"
 import { Button } from "@sanipatitas/ui/components/ui/button"
 import { Spinner } from "@sanipatitas/ui/components/ui/spinner"
@@ -15,7 +15,7 @@ import {
 } from "@sanipatitas/ui/components/ui/table"
 import { useQuery } from "@tanstack/react-query"
 import { useState } from "react"
-import { TbPencil, TbShieldOff } from "react-icons/tb"
+import { TbPencil } from "react-icons/tb"
 
 // Types
 interface UserWithRole {
@@ -86,7 +86,9 @@ export function UserTable() {
                 </TableCell>
                 <TableCell>{user.email}</TableCell>
                 <TableCell>
-                  <Badge variant="outline">{displayRole(user.role ?? "")}</Badge>
+                  <Badge variant="outline">
+                    {displayRole(user.role ?? "")}
+                  </Badge>
                 </TableCell>
                 <TableCell>
                   {user.banned ? (

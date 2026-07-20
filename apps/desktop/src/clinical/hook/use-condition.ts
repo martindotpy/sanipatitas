@@ -1,11 +1,11 @@
 import { useConditionQuery } from "@sanipatitas/desktop/clinical/store/condition-query-store"
 import {
+  deleteApiClinicalConditionByIdMutation,
   getApiClinicalConditionOptions,
   postApiClinicalConditionMutation,
   putApiClinicalConditionByIdMutation,
-  deleteApiClinicalConditionByIdMutation,
 } from "@sanipatitas/shared/api/client/@tanstack/react-query.gen"
-import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query"
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query"
 
 // Query key
 const conditionKey = ["conditions"] as const
@@ -40,7 +40,9 @@ export function useCreateCondition() {
   return useMutation({
     ...postApiClinicalConditionMutation(),
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: [...conditionKey, query.patientId] })
+      queryClient.invalidateQueries({
+        queryKey: [...conditionKey, query.patientId],
+      })
     },
   })
 }
@@ -52,7 +54,9 @@ export function useUpdateCondition() {
   return useMutation({
     ...putApiClinicalConditionByIdMutation(),
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: [...conditionKey, query.patientId] })
+      queryClient.invalidateQueries({
+        queryKey: [...conditionKey, query.patientId],
+      })
     },
   })
 }
@@ -64,7 +68,9 @@ export function useDeleteCondition() {
   return useMutation({
     ...deleteApiClinicalConditionByIdMutation(),
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: [...conditionKey, query.patientId] })
+      queryClient.invalidateQueries({
+        queryKey: [...conditionKey, query.patientId],
+      })
     },
   })
 }

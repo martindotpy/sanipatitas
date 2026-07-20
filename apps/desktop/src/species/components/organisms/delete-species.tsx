@@ -43,7 +43,9 @@ export function DeleteSpeciesAlert({
       onSuccess?.()
     },
     onError: (error) => {
-      toast.error((error as { detail?: string })?.detail ?? "Error al eliminar especie(s)")
+      toast.error(
+        (error as { detail?: string })?.detail ?? "Error al eliminar especie(s)"
+      )
     },
   })
 
@@ -67,9 +69,7 @@ export function DeleteSpeciesAlert({
           <AlertDialogCancel>Cancelar</AlertDialogCancel>
           <AlertDialogAction
             variant="destructive"
-            onClick={() =>
-              deleteMutation.mutate(species.map((s) => s.id))
-            }
+            onClick={() => deleteMutation.mutate(species.map((s) => s.id))}
           >
             {deleteMutation.isPending ? "Eliminando..." : "Eliminar"}
           </AlertDialogAction>

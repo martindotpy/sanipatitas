@@ -22,7 +22,11 @@ export const appointmentStatuses = [
 ] as const
 export type AppointmentStatus = (typeof appointmentStatuses)[number]
 
-export const appointmentClasses = ["AMBULATORY", "EMERGENCY", "HOME_VISIT"] as const
+export const appointmentClasses = [
+  "AMBULATORY",
+  "EMERGENCY",
+  "HOME_VISIT",
+] as const
 export type AppointmentClass = (typeof appointmentClasses)[number]
 
 // Table

@@ -1,12 +1,15 @@
 import { type DialogRoot } from "@base-ui/react"
 import { zodResolver } from "@hookform/resolvers/zod"
-import { useCreateObservation } from "@sanipatitas/desktop/clinical/hook/use-observation"
 import { authClient } from "@sanipatitas/desktop/auth/client/auth-client"
-import { zOpenapiCreateMedicalObservationRequest } from "@sanipatitas/shared/api/client/zod.gen"
+import { useCreateObservation } from "@sanipatitas/desktop/clinical/hook/use-observation"
 import type {
   OpenapiObservationCategory,
   OpenapiObservationStatus,
 } from "@sanipatitas/shared/api/client/types.gen"
+import { zOpenapiCreateMedicalObservationRequest } from "@sanipatitas/shared/api/client/zod.gen"
+import { ControlledCombobox } from "@sanipatitas/ui/components/form/controlled/controlled-combobox"
+import { ControlledDatetimeInput } from "@sanipatitas/ui/components/form/controlled/controlled-datetime-input"
+import { ControlledInput } from "@sanipatitas/ui/components/form/controlled/controlled-input"
 import { Button } from "@sanipatitas/ui/components/ui/button"
 import {
   Dialog,
@@ -18,14 +21,11 @@ import {
   DialogTrigger,
 } from "@sanipatitas/ui/components/ui/dialog"
 import { FieldGroup } from "@sanipatitas/ui/components/ui/field"
-import { ControlledInput } from "@sanipatitas/ui/components/form/controlled/controlled-input"
-import { ControlledDatetimeInput } from "@sanipatitas/ui/components/form/controlled/controlled-datetime-input"
-import { ControlledCombobox } from "@sanipatitas/ui/components/form/controlled/controlled-combobox"
 import { useQuery } from "@tanstack/react-query"
 import { useMemo, useRef } from "react"
 import { useForm } from "react-hook-form"
-import { toast } from "sonner"
 import { TbPlus } from "react-icons/tb"
+import { toast } from "sonner"
 
 // Options
 const CATEGORY_OPTIONS = [
@@ -65,10 +65,12 @@ export function CreateObservation({ patientId }: CreateObservationProps) {
 
   const userOptions = useMemo(
     () =>
-      (usersQuery.data?.users ?? []).map((u: { id: string; name: string; lastName?: string }) => ({
-        value: u.id,
-        label: `${u.name} ${u.lastName ?? ""}`,
-      })),
+      (usersQuery.data?.users ?? []).map(
+        (u: { id: string; name: string; lastName?: string }) => ({
+          value: u.id,
+          label: `${u.name} ${u.lastName ?? ""}`,
+        })
+      ),
     [usersQuery.data]
   )
 
@@ -77,14 +79,14 @@ export function CreateObservation({ patientId }: CreateObservationProps) {
     defaultValues: {
       code: "",
       value: "",
-      unit: undefined,
-      interpretation: undefined,
-      bodySite: undefined,
-      method: undefined,
-      referenceRange: undefined,
-      category: undefined,
-      status: undefined,
-      issuedDate: undefined,
+      unit: "",
+      interpretation: "",
+      bodySite: "",
+      method: "",
+      referenceRange: "",
+      category: "",
+      status: "",
+      issuedDate: "",
       patientId,
       veterinarianId: "",
     },
@@ -95,13 +97,13 @@ export function CreateObservation({ patientId }: CreateObservationProps) {
       {
         code: data.code,
         value: data.value,
-        unit: data.unit || undefined,
-        interpretation: data.interpretation || undefined,
-        bodySite: data.bodySite || undefined,
-        method: data.method || undefined,
-        referenceRange: data.referenceRange || undefined,
-        category: data.category as OpenapiObservationCategory | undefined,
-        status: data.status as OpenapiObservationStatus | undefined,
+        unit: data.unit,
+        interpretation: data.interpretation,
+        bodySite: data.bodySite,
+        method: data.method,
+        referenceRange: data.referenceRange,
+        category: data.category as OpenapiObservationCategory,
+        status: data.status as OpenapiObservationStatus,
         issuedDate: data.issuedDate,
         patientId,
         veterinarianId: data.veterinarianId,
@@ -112,7 +114,10 @@ export function CreateObservation({ patientId }: CreateObservationProps) {
           reset()
         },
         onError: (error) => {
-          toast.error((error as { detail?: string })?.detail ?? "Error al crear la observación")
+          toast.error(
+            (error as { detail?: string })?.detail ??
+              "Error al crear la observación"
+          )
         },
       }
     )
@@ -141,13 +146,25 @@ export function CreateObservation({ patientId }: CreateObservationProps) {
 
           <ControlledInput control={control} name="unit" label="Unidad" />
 
-          <ControlledInput control={control} name="interpretation" label="Interpretación" />
+          <ControlledInput
+            control={control}
+            name="interpretation"
+            label="Interpretación"
+          />
 
-          <ControlledInput control={control} name="bodySite" label="Sitio corporal" />
+          <ControlledInput
+            control={control}
+            name="bodySite"
+            label="Sitio corporal"
+          />
 
           <ControlledInput control={control} name="method" label="Método" />
 
-          <ControlledInput control={control} name="referenceRange" label="Rango de referencia" />
+          <ControlledInput
+            control={control}
+            name="referenceRange"
+            label="Rango de referencia"
+          />
 
           <ControlledCombobox
             control={control}

@@ -1,14 +1,14 @@
+import type {
+  CreateSupplierRequest,
+  UpdateSupplierRequest,
+} from "@sanipatitas/desktop/inventory/api/inventory-api"
 import {
   deleteApiInventorySupplierById,
   postApiInventorySupplier,
   putApiInventorySupplierById,
 } from "@sanipatitas/shared/api/client"
 import { getApiInventorySupplierOptions } from "@sanipatitas/shared/api/client/@tanstack/react-query.gen"
-import type {
-  CreateSupplierRequest,
-  UpdateSupplierRequest,
-} from "@sanipatitas/desktop/inventory/api/inventory-api"
-import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query"
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query"
 
 // Query key
 const supplierKey = ["inventory-suppliers"] as const

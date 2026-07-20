@@ -1,3 +1,4 @@
+import { useStore } from "@nanostores/react"
 import { Button } from "@sanipatitas/ui/components/ui/button"
 import {
   Command,
@@ -14,14 +15,13 @@ import {
 } from "@sanipatitas/ui/components/ui/popover"
 import { cn } from "@sanipatitas/ui/lib/tailwind"
 import { getDay, getDaysInMonth, isSameDay } from "date-fns"
-import { useStore } from "@nanostores/react"
-import { atom } from "nanostores"
 import {
   Check,
   ChevronLeftIcon,
   ChevronRightIcon,
   ChevronsUpDown,
 } from "lucide-react"
+import { atom } from "nanostores"
 import {
   createContext,
   memo,
@@ -378,11 +378,11 @@ export const CalendarMonthPicker = ({
     <Combobox
       className={className}
       data={monthData}
-        labels={{
-          button: "Seleccionar mes",
-          empty: "No se encontró mes",
-          search: "Buscar mes",
-        }}
+      labels={{
+        button: "Seleccionar mes",
+        empty: "No se encontró mes",
+        search: "Buscar mes",
+      }}
       setValue={(value) =>
         setMonth(Number.parseInt(value, 10) as CalendarState["month"])
       }

@@ -19,10 +19,10 @@ import {
 } from "@sanipatitas/ui/components/ui/dialog"
 import { FieldGroup } from "@sanipatitas/ui/components/ui/field"
 import { useMutation } from "@tanstack/react-query"
-import { useMemo, useRef } from "react"
+import { useRef } from "react"
 import { useForm } from "react-hook-form"
-import { toast } from "sonner"
 import { TbPlus } from "react-icons/tb"
+import { toast } from "sonner"
 
 const ID_TYPE_OPTIONS = [
   { value: "DNI", label: "DNI" },
@@ -58,7 +58,9 @@ export function CreateClient() {
       reset()
     },
     onError: (error) => {
-      toast.error((error as { detail?: string })?.detail ?? "Error al crear el cliente")
+      toast.error(
+        (error as { detail?: string })?.detail ?? "Error al crear el cliente"
+      )
     },
   })
 
@@ -67,10 +69,10 @@ export function CreateClient() {
       body: {
         id: uuidV7(),
         ...data,
-        phoneAlt: data.phoneAlt || undefined,
-        email: data.email || undefined,
-        address: data.address || undefined,
-        notes: data.notes || undefined,
+        phoneAlt: data.phoneAlt,
+        email: data.email,
+        address: data.address,
+        notes: data.notes,
       },
     })
   })
@@ -92,7 +94,11 @@ export function CreateClient() {
 
         <FieldGroup>
           <ControlledInput control={control} name="firstName" label="Nombres" />
-          <ControlledInput control={control} name="lastName" label="Apellidos" />
+          <ControlledInput
+            control={control}
+            name="lastName"
+            label="Apellidos"
+          />
 
           <ControlledCombobox
             control={control}

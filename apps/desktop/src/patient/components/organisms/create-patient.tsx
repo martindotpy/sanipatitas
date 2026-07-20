@@ -1,9 +1,11 @@
 import { type DialogRoot } from "@base-ui/react"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { usePatient } from "@sanipatitas/desktop/patient/hook/use-patient"
-import { getApiBreedOptions } from "@sanipatitas/shared/api/client/@tanstack/react-query.gen"
-import { getApiClientOptions } from "@sanipatitas/shared/api/client/@tanstack/react-query.gen"
-import { postApiPatientMutation } from "@sanipatitas/shared/api/client/@tanstack/react-query.gen"
+import {
+  getApiBreedOptions,
+  getApiClientOptions,
+  postApiPatientMutation,
+} from "@sanipatitas/shared/api/client/@tanstack/react-query.gen"
 import type { OpenapiBreedDto } from "@sanipatitas/shared/api/client/types.gen"
 import { zOpenapiCreatePatientRequest } from "@sanipatitas/shared/api/client/zod.gen"
 import { uuidV7 } from "@sanipatitas/shared/lib/uuid"
@@ -26,8 +28,8 @@ import { FieldGroup } from "@sanipatitas/ui/components/ui/field"
 import { useMutation, useQuery } from "@tanstack/react-query"
 import { useMemo, useRef } from "react"
 import { useForm } from "react-hook-form"
-import { toast } from "sonner"
 import { TbPlus } from "react-icons/tb"
+import { toast } from "sonner"
 
 const GENDER_OPTIONS = [
   { value: "MALE", label: "Macho" },
@@ -61,9 +63,7 @@ export function CreatePatient() {
     () =>
       (breedsQuery.data?.data ?? []).map((b: OpenapiBreedDto) => ({
         value: b.id,
-        label: b.species
-          ? `${b.name} (${b.species.name})`
-          : b.name,
+        label: b.species ? `${b.name} (${b.species.name})` : b.name,
       })),
     [breedsQuery.data]
   )
@@ -72,14 +72,15 @@ export function CreatePatient() {
     resolver: zodResolver(zOpenapiCreatePatientRequest),
     defaultValues: {
       name: "",
-      gender: undefined,
-      birthDate: undefined,
+      gender: "",
+      birthDate: "",
       approximateAge: "",
-      weightKg: undefined,
+      weightKg: 0,
       description: "",
       isSterilized: false,
       isDeceased: false,
-      breedId: undefined,
+      breedId: "",
+      clientId: "",
       clientId: "",
     },
   })
@@ -92,7 +93,9 @@ export function CreatePatient() {
       reset()
     },
     onError: (error) => {
-      toast.error((error as { detail?: string })?.detail ?? "Error al crear el paciente")
+      toast.error(
+        (error as { detail?: string })?.detail ?? "Error al crear el paciente"
+      )
     },
   })
 
@@ -101,14 +104,14 @@ export function CreatePatient() {
       body: {
         id: uuidV7(),
         ...data,
-        gender: data.gender || undefined,
-        birthDate: data.birthDate || undefined,
-        approximateAge: data.approximateAge || undefined,
-        weightKg: data.weightKg || undefined,
-        description: data.description || undefined,
-        breedId: data.breedId || undefined,
-        isSterilized: data.isSterilized || undefined,
-        isDeceased: data.isDeceased || undefined,
+        gender: data.gender,
+        birthDate: data.birthDate,
+        approximateAge: data.approximateAge,
+        weightKg: data.weightKg,
+        description: data.description,
+        breedId: data.breedId,
+        isSterilized: data.isSterilized,
+        isDeceased: data.isDeceased,
       },
     })
   })

@@ -1,3 +1,4 @@
+import { useStore } from "@nanostores/react"
 import { $breedQuery } from "@sanipatitas/desktop/breed/store/breed-query-store"
 import { useSpecies } from "@sanipatitas/desktop/species/hook/use-species"
 import { Button } from "@sanipatitas/ui/components/ui/button"
@@ -15,7 +16,6 @@ import {
   PopoverTrigger,
 } from "@sanipatitas/ui/components/ui/popover"
 import { cn } from "@sanipatitas/ui/lib/tailwind"
-import { useStore } from "@nanostores/react"
 import { useMemo, useState } from "react"
 import { TbCheck, TbSelector } from "react-icons/tb"
 
@@ -48,9 +48,7 @@ export function SpeciesFilterCombobox() {
   const toggleSpecies = (id: string) => {
     const current = $breedQuery.get().speciesIds
     const isSelected = current.includes(id)
-    const next = isSelected
-      ? current.filter((s) => s !== id)
-      : [...current, id]
+    const next = isSelected ? current.filter((s) => s !== id) : [...current, id]
 
     $breedQuery.set({
       ...$breedQuery.get(),

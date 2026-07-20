@@ -36,7 +36,9 @@ export function DeleteClientAlert({
   const deleteMutation = useMutation({
     mutationFn: async (ids: string[]) => {
       await Promise.all(
-        ids.map((id) => deleteApiClientById({ path: { id }, throwOnError: true }))
+        ids.map((id) =>
+          deleteApiClientById({ path: { id }, throwOnError: true })
+        )
       )
     },
     onSuccess: () => {
@@ -47,7 +49,10 @@ export function DeleteClientAlert({
     },
     onError: (error) => {
       const detail =
-        error && typeof error === "object" && "detail" in error && typeof error.detail === "string"
+        error &&
+        typeof error === "object" &&
+        "detail" in error &&
+        typeof error.detail === "string"
           ? error.detail
           : null
       toast.error(detail ?? "Error al eliminar cliente(s)")
@@ -72,9 +77,7 @@ export function DeleteClientAlert({
           <AlertDialogCancel>Cancelar</AlertDialogCancel>
           <AlertDialogAction
             variant="destructive"
-            onClick={() =>
-              deleteMutation.mutate(clients.map((c) => c.id))
-            }
+            onClick={() => deleteMutation.mutate(clients.map((c) => c.id))}
           >
             {deleteMutation.isPending ? "Eliminando..." : "Eliminar"}
           </AlertDialogAction>

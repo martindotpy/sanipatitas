@@ -37,34 +37,32 @@ export const auditMiddleware = new Elysia({ name: "audit-middleware" })
       uuidV7(),
     auditStartedAt: Date.now(),
   }))
-  .onAfterResponse(
-    ({ auditCorrelationId, auditStartedAt, request, set }) => {
-      if (!criticalMethods.has(request.method)) {
-        return
-      }
-
-      const url = new URL(request.url)
-      const payload = getJwtPayload(request)
-      const entry: AuditLogEntry = {
-        type: "audit",
-        when: new Date().toISOString(),
-        service: "auth",
-        correlationId: auditCorrelationId,
-        who: payload.sub ?? "anonymous",
-        role: payload.group ?? payload.role ?? "unknown",
-        action: actionFromMethod(request.method),
-        resourceType: resourceTypeFromPath(url.pathname),
-        resourceId: resourceIdFromPath(url.pathname),
-        method: request.method,
-        path: url.pathname,
-        status: String(set.status),
-        durationMs: String(Date.now() - auditStartedAt),
-      }
-
-      set.headers["X-Correlation-Id"] = auditCorrelationId
-      serverLog.info(entry, "critical_transaction")
+  .onAfterResponse(({ auditCorrelationId, auditStartedAt, request, set }) => {
+    if (!criticalMethods.has(request.method)) {
+      return
     }
-  )
+
+    const url = new URL(request.url)
+    const payload = getJwtPayload(request)
+    const entry: AuditLogEntry = {
+      type: "audit",
+      when: new Date().toISOString(),
+      service: "auth",
+      correlationId: auditCorrelationId,
+      who: payload.sub ?? "anonymous",
+      role: payload.group ?? payload.role ?? "unknown",
+      action: actionFromMethod(request.method),
+      resourceType: resourceTypeFromPath(url.pathname),
+      resourceId: resourceIdFromPath(url.pathname),
+      method: request.method,
+      path: url.pathname,
+      status: String(set.status),
+      durationMs: String(Date.now() - auditStartedAt),
+    }
+
+    set.headers["X-Correlation-Id"] = auditCorrelationId
+    serverLog.info(entry, "critical_transaction")
+  })
 
 // Jwt
 const getJwtPayload = (request: Request): JwtPayload => {

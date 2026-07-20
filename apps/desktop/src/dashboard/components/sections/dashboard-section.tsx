@@ -1,13 +1,27 @@
-import { dashboardApi, type AppointmentStatsDto, type BillingStatsDto, type InventoryStatsDto, type PatientStatsDto } from "@sanipatitas/desktop/dashboard/api/dashboard-api"
+import {
+  dashboardApi,
+  type AppointmentStatsDto,
+  type BillingStatsDto,
+  type InventoryStatsDto,
+} from "@sanipatitas/desktop/dashboard/api/dashboard-api"
 import { Badge } from "@sanipatitas/ui/components/ui/badge"
-import { Card, CardContent, CardHeader, CardTitle } from "@sanipatitas/ui/components/ui/card"
-import { ChartContainer, ChartTooltip, ChartTooltipContent, type ChartConfig } from "@sanipatitas/ui/components/ui/chart"
+import {
+  Card,
+  CardContent,
+  CardHeader,
+  CardTitle,
+} from "@sanipatitas/ui/components/ui/card"
+import {
+  ChartContainer,
+  ChartTooltip,
+  ChartTooltipContent,
+  type ChartConfig,
+} from "@sanipatitas/ui/components/ui/chart"
 import { Skeleton } from "@sanipatitas/ui/components/ui/skeleton"
 import { H2, Muted, Small } from "@sanipatitas/ui/components/ui/typography"
 import { useQuery } from "@tanstack/react-query"
 import { AnimatePresence, motion } from "motion/react"
 import { useMemo } from "react"
-import { Area, AreaChart, Cell, Pie, PieChart, XAxis, YAxis } from "recharts"
 import {
   TbActivity,
   TbAlertTriangle,
@@ -21,6 +35,7 @@ import {
   TbTrendingUp,
   TbUsers,
 } from "react-icons/tb"
+import { Area, AreaChart, Cell, Pie, PieChart, XAxis, YAxis } from "recharts"
 
 // Status labels & colors
 const statusLabels: Record<string, string> = {
@@ -33,14 +48,18 @@ const statusLabels: Record<string, string> = {
 
 const statusColors: Record<string, string> = {
   SCHEDULED: "bg-blue-100 text-blue-800 dark:bg-blue-900/30 dark:text-blue-300",
-  IN_PROGRESS: "bg-yellow-100 text-yellow-800 dark:bg-yellow-900/30 dark:text-yellow-300",
-  COMPLETED: "bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-300",
+  IN_PROGRESS:
+    "bg-yellow-100 text-yellow-800 dark:bg-yellow-900/30 dark:text-yellow-300",
+  COMPLETED:
+    "bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-300",
   CANCELLED: "bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-300",
   NO_SHOW: "bg-gray-100 text-gray-800 dark:bg-gray-900/30 dark:text-gray-300",
 }
 
 // Type-safe chart config helper
-const cfg = <T extends Record<string, { label: string; color: string }>>(c: T): T & Record<string, { label: string; color: string }> => c as never
+const cfg = <T extends Record<string, { label: string; color: string }>>(
+  c: T
+): T & Record<string, { label: string; color: string }> => c as never
 
 // Shadcn chart config for appointment status (pie)
 const appointmentChartConfig = cfg({
@@ -132,21 +151,30 @@ function AnimatedStatCard({
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.4, delay, ease: "easeOut" }}
-      className="flex-1 min-w-[180px]"
+      className="min-w-[180px] flex-1"
     >
-      <Card size="sm" className={`relative overflow-hidden border ${colorMap[color]}`}>
-        <div className={`absolute inset-0 bg-gradient-to-br ${colorMap[color]} opacity-50`} />
-        <CardHeader className="flex flex-row items-center justify-between gap-2 relative z-10">
-          <CardTitle className="text-muted-foreground text-xs font-medium uppercase tracking-wider">
+      <Card
+        size="sm"
+        className={`relative overflow-hidden border ${colorMap[color]}`}
+      >
+        <div
+          className={`absolute inset-0 bg-gradient-to-br ${colorMap[color]} opacity-50`}
+        />
+        <CardHeader className="relative z-10 flex flex-row items-center justify-between gap-2">
+          <CardTitle className="text-muted-foreground text-xs font-medium tracking-wider uppercase">
             {label}
           </CardTitle>
           <Icon className={`${iconColorMap[color]} size-5 shrink-0`} />
         </CardHeader>
         <CardContent className="relative z-10">
           <div className="flex items-baseline gap-2">
-            <p className="text-foreground text-3xl font-bold tabular-nums">{value}</p>
+            <p className="text-foreground text-3xl font-bold tabular-nums">
+              {value}
+            </p>
           </div>
-          {subtitle && <p className="text-muted-foreground mt-1 text-xs">{subtitle}</p>}
+          {subtitle && (
+            <p className="text-muted-foreground mt-1 text-xs">{subtitle}</p>
+          )}
         </CardContent>
       </Card>
     </motion.div>
@@ -213,12 +241,22 @@ function AppointmentStatusChart({ data }: { data: Record<string, number> }) {
             </ChartContainer>
             <div className="flex w-full max-w-55 flex-col gap-2">
               {chartData.map((item) => (
-                <div key={item.name} className="flex items-center justify-between gap-2">
+                <div
+                  key={item.name}
+                  className="flex items-center justify-between gap-2"
+                >
                   <div className="flex items-center gap-2">
-                    <div className="size-3 rounded-full" style={{ backgroundColor: item.fill }} />
-                    <span className="text-sm">{appointmentChartConfig[item.name]?.label ?? item.name}</span>
+                    <div
+                      className="size-3 rounded-full"
+                      style={{ backgroundColor: item.fill }}
+                    />
+                    <span className="text-sm">
+                      {appointmentChartConfig[item.name]?.label ?? item.name}
+                    </span>
                   </div>
-                  <span className="text-sm font-bold tabular-nums">{item.value}</span>
+                  <span className="text-sm font-bold tabular-nums">
+                    {item.value}
+                  </span>
                 </div>
               ))}
             </div>
@@ -282,10 +320,16 @@ function MonthlyComparisonChart({
         <CardContent>
           <div className="flex h-52 items-end gap-4 px-1">
             {data.map((item) => {
-              const heightPercent = Math.max((item.value / maxValue) * 100, item.value > 0 ? 8 : 0)
+              const heightPercent = Math.max(
+                (item.value / maxValue) * 100,
+                item.value > 0 ? 8 : 0
+              )
 
               return (
-                <div key={item.key} className="flex min-w-0 flex-1 flex-col items-center gap-2">
+                <div
+                  key={item.key}
+                  className="flex min-w-0 flex-1 flex-col items-center gap-2"
+                >
                   <span className="text-foreground text-center text-sm font-bold tabular-nums">
                     {item.display}
                   </span>
@@ -298,7 +342,9 @@ function MonthlyComparisonChart({
                       }}
                     />
                   </div>
-                  <span className="text-muted-foreground text-xs">{item.label}</span>
+                  <span className="text-muted-foreground text-xs">
+                    {item.label}
+                  </span>
                 </div>
               )
             })}
@@ -337,7 +383,7 @@ function UpcomingAppointments({
             initial={{ opacity: 0, x: -10 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ delay: i * 0.05 }}
-            className="flex items-center justify-between gap-4 px-(--card-spacing) py-3 hover:bg-accent/50 transition-colors"
+            className="hover:bg-accent/50 flex items-center justify-between gap-4 px-(--card-spacing) py-3 transition-colors"
           >
             <div className="flex min-w-0 flex-1 flex-col gap-0.5">
               <div className="flex items-center gap-2">
@@ -347,13 +393,19 @@ function UpcomingAppointments({
                 </span>
               </div>
               {appt.reason && (
-                <span className="text-muted-foreground truncate text-xs">{appt.reason}</span>
+                <span className="text-muted-foreground truncate text-xs">
+                  {appt.reason}
+                </span>
               )}
               <span className="text-muted-foreground text-xs">
                 {appt.veterinarian.name} {appt.veterinarian.lastName ?? ""}
               </span>
             </div>
-            <Badge className={statusColors[appt.status] ?? "bg-gray-100 text-gray-800"}>
+            <Badge
+              className={
+                statusColors[appt.status] ?? "bg-gray-100 text-gray-800"
+              }
+            >
               {statusLabels[appt.status] ?? appt.status}
             </Badge>
           </motion.div>
@@ -364,9 +416,19 @@ function UpcomingAppointments({
 }
 
 // Revenue area chart (last 7 days - simulated from available data)
-function RevenueAreaChart({ revenueToday, revenueThisMonth }: { revenueToday: number; revenueThisMonth: number }) {
+function RevenueAreaChart({
+  revenueToday,
+  revenueThisMonth,
+}: {
+  revenueToday: number
+  revenueThisMonth: number
+}) {
   // Generate sample daily data based on actual monthly revenue
-  const daysInMonth = new Date(new Date().getFullYear(), new Date().getMonth() + 1, 0).getDate()
+  const daysInMonth = new Date(
+    new Date().getFullYear(),
+    new Date().getMonth() + 1,
+    0
+  ).getDate()
   const dayOfMonth = new Date().getDate()
   const avgDaily = revenueThisMonth / dayOfMonth
 
@@ -384,7 +446,7 @@ function RevenueAreaChart({ revenueToday, revenueThisMonth }: { revenueToday: nu
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.5, delay: 0.35 }}
-      className="flex-1 min-w-[250px]"
+      className="min-w-[250px] flex-1"
     >
       <Card>
         <CardHeader>
@@ -399,7 +461,10 @@ function RevenueAreaChart({ revenueToday, revenueThisMonth }: { revenueToday: nu
             initialDimension={{ width: 300, height: 160 }}
             className="aspect-[3/1.6] w-full"
           >
-            <AreaChart data={data} margin={{ top: 5, right: 5, left: -10, bottom: 0 }}>
+            <AreaChart
+              data={data}
+              margin={{ top: 5, right: 5, left: -10, bottom: 0 }}
+            >
               <XAxis
                 dataKey="day"
                 tick={{ fontSize: 11 }}
@@ -410,7 +475,10 @@ function RevenueAreaChart({ revenueToday, revenueThisMonth }: { revenueToday: nu
               <ChartTooltip
                 content={
                   <ChartTooltipContent
-                    formatter={(value) => [formatCurrency(Number(value)), "Ingresos"]}
+                    formatter={(value) => [
+                      formatCurrency(Number(value)),
+                      "Ingresos",
+                    ]}
                     indicator="dot"
                   />
                 }
@@ -443,7 +511,7 @@ function LowStockAlert({ lowStockCount }: { lowStockCount: number }) {
         transition={{ delay: 0.4 }}
         className="flex items-center gap-3 rounded-lg border border-emerald-200 bg-emerald-50 px-4 py-3 dark:border-emerald-900/30 dark:bg-emerald-950/20"
       >
-        <TbPackage className="size-5 text-emerald-500 shrink-0" />
+        <TbPackage className="size-5 shrink-0 text-emerald-500" />
         <p className="text-sm font-medium text-emerald-700 dark:text-emerald-300">
           Inventario saludable — todos los productos tienen stock suficiente
         </p>
@@ -458,9 +526,10 @@ function LowStockAlert({ lowStockCount }: { lowStockCount: number }) {
       transition={{ delay: 0.4, type: "spring" }}
       className="flex items-center gap-3 rounded-lg border border-red-200 bg-red-50 px-4 py-3 dark:border-red-900/30 dark:bg-red-950/20"
     >
-      <TbAlertTriangle className="size-5 animate-pulse text-red-500 shrink-0" />
+      <TbAlertTriangle className="size-5 shrink-0 animate-pulse text-red-500" />
       <p className="text-sm font-medium text-red-700 dark:text-red-300">
-        <strong className="tabular-nums">{lowStockCount}</strong> producto{lowStockCount !== 1 ? "s" : ""} con stock bajo — revisar inventario
+        <strong className="tabular-nums">{lowStockCount}</strong> producto
+        {lowStockCount !== 1 ? "s" : ""} con stock bajo — revisar inventario
       </p>
     </motion.div>
   )
@@ -484,20 +553,36 @@ function InventorySummary({ stats }: { stats: InventoryStatsDto }) {
         <CardContent>
           <div className="grid grid-cols-2 gap-4 sm:grid-cols-4">
             <div className="flex flex-col">
-              <Small className="text-muted-foreground uppercase tracking-wider">Productos</Small>
-              <p className="text-2xl font-bold tabular-nums">{stats.totalProducts}</p>
+              <Small className="text-muted-foreground tracking-wider uppercase">
+                Productos
+              </Small>
+              <p className="text-2xl font-bold tabular-nums">
+                {stats.totalProducts}
+              </p>
             </div>
             <div className="flex flex-col">
-              <Small className="text-muted-foreground uppercase tracking-wider">Categorías</Small>
-              <p className="text-2xl font-bold tabular-nums">{stats.totalCategories}</p>
+              <Small className="text-muted-foreground tracking-wider uppercase">
+                Categorías
+              </Small>
+              <p className="text-2xl font-bold tabular-nums">
+                {stats.totalCategories}
+              </p>
             </div>
             <div className="flex flex-col">
-              <Small className="text-muted-foreground uppercase tracking-wider">Stock total</Small>
-              <p className="text-2xl font-bold tabular-nums">{stats.totalStockQuantity}</p>
+              <Small className="text-muted-foreground tracking-wider uppercase">
+                Stock total
+              </Small>
+              <p className="text-2xl font-bold tabular-nums">
+                {stats.totalStockQuantity}
+              </p>
             </div>
             <div className="flex flex-col">
-              <Small className="text-muted-foreground uppercase tracking-wider">Valor stock</Small>
-              <p className="text-2xl font-bold tabular-nums">{formatCurrency(stats.totalStockValue)}</p>
+              <Small className="text-muted-foreground tracking-wider uppercase">
+                Valor stock
+              </Small>
+              <p className="text-2xl font-bold tabular-nums">
+                {formatCurrency(stats.totalStockValue)}
+              </p>
             </div>
           </div>
           <div className="mt-4">
@@ -527,24 +612,36 @@ function BillingSummary({ stats }: { stats: BillingStatsDto }) {
         <CardContent>
           <div className="grid grid-cols-2 gap-4 sm:grid-cols-4">
             <div className="flex flex-col">
-              <Small className="text-muted-foreground uppercase tracking-wider">Facturas hoy</Small>
-              <p className="text-2xl font-bold tabular-nums">{stats.billingToday}</p>
+              <Small className="text-muted-foreground tracking-wider uppercase">
+                Facturas hoy
+              </Small>
+              <p className="text-2xl font-bold tabular-nums">
+                {stats.billingToday}
+              </p>
             </div>
             <div className="flex flex-col">
-              <Small className="text-muted-foreground uppercase tracking-wider">Ingresos hoy</Small>
-              <p className="text-2xl font-bold tabular-nums text-emerald-500">
+              <Small className="text-muted-foreground tracking-wider uppercase">
+                Ingresos hoy
+              </Small>
+              <p className="text-2xl font-bold text-emerald-500 tabular-nums">
                 {formatCurrency(stats.totalRevenueToday)}
               </p>
             </div>
             <div className="flex flex-col">
-              <Small className="text-muted-foreground uppercase tracking-wider">Ingresos del mes</Small>
-              <p className="text-2xl font-bold tabular-nums text-emerald-500">
+              <Small className="text-muted-foreground tracking-wider uppercase">
+                Ingresos del mes
+              </Small>
+              <p className="text-2xl font-bold text-emerald-500 tabular-nums">
                 {formatCurrency(stats.totalRevenueThisMonth)}
               </p>
             </div>
             <div className="flex flex-col">
-              <Small className="text-muted-foreground uppercase tracking-wider">Pendientes</Small>
-              <p className="text-2xl font-bold tabular-nums text-amber-500">{stats.totalPending}</p>
+              <Small className="text-muted-foreground tracking-wider uppercase">
+                Pendientes
+              </Small>
+              <p className="text-2xl font-bold text-amber-500 tabular-nums">
+                {stats.totalPending}
+              </p>
             </div>
           </div>
         </CardContent>
@@ -563,8 +660,8 @@ function DashboardSkeleton() {
         ))}
       </div>
       <div className="flex flex-wrap gap-4">
-        <Skeleton className="h-56 flex-[2] min-w-[300px] rounded-xl" />
-        <Skeleton className="h-56 flex-1 min-w-[250px] rounded-xl" />
+        <Skeleton className="h-56 min-w-[300px] flex-[2] rounded-xl" />
+        <Skeleton className="h-56 min-w-[250px] flex-1 rounded-xl" />
       </div>
       <Skeleton className="h-32 rounded-xl" />
       <Skeleton className="h-40 rounded-xl" />
@@ -630,7 +727,7 @@ export function DashboardSection() {
           </div>
           <div className="hidden items-center gap-2 sm:flex">
             <Badge variant="outline" className="gap-1.5">
-              <span className="bg-green-500 size-2 animate-pulse rounded-full" />
+              <span className="size-2 animate-pulse rounded-full bg-green-500" />
               En vivo
             </Badge>
           </div>
@@ -686,7 +783,11 @@ export function DashboardSection() {
             <AnimatedStatCard
               icon={TbCash}
               label="Ingresos hoy"
-              value={billingStats ? formatCurrency(billingStats.totalRevenueToday) : "—"}
+              value={
+                billingStats
+                  ? formatCurrency(billingStats.totalRevenueToday)
+                  : "—"
+              }
               subtitle="Facturado el día de hoy"
               color="green"
               delay={0.25}
@@ -696,15 +797,20 @@ export function DashboardSection() {
           {/* Charts row */}
           <div className="flex flex-wrap gap-4">
             {appointmentStats &&
-              Object.keys(appointmentStats.appointmentsTodayByStatus).length > 0 && (
-                <div className="flex-1 min-w-75">
-                  <AppointmentStatusChart data={appointmentStats.appointmentsTodayByStatus} />
+              Object.keys(appointmentStats.appointmentsTodayByStatus).length >
+                0 && (
+                <div className="min-w-75 flex-1">
+                  <AppointmentStatusChart
+                    data={appointmentStats.appointmentsTodayByStatus}
+                  />
                 </div>
               )}
-            <div className="flex-1 min-w-[250px]">
+            <div className="min-w-[250px] flex-1">
               <MonthlyComparisonChart
                 patientsThisMonth={patientStats?.patientsCreatedThisMonth ?? 0}
-                appointmentsThisMonth={appointmentStats?.appointmentsThisMonth ?? 0}
+                appointmentsThisMonth={
+                  appointmentStats?.appointmentsThisMonth ?? 0
+                }
                 revenueThisMonth={billingStats?.totalRevenueThisMonth ?? 0}
               />
             </div>
@@ -714,7 +820,7 @@ export function DashboardSection() {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.4, delay: 0.4 }}
-              className="flex-1 min-w-70"
+              className="min-w-70 flex-1"
             >
               <Card>
                 <CardHeader>
@@ -722,12 +828,15 @@ export function DashboardSection() {
                     <TbCalendar className="text-primary size-4" />
                     Próximas citas
                     <Badge variant="secondary" className="ml-auto">
-                      {appointmentStats?.upcomingAppointments.length ?? 0} pendientes
+                      {appointmentStats?.upcomingAppointments.length ?? 0}{" "}
+                      pendientes
                     </Badge>
                   </CardTitle>
                 </CardHeader>
                 <CardContent className="max-h-64 overflow-y-auto p-0!">
-                  <UpcomingAppointments appointments={appointmentStats?.upcomingAppointments ?? []} />
+                  <UpcomingAppointments
+                    appointments={appointmentStats?.upcomingAppointments ?? []}
+                  />
                 </CardContent>
               </Card>
             </motion.div>
@@ -736,12 +845,12 @@ export function DashboardSection() {
           {/* Inventory + Billing */}
           <div className="flex flex-wrap gap-4">
             {inventoryStats && (
-              <div className="flex-1 min-w-[300px]">
+              <div className="min-w-[300px] flex-1">
                 <InventorySummary stats={inventoryStats} />
               </div>
             )}
             {billingStats && (
-              <div className="flex-1 min-w-[300px]">
+              <div className="min-w-[300px] flex-1">
                 <BillingSummary stats={billingStats} />
               </div>
             )}

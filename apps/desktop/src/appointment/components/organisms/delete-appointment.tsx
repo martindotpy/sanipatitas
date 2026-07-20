@@ -38,7 +38,10 @@ export function DeleteAppointmentAlert({
       onSuccess?.()
     },
     onError: (error) => {
-      toast.error((error as { detail?: string })?.detail ?? "Error al eliminar la(s) cita(s)")
+      toast.error(
+        (error as { detail?: string })?.detail ??
+          "Error al eliminar la(s) cita(s)"
+      )
     },
   })
 

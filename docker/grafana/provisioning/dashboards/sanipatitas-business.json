@@ -20,7 +20,10 @@
         "defaults": {
           "color": { "mode": "thresholds" },
           "mappings": [],
-          "thresholds": { "mode": "absolute", "steps": [{ "color": "green", "value": null }] },
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [{ "color": "green", "value": null }]
+          },
           "unit": "short"
         },
         "overrides": []
@@ -32,7 +35,11 @@
         "graphMode": "area",
         "justifyMode": "auto",
         "orientation": "auto",
-        "reduceOptions": { "calcs": ["lastNotNull"], "fields": "", "values": false },
+        "reduceOptions": {
+          "calcs": ["lastNotNull"],
+          "fields": "",
+          "values": false
+        },
         "textMode": "auto"
       },
       "pluginVersion": "9.5.0",
@@ -51,7 +58,10 @@
         "defaults": {
           "color": { "mode": "thresholds" },
           "mappings": [],
-          "thresholds": { "mode": "absolute", "steps": [{ "color": "green", "value": null }] },
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [{ "color": "green", "value": null }]
+          },
           "unit": "short"
         },
         "overrides": []
@@ -63,7 +73,11 @@
         "graphMode": "area",
         "justifyMode": "auto",
         "orientation": "auto",
-        "reduceOptions": { "calcs": ["lastNotNull"], "fields": "", "values": false },
+        "reduceOptions": {
+          "calcs": ["lastNotNull"],
+          "fields": "",
+          "values": false
+        },
         "textMode": "auto"
       },
       "pluginVersion": "9.5.0",
@@ -82,7 +96,10 @@
         "defaults": {
           "color": { "mode": "thresholds" },
           "mappings": [],
-          "thresholds": { "mode": "absolute", "steps": [{ "color": "green", "value": null }] },
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [{ "color": "green", "value": null }]
+          },
           "unit": "short"
         },
         "overrides": []
@@ -113,18 +130,30 @@
         "defaults": {
           "color": { "mode": "palette-classic" },
           "custom": {
-            "axisBorderShow": false, "axisCenteredZero": false, "axisColorMode": "text",
-            "axisLabel": "", "axisPlacement": "auto", "barAlignment": 0,
-            "drawStyle": "line", "fillOpacity": 40, "gradientMode": "opacity",
+            "axisBorderShow": false,
+            "axisCenteredZero": false,
+            "axisColorMode": "text",
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "drawStyle": "line",
+            "fillOpacity": 40,
+            "gradientMode": "opacity",
             "hideFrom": { "legend": false, "tooltip": false, "viz": false },
-            "lineInterpolation": "smooth", "lineWidth": 2,
-            "pointSize": 4, "scaleDistribution": { "type": "linear" },
-            "showPoints": "never", "spanNulls": true,
+            "lineInterpolation": "smooth",
+            "lineWidth": 2,
+            "pointSize": 4,
+            "scaleDistribution": { "type": "linear" },
+            "showPoints": "never",
+            "spanNulls": true,
             "stacking": { "group": "A", "mode": "none" },
             "thresholdsStyle": { "mode": "off" }
           },
           "mappings": [],
-          "thresholds": { "mode": "absolute", "steps": [{ "color": "green", "value": null }] },
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [{ "color": "green", "value": null }]
+          },
           "unit": "short"
         },
         "overrides": []
@@ -132,7 +161,12 @@
       "gridPos": { "h": 8, "w": 12, "x": 0, "y": 5 },
       "id": 4,
       "options": {
-        "legend": { "calcs": [], "displayMode": "table", "placement": "bottom", "showLegend": true },
+        "legend": {
+          "calcs": [],
+          "displayMode": "table",
+          "placement": "bottom",
+          "showLegend": true
+        },
         "tooltip": { "mode": "multi", "sort": "desc" }
       },
       "pluginVersion": "9.5.0",
@@ -152,18 +186,30 @@
         "defaults": {
           "color": { "mode": "palette-classic" },
           "custom": {
-            "axisBorderShow": false, "axisCenteredZero": false, "axisColorMode": "text",
-            "axisLabel": "", "axisPlacement": "auto", "barAlignment": 0,
-            "drawStyle": "line", "fillOpacity": 40, "gradientMode": "opacity",
+            "axisBorderShow": false,
+            "axisCenteredZero": false,
+            "axisColorMode": "text",
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "drawStyle": "line",
+            "fillOpacity": 40,
+            "gradientMode": "opacity",
             "hideFrom": { "legend": false, "tooltip": false, "viz": false },
-            "lineInterpolation": "smooth", "lineWidth": 2,
-            "pointSize": 4, "scaleDistribution": { "type": "linear" },
-            "showPoints": "never", "spanNulls": true,
+            "lineInterpolation": "smooth",
+            "lineWidth": 2,
+            "pointSize": 4,
+            "scaleDistribution": { "type": "linear" },
+            "showPoints": "never",
+            "spanNulls": true,
             "stacking": { "group": "A", "mode": "none" },
             "thresholdsStyle": { "mode": "off" }
           },
           "mappings": [],
-          "thresholds": { "mode": "absolute", "steps": [{ "color": "green", "value": null }] },
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [{ "color": "green", "value": null }]
+          },
           "unit": "short"
         },
         "overrides": []
@@ -171,7 +217,12 @@
       "gridPos": { "h": 8, "w": 12, "x": 12, "y": 5 },
       "id": 5,
       "options": {
-        "legend": { "calcs": [], "displayMode": "table", "placement": "bottom", "showLegend": true },
+        "legend": {
+          "calcs": [],
+          "displayMode": "table",
+          "placement": "bottom",
+          "showLegend": true
+        },
         "tooltip": { "mode": "multi", "sort": "desc" }
       },
       "pluginVersion": "9.5.0",
@@ -199,7 +250,10 @@
         "defaults": {
           "color": { "mode": "thresholds" },
           "mappings": [],
-          "thresholds": { "mode": "absolute", "steps": [{ "color": "green", "value": null }] },
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [{ "color": "green", "value": null }]
+          },
           "unit": "short"
         },
         "overrides": []
@@ -211,7 +265,11 @@
         "graphMode": "area",
         "justifyMode": "auto",
         "orientation": "auto",
-        "reduceOptions": { "calcs": ["lastNotNull"], "fields": "", "values": false },
+        "reduceOptions": {
+          "calcs": ["lastNotNull"],
+          "fields": "",
+          "values": false
+        },
         "textMode": "auto"
       },
       "pluginVersion": "9.5.0",
@@ -230,7 +288,10 @@
         "defaults": {
           "color": { "mode": "thresholds" },
           "mappings": [],
-          "thresholds": { "mode": "absolute", "steps": [{ "color": "green", "value": null }] },
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [{ "color": "green", "value": null }]
+          },
           "unit": "short"
         },
         "overrides": []
@@ -242,7 +303,11 @@
         "graphMode": "area",
         "justifyMode": "auto",
         "orientation": "auto",
-        "reduceOptions": { "calcs": ["lastNotNull"], "fields": "", "values": false },
+        "reduceOptions": {
+          "calcs": ["lastNotNull"],
+          "fields": "",
+          "values": false
+        },
         "textMode": "auto"
       },
       "pluginVersion": "9.5.0",
@@ -261,7 +326,10 @@
         "defaults": {
           "color": { "mode": "thresholds" },
           "mappings": [],
-          "thresholds": { "mode": "absolute", "steps": [{ "color": "green", "value": null }] },
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [{ "color": "green", "value": null }]
+          },
           "unit": "short"
         },
         "overrides": []
@@ -273,7 +341,11 @@
         "graphMode": "area",
         "justifyMode": "auto",
         "orientation": "auto",
-        "reduceOptions": { "calcs": ["lastNotNull"], "fields": "", "values": false },
+        "reduceOptions": {
+          "calcs": ["lastNotNull"],
+          "fields": "",
+          "values": false
+        },
         "textMode": "auto"
       },
       "pluginVersion": "9.5.0",
@@ -292,18 +364,30 @@
         "defaults": {
           "color": { "mode": "palette-classic" },
           "custom": {
-            "axisBorderShow": false, "axisCenteredZero": false, "axisColorMode": "text",
-            "axisLabel": "", "axisPlacement": "auto", "barAlignment": 0,
-            "drawStyle": "line", "fillOpacity": 40, "gradientMode": "opacity",
+            "axisBorderShow": false,
+            "axisCenteredZero": false,
+            "axisColorMode": "text",
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "drawStyle": "line",
+            "fillOpacity": 40,
+            "gradientMode": "opacity",
             "hideFrom": { "legend": false, "tooltip": false, "viz": false },
-            "lineInterpolation": "smooth", "lineWidth": 2,
-            "pointSize": 4, "scaleDistribution": { "type": "linear" },
-            "showPoints": "never", "spanNulls": true,
+            "lineInterpolation": "smooth",
+            "lineWidth": 2,
+            "pointSize": 4,
+            "scaleDistribution": { "type": "linear" },
+            "showPoints": "never",
+            "spanNulls": true,
             "stacking": { "group": "A", "mode": "none" },
             "thresholdsStyle": { "mode": "off" }
           },
           "mappings": [],
-          "thresholds": { "mode": "absolute", "steps": [{ "color": "green", "value": null }] },
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [{ "color": "green", "value": null }]
+          },
           "unit": "short"
         },
         "overrides": []
@@ -311,7 +395,12 @@
       "gridPos": { "h": 8, "w": 24, "x": 0, "y": 18 },
       "id": 9,
       "options": {
-        "legend": { "calcs": [], "displayMode": "table", "placement": "bottom", "showLegend": true },
+        "legend": {
+          "calcs": [],
+          "displayMode": "table",
+          "placement": "bottom",
+          "showLegend": true
+        },
         "tooltip": { "mode": "multi", "sort": "desc" }
       },
       "pluginVersion": "9.5.0",
@@ -339,7 +428,10 @@
         "defaults": {
           "color": { "mode": "thresholds" },
           "mappings": [],
-          "thresholds": { "mode": "absolute", "steps": [{ "color": "green", "value": null }] },
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [{ "color": "green", "value": null }]
+          },
           "unit": "currencyUSD"
         },
         "overrides": []
@@ -351,7 +443,11 @@
         "graphMode": "area",
         "justifyMode": "auto",
         "orientation": "auto",
-        "reduceOptions": { "calcs": ["lastNotNull"], "fields": "", "values": false },
+        "reduceOptions": {
+          "calcs": ["lastNotNull"],
+          "fields": "",
+          "values": false
+        },
         "textMode": "auto"
       },
       "pluginVersion": "9.5.0",
@@ -370,7 +466,10 @@
         "defaults": {
           "color": { "mode": "thresholds" },
           "mappings": [],
-          "thresholds": { "mode": "absolute", "steps": [{ "color": "green", "value": null }] },
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [{ "color": "green", "value": null }]
+          },
           "unit": "currencyUSD"
         },
         "overrides": []
@@ -382,7 +481,11 @@
         "graphMode": "area",
         "justifyMode": "auto",
         "orientation": "auto",
-        "reduceOptions": { "calcs": ["lastNotNull"], "fields": "", "values": false },
+        "reduceOptions": {
+          "calcs": ["lastNotNull"],
+          "fields": "",
+          "values": false
+        },
         "textMode": "auto"
       },
       "pluginVersion": "9.5.0",
@@ -401,18 +504,30 @@
         "defaults": {
           "color": { "mode": "palette-classic" },
           "custom": {
-            "axisBorderShow": false, "axisCenteredZero": false, "axisColorMode": "text",
-            "axisLabel": "", "axisPlacement": "auto", "barAlignment": 0,
-            "drawStyle": "line", "fillOpacity": 40, "gradientMode": "opacity",
+            "axisBorderShow": false,
+            "axisCenteredZero": false,
+            "axisColorMode": "text",
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "drawStyle": "line",
+            "fillOpacity": 40,
+            "gradientMode": "opacity",
             "hideFrom": { "legend": false, "tooltip": false, "viz": false },
-            "lineInterpolation": "smooth", "lineWidth": 2,
-            "pointSize": 4, "scaleDistribution": { "type": "linear" },
-            "showPoints": "never", "spanNulls": true,
+            "lineInterpolation": "smooth",
+            "lineWidth": 2,
+            "pointSize": 4,
+            "scaleDistribution": { "type": "linear" },
+            "showPoints": "never",
+            "spanNulls": true,
             "stacking": { "group": "A", "mode": "none" },
             "thresholdsStyle": { "mode": "off" }
           },
           "mappings": [],
-          "thresholds": { "mode": "absolute", "steps": [{ "color": "green", "value": null }] },
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [{ "color": "green", "value": null }]
+          },
           "unit": "short"
         },
         "overrides": []
@@ -420,7 +535,12 @@
       "gridPos": { "h": 8, "w": 12, "x": 0, "y": 31 },
       "id": 12,
       "options": {
-        "legend": { "calcs": [], "displayMode": "table", "placement": "bottom", "showLegend": true },
+        "legend": {
+          "calcs": [],
+          "displayMode": "table",
+          "placement": "bottom",
+          "showLegend": true
+        },
         "tooltip": { "mode": "multi", "sort": "desc" }
       },
       "pluginVersion": "9.5.0",
@@ -440,18 +560,30 @@
         "defaults": {
           "color": { "mode": "palette-classic" },
           "custom": {
-            "axisBorderShow": false, "axisCenteredZero": false, "axisColorMode": "text",
-            "axisLabel": "", "axisPlacement": "auto", "barAlignment": 0,
-            "drawStyle": "line", "fillOpacity": 40, "gradientMode": "opacity",
+            "axisBorderShow": false,
+            "axisCenteredZero": false,
+            "axisColorMode": "text",
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "drawStyle": "line",
+            "fillOpacity": 40,
+            "gradientMode": "opacity",
             "hideFrom": { "legend": false, "tooltip": false, "viz": false },
-            "lineInterpolation": "smooth", "lineWidth": 2,
-            "pointSize": 4, "scaleDistribution": { "type": "linear" },
-            "showPoints": "never", "spanNulls": true,
+            "lineInterpolation": "smooth",
+            "lineWidth": 2,
+            "pointSize": 4,
+            "scaleDistribution": { "type": "linear" },
+            "showPoints": "never",
+            "spanNulls": true,
             "stacking": { "group": "A", "mode": "none" },
             "thresholdsStyle": { "mode": "off" }
           },
           "mappings": [],
-          "thresholds": { "mode": "absolute", "steps": [{ "color": "green", "value": null }] },
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [{ "color": "green", "value": null }]
+          },
           "unit": "short"
         },
         "overrides": []
@@ -459,7 +591,12 @@
       "gridPos": { "h": 8, "w": 12, "x": 12, "y": 31 },
       "id": 13,
       "options": {
-        "legend": { "calcs": [], "displayMode": "table", "placement": "bottom", "showLegend": true },
+        "legend": {
+          "calcs": [],
+          "displayMode": "table",
+          "placement": "bottom",
+          "showLegend": true
+        },
         "tooltip": { "mode": "multi", "sort": "desc" }
       },
       "pluginVersion": "9.5.0",
@@ -492,7 +629,10 @@
             "inspect": false
           },
           "mappings": [],
-          "thresholds": { "mode": "absolute", "steps": [{ "color": "green", "value": null }] }
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [{ "color": "green", "value": null }]
+          }
         },
         "overrides": []
       },
@@ -500,7 +640,12 @@
       "id": 14,
       "options": {
         "cellHeight": "sm",
-        "footer": { "countRows": false, "fields": "", "reducer": ["sum"], "show": false },
+        "footer": {
+          "countRows": false,
+          "fields": "",
+          "reducer": ["sum"],
+          "show": false
+        },
         "showHeader": true
       },
       "pluginVersion": "9.5.0",
@@ -512,7 +657,18 @@
       ],
       "title": "Resumen de actividad por servicio y tipo",
       "transformations": [
-        { "id": "organize", "options": { "excludeByName": {}, "indexByName": {}, "renameByName": { "service": "Servicio", "action": "Acción", "Value": "Cantidad" } } }
+        {
+          "id": "organize",
+          "options": {
+            "excludeByName": {},
+            "indexByName": {},
+            "renameByName": {
+              "service": "Servicio",
+              "action": "Acción",
+              "Value": "Cantidad"
+            }
+          }
+        }
       ],
       "type": "table"
     }

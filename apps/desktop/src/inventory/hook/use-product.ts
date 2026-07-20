@@ -1,14 +1,14 @@
+import type {
+  CreateProductRequest,
+  UpdateProductRequest,
+} from "@sanipatitas/desktop/inventory/api/inventory-api"
 import {
   deleteApiInventoryProductById,
   postApiInventoryProduct,
   putApiInventoryProductById,
 } from "@sanipatitas/shared/api/client"
 import { getApiInventoryProductOptions } from "@sanipatitas/shared/api/client/@tanstack/react-query.gen"
-import type {
-  CreateProductRequest,
-  UpdateProductRequest,
-} from "@sanipatitas/desktop/inventory/api/inventory-api"
-import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query"
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query"
 
 // Query key
 const productKey = ["inventory-products"] as const

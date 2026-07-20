@@ -1,5 +1,6 @@
 import type { OpenapiAppointmentDto } from "@sanipatitas/shared/api/client/types.gen"
 import { Badge } from "@sanipatitas/ui/components/ui/badge"
+import { Button } from "@sanipatitas/ui/components/ui/button"
 import { Separator } from "@sanipatitas/ui/components/ui/separator"
 import {
   Sheet,
@@ -7,7 +8,6 @@ import {
   SheetHeader,
   SheetTitle,
 } from "@sanipatitas/ui/components/ui/sheet"
-import { Button } from "@sanipatitas/ui/components/ui/button"
 import { TbEdit, TbTrash } from "react-icons/tb"
 
 // Labels
@@ -59,9 +59,7 @@ export function AppointmentDetailsSheet({
         className="max-h-main-h mt-header-h overflow-y-auto"
       >
         <SheetHeader>
-          <SheetTitle>
-            {appointment.patient.name}
-          </SheetTitle>
+          <SheetTitle>{appointment.patient.name}</SheetTitle>
         </SheetHeader>
 
         <div className="flex flex-col gap-4 px-4">
@@ -98,7 +96,9 @@ export function AppointmentDetailsSheet({
           <Separator />
 
           <div className="flex flex-col gap-1">
-            <p className="text-muted-foreground text-xs font-medium">Paciente</p>
+            <p className="text-muted-foreground text-xs font-medium">
+              Paciente
+            </p>
             <p className="text-sm">{appointment.patient.name}</p>
           </div>
 
@@ -122,8 +122,7 @@ export function AppointmentDetailsSheet({
               Veterinario
             </p>
             <p className="text-sm">
-              {appointment.veterinarian.name ??
-                appointment.veterinarian.email}
+              {appointment.veterinarian.name ?? appointment.veterinarian.email}
             </p>
           </div>
 

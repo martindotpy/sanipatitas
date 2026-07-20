@@ -1,8 +1,12 @@
 import { type DialogRoot } from "@base-ui/react"
 import { zodResolver } from "@hookform/resolvers/zod"
-import { useCreateCondition } from "@sanipatitas/desktop/clinical/hook/use-condition"
 import { authClient } from "@sanipatitas/desktop/auth/client/auth-client"
+import { useCreateCondition } from "@sanipatitas/desktop/clinical/hook/use-condition"
 import { zOpenapiCreateMedicalConditionRequest } from "@sanipatitas/shared/api/client/zod.gen"
+import { ControlledCombobox } from "@sanipatitas/ui/components/form/controlled/controlled-combobox"
+import { ControlledDatetimeInput } from "@sanipatitas/ui/components/form/controlled/controlled-datetime-input"
+import { ControlledInput } from "@sanipatitas/ui/components/form/controlled/controlled-input"
+import { ControlledTextarea } from "@sanipatitas/ui/components/form/controlled/controlled-textarea"
 import { Button } from "@sanipatitas/ui/components/ui/button"
 import {
   Dialog,
@@ -14,15 +18,11 @@ import {
   DialogTrigger,
 } from "@sanipatitas/ui/components/ui/dialog"
 import { FieldGroup } from "@sanipatitas/ui/components/ui/field"
-import { ControlledInput } from "@sanipatitas/ui/components/form/controlled/controlled-input"
-import { ControlledDatetimeInput } from "@sanipatitas/ui/components/form/controlled/controlled-datetime-input"
-import { ControlledCombobox } from "@sanipatitas/ui/components/form/controlled/controlled-combobox"
-import { ControlledTextarea } from "@sanipatitas/ui/components/form/controlled/controlled-textarea"
 import { useQuery } from "@tanstack/react-query"
 import { useMemo, useRef } from "react"
 import { useForm } from "react-hook-form"
-import { toast } from "sonner"
 import { TbPlus } from "react-icons/tb"
+import { toast } from "sonner"
 
 // Options
 const STATUS_OPTIONS = [
@@ -60,10 +60,12 @@ export function CreateCondition({ patientId }: CreateConditionProps) {
 
   const userOptions = useMemo(
     () =>
-      (usersQuery.data?.users ?? []).map((u: { id: string; name: string; lastName?: string }) => ({
-        value: u.id,
-        label: `${u.name} ${u.lastName ?? ""}`,
-      })),
+      (usersQuery.data?.users ?? []).map(
+        (u: { id: string; name: string; lastName?: string }) => ({
+          value: u.id,
+          label: `${u.name} ${u.lastName ?? ""}`,
+        })
+      ),
     [usersQuery.data]
   )
 
@@ -71,11 +73,11 @@ export function CreateCondition({ patientId }: CreateConditionProps) {
     resolver: zodResolver(zOpenapiCreateMedicalConditionRequest),
     defaultValues: {
       name: "",
-      code: undefined,
-      description: undefined,
-      onsetDate: undefined,
-      status: undefined,
-      severity: undefined,
+      code: "",
+      description: "",
+      onsetDate: "",
+      status: "",
+      severity: "",
       patientId,
       veterinarianId: "",
     },
@@ -87,10 +89,10 @@ export function CreateCondition({ patientId }: CreateConditionProps) {
         body: {
           ...data,
           patientId,
-          code: data.code || undefined,
-          description: data.description || undefined,
-          status: data.status || undefined,
-          severity: data.severity || undefined,
+          code: data.code,
+          description: data.description,
+          status: data.status,
+          severity: data.severity,
         },
       },
       {
@@ -99,7 +101,10 @@ export function CreateCondition({ patientId }: CreateConditionProps) {
           reset()
         },
         onError: (error) => {
-          toast.error((error as { detail?: string })?.detail ?? "Error al crear la condición")
+          toast.error(
+            (error as { detail?: string })?.detail ??
+              "Error al crear la condición"
+          )
         },
       }
     )
@@ -124,7 +129,11 @@ export function CreateCondition({ patientId }: CreateConditionProps) {
         <FieldGroup>
           <ControlledInput control={control} name="name" label="Nombre" />
 
-          <ControlledInput control={control} name="code" label="Código (CIE-10)" />
+          <ControlledInput
+            control={control}
+            name="code"
+            label="Código (CIE-10)"
+          />
 
           <ControlledCombobox
             control={control}

@@ -3,6 +3,9 @@ import { zodResolver } from "@hookform/resolvers/zod"
 import { useCreateBilling } from "@sanipatitas/desktop/billing/hook/use-billing"
 import { getApiClientOptions } from "@sanipatitas/shared/api/client/@tanstack/react-query.gen"
 import { zOpenapiCreateBillingRequest } from "@sanipatitas/shared/api/client/zod.gen"
+import { ControlledCombobox } from "@sanipatitas/ui/components/form/controlled/controlled-combobox"
+import { ControlledNumberInput } from "@sanipatitas/ui/components/form/controlled/controlled-number-input"
+import { ControlledTextarea } from "@sanipatitas/ui/components/form/controlled/controlled-textarea"
 import { Button } from "@sanipatitas/ui/components/ui/button"
 import {
   Dialog,
@@ -14,14 +17,11 @@ import {
   DialogTrigger,
 } from "@sanipatitas/ui/components/ui/dialog"
 import { FieldGroup } from "@sanipatitas/ui/components/ui/field"
-import { ControlledInput } from "@sanipatitas/ui/components/form/controlled/controlled-input"
-import { ControlledCombobox } from "@sanipatitas/ui/components/form/controlled/controlled-combobox"
-import { ControlledTextarea } from "@sanipatitas/ui/components/form/controlled/controlled-textarea"
 import { useQuery } from "@tanstack/react-query"
 import { useMemo, useRef } from "react"
 import { useForm } from "react-hook-form"
-import { toast } from "sonner"
 import { TbPlus } from "react-icons/tb"
+import { toast } from "sonner"
 
 // Component
 export function CreateBilling() {
@@ -36,7 +36,7 @@ export function CreateBilling() {
         value: c.id,
         label: `${c.firstName} ${c.lastName ?? ""}`,
       })),
-    [clientsQuery.data],
+    [clientsQuery.data]
   )
 
   const { control, handleSubmit, reset } = useForm({
@@ -47,7 +47,7 @@ export function CreateBilling() {
       discount: 0,
       taxAmount: 0,
       totalAmount: 0,
-      notes: undefined,
+      notes: "",
     },
   })
 
@@ -59,7 +59,7 @@ export function CreateBilling() {
         discount: data.discount,
         taxAmount: data.taxAmount,
         totalAmount: data.totalAmount,
-        notes: data.notes || undefined,
+        notes: data.notes,
       },
       {
         onSuccess: () => {
@@ -72,7 +72,7 @@ export function CreateBilling() {
               "Error al crear la factura"
           )
         },
-      },
+      }
     )
   })
 
@@ -87,7 +87,10 @@ export function CreateBilling() {
         }
       />
 
-      <DialogContent render={<form onSubmit={onSubmit} />} className="sm:max-w-lg">
+      <DialogContent
+        render={<form onSubmit={onSubmit} />}
+        className="sm:max-w-lg"
+      >
         <DialogHeader>
           <DialogTitle>Crear factura</DialogTitle>
         </DialogHeader>
@@ -102,39 +105,35 @@ export function CreateBilling() {
             searchPlaceholder="Buscar cliente..."
           />
 
-          <ControlledInput
+          <ControlledNumberInput
             control={control}
             name="subtotal"
-            inputProps={{ type: "number", step: "0.01" }}
+            numberInputProps={{ step: 0.01 }}
             label="Subtotal"
           />
 
-          <ControlledInput
+          <ControlledNumberInput
             control={control}
             name="discount"
-            inputProps={{ type: "number", step: "0.01" }}
+            numberInputProps={{ step: 0.01 }}
             label="Descuento"
           />
 
-          <ControlledInput
+          <ControlledNumberInput
             control={control}
             name="taxAmount"
-            inputProps={{ type: "number", step: "0.01" }}
+            numberInputProps={{ step: 0.01 }}
             label="Impuesto"
           />
 
-          <ControlledInput
+          <ControlledNumberInput
             control={control}
             name="totalAmount"
-            inputProps={{ type: "number", step: "0.01" }}
+            numberInputProps={{ step: 0.01 }}
             label="Total"
           />
 
-          <ControlledTextarea
-            control={control}
-            name="notes"
-            label="Notas"
-          />
+          <ControlledTextarea control={control} name="notes" label="Notas" />
         </FieldGroup>
 
         <DialogFooter>

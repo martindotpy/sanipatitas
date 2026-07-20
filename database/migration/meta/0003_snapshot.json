@@ -96,12 +96,8 @@
           "name": "appointment_patient_id_patient_id_fk",
           "tableFrom": "appointment",
           "tableTo": "patient",
-          "columnsFrom": [
-            "patient_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["patient_id"],
+          "columnsTo": ["id"],
           "onDelete": "no action",
           "onUpdate": "no action"
         },
@@ -109,12 +105,8 @@
           "name": "appointment_client_id_client_id_fk",
           "tableFrom": "appointment",
           "tableTo": "client",
-          "columnsFrom": [
-            "client_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["client_id"],
+          "columnsTo": ["id"],
           "onDelete": "no action",
           "onUpdate": "no action"
         },
@@ -122,12 +114,8 @@
           "name": "appointment_veterinarian_id_user_id_fk",
           "tableFrom": "appointment",
           "tableTo": "user",
-          "columnsFrom": [
-            "veterinarian_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["veterinarian_id"],
+          "columnsTo": ["id"],
           "onDelete": "no action",
           "onUpdate": "no action"
         }
@@ -248,12 +236,8 @@
           "name": "appointment_aud_rev_revinfo_id_fk",
           "tableFrom": "appointment_aud",
           "tableTo": "revinfo",
-          "columnsFrom": [
-            "rev"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["rev"],
+          "columnsTo": ["id"],
           "onDelete": "no action",
           "onUpdate": "no action"
         }
@@ -311,12 +295,8 @@
           "name": "breed_aud_rev_revinfo_id_fk",
           "tableFrom": "breed_aud",
           "tableTo": "revinfo",
-          "columnsFrom": [
-            "rev"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["rev"],
+          "columnsTo": ["id"],
           "onDelete": "no action",
           "onUpdate": "no action"
         }
@@ -428,12 +408,8 @@
           "name": "client_aud_rev_revinfo_id_fk",
           "tableFrom": "client_aud",
           "tableTo": "revinfo",
-          "columnsFrom": [
-            "rev"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["rev"],
+          "columnsTo": ["id"],
           "onDelete": "no action",
           "onUpdate": "no action"
         }
@@ -545,12 +521,8 @@
           "name": "patient_aud_rev_revinfo_id_fk",
           "tableFrom": "patient_aud",
           "tableTo": "revinfo",
-          "columnsFrom": [
-            "rev"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["rev"],
+          "columnsTo": ["id"],
           "onDelete": "no action",
           "onUpdate": "no action"
         }
@@ -639,12 +611,8 @@
           "name": "species_aud_rev_revinfo_id_fk",
           "tableFrom": "species_aud",
           "tableTo": "revinfo",
-          "columnsFrom": [
-            "rev"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["rev"],
+          "columnsTo": ["id"],
           "onDelete": "no action",
           "onUpdate": "no action"
         }
@@ -750,12 +718,8 @@
           "name": "user_aud_rev_revinfo_id_fk",
           "tableFrom": "user_aud",
           "tableTo": "revinfo",
-          "columnsFrom": [
-            "rev"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["rev"],
+          "columnsTo": ["id"],
           "onDelete": "no action",
           "onUpdate": "no action"
         }
@@ -872,12 +836,8 @@
           "name": "account_user_id_user_id_fk",
           "tableFrom": "account",
           "tableTo": "user",
-          "columnsFrom": [
-            "user_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["user_id"],
+          "columnsTo": ["id"],
           "onDelete": "cascade",
           "onUpdate": "no action"
         }
@@ -1019,9 +979,7 @@
         "user_email_unique": {
           "name": "user_email_unique",
           "nullsNotDistinct": false,
-          "columns": [
-            "email"
-          ]
+          "columns": ["email"]
         }
       },
       "policies": {},
@@ -1155,12 +1113,8 @@
           "name": "breed_species_id_species_id_fk",
           "tableFrom": "breed",
           "tableTo": "species",
-          "columnsFrom": [
-            "species_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["species_id"],
+          "columnsTo": ["id"],
           "onDelete": "no action",
           "onUpdate": "no action"
         }
@@ -1295,12 +1249,8 @@
           "name": "client_user_id_user_id_fk",
           "tableFrom": "client",
           "tableTo": "user",
-          "columnsFrom": [
-            "user_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["user_id"],
+          "columnsTo": ["id"],
           "onDelete": "no action",
           "onUpdate": "no action"
         }
@@ -1310,9 +1260,7 @@
         "client_idNumber_unique": {
           "name": "client_idNumber_unique",
           "nullsNotDistinct": false,
-          "columns": [
-            "id_number"
-          ]
+          "columns": ["id_number"]
         }
       },
       "policies": {},
@@ -1441,12 +1389,8 @@
           "name": "patient_client_id_client_id_fk",
           "tableFrom": "patient",
           "tableTo": "client",
-          "columnsFrom": [
-            "client_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["client_id"],
+          "columnsTo": ["id"],
           "onDelete": "no action",
           "onUpdate": "no action"
         },
@@ -1454,12 +1398,8 @@
           "name": "patient_breed_id_breed_id_fk",
           "tableFrom": "patient",
           "tableTo": "breed",
-          "columnsFrom": [
-            "breed_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["breed_id"],
+          "columnsTo": ["id"],
           "onDelete": "no action",
           "onUpdate": "no action"
         }
@@ -1531,9 +1471,7 @@
         "species_name_unique": {
           "name": "species_name_unique",
           "nullsNotDistinct": false,
-          "columns": [
-            "name"
-          ]
+          "columns": ["name"]
         }
       },
       "policies": {},

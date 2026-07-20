@@ -1,5 +1,7 @@
 import { zodResolver } from "@hookform/resolvers/zod"
 import { authClient } from "@sanipatitas/desktop/auth/client/auth-client"
+import { ControlledCombobox } from "@sanipatitas/ui/components/form/controlled/controlled-combobox"
+import { ControlledInput } from "@sanipatitas/ui/components/form/controlled/controlled-input"
 import { Button } from "@sanipatitas/ui/components/ui/button"
 import {
   Dialog,
@@ -10,8 +12,6 @@ import {
   DialogTitle,
 } from "@sanipatitas/ui/components/ui/dialog"
 import { FieldGroup } from "@sanipatitas/ui/components/ui/field"
-import { ControlledCombobox } from "@sanipatitas/ui/components/form/controlled/controlled-combobox"
-import { ControlledInput } from "@sanipatitas/ui/components/form/controlled/controlled-input"
 import { useQueryClient } from "@tanstack/react-query"
 import { useEffect } from "react"
 import { useForm } from "react-hook-form"
@@ -50,7 +50,11 @@ interface UpdateUserDialogProps {
 }
 
 // Component
-export function UpdateUserDialog({ user, open, onOpenChange }: UpdateUserDialogProps) {
+export function UpdateUserDialog({
+  user,
+  open,
+  onOpenChange,
+}: UpdateUserDialogProps) {
   const queryClient = useQueryClient()
 
   const { control, handleSubmit, reset } = useForm({
@@ -174,7 +178,9 @@ export function UpdateUserDialog({ user, open, onOpenChange }: UpdateUserDialogP
             >
               {user?.banned ? "Desbanear" : "Banear"}
             </Button>
-            <DialogClose render={<Button variant="secondary">Cancelar</Button>} />
+            <DialogClose
+              render={<Button variant="secondary">Cancelar</Button>}
+            />
             <Button type="submit">
               <TbLoader2 className="size-4 animate-spin" />
               Guardar

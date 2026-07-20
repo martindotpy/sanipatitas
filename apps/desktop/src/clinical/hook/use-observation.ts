@@ -1,15 +1,15 @@
 import { useObservationQuery } from "@sanipatitas/desktop/clinical/store/observation-query-store"
-import { getApiClinicalObservationOptions } from "@sanipatitas/shared/api/client/@tanstack/react-query.gen"
 import {
+  deleteApiClinicalObservationById,
   postApiClinicalObservation,
   putApiClinicalObservationById,
-  deleteApiClinicalObservationById,
 } from "@sanipatitas/shared/api/client"
+import { getApiClinicalObservationOptions } from "@sanipatitas/shared/api/client/@tanstack/react-query.gen"
 import type {
   OpenapiCreateMedicalObservationRequest,
   OpenapiUpdateMedicalObservationRequest,
 } from "@sanipatitas/shared/api/client/types.gen"
-import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query"
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query"
 
 // Query key
 const observationKey = ["observations"] as const
@@ -45,7 +45,9 @@ export function useCreateObservation() {
     mutationFn: (body: OpenapiCreateMedicalObservationRequest) =>
       postApiClinicalObservation({ body, throwOnError: true }),
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: [...observationKey, query.patientId] })
+      queryClient.invalidateQueries({
+        queryKey: [...observationKey, query.patientId],
+      })
     },
   })
 }
@@ -55,10 +57,15 @@ export function useUpdateObservation() {
   const query = useObservationQuery()
 
   return useMutation({
-    mutationFn: ({ id, ...body }: { id: string } & OpenapiUpdateMedicalObservationRequest) =>
+    mutationFn: ({
+      id,
+      ...body
+    }: { id: string } & OpenapiUpdateMedicalObservationRequest) =>
       putApiClinicalObservationById({ path: { id }, body, throwOnError: true }),
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: [...observationKey, query.patientId] })
+      queryClient.invalidateQueries({
+        queryKey: [...observationKey, query.patientId],
+      })
     },
   })
 }
@@ -71,7 +78,9 @@ export function useDeleteObservation() {
     mutationFn: (id: string) =>
       deleteApiClinicalObservationById({ path: { id }, throwOnError: true }),
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: [...observationKey, query.patientId] })
+      queryClient.invalidateQueries({
+        queryKey: [...observationKey, query.patientId],
+      })
     },
   })
 }

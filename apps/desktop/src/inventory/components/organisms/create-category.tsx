@@ -2,6 +2,8 @@ import { type DialogRoot } from "@base-ui/react"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useCreateCategory } from "@sanipatitas/desktop/inventory/hook/use-category"
 import { zOpenapiCreateProductCategoryRequest } from "@sanipatitas/shared/api/client/zod.gen"
+import { ControlledInput } from "@sanipatitas/ui/components/form/controlled/controlled-input"
+import { ControlledTextarea } from "@sanipatitas/ui/components/form/controlled/controlled-textarea"
 import { Button } from "@sanipatitas/ui/components/ui/button"
 import {
   Dialog,
@@ -13,12 +15,10 @@ import {
   DialogTrigger,
 } from "@sanipatitas/ui/components/ui/dialog"
 import { FieldGroup } from "@sanipatitas/ui/components/ui/field"
-import { ControlledInput } from "@sanipatitas/ui/components/form/controlled/controlled-input"
-import { ControlledTextarea } from "@sanipatitas/ui/components/form/controlled/controlled-textarea"
 import { useRef } from "react"
 import { useForm } from "react-hook-form"
-import { toast } from "sonner"
 import { TbPlus } from "react-icons/tb"
+import { toast } from "sonner"
 
 // Component
 export function CreateCategory() {
@@ -29,7 +29,7 @@ export function CreateCategory() {
     resolver: zodResolver(zOpenapiCreateProductCategoryRequest),
     defaultValues: {
       name: "",
-      description: undefined,
+      description: "",
     },
   })
 
@@ -37,7 +37,7 @@ export function CreateCategory() {
     createMutation.mutate(
       {
         name: data.name,
-        description: data.description || undefined,
+        description: data.description,
       },
       {
         onSuccess: () => {
@@ -50,7 +50,7 @@ export function CreateCategory() {
               "Error al crear la categoría"
           )
         },
-      },
+      }
     )
   })
 

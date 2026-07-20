@@ -1,6 +1,6 @@
+import { useAppointmentSSE } from "@sanipatitas/desktop/appointment/components/organisms/appointment-sse"
 import { useAppointmentQuery } from "@sanipatitas/desktop/appointment/hook/use-appointment"
 import { useUpcomingAppointmentNotifications } from "@sanipatitas/desktop/appointment/hook/use-upcoming-appointment-notifications"
-import { useAppointmentSSE } from "@sanipatitas/desktop/appointment/components/organisms/appointment-sse"
 import { useAuthQuery } from "@sanipatitas/desktop/auth/hook/use-auth"
 import { requestNotificationPermission } from "@sanipatitas/desktop/core/utils/notify"
 import { HomeHeader } from "@sanipatitas/desktop/home/components/organisms/home-header"

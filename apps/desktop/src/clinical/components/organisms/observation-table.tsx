@@ -1,12 +1,11 @@
-import {
-  useObservations,
-  useDeleteObservation,
-} from "@sanipatitas/desktop/clinical/hook/use-observation"
-import { $observationQuery } from "@sanipatitas/desktop/clinical/store/observation-query-store"
+import type { ObservationDto } from "@sanipatitas/desktop/clinical/api/clinical-api"
 import { CreateObservation } from "@sanipatitas/desktop/clinical/components/organisms/create-observation"
 import { UpdateObservation } from "@sanipatitas/desktop/clinical/components/organisms/update-observation"
-import type { ObservationDto } from "@sanipatitas/desktop/clinical/api/clinical-api"
-import { Button } from "@sanipatitas/ui/components/ui/button"
+import {
+  useDeleteObservation,
+  useObservations,
+} from "@sanipatitas/desktop/clinical/hook/use-observation"
+import { $observationQuery } from "@sanipatitas/desktop/clinical/store/observation-query-store"
 import {
   AlertDialog,
   AlertDialogAction,
@@ -17,6 +16,9 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
 } from "@sanipatitas/ui/components/ui/alert-dialog"
+import { Badge } from "@sanipatitas/ui/components/ui/badge"
+import { Button } from "@sanipatitas/ui/components/ui/button"
+import { Spinner } from "@sanipatitas/ui/components/ui/spinner"
 import {
   Table,
   TableBody,
@@ -25,11 +27,9 @@ import {
   TableHeader,
   TableRow,
 } from "@sanipatitas/ui/components/ui/table"
-import { Badge } from "@sanipatitas/ui/components/ui/badge"
-import { Spinner } from "@sanipatitas/ui/components/ui/spinner"
 import { useEffect, useState } from "react"
-import { toast } from "sonner"
 import { TbPencil, TbTrash } from "react-icons/tb"
+import { toast } from "sonner"
 
 // Labels
 const CATEGORY_LABELS: Record<string, string> = {
@@ -39,7 +39,10 @@ const CATEGORY_LABELS: Record<string, string> = {
   GENERAL: "General",
 }
 
-const CATEGORY_VARIANTS: Record<string, "default" | "secondary" | "destructive" | "outline"> = {
+const CATEGORY_VARIANTS: Record<
+  string,
+  "default" | "secondary" | "destructive" | "outline"
+> = {
   VITAL_SIGNS: "default",
   LABORATORY: "secondary",
   EXAM: "outline",
@@ -53,12 +56,13 @@ const STATUS_LABELS: Record<string, string> = {
   CANCELLED: "Cancelado",
 }
 
-const STATUS_VARIANTS: Record<string, "default" | "secondary" | "destructive"> = {
-  PRELIMINARY: "secondary",
-  FINAL: "default",
-  AMENDED: "default",
-  CANCELLED: "destructive",
-}
+const STATUS_VARIANTS: Record<string, "default" | "secondary" | "destructive"> =
+  {
+    PRELIMINARY: "secondary",
+    FINAL: "default",
+    AMENDED: "default",
+    CANCELLED: "destructive",
+  }
 
 // Props
 interface ObservationTableProps {
@@ -71,7 +75,8 @@ export function ObservationTable({ patientId }: ObservationTableProps) {
   const deleteMutation = useDeleteObservation()
 
   const observations = observationsQuery.data?.data ?? []
-  const [editingObservation, setEditingObservation] = useState<ObservationDto | null>(null)
+  const [editingObservation, setEditingObservation] =
+    useState<ObservationDto | null>(null)
   const [editOpen, setEditOpen] = useState(false)
   const [deleteTarget, setDeleteTarget] = useState<ObservationDto | null>(null)
   const [deleteOpen, setDeleteOpen] = useState(false)
@@ -82,18 +87,18 @@ export function ObservationTable({ patientId }: ObservationTableProps) {
 
   const handleDelete = () => {
     if (!deleteTarget) return
-    deleteMutation.mutate(
-      deleteTarget.id,
-      {
-        onSuccess: () => {
-          setDeleteOpen(false)
-          setDeleteTarget(null)
-        },
-        onError: (error) => {
-          toast.error((error as { detail?: string })?.detail ?? "Error al eliminar la observación")
-        },
-      }
-    )
+    deleteMutation.mutate(deleteTarget.id, {
+      onSuccess: () => {
+        setDeleteOpen(false)
+        setDeleteTarget(null)
+      },
+      onError: (error) => {
+        toast.error(
+          (error as { detail?: string })?.detail ??
+            "Error al eliminar la observación"
+        )
+      },
+    })
   }
 
   if (observationsQuery.isLoading) {
@@ -108,7 +113,8 @@ export function ObservationTable({ patientId }: ObservationTableProps) {
     <>
       <div className="flex items-center justify-between">
         <p className="text-muted-foreground text-sm">
-          {observations.length} observación{observations.length !== 1 ? "es" : ""}
+          {observations.length} observación
+          {observations.length !== 1 ? "es" : ""}
         </p>
 
         <CreateObservation patientId={patientId} />
@@ -133,13 +139,20 @@ export function ObservationTable({ patientId }: ObservationTableProps) {
           <TableBody>
             {observations.map((observation) => (
               <TableRow key={observation.id}>
-                <TableCell className="font-medium">{observation.code}</TableCell>
+                <TableCell className="font-medium">
+                  {observation.code}
+                </TableCell>
                 <TableCell>{observation.value}</TableCell>
                 <TableCell>{observation.unit ?? "—"}</TableCell>
                 <TableCell>
                   {observation.category ? (
-                    <Badge variant={CATEGORY_VARIANTS[observation.category] ?? "default"}>
-                      {CATEGORY_LABELS[observation.category] ?? observation.category}
+                    <Badge
+                      variant={
+                        CATEGORY_VARIANTS[observation.category] ?? "default"
+                      }
+                    >
+                      {CATEGORY_LABELS[observation.category] ??
+                        observation.category}
                     </Badge>
                   ) : (
                     "—"
@@ -147,7 +160,9 @@ export function ObservationTable({ patientId }: ObservationTableProps) {
                 </TableCell>
                 <TableCell>
                   {observation.status ? (
-                    <Badge variant={STATUS_VARIANTS[observation.status] ?? "default"}>
+                    <Badge
+                      variant={STATUS_VARIANTS[observation.status] ?? "default"}
+                    >
                       {STATUS_LABELS[observation.status] ?? observation.status}
                     </Badge>
                   ) : (
@@ -199,7 +214,8 @@ export function ObservationTable({ patientId }: ObservationTableProps) {
           <AlertDialogHeader>
             <AlertDialogTitle>Eliminar observación</AlertDialogTitle>
             <AlertDialogDescription>
-              ¿Estás seguro de que deseas eliminar &quot;{deleteTarget?.code}&quot;? Esta acción no se puede deshacer.
+              ¿Estás seguro de que deseas eliminar &quot;{deleteTarget?.code}
+              &quot;? Esta acción no se puede deshacer.
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>

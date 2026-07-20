@@ -1,29 +1,24 @@
-import { DeleteAppointmentAlert } from "@sanipatitas/desktop/appointment/components/organisms/delete-appointment"
-import { UpdateAppointment } from "@sanipatitas/desktop/appointment/components/organisms/update-appointment"
 import { AppointmentDetailsSheet } from "@sanipatitas/desktop/appointment/components/organisms/appointment-details-sheet"
 import { CreateAppointment } from "@sanipatitas/desktop/appointment/components/organisms/create-appointment"
+import { DeleteAppointmentAlert } from "@sanipatitas/desktop/appointment/components/organisms/delete-appointment"
+import { UpdateAppointment } from "@sanipatitas/desktop/appointment/components/organisms/update-appointment"
 import { useAppointment } from "@sanipatitas/desktop/appointment/hook/use-appointment"
 import { $appointmentQuery } from "@sanipatitas/desktop/appointment/store/appointment-query-store"
-import {
-  useCalendarMonth,
-  useCalendarYear,
-} from "@sanipatitas/ui/components/ui/calendar"
+import type { OpenapiAppointmentDto } from "@sanipatitas/shared/api/client/types.gen"
+import type { Feature, Status } from "@sanipatitas/ui/components/ui/calendar"
 import {
   CalendarBody,
   CalendarDate,
-  CalendarDatePicker,
   CalendarDatePagination,
+  CalendarDatePicker,
   CalendarHeader,
   CalendarItem,
   CalendarMonthPicker,
   CalendarProvider,
   CalendarYearPicker,
+  useCalendarMonth,
+  useCalendarYear,
 } from "@sanipatitas/ui/components/ui/calendar"
-import type {
-  Feature,
-  Status,
-} from "@sanipatitas/ui/components/ui/calendar"
-import type { OpenapiAppointmentDto } from "@sanipatitas/shared/api/client/types.gen"
 import { useEffect, useMemo, useState } from "react"
 
 // Constants
@@ -108,7 +103,10 @@ export function AppointmentCalendarView() {
 
   return (
     <>
-      <CalendarProvider locale="es-ES" className="flex h-full w-full flex-col rounded-lg border">
+      <CalendarProvider
+        locale="es-ES"
+        className="flex h-full w-full flex-col rounded-lg border"
+      >
         <CalendarDate>
           <CalendarDatePicker>
             <CalendarMonthPicker />

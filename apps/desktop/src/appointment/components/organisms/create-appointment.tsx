@@ -1,12 +1,14 @@
 import { type DialogRoot } from "@base-ui/react"
-import { useUser } from "@sanipatitas/desktop/auth/hook/use-user"
+import { zodResolver } from "@hookform/resolvers/zod"
 import { useAppointment } from "@sanipatitas/desktop/appointment/hook/use-appointment"
-import { getApiPatientOptions } from "@sanipatitas/shared/api/client/@tanstack/react-query.gen"
-import { getApiClientOptions } from "@sanipatitas/shared/api/client/@tanstack/react-query.gen"
-import { postApiAppointmentMutation } from "@sanipatitas/shared/api/client/@tanstack/react-query.gen"
+import { useUser } from "@sanipatitas/desktop/auth/hook/use-user"
+import {
+  getApiClientOptions,
+  getApiPatientOptions,
+  postApiAppointmentMutation,
+} from "@sanipatitas/shared/api/client/@tanstack/react-query.gen"
 import { zOpenapiCreateAppointmentRequest } from "@sanipatitas/shared/api/client/zod.gen"
 import { uuidV7 } from "@sanipatitas/shared/lib/uuid"
-import { zodResolver } from "@hookform/resolvers/zod"
 import { ControlledCombobox } from "@sanipatitas/ui/components/form/controlled/controlled-combobox"
 import { ControlledInput } from "@sanipatitas/ui/components/form/controlled/controlled-input"
 import { ControlledTextarea } from "@sanipatitas/ui/components/form/controlled/controlled-textarea"
@@ -24,8 +26,8 @@ import { FieldGroup } from "@sanipatitas/ui/components/ui/field"
 import { useMutation, useQuery } from "@tanstack/react-query"
 import { useMemo, useRef } from "react"
 import { useForm } from "react-hook-form"
-import { toast } from "sonner"
 import { TbPlus } from "react-icons/tb"
+import { toast } from "sonner"
 
 // Constants
 const STATUS_OPTIONS = [
@@ -98,7 +100,9 @@ export function CreateAppointment() {
       reset()
     },
     onError: (error) => {
-      toast.error((error as { detail?: string })?.detail ?? "Error al crear la cita")
+      toast.error(
+        (error as { detail?: string })?.detail ?? "Error al crear la cita"
+      )
     },
   })
 
@@ -107,14 +111,11 @@ export function CreateAppointment() {
       body: {
         id: uuidV7(),
         ...data,
-        endTime: data.endTime || undefined,
-        reason: data.reason || undefined,
-        notes: data.notes || undefined,
-        appointmentClass: (data.appointmentClass as
-          | "AMBULATORY"
-          | "EMERGENCY"
-          | "HOME_VISIT"
-          | undefined) || undefined,
+        endTime: data.endTime,
+        reason: data.reason,
+        notes: data.notes,
+        appointmentClass: data.appointmentClass as
+          "AMBULATORY" | "EMERGENCY" | "HOME_VISIT",
       },
     })
   })
@@ -188,23 +189,13 @@ export function CreateAppointment() {
             searchPlaceholder="Buscar dueño..."
           />
 
-          <ControlledTextarea
-            control={control}
-            name="reason"
-            label="Motivo"
-          />
+          <ControlledTextarea control={control} name="reason" label="Motivo" />
 
-          <ControlledTextarea
-            control={control}
-            name="notes"
-            label="Notas"
-          />
+          <ControlledTextarea control={control} name="notes" label="Notas" />
         </FieldGroup>
 
         <DialogFooter>
-          <DialogClose
-            render={<Button variant="secondary">Cancelar</Button>}
-          />
+          <DialogClose render={<Button variant="secondary">Cancelar</Button>} />
           <Button type="submit">Crear</Button>
         </DialogFooter>
       </DialogContent>

@@ -13,8 +13,7 @@ const loggerConfiguration: ElysiaLoggerOptions = {
   customProps(ctx) {
     const ip = ctx.request.headers.get("x-real-ip") || undefined
     const store = (ctx as Record<string, unknown>).store as
-      | Record<string, unknown>
-      | undefined
+      Record<string, unknown> | undefined
     const correlationId =
       (store?.correlationId as string) ||
       ctx.request.headers.get("x-correlation-id") ||

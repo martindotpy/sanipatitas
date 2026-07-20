@@ -1,12 +1,14 @@
 import { type DialogRoot } from "@base-ui/react"
-import { useUser } from "@sanipatitas/desktop/auth/hook/use-user"
+import { zodResolver } from "@hookform/resolvers/zod"
 import { useAppointment } from "@sanipatitas/desktop/appointment/hook/use-appointment"
-import { getApiPatientOptions } from "@sanipatitas/shared/api/client/@tanstack/react-query.gen"
-import { getApiClientOptions } from "@sanipatitas/shared/api/client/@tanstack/react-query.gen"
-import { putApiAppointmentByIdMutation } from "@sanipatitas/shared/api/client/@tanstack/react-query.gen"
+import { useUser } from "@sanipatitas/desktop/auth/hook/use-user"
+import {
+  getApiClientOptions,
+  getApiPatientOptions,
+  putApiAppointmentByIdMutation,
+} from "@sanipatitas/shared/api/client/@tanstack/react-query.gen"
 import type { OpenapiAppointmentDto } from "@sanipatitas/shared/api/client/types.gen"
 import { zOpenapiUpdateAppointmentRequest } from "@sanipatitas/shared/api/client/zod.gen"
-import { zodResolver } from "@hookform/resolvers/zod"
 import { ControlledCombobox } from "@sanipatitas/ui/components/form/controlled/controlled-combobox"
 import { ControlledInput } from "@sanipatitas/ui/components/form/controlled/controlled-input"
 import { ControlledTextarea } from "@sanipatitas/ui/components/form/controlled/controlled-textarea"
@@ -123,7 +125,9 @@ export function UpdateAppointment({
       appointmentQuery.refetch()
     },
     onError: (error) => {
-      toast.error((error as { detail?: string })?.detail ?? "Error al actualizar la cita")
+      toast.error(
+        (error as { detail?: string })?.detail ?? "Error al actualizar la cita"
+      )
     },
   })
 
@@ -136,14 +140,11 @@ export function UpdateAppointment({
         body: {
           ...data,
           veterinarianId: user?.id ?? appointment.veterinarian.id,
-          endTime: data.endTime || undefined,
-          reason: data.reason || undefined,
-          notes: data.notes || undefined,
-          appointmentClass: (data.appointmentClass as
-            | "AMBULATORY"
-            | "EMERGENCY"
-            | "HOME_VISIT"
-            | undefined) || undefined,
+          endTime: data.endTime,
+          reason: data.reason,
+          notes: data.notes,
+          appointmentClass: data.appointmentClass as
+            "AMBULATORY" | "EMERGENCY" | "HOME_VISIT",
         },
       })
     },
@@ -217,23 +218,13 @@ export function UpdateAppointment({
             searchPlaceholder="Buscar dueño..."
           />
 
-          <ControlledTextarea
-            control={control}
-            name="reason"
-            label="Motivo"
-          />
+          <ControlledTextarea control={control} name="reason" label="Motivo" />
 
-          <ControlledTextarea
-            control={control}
-            name="notes"
-            label="Notas"
-          />
+          <ControlledTextarea control={control} name="notes" label="Notas" />
         </FieldGroup>
 
         <DialogFooter>
-          <DialogClose
-            render={<Button variant="secondary">Cancelar</Button>}
-          />
+          <DialogClose render={<Button variant="secondary">Cancelar</Button>} />
           <Button type="submit">Guardar</Button>
         </DialogFooter>
       </DialogContent>

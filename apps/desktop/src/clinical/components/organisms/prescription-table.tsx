@@ -1,12 +1,11 @@
-import {
-  usePrescriptions,
-  useDeletePrescription,
-} from "@sanipatitas/desktop/clinical/hook/use-prescription"
-import { $prescriptionQuery } from "@sanipatitas/desktop/clinical/store/prescription-query-store"
+import type { PrescriptionDto } from "@sanipatitas/desktop/clinical/api/clinical-api"
 import { CreatePrescription } from "@sanipatitas/desktop/clinical/components/organisms/create-prescription"
 import { UpdatePrescription } from "@sanipatitas/desktop/clinical/components/organisms/update-prescription"
-import type { PrescriptionDto } from "@sanipatitas/desktop/clinical/api/clinical-api"
-import { Button } from "@sanipatitas/ui/components/ui/button"
+import {
+  useDeletePrescription,
+  usePrescriptions,
+} from "@sanipatitas/desktop/clinical/hook/use-prescription"
+import { $prescriptionQuery } from "@sanipatitas/desktop/clinical/store/prescription-query-store"
 import {
   AlertDialog,
   AlertDialogAction,
@@ -17,6 +16,9 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
 } from "@sanipatitas/ui/components/ui/alert-dialog"
+import { Badge } from "@sanipatitas/ui/components/ui/badge"
+import { Button } from "@sanipatitas/ui/components/ui/button"
+import { Spinner } from "@sanipatitas/ui/components/ui/spinner"
 import {
   Table,
   TableBody,
@@ -25,8 +27,6 @@ import {
   TableHeader,
   TableRow,
 } from "@sanipatitas/ui/components/ui/table"
-import { Badge } from "@sanipatitas/ui/components/ui/badge"
-import { Spinner } from "@sanipatitas/ui/components/ui/spinner"
 import { useEffect, useState } from "react"
 import { TbPencil, TbTrash } from "react-icons/tb"
 import { toast } from "sonner"
@@ -38,11 +38,12 @@ const STATUS_LABELS: Record<string, string> = {
   CANCELLED: "Cancelada",
 }
 
-const STATUS_VARIANTS: Record<string, "default" | "secondary" | "destructive"> = {
-  ACTIVE: "default",
-  COMPLETED: "secondary",
-  CANCELLED: "destructive",
-}
+const STATUS_VARIANTS: Record<string, "default" | "secondary" | "destructive"> =
+  {
+    ACTIVE: "default",
+    COMPLETED: "secondary",
+    CANCELLED: "destructive",
+  }
 
 // Props
 interface PrescriptionTableProps {
@@ -55,7 +56,8 @@ export function PrescriptionTable({ patientId }: PrescriptionTableProps) {
   const deleteMutation = useDeletePrescription()
 
   const prescriptions = prescriptionsQuery.data?.data ?? []
-  const [editingPrescription, setEditingPrescription] = useState<PrescriptionDto | null>(null)
+  const [editingPrescription, setEditingPrescription] =
+    useState<PrescriptionDto | null>(null)
   const [editOpen, setEditOpen] = useState(false)
   const [deleteTarget, setDeleteTarget] = useState<PrescriptionDto | null>(null)
   const [deleteOpen, setDeleteOpen] = useState(false)
@@ -73,7 +75,10 @@ export function PrescriptionTable({ patientId }: PrescriptionTableProps) {
         toast.success("Receta eliminada correctamente")
       },
       onError: (error) => {
-        toast.error((error as { detail?: string })?.detail ?? "Error al eliminar la receta")
+        toast.error(
+          (error as { detail?: string })?.detail ??
+            "Error al eliminar la receta"
+        )
       },
     })
   }
@@ -118,13 +123,22 @@ export function PrescriptionTable({ patientId }: PrescriptionTableProps) {
                   {new Date(prescription.issueDate).toLocaleDateString()}
                 </TableCell>
                 <TableCell>
-                  <Badge variant={STATUS_VARIANTS[prescription.status ?? ""] ?? "default"}>
-                    {STATUS_LABELS[prescription.status ?? ""] ?? prescription.status}
+                  <Badge
+                    variant={
+                      STATUS_VARIANTS[prescription.status ?? ""] ?? "default"
+                    }
+                  >
+                    {STATUS_LABELS[prescription.status ?? ""] ??
+                      prescription.status}
                   </Badge>
                 </TableCell>
-                <TableCell>{prescription.items.length} medicamento{prescription.items.length !== 1 ? "s" : ""}</TableCell>
                 <TableCell>
-                  {prescription.veterinarian?.name} {prescription.veterinarian?.lastName ?? ""}
+                  {prescription.items.length} medicamento
+                  {prescription.items.length !== 1 ? "s" : ""}
+                </TableCell>
+                <TableCell>
+                  {prescription.veterinarian?.name}{" "}
+                  {prescription.veterinarian?.lastName ?? ""}
                 </TableCell>
                 <TableCell>
                   <div className="flex items-center gap-1">
@@ -171,7 +185,8 @@ export function PrescriptionTable({ patientId }: PrescriptionTableProps) {
           <AlertDialogHeader>
             <AlertDialogTitle>Eliminar receta</AlertDialogTitle>
             <AlertDialogDescription>
-              ¿Estás seguro de que deseas eliminar esta receta? Esta acción no se puede deshacer.
+              ¿Estás seguro de que deseas eliminar esta receta? Esta acción no
+              se puede deshacer.
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>

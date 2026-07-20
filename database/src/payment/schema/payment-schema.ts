@@ -1,3 +1,4 @@
+import { billingTable } from "@sanipatitas/database/payment/schema/billing-schema"
 import { sql } from "drizzle-orm"
 import {
   check,
@@ -7,7 +8,6 @@ import {
   uuid,
   varchar,
 } from "drizzle-orm/pg-core"
-import { billingTable } from "@sanipatitas/database/payment/schema/billing-schema"
 
 // Enums
 export const paymentMethods = [

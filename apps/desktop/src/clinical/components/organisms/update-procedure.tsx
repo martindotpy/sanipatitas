@@ -1,12 +1,17 @@
 import { type DialogRoot } from "@base-ui/react"
 import { zodResolver } from "@hookform/resolvers/zod"
-import { useUpdateProcedure } from "@sanipatitas/desktop/clinical/hook/use-procedure"
 import { authClient } from "@sanipatitas/desktop/auth/client/auth-client"
 import type {
-  ProcedureDto,
   OpenapiProcedureCategory,
   OpenapiProcedureStatus,
+  ProcedureDto,
 } from "@sanipatitas/desktop/clinical/api/clinical-api"
+import { useUpdateProcedure } from "@sanipatitas/desktop/clinical/hook/use-procedure"
+import { zOpenapiUpdateProcedureRequest } from "@sanipatitas/shared/api/client/zod.gen"
+import { ControlledCombobox } from "@sanipatitas/ui/components/form/controlled/controlled-combobox"
+import { ControlledDatetimeInput } from "@sanipatitas/ui/components/form/controlled/controlled-datetime-input"
+import { ControlledInput } from "@sanipatitas/ui/components/form/controlled/controlled-input"
+import { ControlledTextarea } from "@sanipatitas/ui/components/form/controlled/controlled-textarea"
 import { Button } from "@sanipatitas/ui/components/ui/button"
 import {
   Dialog,
@@ -17,15 +22,10 @@ import {
   DialogTitle,
 } from "@sanipatitas/ui/components/ui/dialog"
 import { FieldGroup } from "@sanipatitas/ui/components/ui/field"
-import { ControlledInput } from "@sanipatitas/ui/components/form/controlled/controlled-input"
-import { ControlledDatetimeInput } from "@sanipatitas/ui/components/form/controlled/controlled-datetime-input"
-import { ControlledCombobox } from "@sanipatitas/ui/components/form/controlled/controlled-combobox"
-import { ControlledTextarea } from "@sanipatitas/ui/components/form/controlled/controlled-textarea"
 import { useQuery } from "@tanstack/react-query"
 import { useEffect, useMemo, useRef } from "react"
 import { useForm } from "react-hook-form"
 import { toast } from "sonner"
-import { z } from "zod"
 
 // Options
 const CATEGORY_OPTIONS = [
@@ -44,17 +44,7 @@ const STATUS_OPTIONS = [
 ]
 
 // Schema
-const schema = z.object({
-  name: z.string().min(1, "El nombre es requerido").optional(),
-  code: z.string().optional(),
-  category: z.string().optional(),
-  reason: z.string().optional(),
-  outcome: z.string().optional(),
-  complications: z.string().optional(),
-  performedDate: z.string().optional(),
-  status: z.string().optional(),
-  veterinarianId: z.string().optional(),
-})
+// Using imported zOpenapiUpdateProcedureRequest from zod.gen
 
 // Props
 interface UpdateProcedureProps {
@@ -87,25 +77,28 @@ export function UpdateProcedure({
 
   const userOptions = useMemo(
     () =>
-      (usersQuery.data?.users ?? []).map((u: { id: string; name: string; lastName?: string }) => ({
-        value: u.id,
-        label: `${u.name} ${u.lastName ?? ""}`,
-      })),
+      (usersQuery.data?.users ?? []).map(
+        (u: { id: string; name: string; lastName?: string }) => ({
+          value: u.id,
+          label: `${u.name} ${u.lastName ?? ""}`,
+        })
+      ),
     [usersQuery.data]
   )
 
   const { control, handleSubmit, reset } = useForm({
-    resolver: zodResolver(schema),
+    resolver: zodResolver(zOpenapiUpdateProcedureRequest),
     defaultValues: {
-      name: undefined,
-      code: undefined,
-      category: undefined,
-      reason: undefined,
-      outcome: undefined,
-      complications: undefined,
-      performedDate: undefined,
-      status: undefined,
-      veterinarianId: undefined,
+      name: "",
+      code: "",
+      category: "",
+      reason: "",
+      outcome: "",
+      complications: "",
+      performedDate: "",
+      status: "",
+      patientId: "",
+      veterinarianId: "",
     },
   })
 
@@ -113,13 +106,13 @@ export function UpdateProcedure({
     if (procedure) {
       reset({
         name: procedure.name,
-        code: procedure.code ?? undefined,
-        category: procedure.category ?? undefined,
-        reason: procedure.reason ?? undefined,
-        outcome: procedure.outcome ?? undefined,
-        complications: procedure.complications ?? undefined,
-        performedDate: procedure.performedDate ?? undefined,
-        status: procedure.status ?? undefined,
+        code: procedure.code ?? "",
+        category: procedure.category ?? "",
+        reason: procedure.reason ?? "",
+        outcome: procedure.outcome ?? "",
+        complications: procedure.complications ?? "",
+        performedDate: procedure.performedDate ?? "",
+        status: procedure.status ?? "",
         veterinarianId: procedure.veterinarian?.id ?? "",
       })
     }
@@ -133,13 +126,13 @@ export function UpdateProcedure({
         id: procedure.id,
         ...data,
         name: data.name!,
-        code: data.code || undefined,
-        category: data.category as OpenapiProcedureCategory | undefined,
-        reason: data.reason || undefined,
-        outcome: data.outcome || undefined,
-        complications: data.complications || undefined,
+        code: data.code,
+        category: data.category as OpenapiProcedureCategory,
+        reason: data.reason,
+        outcome: data.outcome,
+        complications: data.complications,
         performedDate: data.performedDate,
-        status: data.status as OpenapiProcedureStatus | undefined,
+        status: data.status as OpenapiProcedureStatus,
         veterinarianId: data.veterinarianId!,
         patientId,
       },
@@ -148,14 +141,21 @@ export function UpdateProcedure({
           dialogActionsRef.current?.close()
         },
         onError: (error) => {
-          toast.error((error as { detail?: string })?.detail ?? "Error al actualizar el procedimiento")
+          toast.error(
+            (error as { detail?: string })?.detail ??
+              "Error al actualizar el procedimiento"
+          )
         },
       }
     )
   })
 
   return (
-    <Dialog open={open} onOpenChange={onOpenChange} actionsRef={dialogActionsRef}>
+    <Dialog
+      open={open}
+      onOpenChange={onOpenChange}
+      actionsRef={dialogActionsRef}
+    >
       <DialogContent render={<form onSubmit={onSubmit} />}>
         <DialogHeader>
           <DialogTitle>Editar procedimiento</DialogTitle>
@@ -198,11 +198,7 @@ export function UpdateProcedure({
             label="Fecha de realización"
           />
 
-          <ControlledTextarea
-            control={control}
-            name="reason"
-            label="Motivo"
-          />
+          <ControlledTextarea control={control} name="reason" label="Motivo" />
 
           <ControlledTextarea
             control={control}

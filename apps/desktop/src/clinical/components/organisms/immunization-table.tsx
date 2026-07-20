@@ -1,12 +1,11 @@
-import {
-  useImmunizations,
-  useDeleteImmunization,
-} from "@sanipatitas/desktop/clinical/hook/use-immunization"
-import { $immunizationQuery } from "@sanipatitas/desktop/clinical/store/immunization-query-store"
+import type { ImmunizationDto } from "@sanipatitas/desktop/clinical/api/clinical-api"
 import { CreateImmunization } from "@sanipatitas/desktop/clinical/components/organisms/create-immunization"
 import { UpdateImmunization } from "@sanipatitas/desktop/clinical/components/organisms/update-immunization"
-import type { ImmunizationDto } from "@sanipatitas/desktop/clinical/api/clinical-api"
-import { Button } from "@sanipatitas/ui/components/ui/button"
+import {
+  useDeleteImmunization,
+  useImmunizations,
+} from "@sanipatitas/desktop/clinical/hook/use-immunization"
+import { $immunizationQuery } from "@sanipatitas/desktop/clinical/store/immunization-query-store"
 import {
   AlertDialog,
   AlertDialogAction,
@@ -17,6 +16,9 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
 } from "@sanipatitas/ui/components/ui/alert-dialog"
+import { Badge } from "@sanipatitas/ui/components/ui/badge"
+import { Button } from "@sanipatitas/ui/components/ui/button"
+import { Spinner } from "@sanipatitas/ui/components/ui/spinner"
 import {
   Table,
   TableBody,
@@ -25,11 +27,9 @@ import {
   TableHeader,
   TableRow,
 } from "@sanipatitas/ui/components/ui/table"
-import { Badge } from "@sanipatitas/ui/components/ui/badge"
-import { Spinner } from "@sanipatitas/ui/components/ui/spinner"
 import { useEffect, useState } from "react"
-import { toast } from "sonner"
 import { TbPencil, TbTrash } from "react-icons/tb"
+import { toast } from "sonner"
 
 // Labels
 const STATUS_LABELS: Record<string, string> = {
@@ -38,11 +38,12 @@ const STATUS_LABELS: Record<string, string> = {
   NOT_DONE: "No realizada",
 }
 
-const STATUS_VARIANTS: Record<string, "default" | "secondary" | "destructive"> = {
-  COMPLETED: "default",
-  ENTERED_IN_ERROR: "secondary",
-  NOT_DONE: "destructive",
-}
+const STATUS_VARIANTS: Record<string, "default" | "secondary" | "destructive"> =
+  {
+    COMPLETED: "default",
+    ENTERED_IN_ERROR: "secondary",
+    NOT_DONE: "destructive",
+  }
 
 // Props
 interface ImmunizationTableProps {
@@ -55,7 +56,8 @@ export function ImmunizationTable({ patientId }: ImmunizationTableProps) {
   const deleteMutation = useDeleteImmunization()
 
   const immunizations = immunizationsQuery.data?.data ?? []
-  const [editingImmunization, setEditingImmunization] = useState<ImmunizationDto | null>(null)
+  const [editingImmunization, setEditingImmunization] =
+    useState<ImmunizationDto | null>(null)
   const [editOpen, setEditOpen] = useState(false)
   const [deleteTarget, setDeleteTarget] = useState<ImmunizationDto | null>(null)
   const [deleteOpen, setDeleteOpen] = useState(false)
@@ -66,18 +68,18 @@ export function ImmunizationTable({ patientId }: ImmunizationTableProps) {
 
   const handleDelete = () => {
     if (!deleteTarget) return
-    deleteMutation.mutate(
-      deleteTarget.id,
-      {
-        onSuccess: () => {
-          setDeleteOpen(false)
-          setDeleteTarget(null)
-        },
-        onError: (error) => {
-          toast.error((error as { detail?: string })?.detail ?? "Error al eliminar la inmunización")
-        },
-      }
-    )
+    deleteMutation.mutate(deleteTarget.id, {
+      onSuccess: () => {
+        setDeleteOpen(false)
+        setDeleteTarget(null)
+      },
+      onError: (error) => {
+        toast.error(
+          (error as { detail?: string })?.detail ??
+            "Error al eliminar la inmunización"
+        )
+      },
+    })
   }
 
   if (immunizationsQuery.isLoading) {
@@ -92,7 +94,8 @@ export function ImmunizationTable({ patientId }: ImmunizationTableProps) {
     <>
       <div className="flex items-center justify-between">
         <p className="text-muted-foreground text-sm">
-          {immunizations.length} inmunizacion{immunizations.length !== 1 ? "es" : ""}
+          {immunizations.length} inmunizacion
+          {immunizations.length !== 1 ? "es" : ""}
         </p>
 
         <CreateImmunization patientId={patientId} />
@@ -117,13 +120,20 @@ export function ImmunizationTable({ patientId }: ImmunizationTableProps) {
           <TableBody>
             {immunizations.map((immunization) => (
               <TableRow key={immunization.id}>
-                <TableCell className="font-medium">{immunization.vaccineName}</TableCell>
+                <TableCell className="font-medium">
+                  {immunization.vaccineName}
+                </TableCell>
                 <TableCell>{immunization.vaccineCode}</TableCell>
                 <TableCell>{immunization.administrationDate}</TableCell>
                 <TableCell>{immunization.lotNumber ?? "—"}</TableCell>
                 <TableCell>
-                  <Badge variant={STATUS_VARIANTS[immunization.status ?? ""] ?? "default"}>
-                    {STATUS_LABELS[immunization.status ?? ""] ?? immunization.status}
+                  <Badge
+                    variant={
+                      STATUS_VARIANTS[immunization.status ?? ""] ?? "default"
+                    }
+                  >
+                    {STATUS_LABELS[immunization.status ?? ""] ??
+                      immunization.status}
                   </Badge>
                 </TableCell>
                 <TableCell>
@@ -171,7 +181,9 @@ export function ImmunizationTable({ patientId }: ImmunizationTableProps) {
           <AlertDialogHeader>
             <AlertDialogTitle>Eliminar inmunización</AlertDialogTitle>
             <AlertDialogDescription>
-              ¿Estás seguro de que deseas eliminar &quot;{deleteTarget?.vaccineName}&quot;? Esta acción no se puede deshacer.
+              ¿Estás seguro de que deseas eliminar &quot;
+              {deleteTarget?.vaccineName}&quot;? Esta acción no se puede
+              deshacer.
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>

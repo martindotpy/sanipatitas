@@ -1,6 +1,10 @@
 import { DataTableViewOptions } from "@sanipatitas/ui/components/ui/data-table-view-options"
 import { cn } from "@sanipatitas/ui/lib/tailwind"
-import type { Table, VisibilityState, useReactTable } from "@tanstack/react-table"
+import type {
+  Table,
+  VisibilityState,
+  useReactTable,
+} from "@tanstack/react-table"
 
 // Types
 export interface DataTableToolbarProps<TData> {

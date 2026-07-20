@@ -5,13 +5,9 @@ import { useSpecies } from "@sanipatitas/desktop/species/hook/use-species"
 import { postApiBreedMutation } from "@sanipatitas/shared/api/client/@tanstack/react-query.gen"
 import { zOpenapiCreateBreedRequest } from "@sanipatitas/shared/api/client/zod.gen"
 import { uuidV7 } from "@sanipatitas/shared/lib/uuid"
-import {
-  ControlledInput,
-} from "@sanipatitas/ui/components/form/controlled/controlled-input"
 import { ControlledCombobox } from "@sanipatitas/ui/components/form/controlled/controlled-combobox"
-import {
-  ControlledTextarea,
-} from "@sanipatitas/ui/components/form/controlled/controlled-textarea"
+import { ControlledInput } from "@sanipatitas/ui/components/form/controlled/controlled-input"
+import { ControlledTextarea } from "@sanipatitas/ui/components/form/controlled/controlled-textarea"
 import { Button } from "@sanipatitas/ui/components/ui/button"
 import {
   Dialog,
@@ -26,8 +22,8 @@ import { FieldGroup } from "@sanipatitas/ui/components/ui/field"
 import { useMutation } from "@tanstack/react-query"
 import { useMemo, useRef } from "react"
 import { useForm } from "react-hook-form"
-import { toast } from "sonner"
 import { TbPlus } from "react-icons/tb"
+import { toast } from "sonner"
 
 export function CreateBreed() {
   const dialogActionsRef = useRef<DialogRoot.Actions | null>(null)
@@ -61,7 +57,9 @@ export function CreateBreed() {
       reset()
     },
     onError: (error) => {
-      toast.error((error as { detail?: string })?.detail ?? "Error al crear la raza")
+      toast.error(
+        (error as { detail?: string })?.detail ?? "Error al crear la raza"
+      )
     },
   })
 

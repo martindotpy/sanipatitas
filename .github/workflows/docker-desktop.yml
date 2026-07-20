@@ -5,32 +5,32 @@ on:
     branches:
       - main
     paths:
-      - 'apps/desktop/**'
-      - 'shared/typescript/**'
-      - 'shared/ui/**'
-      - 'services/auth/src/**'
-      - 'patches/**'
-      - 'package.json'
-      - 'bun.lock'
-      - 'bunfig.toml'
-      - 'tsconfig.base.json'
-      - 'assets/**'
-      - '.github/workflows/docker-desktop.yml'
+      - "apps/desktop/**"
+      - "shared/typescript/**"
+      - "shared/ui/**"
+      - "services/auth/src/**"
+      - "patches/**"
+      - "package.json"
+      - "bun.lock"
+      - "bunfig.toml"
+      - "tsconfig.base.json"
+      - "assets/**"
+      - ".github/workflows/docker-desktop.yml"
   pull_request:
     branches:
       - main
     paths:
-      - 'apps/desktop/**'
-      - 'shared/typescript/**'
-      - 'shared/ui/**'
-      - 'services/auth/src/**'
-      - 'patches/**'
-      - 'package.json'
-      - 'bun.lock'
-      - 'bunfig.toml'
-      - 'tsconfig.base.json'
-      - 'assets/**'
-      - '.github/workflows/docker-desktop.yml'
+      - "apps/desktop/**"
+      - "shared/typescript/**"
+      - "shared/ui/**"
+      - "services/auth/src/**"
+      - "patches/**"
+      - "package.json"
+      - "bun.lock"
+      - "bunfig.toml"
+      - "tsconfig.base.json"
+      - "assets/**"
+      - ".github/workflows/docker-desktop.yml"
 
 env:
   REGISTRY: ghcr.io

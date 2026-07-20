@@ -1,3 +1,9 @@
+import type {
+  CreateBillingItemRequest,
+  CreateBillingRequest,
+  CreatePaymentRequest,
+  UpdateBillingRequest,
+} from "@sanipatitas/desktop/billing/api/billing-api"
 import {
   deleteApiBillingById,
   getApiBillingByBillingIdItem,
@@ -8,15 +14,7 @@ import {
   putApiBillingById,
 } from "@sanipatitas/shared/api/client"
 import { getApiBillingOptions } from "@sanipatitas/shared/api/client/@tanstack/react-query.gen"
-import type {
-  BillingItemDto,
-  CreateBillingItemRequest,
-  CreateBillingRequest,
-  CreatePaymentRequest,
-  PaymentDto,
-  UpdateBillingRequest,
-} from "@sanipatitas/desktop/billing/api/billing-api"
-import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query"
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query"
 
 // Query keys
 const billingKey = ["billings"] as const
@@ -116,7 +114,9 @@ export function useCreatePayment(billingId: string) {
         throwOnError: true,
       }),
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["billing-payments", billingId] })
+      queryClient.invalidateQueries({
+        queryKey: ["billing-payments", billingId],
+      })
       queryClient.invalidateQueries({ queryKey: billingKey })
     },
   })

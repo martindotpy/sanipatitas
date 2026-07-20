@@ -1,17 +1,22 @@
 import { userTable } from "@sanipatitas/database/auth/schema/auth-schema"
 import { patientTable } from "@sanipatitas/database/patient/schema/patient-schema"
-import {
-  pgTable,
-  timestamp,
-  uuid,
-  varchar,
-} from "drizzle-orm/pg-core"
+import { pgTable, timestamp, uuid, varchar } from "drizzle-orm/pg-core"
 
 // Enums
-export const immunizationStatuses = ["COMPLETED", "ENTERED_IN_ERROR", "NOT_DONE"] as const
+export const immunizationStatuses = [
+  "COMPLETED",
+  "ENTERED_IN_ERROR",
+  "NOT_DONE",
+] as const
 export type ImmunizationStatus = (typeof immunizationStatuses)[number]
 
-export const immunizationRoutes = ["SUBCUTANEOUS", "INTRAMUSCULAR", "ORAL", "INTRADERMAL", "TOPICAL"] as const
+export const immunizationRoutes = [
+  "SUBCUTANEOUS",
+  "INTRAMUSCULAR",
+  "ORAL",
+  "INTRADERMAL",
+  "TOPICAL",
+] as const
 export type ImmunizationRoute = (typeof immunizationRoutes)[number]
 
 // Table

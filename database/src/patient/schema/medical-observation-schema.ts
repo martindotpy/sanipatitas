@@ -1,17 +1,22 @@
 import { userTable } from "@sanipatitas/database/auth/schema/auth-schema"
 import { patientTable } from "@sanipatitas/database/patient/schema/patient-schema"
-import {
-  pgTable,
-  timestamp,
-  uuid,
-  varchar,
-} from "drizzle-orm/pg-core"
+import { pgTable, timestamp, uuid, varchar } from "drizzle-orm/pg-core"
 
 // Enums
-export const observationStatuses = ["PRELIMINARY", "FINAL", "AMENDED", "CANCELLED"] as const
+export const observationStatuses = [
+  "PRELIMINARY",
+  "FINAL",
+  "AMENDED",
+  "CANCELLED",
+] as const
 export type ObservationStatus = (typeof observationStatuses)[number]
 
-export const observationCategories = ["VITAL_SIGNS", "LABORATORY", "EXAM", "GENERAL"] as const
+export const observationCategories = [
+  "VITAL_SIGNS",
+  "LABORATORY",
+  "EXAM",
+  "GENERAL",
+] as const
 export type ObservationCategory = (typeof observationCategories)[number]
 
 // Table
@@ -25,7 +30,9 @@ export const medicalObservationTable = pgTable("medical_observation", {
   veterinarianId: uuid()
     .notNull()
     .references(() => userTable.id),
-  category: varchar({ length: 30, enum: observationCategories }).default("GENERAL"),
+  category: varchar({ length: 30, enum: observationCategories }).default(
+    "GENERAL"
+  ),
   code: varchar({ length: 100 }).notNull(),
   value: varchar({ length: 500 }).notNull(),
   unit: varchar({ length: 50 }),

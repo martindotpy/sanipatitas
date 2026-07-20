@@ -1,10 +1,7 @@
 import { Tabs as TabsPrimitive } from "@base-ui/react/tabs"
 import { cn } from "@sanipatitas/ui/lib/tailwind"
 
-function Tabs({
-  className,
-  ...props
-}: TabsPrimitive.Root.Props) {
+function Tabs({ className, ...props }: TabsPrimitive.Root.Props) {
   return (
     <TabsPrimitive.Root
       data-slot="tabs"
@@ -14,10 +11,7 @@ function Tabs({
   )
 }
 
-function TabsList({
-  className,
-  ...props
-}: TabsPrimitive.List.Props) {
+function TabsList({ className, ...props }: TabsPrimitive.List.Props) {
   return (
     <TabsPrimitive.List
       data-slot="tabs-list"
@@ -30,10 +24,7 @@ function TabsList({
   )
 }
 
-function TabsTab({
-  className,
-  ...props
-}: TabsPrimitive.Tab.Props) {
+function TabsTab({ className, ...props }: TabsPrimitive.Tab.Props) {
   return (
     <TabsPrimitive.Tab
       data-slot="tabs-tab"
@@ -46,10 +37,7 @@ function TabsTab({
   )
 }
 
-function TabsPanel({
-  className,
-  ...props
-}: TabsPrimitive.Panel.Props) {
+function TabsPanel({ className, ...props }: TabsPrimitive.Panel.Props) {
   return (
     <TabsPrimitive.Panel
       data-slot="tabs-panel"
@@ -59,4 +47,4 @@ function TabsPanel({
   )
 }
 
-export { Tabs, TabsList, TabsTab, TabsPanel }
+export { Tabs, TabsList, TabsPanel, TabsTab }
