@@ -27,7 +27,10 @@ public class CreateStockMovementUseCase implements CreateStockMovementPort {
         return stockRepository.findById(payload.getStockId())
                 .onItem().ifNull().failWith(() -> new StockNotFoundException(payload.getStockId()))
                 .chain(stock -> {
-                    var movement = stockMovementMapper.from(payload).stock(stock).build();
+                    var movement = stockMovementMapper.from(payload)
+                            .stock(stock)
+                            .type(payload.getType())
+                            .build();
                     var delta = switch (movement.getType()) {
                         case PURCHASE_ENTRY, RETURN -> movement.getQuantity();
                         case SALE_EXIT -> -movement.getQuantity();

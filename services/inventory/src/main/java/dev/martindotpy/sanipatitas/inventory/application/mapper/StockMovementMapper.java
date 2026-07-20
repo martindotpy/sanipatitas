@@ -20,5 +20,6 @@ public interface StockMovementMapper {
 
     @Mapping(target = "stock", ignore = true)
     @Mapping(target = "createdAt", ignore = true)
+    @Mapping(target = "type", source = "type")
     StockMovement.StockMovementBuilder<?, ?> from(CreateStockMovementPayload payload);
 }
