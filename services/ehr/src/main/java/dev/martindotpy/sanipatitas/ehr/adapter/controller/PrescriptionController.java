@@ -3,7 +3,9 @@ package dev.martindotpy.sanipatitas.ehr.adapter.controller;
 import java.util.UUID;
 
 import jakarta.annotation.security.RolesAllowed;
+import jakarta.validation.Valid;
 import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.NotNull;
 import jakarta.ws.rs.DELETE;
 import jakarta.ws.rs.DefaultValue;
 import jakarta.ws.rs.GET;
@@ -64,7 +66,7 @@ public class PrescriptionController {
 
     @POST
     @RolesAllowed({"admin", "veterinarian"})
-    public Uni<DataResponse<PrescriptionDto>> create(CreatePrescriptionRequest request) {
+    public Uni<DataResponse<PrescriptionDto>> create(@Valid @NotNull CreatePrescriptionRequest request) {
         return createPrescriptionPort.create(request)
                 .map(DataResponse::from)
                 .map(response -> response
@@ -76,7 +78,7 @@ public class PrescriptionController {
     @Path("/{id}")
     @RolesAllowed({"admin", "veterinarian"})
     public Uni<DataResponse<PrescriptionDto>> update(
-            @Uuid @RestPath UUID id, UpdatePrescriptionRequest request) {
+            @Uuid @RestPath UUID id, @Valid @NotNull UpdatePrescriptionRequest request) {
         return updatePrescriptionPort.update(id, request)
                 .map(DataResponse::from)
                 .map(response -> response

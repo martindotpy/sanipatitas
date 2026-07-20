@@ -3,7 +3,9 @@ package dev.martindotpy.sanipatitas.appointment.adapter.controller;
 import java.time.LocalDate;
 import java.util.UUID;
 
+import jakarta.validation.Valid;
 import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.NotNull;
 import jakarta.annotation.security.RolesAllowed;
 import jakarta.ws.rs.DELETE;
 import jakarta.ws.rs.DefaultValue;
@@ -73,7 +75,7 @@ public class AppointmentController {
 
     @POST
     @RolesAllowed({"admin", "veterinarian", "worker"})
-    public Uni<DataResponse<AppointmentDto>> create(CreateAppointmentRequest request) {
+    public Uni<DataResponse<AppointmentDto>> create(@Valid @NotNull CreateAppointmentRequest request) {
         return createAppointmentPort.create(request)
                 .map(DataResponse::from)
                 .map(response -> response
@@ -85,7 +87,7 @@ public class AppointmentController {
     @Path("/{id}")
     @RolesAllowed({"admin", "veterinarian", "worker"})
     public Uni<DataResponse<AppointmentDto>> update(
-            @Uuid @RestPath UUID id, UpdateAppointmentRequest request) {
+            @Uuid @RestPath UUID id, @Valid @NotNull UpdateAppointmentRequest request) {
         return updateAppointmentPort.update(id, request)
                 .map(DataResponse::from)
                 .map(response -> response

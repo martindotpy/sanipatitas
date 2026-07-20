@@ -27,7 +27,7 @@ public class CreateMedicalObservationRequest implements CreateMedicalObservation
     @Nullable
     private UUID id;
 
-    @Nullable
+    @NotBlank
     @Size(max = 255)
     private String code;
 

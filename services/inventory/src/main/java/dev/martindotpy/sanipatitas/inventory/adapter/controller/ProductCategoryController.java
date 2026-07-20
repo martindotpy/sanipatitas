@@ -3,7 +3,9 @@ package dev.martindotpy.sanipatitas.inventory.adapter.controller;
 import java.util.UUID;
 
 import jakarta.annotation.security.RolesAllowed;
+import jakarta.validation.Valid;
 import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.NotNull;
 import jakarta.ws.rs.DELETE;
 import jakarta.ws.rs.DefaultValue;
 import jakarta.ws.rs.GET;
@@ -61,7 +63,7 @@ public class ProductCategoryController {
 
     @POST
     @RolesAllowed({"admin", "veterinarian"})
-    public Uni<DataResponse<ProductCategoryDto>> create(CreateProductCategoryRequest request) {
+    public Uni<DataResponse<ProductCategoryDto>> create(@Valid @NotNull CreateProductCategoryRequest request) {
         return createProductCategoryPort.create(request)
                 .map(DataResponse::from)
                 .map(response -> response
@@ -73,7 +75,7 @@ public class ProductCategoryController {
     @Path("/{id}")
     @RolesAllowed({"admin", "veterinarian"})
     public Uni<DataResponse<ProductCategoryDto>> update(
-            @Uuid @RestPath UUID id, UpdateProductCategoryRequest request) {
+            @Uuid @RestPath UUID id, @Valid @NotNull UpdateProductCategoryRequest request) {
         return updateProductCategoryPort.update(id, request)
                 .map(DataResponse::from)
                 .map(response -> response

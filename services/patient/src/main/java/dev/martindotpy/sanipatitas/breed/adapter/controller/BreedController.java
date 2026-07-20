@@ -3,7 +3,9 @@ package dev.martindotpy.sanipatitas.breed.adapter.controller;
 import java.util.List;
 import java.util.UUID;
 
+import jakarta.validation.Valid;
 import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.NotNull;
 import jakarta.annotation.security.RolesAllowed;
 import jakarta.ws.rs.DELETE;
 import jakarta.ws.rs.DefaultValue;
@@ -67,7 +69,7 @@ public class BreedController {
 
     @POST
     @RolesAllowed({"admin", "worker"})
-    public Uni<DataResponse<BreedDto>> create(CreateBreedRequest request) {
+    public Uni<DataResponse<BreedDto>> create(@Valid @NotNull CreateBreedRequest request) {
         return createBreedPort.create(request)
                 .map(DataResponse::from)
                 .map(response -> response
@@ -79,7 +81,7 @@ public class BreedController {
     @Path("/{id}")
     @RolesAllowed({"admin", "worker"})
     public Uni<DataResponse<BreedDto>> update(
-            @Uuid @RestPath UUID id, UpdateBreedRequest request) {
+            @Uuid @RestPath UUID id, @Valid @NotNull UpdateBreedRequest request) {
         return updateBreedPort.update(id, request)
                 .map(DataResponse::from)
                 .map(response -> response

@@ -3,7 +3,9 @@ package dev.martindotpy.sanipatitas.payment.adapter.controller;
 import java.util.UUID;
 
 import jakarta.annotation.security.RolesAllowed;
+import jakarta.validation.Valid;
 import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.NotNull;
 import jakarta.ws.rs.DELETE;
 import jakarta.ws.rs.DefaultValue;
 import jakarta.ws.rs.GET;
@@ -86,7 +88,7 @@ public class BillingController {
 
     @POST
     @RolesAllowed({"admin", "veterinarian"})
-    public Uni<DataResponse<BillingDto>> create(CreateBillingRequest request) {
+    public Uni<DataResponse<BillingDto>> create(@Valid @NotNull CreateBillingRequest request) {
         return createBillingPort.create(request)
                 .map(DataResponse::from)
                 .map(response -> response
@@ -98,7 +100,7 @@ public class BillingController {
     @Path("/{id}")
     @RolesAllowed({"admin", "veterinarian"})
     public Uni<DataResponse<BillingDto>> update(
-            @Uuid @RestPath UUID id, UpdateBillingRequest request) {
+            @Uuid @RestPath UUID id, @Valid @NotNull UpdateBillingRequest request) {
         return updateBillingPort.update(id, request)
                 .map(DataResponse::from)
                 .map(response -> response

@@ -4,6 +4,8 @@ import java.util.List;
 import java.util.UUID;
 
 import jakarta.annotation.security.RolesAllowed;
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotNull;
 import jakarta.ws.rs.DELETE;
 import jakarta.ws.rs.GET;
 import jakarta.ws.rs.POST;
@@ -44,7 +46,7 @@ public class BillingItemController {
     @Path("/{billingId}/item")
     @RolesAllowed({"admin", "veterinarian"})
     public Uni<DataResponse<BillingItemDto>> createItem(
-            @Uuid @RestPath UUID billingId, CreateBillingItemRequest request) {
+            @Uuid @RestPath UUID billingId, @Valid @NotNull CreateBillingItemRequest request) {
         return createBillingItemPort.create(billingId, request)
                 .map(DataResponse::from)
                 .map(response -> response

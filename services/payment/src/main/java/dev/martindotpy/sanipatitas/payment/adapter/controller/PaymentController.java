@@ -4,6 +4,8 @@ import java.util.List;
 import java.util.UUID;
 
 import jakarta.annotation.security.RolesAllowed;
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotNull;
 import jakarta.ws.rs.GET;
 import jakarta.ws.rs.POST;
 import jakarta.ws.rs.Path;
@@ -40,7 +42,7 @@ public class PaymentController {
     @Path("/{billingId}/payment")
     @RolesAllowed({"admin", "veterinarian"})
     public Uni<DataResponse<PaymentDto>> createPayment(
-            @Uuid @RestPath UUID billingId, CreatePaymentRequest request) {
+            @Uuid @RestPath UUID billingId, @Valid @NotNull CreatePaymentRequest request) {
         return createPaymentPort.create(billingId, request)
                 .map(DataResponse::from)
                 .map(response -> response

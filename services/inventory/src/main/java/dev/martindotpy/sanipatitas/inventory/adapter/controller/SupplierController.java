@@ -3,7 +3,9 @@ package dev.martindotpy.sanipatitas.inventory.adapter.controller;
 import java.util.UUID;
 
 import jakarta.annotation.security.RolesAllowed;
+import jakarta.validation.Valid;
 import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.NotNull;
 import jakarta.ws.rs.DELETE;
 import jakarta.ws.rs.DefaultValue;
 import jakarta.ws.rs.GET;
@@ -61,7 +63,7 @@ public class SupplierController {
 
     @POST
     @RolesAllowed({"admin", "veterinarian"})
-    public Uni<DataResponse<SupplierDto>> create(CreateSupplierRequest request) {
+    public Uni<DataResponse<SupplierDto>> create(@Valid @NotNull CreateSupplierRequest request) {
         return createSupplierPort.create(request)
                 .map(DataResponse::from)
                 .map(response -> response
@@ -73,7 +75,7 @@ public class SupplierController {
     @Path("/{id}")
     @RolesAllowed({"admin", "veterinarian"})
     public Uni<DataResponse<SupplierDto>> update(
-            @Uuid @RestPath UUID id, UpdateSupplierRequest request) {
+            @Uuid @RestPath UUID id, @Valid @NotNull UpdateSupplierRequest request) {
         return updateSupplierPort.update(id, request)
                 .map(DataResponse::from)
                 .map(response -> response

@@ -2,7 +2,9 @@ package dev.martindotpy.sanipatitas.patient.adapter.controller;
 
 import java.util.UUID;
 
+import jakarta.validation.Valid;
 import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.NotNull;
 import jakarta.annotation.security.RolesAllowed;
 import jakarta.ws.rs.DELETE;
 import jakarta.ws.rs.DefaultValue;
@@ -65,7 +67,7 @@ public class PatientController {
 
     @POST
     @RolesAllowed({"admin", "worker"})
-    public Uni<DataResponse<PatientDto>> create(CreatePatientRequest request) {
+    public Uni<DataResponse<PatientDto>> create(@Valid @NotNull CreatePatientRequest request) {
         return createPatientPort.create(request)
                 .map(DataResponse::from)
                 .map(response -> response
@@ -77,7 +79,7 @@ public class PatientController {
     @Path("/{id}")
     @RolesAllowed({"admin", "worker"})
     public Uni<DataResponse<PatientDto>> update(
-            @Uuid @RestPath UUID id, UpdatePatientRequest request) {
+            @Uuid @RestPath UUID id, @Valid @NotNull UpdatePatientRequest request) {
         return updatePatientPort.update(id, request)
                 .map(DataResponse::from)
                 .map(response -> response
