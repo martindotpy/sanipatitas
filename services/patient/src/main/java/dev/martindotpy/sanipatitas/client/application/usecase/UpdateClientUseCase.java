@@ -7,6 +7,7 @@ import jakarta.enterprise.context.ApplicationScoped;
 import dev.martindotpy.sanipatitas.client.application.mapper.ClientMapper;
 import dev.martindotpy.sanipatitas.shared.client.application.dto.ClientDto;
 import dev.martindotpy.sanipatitas.shared.client.application.port.UpdateClientPort;
+import dev.martindotpy.sanipatitas.shared.client.domain.error.ClientDuplicateDocumentException;
 import dev.martindotpy.sanipatitas.shared.client.domain.error.ClientNotFoundException;
 import dev.martindotpy.sanipatitas.shared.client.domain.payload.UpdateClientPayload;
 import dev.martindotpy.sanipatitas.shared.client.domain.repository.ClientRepository;
@@ -29,7 +30,14 @@ public class UpdateClientUseCase implements UpdateClientPort {
 
         return clientRepository.findById(id)
                 .onItem().ifNull().failWith(() -> new ClientNotFoundException(id))
-                .replaceWith(clientRepository.update(newClient))
-                .map(clientMapper::toDto);
+                .chain(client -> clientRepository.count("idNumber = ?1 and id != ?2", payload.getIdNumber(), id)
+                        .chain(count -> {
+                            if (count > 0) {
+                                return Uni.createFrom().failure(
+                                        new ClientDuplicateDocumentException(payload.getIdNumber()));
+                            }
+                            return clientRepository.update(newClient)
+                                    .map(clientMapper::toDto);
+                        }));
     }
 }
