@@ -98,7 +98,7 @@ function SessionCard({
     ipAddress?: string
   }
   isCurrent: boolean
-  onRevoke: (id: string) => void
+  onRevoke: (id: string) => Promise<void>
 }) {
   const [isRevoking, setIsRevoking] = React.useState(false)
 

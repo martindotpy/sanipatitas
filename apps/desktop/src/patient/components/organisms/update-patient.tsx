@@ -82,15 +82,15 @@ export function UpdatePatient({
     resolver: zodResolver(zOpenapiUpdatePatientRequest),
     defaultValues: {
       name: "",
-      gender: "",
+      gender: undefined,
       birthDate: "",
       approximateAge: "",
       weightKg: 0,
       description: "",
       isSterilized: false,
       isDeceased: false,
-      breedId: "",
-      clientId: "",
+      breedId: undefined,
+      clientId: undefined,
     },
   })
 
@@ -98,14 +98,14 @@ export function UpdatePatient({
     if (patient) {
       reset({
         name: patient.name,
-        gender: patient.gender ?? "",
+        gender: patient.gender ?? undefined,
         birthDate: patient.birthDate ?? "",
         approximateAge: patient.approximateAge ?? "",
         weightKg: patient.weightKg ?? 0,
         description: patient.description ?? "",
         isSterilized: patient.isSterilized ?? false,
         isDeceased: patient.isDeceased ?? false,
-        breedId: patient.breed?.id ?? "",
+        breedId: patient.breed?.id ?? undefined,
         clientId: patient.client.id,
       })
     }

@@ -80,9 +80,9 @@ export function UpdatePrescription({
       issueDate: "",
       expirationDate: "",
       notes: "",
-      status: "",
-      patientId: "",
-      veterinarianId: "",
+      status: undefined,
+      patientId: undefined,
+      veterinarianId: undefined,
       items: [],
     },
   })
@@ -99,7 +99,7 @@ export function UpdatePrescription({
         expirationDate: prescription.expirationDate ?? "",
         notes: prescription.notes ?? "",
         status: prescription.status ?? "",
-        veterinarianId: prescription.veterinarian?.id ?? "",
+        veterinarianId: prescription.veterinarian?.id ?? undefined,
         items: prescription.items.map((item) => ({
           medicationName: item.medicationName,
           dosage: item.dosage ?? "",

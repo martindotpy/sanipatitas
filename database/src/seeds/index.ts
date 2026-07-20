@@ -508,8 +508,8 @@ export async function seedClinical() {
   // Medical conditions
   await db.insert(medicalConditionTable).values(
     medicalConditionSeed.map((c) => ({
-      patientId: patients[c.patientIndex].id,
-      veterinarianId: veterinarians[c.patientIndex % veterinarians.length].id,
+      patientId: patients[c.patientIndex]!.id,
+      veterinarianId: veterinarians[c.patientIndex % veterinarians.length]!.id,
       code: c.code,
       name: c.name,
       description: c.description,
@@ -527,8 +527,8 @@ export async function seedClinical() {
   // Medical observations
   await db.insert(medicalObservationTable).values(
     medicalObservationSeed.map((o) => ({
-      patientId: patients[o.patientIndex].id,
-      veterinarianId: veterinarians[o.patientIndex % veterinarians.length].id,
+      patientId: patients[o.patientIndex]!.id,
+      veterinarianId: veterinarians[o.patientIndex % veterinarians.length]!.id,
       category: o.category,
       code: o.code,
       value: o.value,
@@ -550,8 +550,8 @@ export async function seedClinical() {
   // Immunizations
   await db.insert(immunizationTable).values(
     immunizationSeed.map((imm) => ({
-      patientId: patients[imm.patientIndex].id,
-      veterinarianId: veterinarians[imm.patientIndex % veterinarians.length].id,
+      patientId: patients[imm.patientIndex]!.id,
+      veterinarianId: veterinarians[imm.patientIndex % veterinarians.length]!.id,
       vaccineCode: imm.vaccineCode,
       vaccineName: imm.vaccineName,
       manufacturer: imm.manufacturer,
@@ -572,8 +572,8 @@ export async function seedClinical() {
   // Procedures
   await db.insert(procedureTable).values(
     procedureSeed.map((p) => ({
-      patientId: patients[p.patientIndex].id,
-      veterinarianId: veterinarians[p.patientIndex % veterinarians.length].id,
+      patientId: patients[p.patientIndex]!.id,
+      veterinarianId: veterinarians[p.patientIndex % veterinarians.length]!.id,
       code: p.code,
       name: p.name,
       category: p.category,
@@ -592,9 +592,9 @@ export async function seedClinical() {
     const insertedPrescriptions = await db
       .insert(prescriptionTable)
       .values({
-        patientId: patients[rx.patientIndex].id,
+        patientId: patients[rx.patientIndex]!.id,
         veterinarianId:
-          veterinarians[rx.patientIndex % veterinarians.length].id,
+          veterinarians[rx.patientIndex % veterinarians.length]!.id,
         issueDate: new Date(rx.issueDate),
         expirationDate: rx.expirationDate ? new Date(rx.expirationDate) : null,
         notes: rx.notes,
@@ -605,7 +605,7 @@ export async function seedClinical() {
     if (rx.items.length > 0) {
       await db.insert(prescriptionItemTable).values(
         rx.items.map((item) => ({
-          prescriptionId: insertedPrescriptions[0].id,
+          prescriptionId: insertedPrescriptions[0]!.id,
           medicationName: item.medicationName,
           dosage: item.dosage,
           frequency: item.frequency,

@@ -95,9 +95,9 @@ export function UpdateAppointment({
       appointmentClass: "AMBULATORY",
       reason: "",
       notes: "",
-      patientId: "",
-      clientId: "",
-      veterinarianId: user?.id ?? "",
+      patientId: undefined,
+      clientId: undefined,
+      veterinarianId: user?.id ?? undefined,
     },
   })
 

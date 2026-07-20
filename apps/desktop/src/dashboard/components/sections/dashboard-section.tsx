@@ -35,7 +35,7 @@ import {
   TbTrendingUp,
   TbUsers,
 } from "react-icons/tb"
-import { Area, AreaChart, Cell, Pie, PieChart, XAxis, YAxis } from "recharts"
+import { Area, AreaChart, Pie, PieChart, XAxis, YAxis } from "recharts"
 
 // Status labels & colors
 const statusLabels: Record<string, string> = {
@@ -229,9 +229,6 @@ function AppointmentStatusChart({ data }: { data: Record<string, number> }) {
                   animationDuration={1000}
                   animationEasing="ease-out"
                 >
-                  {chartData.map((entry, index) => (
-                    <Cell key={index} fill={entry.fill} stroke="transparent" />
-                  ))}
                 </Pie>
                 <ChartTooltip
                   cursor={false}
@@ -412,92 +409,6 @@ function UpcomingAppointments({
         ))}
       </AnimatePresence>
     </div>
-  )
-}
-
-// Revenue area chart (last 7 days - simulated from available data)
-function RevenueAreaChart({
-  revenueToday,
-  revenueThisMonth,
-}: {
-  revenueToday: number
-  revenueThisMonth: number
-}) {
-  // Generate sample daily data based on actual monthly revenue
-  const daysInMonth = new Date(
-    new Date().getFullYear(),
-    new Date().getMonth() + 1,
-    0
-  ).getDate()
-  const dayOfMonth = new Date().getDate()
-  const avgDaily = revenueThisMonth / dayOfMonth
-
-  const data = Array.from({ length: 7 }, (_, i) => {
-    const day = dayOfMonth - 6 + i
-    const variation = 0.7 + Math.random() * 0.6 // 70%-130% of average
-    return {
-      day: `${day}`,
-      ingresos: Math.round(avgDaily * variation),
-    }
-  })
-
-  return (
-    <motion.div
-      initial={{ opacity: 0, y: 20 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.5, delay: 0.35 }}
-      className="min-w-[250px] flex-1"
-    >
-      <Card>
-        <CardHeader>
-          <CardTitle className="flex items-center gap-2">
-            <TbCash className="text-primary size-4" />
-            Ingresos (últimos 7 días)
-          </CardTitle>
-        </CardHeader>
-        <CardContent>
-          <ChartContainer
-            config={revenueChartConfig}
-            initialDimension={{ width: 300, height: 160 }}
-            className="aspect-[3/1.6] w-full"
-          >
-            <AreaChart
-              data={data}
-              margin={{ top: 5, right: 5, left: -10, bottom: 0 }}
-            >
-              <XAxis
-                dataKey="day"
-                tick={{ fontSize: 11 }}
-                axisLine={false}
-                tickLine={false}
-              />
-              <YAxis hide />
-              <ChartTooltip
-                content={
-                  <ChartTooltipContent
-                    formatter={(value) => [
-                      formatCurrency(Number(value)),
-                      "Ingresos",
-                    ]}
-                    indicator="dot"
-                  />
-                }
-              />
-              <Area
-                type="monotone"
-                dataKey="ingresos"
-                stroke="var(--color-ingresos)"
-                fill="var(--color-ingresos)"
-                fillOpacity={0.15}
-                strokeWidth={2}
-                animationBegin={600}
-                animationDuration={1000}
-              />
-            </AreaChart>
-          </ChartContainer>
-        </CardContent>
-      </Card>
-    </motion.div>
   )
 }
 

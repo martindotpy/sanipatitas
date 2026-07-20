@@ -76,10 +76,10 @@ export function CreateCondition({ patientId }: CreateConditionProps) {
       code: "",
       description: "",
       onsetDate: "",
-      status: "",
-      severity: "",
+      status: undefined,
+      severity: undefined,
       patientId,
-      veterinarianId: "",
+      veterinarianId: undefined,
     },
   })
 

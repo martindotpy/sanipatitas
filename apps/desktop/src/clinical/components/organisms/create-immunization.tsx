@@ -85,12 +85,12 @@ export function CreateImmunization({ patientId }: CreateImmunizationProps) {
       administrationDate: "",
       doseNumber: "",
       doseUnit: "",
-      route: "",
+      route: undefined,
       site: "",
       reaction: "",
-      status: "",
+      status: undefined,
       patientId,
-      veterinarianId: "",
+      veterinarianId: undefined,
     },
   })
 

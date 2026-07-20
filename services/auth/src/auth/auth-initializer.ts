@@ -5,7 +5,7 @@ import {
 } from "@sanipatitas/auth/core/configuration/app-configuration"
 import { db } from "@sanipatitas/database"
 import { userTable } from "@sanipatitas/database/auth/schema/auth-schema"
-import { seedAppointments, seedBilling } from "@sanipatitas/database/seeds"
+import { seedAppointments, seedBilling, seedClinical } from "@sanipatitas/database/seeds"
 import { serverLog } from "@sanipatitas/shared/log/server-logger"
 
 // Test users
@@ -53,6 +53,9 @@ export async function initializeAuth() {
   if (userResult) {
     serverLog.debug("User is already created")
 
+    // Seed clinical data if users exist
+    await seedClinical()
+
     // Seed appointments if users exist
     await seedAppointments()
 
@@ -98,6 +101,9 @@ export async function initializeAuth() {
       throw err
     }
   }
+
+  // Seed clinical data (requires patients and veterinarians)
+  await seedClinical()
 
   // Seed appointments after users are created
   await seedAppointments()

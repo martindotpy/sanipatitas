@@ -42,7 +42,7 @@ export function CreateBilling() {
   const { control, handleSubmit, reset } = useForm({
     resolver: zodResolver(zOpenapiCreateBillingRequest),
     defaultValues: {
-      clientId: "",
+      clientId: undefined,
       subtotal: 0,
       discount: 0,
       taxAmount: 0,

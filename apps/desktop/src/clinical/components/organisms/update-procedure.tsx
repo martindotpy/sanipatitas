@@ -91,14 +91,14 @@ export function UpdateProcedure({
     defaultValues: {
       name: "",
       code: "",
-      category: "",
+      category: undefined,
       reason: "",
       outcome: "",
       complications: "",
       performedDate: "",
-      status: "",
-      patientId: "",
-      veterinarianId: "",
+      status: undefined,
+      patientId: undefined,
+      veterinarianId: undefined,
     },
   })
 
@@ -107,13 +107,13 @@ export function UpdateProcedure({
       reset({
         name: procedure.name,
         code: procedure.code ?? "",
-        category: procedure.category ?? "",
+        category: procedure.category ?? undefined,
         reason: procedure.reason ?? "",
         outcome: procedure.outcome ?? "",
         complications: procedure.complications ?? "",
         performedDate: procedure.performedDate ?? "",
         status: procedure.status ?? "",
-        veterinarianId: procedure.veterinarian?.id ?? "",
+        veterinarianId: procedure.veterinarian?.id ?? undefined,
       })
     }
   }, [procedure, reset])

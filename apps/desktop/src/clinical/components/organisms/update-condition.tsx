@@ -83,10 +83,10 @@ export function UpdateCondition({
       code: "",
       description: "",
       onsetDate: "",
-      status: "",
-      severity: "",
+      status: undefined,
+      severity: undefined,
       patientId,
-      veterinarianId: "",
+      veterinarianId: undefined,
     },
   })
 
@@ -98,7 +98,7 @@ export function UpdateCondition({
         description: condition.description ?? "",
         onsetDate: condition.onsetDate ?? "",
         status: condition.status ?? "",
-        severity: condition.severity ?? "",
+        severity: condition.severity ?? undefined,
         patientId,
         veterinarianId: condition.veterinarian.id,
       })

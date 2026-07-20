@@ -72,7 +72,7 @@ export function CreatePrescription({ patientId }: CreatePrescriptionProps) {
       notes: "",
       status: "ACTIVE",
       patientId,
-      veterinarianId: "",
+      veterinarianId: undefined,
       items: [
         {
           medicationName: "",

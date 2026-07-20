@@ -72,16 +72,15 @@ export function CreatePatient() {
     resolver: zodResolver(zOpenapiCreatePatientRequest),
     defaultValues: {
       name: "",
-      gender: "",
+      gender: undefined,
       birthDate: "",
       approximateAge: "",
       weightKg: 0,
       description: "",
       isSterilized: false,
       isDeceased: false,
-      breedId: "",
-      clientId: "",
-      clientId: "",
+      breedId: undefined,
+      clientId: undefined,
     },
   })
 

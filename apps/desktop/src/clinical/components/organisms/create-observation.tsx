@@ -84,11 +84,11 @@ export function CreateObservation({ patientId }: CreateObservationProps) {
       bodySite: "",
       method: "",
       referenceRange: "",
-      category: "",
-      status: "",
+      category: undefined,
+      status: undefined,
       issuedDate: "",
       patientId,
-      veterinarianId: "",
+      veterinarianId: undefined,
     },
   })
 

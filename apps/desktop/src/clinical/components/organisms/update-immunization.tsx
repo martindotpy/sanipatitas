@@ -92,12 +92,12 @@ export function UpdateImmunization({
       administrationDate: "",
       doseNumber: "",
       doseUnit: "",
-      route: "",
+      route: undefined,
       site: "",
       reaction: "",
-      status: "",
-      patientId: "",
-      veterinarianId: "",
+      status: undefined,
+      patientId: undefined,
+      veterinarianId: undefined,
     },
   })
 
@@ -112,11 +112,11 @@ export function UpdateImmunization({
         administrationDate: immunization.administrationDate,
         doseNumber: immunization.doseNumber ?? "",
         doseUnit: immunization.doseUnit ?? "",
-        route: immunization.route ?? "",
+        route: immunization.route ?? undefined,
         site: immunization.site ?? "",
         reaction: immunization.reaction ?? "",
         status: immunization.status ?? "",
-        veterinarianId: immunization.veterinarian?.id ?? "",
+        veterinarianId: immunization.veterinarian?.id ?? undefined,
       })
     }
   }, [immunization, reset])

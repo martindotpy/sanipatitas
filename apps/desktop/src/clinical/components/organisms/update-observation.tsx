@@ -91,11 +91,11 @@ export function UpdateObservation({
       bodySite: "",
       method: "",
       referenceRange: "",
-      category: "",
-      status: "",
+      category: undefined,
+      status: undefined,
       issuedDate: "",
-      patientId: "",
-      veterinarianId: "",
+      patientId: undefined,
+      veterinarianId: undefined,
     },
   })
 
@@ -109,10 +109,10 @@ export function UpdateObservation({
         bodySite: observation.bodySite ?? "",
         method: observation.method ?? "",
         referenceRange: observation.referenceRange ?? "",
-        category: observation.category ?? "",
+        category: observation.category ?? undefined,
         status: observation.status ?? "",
         issuedDate: observation.issuedDate ?? "",
-        veterinarianId: observation.veterinarian?.id ?? "",
+        veterinarianId: observation.veterinarian?.id ?? undefined,
       })
     }
   }, [observation, reset])

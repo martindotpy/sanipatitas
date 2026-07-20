@@ -54,7 +54,7 @@ export function UpdateBreed({ breed, open, onOpenChange }: UpdateBreedProps) {
     defaultValues: {
       name: "",
       description: "",
-      speciesId: "",
+      speciesId: undefined,
     },
   })
 

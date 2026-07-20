@@ -40,12 +40,12 @@ export function CreateBreed() {
     [speciesQuery.data]
   )
 
-  const { control, handleSubmit, setValue, reset } = useForm({
+  const { control, handleSubmit, reset } = useForm({
     resolver: zodResolver(zOpenapiCreateBreedRequest),
     defaultValues: {
       name: "",
       description: "",
-      speciesId: "",
+      speciesId: undefined,
     },
   })
 

@@ -81,13 +81,13 @@ export function CreateProcedure({ patientId }: CreateProcedureProps) {
     defaultValues: {
       name: "",
       code: "",
-      category: "",
+      category: undefined,
       reason: "",
       outcome: "",
       complications: "",
       performedDate: "",
-      status: "",
-      veterinarianId: "",
+      status: undefined,
+      veterinarianId: undefined,
     },
   })
 

@@ -66,8 +66,8 @@ export function UpdateProduct({
       code: "",
       description: "",
       price: 0,
-      categoryId: "",
-      supplierId: "",
+      categoryId: undefined,
+      supplierId: undefined,
     },
   })
 
@@ -78,8 +78,8 @@ export function UpdateProduct({
         code: product.code ?? "",
         description: product.description ?? "",
         price: product.price ?? 0,
-        categoryId: product.category?.id ?? "",
-        supplierId: product.supplier?.id ?? "",
+        categoryId: product.category?.id ?? undefined,
+        supplierId: product.supplier?.id ?? undefined,
       })
     }
   }, [product, reset])

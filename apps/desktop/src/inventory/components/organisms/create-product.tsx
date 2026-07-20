@@ -56,8 +56,8 @@ export function CreateProduct() {
       code: "",
       description: "",
       price: 0,
-      categoryId: "",
-      supplierId: "",
+      categoryId: undefined,
+      supplierId: undefined,
     },
   })
 
