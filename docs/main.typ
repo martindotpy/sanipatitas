@@ -3,10 +3,10 @@
 #import "@preview/codly-languages:0.1.1": *
 
 // Style
-#show: codly-init.with()
 #show: apa-style.with(
   font-size: 12pt,
 )
+#show: codly-init.with()
 #show heading.where(level: 1): h => {
   pagebreak()
   h
@@ -33,21 +33,21 @@
   #image("/assets/img/utp-logo.png", width: 80%)
 
   #v(0.5cm)
-  *UNIVERSIDAD TECNOLÓGICA DEL PERÚ*
+  UNIVERSIDAD TECNOLÓGICA DEL PERÚ
   #v(0.125cm)
 
-  *Sanipatitas - Veterinaria HC*
+  Sanipatitas - Veterinaria HC
   #v(1cm)
 
-  *Curso*\
+  Curso\
   Arquitectura Orientada al Servicio
   #v(0.5cm)
 
-  *Sección*\
+  Sección\
   47007
   #v(0.5cm)
 
-  *Integrantes*\
+  Integrantes\
   #table(
     [Alcántara Paico, Luis Sebastián], [U22218459],
     [Contreras Delgado, Jorge Renzo Paolo], [U22202038],
@@ -60,7 +60,7 @@
   )
   #v(0.5cm)
 
-  *Docente*\
+  Docente\
   Minguillo Rubio, Cesar Augusto
 
   #v(1fr)
@@ -1157,17 +1157,17 @@ definió el siguiente inventario de servicios para la Clínica Veterinaria HC.
     [Java 25 + Quarkus 3.37.0 + Hibernate Reactive],
     [EHR Service],
     [CRUD `/api/clinical/condition` + `/api/clinical/observation` +
-    `/api/clinical/immunization` + `/api/clinical/procedure` +
-    `/api/clinical/prescription`],
+      `/api/clinical/immunization` + `/api/clinical/procedure` +
+      `/api/clinical/prescription`],
     [Java 25 + Quarkus 3.37.0 + Hibernate Reactive],
     [Inventory Service],
     [CRUD `/api/inventory/product` + `/api/inventory/product-category` +
-    `/api/inventory/supplier` + `/api/inventory/stock` +
-    `/api/inventory/stock-movement`],
+      `/api/inventory/supplier` + `/api/inventory/stock` +
+      `/api/inventory/stock-movement`],
     [Java 25 + Quarkus 3.37.0 + Hibernate Reactive],
     [Payment Service],
     [CRUD `/api/billing` + `/api/billing/{id}/item` +
-    `/api/billing/{id}/payment`],
+      `/api/billing/{id}/payment`],
     [Java 25 + Quarkus 3.37.0 + Hibernate Reactive],
     table.hline(),
     columns: (1.5fr, 3fr, 2fr),
@@ -1312,28 +1312,28 @@ del flujo y maneja los errores que puedan ocurrir.
 El proceso de atención integral orquesta seis servicios en una secuencia
 definida.
 
-1. *Identificación del paciente.* El cliente llega a la clínica y el personal
+1. Identificación del paciente. El cliente llega a la clínica y el personal
   escanea el código QR de la mascota desde el frontend. La URI
   `sanipatitas://patient/{uuid}` se extrae y se consulta Patient Service para
   recuperar la ficha del paciente.
 
-2. *Verificación de cita.* El frontend consulta Appointment Service para
+2. Verificación de cita. El frontend consulta Appointment Service para
   verificar si el paciente tiene una cita programada. Si no existe, se registra
   una nueva cita en el momento.
 
-3. *Actualización del historial clínico.* Durante la consulta, el veterinario
+3. Actualización del historial clínico. Durante la consulta, el veterinario
   registra diagnósticos, tratamientos y observaciones. El frontend envía los
   datos a EHR Service, que los almacena bajo los recursos del estándar HL7 FHIR
   (condiciones, observaciones, inmunizaciones, procedimientos).
 
-4. *Prescripción.* Si el veterinario receta medicamentos, el frontend llama al
+4. Prescripción. Si el veterinario receta medicamentos, el frontend llama al
   recurso de recetas del EHR Service para generar la receta asociada al paciente.
 
-5. *Facturación.* Si el cliente adquiere productos o servicios, el frontend invoca
+5. Facturación. Si el cliente adquiere productos o servicios, el frontend invoca
   Payment Service para registrar la facturación, que a su vez consume Inventory
   Service para descontar el stock.
 
-6. *Confirmación.* El frontend muestra un resumen de la atención realizada y
+6. Confirmación. El frontend muestra un resumen de la atención realizada y
   ofrece la opción de imprimir o enviar el código QR actualizado del paciente.
 
 == Flujo secundario: control de inventario
@@ -1398,14 +1398,14 @@ máquina que ejecute k3s, incluyendo el servidor local de la clínica.
     [Java 25 + Quarkus 3.37.0 + Hibernate Reactive],
     [EHR Service],
     [CRUD `/api/clinical/*` (condition, observation,
-    immunization, procedure, prescription)],
+      immunization, procedure, prescription)],
     [Java 25 + Quarkus 3.37.0 + Hibernate Reactive],
     [Inventory Service],
     [CRUD `/api/inventory/*` (product, product-category,
-    supplier, stock, stock-movement)],
+      supplier, stock, stock-movement)],
     [Java 25 + Quarkus 3.37.0 + Hibernate Reactive],
     [Payment Service],
-    [CRUD `/api/billing/*` (billing, item, payment)],
+    [CRUD `/api/billing/` (billing, item, payment)],
     [Java 25 + Quarkus 3.37.0 + Hibernate Reactive],
     table.hline(),
   ),
@@ -1475,7 +1475,7 @@ Better Auth en Elysia.
   caption: [Endpoints principales por servicio],
 )
 
-La base de datos es *PostgreSQL 17* con soporte para texto completo en español
+La base de datos es PostgreSQL 17 con soporte para texto completo en español
 mediante `tsvector` y claves primarias UUID v7 generadas con
 `uuid_generate_v7()`.
 
@@ -1491,7 +1491,7 @@ prefijo de la ruta:
 /api/clinical    -> ehr:8082
 /api/inventory   -> inventory:8083
 /api/billing     -> payment:8084
-/*               -> frontend:1420
+/               -> frontend:1420
 ```
 
 La comunicación inter-servicios se realiza mediante HTTP con propagación de
@@ -1503,9 +1503,9 @@ central de validación en cada petición.
 
 === Stack del cliente
 
-El frontend está construido con *Astro 6* (SSR con adaptador Node.js) y *React
-19* como librería de componentes. La interfaz se distribuye como aplicación web
-progresiva (PWA) y como aplicación de escritorio mediante *Tauri* (Rust).
+El frontend está construido con Astro 6 (SSR con adaptador Node.js) y React
+19 como librería de componentes. La interfaz se distribuye como aplicación web
+progresiva (PWA) y como aplicación de escritorio mediante Tauri (Rust).
 
 #figure(
   table(
@@ -1562,17 +1562,17 @@ sesión.
 
 === Flujos de usuario principales
 
-*Identificación por QR.* El personal escanea el código QR de la mascota generado
+Identificación por QR. El personal escanea el código QR de la mascota generado
 con el protocolo `sanipatitas://patient/{uuid}`. La aplicación extrae el UUID,
 consulta `GET /api/patient/{uuid}` y muestra la ficha completa del paciente en
 una hoja lateral.
 
-*Gestión de citas.* El trabajador selecciona paciente y cliente, verifica
+Gestión de citas. El trabajador selecciona paciente y cliente, verifica
 disponibilidad de horarios y registra la cita. El Appointment Service publica un
 evento SSE que actualiza la vista de todos los usuarios conectados en tiempo
 real.
 
-*Consulta de historial.* El veterinario accede a la ficha del paciente y
+Consulta de historial. El veterinario accede a la ficha del paciente y
 consulta el historial de citas registradas. Las tablas de auditoría de Hibernate
 Envers (`patient_aud`, `appointment_aud`) permiten reconstruir el historial
 completo de cambios sobre cada registro.
@@ -1584,7 +1584,7 @@ completo de cambios sobre cada registro.
 El sistema incorpora un servicio transversal de auditoría orientado al registro
 de transacciones críticas. Su objetivo es dejar evidencia estructurada de las
 operaciones sensibles ejecutadas en la plataforma, registrando como mínimo tres
-datos principales: *quién* realizó la acción, *cuándo* ocurrió y *qué* operación
+datos principales: quién realizó la acción, cuándo ocurrió y qué operación
 fue ejecutada.
 
 Se consideran críticas las peticiones `POST`, `PUT`, `PATCH` y `DELETE` sobre
@@ -1657,7 +1657,7 @@ El mapeo XML de Envers se habilita mediante la propiedad
 
 ==== Centralización en Loki y visualización en Grafana
 
-Los servicios envían logs directamente a *Loki* mediante HTTP, sin depender de
+Los servicios envían logs directamente a Loki mediante HTTP, sin depender de
 plugins de Docker ni sidecars:
 
 #figure(
@@ -1699,7 +1699,7 @@ Las queries se ejecutan sobre Loki mediante LogQL:
 
 === Modelado BPMN con Camunda 8
 
-Se utilizó *Camunda 8* con *BPMN 2.0* para modelar los flujos de negocio del
+Se utilizó Camunda 8 con BPMN 2.0 para modelar los flujos de negocio del
 sistema.
 
 Se modelaron cinco procesos: auditoría de transacción crítica, aprobación de
@@ -1718,7 +1718,7 @@ de autenticación y autorización.
 ))
 
 #block(figure(
-  image("/assets/diagrams/gestion-productos-stock.png", width: 100%),
+  image("/assets/diagrams/gestion-de-stock-inventario.png", width: 100%),
   caption: [Diagrama BPMN del flujo de gestión de productos y control de stock],
 ))
 
@@ -1736,10 +1736,10 @@ de autenticación y autorización.
 
 === Autenticación con JWT (ES256)
 
-El sistema utiliza *JSON Web Tokens* firmados con el algoritmo *ES256* (curva
+El sistema utiliza JSON Web Tokens firmados con el algoritmo ES256 (curva
 elíptica P-256) para la autenticación entre el frontend y los servicios backend.
 
-*Flujo de autenticación:*
+Flujo de autenticación:
 
 #block(
   inset: 8pt,
@@ -1762,7 +1762,7 @@ elíptica P-256) para la autenticación entre el frontend y los servicios backen
     Bearer {token}`
 ]
 
-*Validación autónoma de tokens:*
+Validación autónoma de tokens:
 
 Cada servicio Quarkus valida los JWT sin depender del Auth Service en cada
 petición. El endpoint JWKS (`GET /api/auth/jwks`) expone la clave pública. La
@@ -1804,10 +1804,10 @@ anotación `@RolesAllowed` de Jakarta Security:
 
 La autorización se verifica en dos capas:
 
-+ *Controladores REST*: `@RolesAllowed` en cada método del controlador define
++ Controladores REST: `@RolesAllowed` en cada método del controlador define
   los roles permitidos. `DELETE` solo está disponible para `admin`; `GET` está
   disponible para los tres roles.
-+ *Filtro de auditoría*: `TracingFilter` (prioridad `AUTHENTICATION + 100`)
++ Filtro de auditoría: `TracingFilter` (prioridad `AUTHENTICATION + 100`)
   corre después de la autenticación y extrae `who` y `role` para propagarlos en
   `X-Correlation-Id` y en el contexto de logging (MDC).
 
