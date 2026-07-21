@@ -57,10 +57,33 @@ const itemTypeLabels: Record<string, string> = {
   OTHER: "Otro",
 }
 
-const formatCurrency = (value: number) =>
+const formatCurrency = (value: number | string | null | undefined) =>
   new Intl.NumberFormat("es-PE", { style: "currency", currency: "PEN" }).format(
-    value
+    Number(value ?? 0)
   )
+
+function asList<T>(value: unknown): T[] {
+  if (Array.isArray(value)) {
+    return value as T[]
+  }
+
+  if (value && typeof value === "object" && "data" in value) {
+    const nested = (value as { data: unknown }).data
+
+    if (Array.isArray(nested)) {
+      return nested as T[]
+    }
+
+    if (nested && typeof nested === "object" && "data" in nested) {
+      const list = (nested as { data: unknown }).data
+      if (Array.isArray(list)) {
+        return list as T[]
+      }
+    }
+  }
+
+  return []
+}
 
 // Props
 interface BillingDetailProps {
@@ -83,13 +106,13 @@ export function BillingDetail({
   const getErrorDetail = (error: unknown) =>
     (error as { detail?: string })?.detail
 
-  const items: BillingItemDto[] =
-    (itemsQuery.data as { data?: BillingItemDto[] } | undefined)?.data ?? []
-  const payments: PaymentDto[] =
-    (paymentsQuery.data as { data?: PaymentDto[] } | undefined)?.data ?? []
+  const items = asList<BillingItemDto>(itemsQuery.data)
+  const payments = asList<PaymentDto>(paymentsQuery.data)
 
-  const totalPaid = payments.reduce((sum, p) => sum + p.amount, 0)
-  const remaining = billing ? Math.max(0, billing.totalAmount - totalPaid) : 0
+  const totalPaid = payments.reduce((sum, p) => sum + Number(p.amount ?? 0), 0)
+  const remaining = billing
+    ? Math.max(0, Number(billing.totalAmount ?? 0) - totalPaid)
+    : 0
 
   const handleAddPayment = () => {
     if (!billing) return
@@ -112,9 +135,11 @@ export function BillingDetail({
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className="sm:max-w-2xl">
-        <DialogHeader>
-          <div className="flex items-center justify-between">
-            <DialogTitle>Factura #{billing.id.slice(0, 8)}</DialogTitle>
+        <DialogHeader className="pr-8">
+          <div className="flex min-w-0 items-center gap-3">
+            <DialogTitle className="truncate">
+              Factura #{billing.id.slice(0, 8)}
+            </DialogTitle>
             <Badge className={paymentStatusColors[billing.paymentStatus] ?? ""}>
               {paymentStatusLabels[billing.paymentStatus] ??
                 billing.paymentStatus}

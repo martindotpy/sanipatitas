@@ -1,7 +1,9 @@
 import type {
+  BillingItemDto,
   CreateBillingItemRequest,
   CreateBillingRequest,
   CreatePaymentRequest,
+  PaymentDto,
   UpdateBillingRequest,
 } from "@sanipatitas/desktop/billing/api/billing-api"
 import {
@@ -27,25 +29,31 @@ export function useBillings() {
 }
 
 export function useBillingItems(billingId: string | null) {
-  return useQuery({
+  return useQuery<BillingItemDto[]>({
     queryKey: ["billing-items", billingId],
-    queryFn: () =>
-      getApiBillingByBillingIdItem({
+    queryFn: async () => {
+      const result = await getApiBillingByBillingIdItem({
         path: { billingId: billingId! },
         throwOnError: true,
-      }),
+      })
+
+      return result.data?.data ?? []
+    },
     enabled: !!billingId,
   })
 }
 
 export function useBillingPayments(billingId: string | null) {
-  return useQuery({
+  return useQuery<PaymentDto[]>({
     queryKey: ["billing-payments", billingId],
-    queryFn: () =>
-      getApiBillingByBillingIdPayment({
+    queryFn: async () => {
+      const result = await getApiBillingByBillingIdPayment({
         path: { billingId: billingId! },
         throwOnError: true,
-      }),
+      })
+
+      return result.data?.data ?? []
+    },
     enabled: !!billingId,
   })
 }
