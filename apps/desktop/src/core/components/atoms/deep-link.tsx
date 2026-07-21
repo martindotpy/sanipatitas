@@ -24,7 +24,12 @@ export function DeepLink() {
       try {
         const parsed = new URL(rawUrl)
 
-        const to = parsed.pathname
+        // For custom-scheme URLs (sanipatitas://patient/{uuid}) the first segment
+        // ("patient") is the URL host, not part of the pathname. Re-join it so the
+        // target route is /patient/{uuid} instead of just /{uuid}.
+        const to = parsed.host
+          ? `/${parsed.host}${parsed.pathname}`
+          : parsed.pathname
         const search = parsed.searchParams.toString()
         const hash = parsed.hash
 

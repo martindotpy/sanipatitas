@@ -1,6 +1,7 @@
 import { type DialogRoot } from "@base-ui/react"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useClient } from "@sanipatitas/desktop/client/hook/use-client"
+import { applyServerValidationErrors } from "@sanipatitas/desktop/core/utils/apply-server-validation"
 import { postApiClientMutation } from "@sanipatitas/shared/api/client/@tanstack/react-query.gen"
 import { zOpenapiCreateClientRequest } from "@sanipatitas/shared/api/client/zod.gen"
 import { uuidV7 } from "@sanipatitas/shared/lib/uuid"
@@ -35,7 +36,7 @@ export function CreateClient() {
 
   const clientQuery = useClient()
 
-  const { control, handleSubmit, reset } = useForm({
+  const { control, handleSubmit, reset, setError } = useForm({
     resolver: zodResolver(zOpenapiCreateClientRequest),
     defaultValues: {
       firstName: "",
@@ -58,9 +59,12 @@ export function CreateClient() {
       reset()
     },
     onError: (error) => {
-      toast.error(
-        (error as { detail?: string })?.detail ?? "Error al crear el cliente"
-      )
+      // Show backend field validations inline; fall back to a toast otherwise.
+      if (applyServerValidationErrors(error, setError) === 0) {
+        toast.error(
+          (error as { detail?: string })?.detail ?? "Error al crear el cliente"
+        )
+      }
     },
   })
 

@@ -18,8 +18,9 @@ import { DataTable } from "@sanipatitas/ui/components/ui/data-table"
 import type { RowAction } from "@sanipatitas/ui/components/ui/data-table-row-actions"
 import { DataTableRowActions } from "@sanipatitas/ui/components/ui/data-table-row-actions"
 import { useQuery } from "@tanstack/react-query"
-import { useRouter } from "@tanstack/react-router"
-import { useCallback, useEffect, useRef, useState } from "react"
+import { $deepLinkPatientId } from "@sanipatitas/desktop/patient/store/patient-deeplink-store"
+import { useStore } from "@nanostores/react"
+import { useCallback, useEffect, useState } from "react"
 import { TbEye, TbPencil, TbTrash } from "react-icons/tb"
 
 const GENDER_LABELS: Record<string, string> = {
@@ -64,9 +65,6 @@ export function PatientTable() {
   const patients = patientQueryState.data?.data ?? []
   const patientPageCount = patientQueryState.data?.totalPages
 
-  // Router
-  const router = useRouter()
-
   // Table key
   const [tableKey, setTableKey] = useState(0)
 
@@ -94,12 +92,8 @@ export function PatientTable() {
   const [deleteTarget, setDeleteTarget] = useState<OpenapiPatientDto[]>([])
   const [deleteOpen, setDeleteOpen] = useState(false)
 
-  // Deep link
-  const deepLinkHandled = useRef(false)
-
-  const deepLinkId = deepLinkHandled.current
-    ? null
-    : new URLSearchParams(router.latestLocation.searchStr).get("id")
+  // Deep link — the patient UUID from the QR (set by the /patient/$uuid route).
+  const deepLinkId = useStore($deepLinkPatientId)
 
   const deepLinkPatientQuery = useQuery({
     ...getApiPatientByIdOptions({ path: { id: deepLinkId! } }),
@@ -107,20 +101,16 @@ export function PatientTable() {
   })
 
   useEffect(() => {
-    if (!deepLinkPatientQuery.data?.data || deepLinkHandled.current) return
+    if (!deepLinkId || !deepLinkPatientQuery.data?.data) return
 
     setViewingPatient(deepLinkPatientQuery.data.data)
     setDetailsOpen(true)
-    deepLinkHandled.current = true
-    router.navigate({ to: "/patient", replace: true })
-  }, [deepLinkPatientQuery.data, router])
+    $deepLinkPatientId.set(null)
+  }, [deepLinkId, deepLinkPatientQuery.data])
 
   useEffect(() => {
-    if (!deepLinkPatientQuery.isError || deepLinkHandled.current) return
-
-    deepLinkHandled.current = true
-    router.navigate({ to: "/patient", replace: true })
-  }, [deepLinkPatientQuery.isError, router])
+    if (deepLinkPatientQuery.isError) $deepLinkPatientId.set(null)
+  }, [deepLinkPatientQuery.isError])
 
   const selectedCount = Object.keys(selectedRowIds).length
 
