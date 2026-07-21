@@ -25,8 +25,14 @@ public class UpdateBillingUseCase implements UpdateBillingPort {
     public Uni<BillingDto> update(UUID id, UpdateBillingPayload payload) {
         return billingRepository.findById(id)
                 .onItem().ifNull().failWith(() -> new BillingNotFoundException(id))
-                .map(_ -> billingMapper.from(id, payload).build())
-                .chain(billingRepository::update)
+                .map(existing -> {
+                    existing.setSubtotal(payload.getSubtotal());
+                    existing.setDiscount(payload.getDiscount());
+                    existing.setTaxAmount(payload.getTaxAmount());
+                    existing.setTotalAmount(payload.getTotalAmount());
+                    existing.setNotes(payload.getNotes());
+                    return existing;
+                })
                 .map(billingMapper::toDto);
     }
 }
