@@ -13,7 +13,7 @@ import { Toaster } from "@sanipatitas/ui/components/ui/sonner"
 import { TooltipProvider } from "@sanipatitas/ui/components/ui/tooltip"
 import { dehydrate, hydrate } from "@tanstack/react-query"
 import {
-  createMemoryHistory,
+  createBrowserHistory,
   createRouter,
   ErrorComponent,
 } from "@tanstack/react-router"
@@ -73,7 +73,7 @@ export function createAppRouter(astro?: AstroGlobal) {
     scrollRestoration: true,
     defaultPreload: "intent",
     defaultViewTransition: true,
-    history: createMemoryHistory(),
+    history: createBrowserHistory(),
   })
 
   return router

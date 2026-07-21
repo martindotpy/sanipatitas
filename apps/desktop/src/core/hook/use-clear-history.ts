@@ -1,4 +1,4 @@
-import { createMemoryHistory, useRouter } from "@tanstack/react-router"
+import { createBrowserHistory, useRouter } from "@tanstack/react-router"
 
 // Hook
 export function useClearHistory() {
@@ -7,7 +7,7 @@ export function useClearHistory() {
   const clearHistory = () => {
     router.update({
       ...router.options,
-      history: createMemoryHistory(),
+      history: createBrowserHistory(),
     })
   }
 
