@@ -12,11 +12,7 @@ import { SidebarProvider } from "@sanipatitas/ui/components/ui/sidebar"
 import { Toaster } from "@sanipatitas/ui/components/ui/sonner"
 import { TooltipProvider } from "@sanipatitas/ui/components/ui/tooltip"
 import { dehydrate, hydrate } from "@tanstack/react-query"
-import {
-  createBrowserHistory,
-  createRouter,
-  ErrorComponent,
-} from "@tanstack/react-router"
+import { createRouter, ErrorComponent } from "@tanstack/react-router"
 import type { AstroGlobal } from "astro"
 import { ThemeProvider } from "next-themes"
 import * as React from "react"
@@ -73,7 +69,6 @@ export function createAppRouter(astro?: AstroGlobal) {
     scrollRestoration: true,
     defaultPreload: "intent",
     defaultViewTransition: true,
-    history: createBrowserHistory(),
   })
 
   return router
