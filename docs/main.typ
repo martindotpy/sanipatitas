@@ -1878,4 +1878,13 @@ el desarrollo de una solución tecnológica alineada con las necesidades reales
 del negocio.
 
 
+= Anexos
+
+Vista del dashboard de la página presente en https://sanipatitas.martindotpy.dev.
+
+#figure(
+  image("/assets/diagrams/dashboard.png", width: 100%),
+  caption: [Vista del dashboard de la aplicación web],
+)
+
 #bibliography("refs.bib")
