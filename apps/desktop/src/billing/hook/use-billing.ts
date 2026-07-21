@@ -15,11 +15,15 @@ import {
   postApiBillingByBillingIdPayment,
   putApiBillingById,
 } from "@sanipatitas/shared/api/client"
-import { getApiBillingOptions } from "@sanipatitas/shared/api/client/@tanstack/react-query.gen"
+import {
+  getApiBillingOptions,
+  getApiBillingQueryKey,
+} from "@sanipatitas/shared/api/client/@tanstack/react-query.gen"
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query"
 
-// Query keys
-const billingKey = ["billings"] as const
+// Invalidate the codegen billing list query (not a custom ["billings"] key)
+const invalidateBillings = (queryClient: ReturnType<typeof useQueryClient>) =>
+  queryClient.invalidateQueries({ queryKey: getApiBillingQueryKey() })
 
 // Hook
 export function useBillings() {
@@ -65,7 +69,7 @@ export function useCreateBilling() {
     mutationFn: (body: CreateBillingRequest) =>
       postApiBilling({ body, throwOnError: true }),
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: billingKey })
+      void invalidateBillings(queryClient)
     },
   })
 }
@@ -77,7 +81,7 @@ export function useUpdateBilling() {
     mutationFn: ({ id, ...body }: { id: string } & UpdateBillingRequest) =>
       putApiBillingById({ path: { id }, body, throwOnError: true }),
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: billingKey })
+      void invalidateBillings(queryClient)
     },
   })
 }
@@ -89,7 +93,7 @@ export function useDeleteBilling() {
     mutationFn: (id: string) =>
       deleteApiBillingById({ path: { id }, throwOnError: true }),
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: billingKey })
+      void invalidateBillings(queryClient)
     },
   })
 }
@@ -105,8 +109,10 @@ export function useCreateBillingItem(billingId: string) {
         throwOnError: true,
       }),
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["billing-items", billingId] })
-      queryClient.invalidateQueries({ queryKey: billingKey })
+      void queryClient.invalidateQueries({
+        queryKey: ["billing-items", billingId],
+      })
+      void invalidateBillings(queryClient)
     },
   })
 }
@@ -122,10 +128,10 @@ export function useCreatePayment(billingId: string) {
         throwOnError: true,
       }),
     onSuccess: () => {
-      queryClient.invalidateQueries({
+      void queryClient.invalidateQueries({
         queryKey: ["billing-payments", billingId],
       })
-      queryClient.invalidateQueries({ queryKey: billingKey })
+      void invalidateBillings(queryClient)
     },
   })
 }
